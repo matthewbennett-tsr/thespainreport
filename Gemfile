@@ -35,6 +35,9 @@ gem 'pg'
 # yamp data dumping and loading
 gem 'yaml_db'
 
+# envyable for env variables
+gem 'envyable'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

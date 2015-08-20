@@ -43,6 +43,20 @@ Rails.application.configure do
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   # config.force_ssl = true
+  
+  # Mailer settings
+  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.default_url_options = { host: 'https://www.thespainreport.com' }
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: 'smtp.mandrillapp.com',
+    port: 587,
+    domain: 'thespainreport.com',
+    user_name: '<%= ENV["MANDRILL_USER"] %>',
+    password: '<%= ENV["MANDRILL_API_KEY"] %>',
+    authentication: 'plain',
+    enable_starttls_auto: true}
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
