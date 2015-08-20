@@ -1,0 +1,9 @@
+<div class="login-article-form">
+<p style="margin-bottom: 10px;"><em>Log in here to join the conversation with your ideas. If you're not registered yet, join for free using the form above &#10548;.</em></p>
+<%= form_tag '/login' do %>
+<div class="email-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
+<div class="email-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
+<div class="email-input-float"><button type="submit" class="blueformbutton">Log In</button></div>
+<% end %>
+<div class="clear"></div>
+</div>

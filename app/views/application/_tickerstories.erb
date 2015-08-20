@@ -1,0 +1,16 @@
+<% @tickerstories.each do |story| %>
+  <% if story.urgency == 'majorbreaking' %>
+    <div class="major-breaking-news-top">
+        <span class="breaking"><%= link_to 'MAJOR BREAKING NEWS LIVE BLOG' + ': ' + story.story, story %></span>
+    </div>
+  <% elsif story.urgency == 'breaking' %>
+  <div class="breaking-news-top">
+        <%= link_to story do %><span class="breaking">BREAKING NEWS LIVE BLOG</span><% end %> <strong><%= link_to story.story, story %></strong>
+  </div>
+  <% elsif story.urgency == 'latest' %>
+    <div class="latest-news-top">
+        <%= link_to story do %><span class="latest">LATEST NEWS LIVE BLOG</span><% end %> <strong><%= link_to story.story, story %></strong>
+    </div>
+  <% else %>
+  <% end %>
+<% end %>

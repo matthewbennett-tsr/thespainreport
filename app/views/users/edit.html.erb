@@ -1,0 +1,21 @@
+<% if User.find(params[:id]) == current_user %>
+<h1>Edit My Account</h1>
+<% elsif @user.name.present? %>
+<h1>Editing <%= @user.name %></h1>
+<% else %>
+<h1>Editing <%= @user.email %></h1>
+<% end %>
+
+<%= render 'form' %>
+
+<hr />
+
+<h3>My Notifications</h3>
+
+<p>Coming soon.</p>
+
+<hr />
+
+<h3>My Subscription</h3>
+
+<p>Coming soon.</p>

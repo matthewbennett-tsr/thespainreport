@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>
+    <% if current_page?('/') %>
+      The Spain Report | Understand The News From Spain, In English
+    <% else %>
+      <%= yield(:title) %> | The Spain Report
+    <% end %>
+  </title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <%= favicon_link_tag 'favicon.ico' %>
+  <%= render "layouts/google_analytics" %>
+</head>
+<body>
+
+
+<div class="user-bar">
+
+  <div class="user-bar-flash">
+    <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <span style="background-color: #FEF9E6; padding: 0px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
+    <% end %>
+    <% elsif current_user.nil? %>
+      <% if current_page?('/') %>
+        Original, indpedent reporting. No ads, no spam.
+      <% elsif %>
+        Original, indpedent reporting. No ads, no spam.
+      <% end %>
+    <% elsif current_user %>
+      
+    <% else %>
+      
+    <% end %>
+  </div>
+  
+  <div class="user-bar-right-links">
+    <% if current_user.nil? %>
+      
+    <% elsif current_user.role == 'editor' %>
+      <div style="float:left; padding-top: 6px;">
+        <div class="user-float-left-no"><%= link_to "Update", new_newsitem_path %></div>
+        <div class="user-float-left"><%= link_to "Article", new_article_path %></div>
+        <div class="user-float-left"><%= link_to "Story", new_story_path %></div>
+        <div class="user-float-left"><%= link_to "Audio", new_audio_path %></div>
+        <div class="user-float-left-no">––</div>
+        <div class="user-float-left-no"><%= link_to "Updates", newsitems_admin_path %></div>
+        <div class="user-float-left"><%= link_to "Articles", articles_admin_path %></div>
+        <div class="user-float-left"><%= link_to "Stories", stories_admin_path %></div>
+        <div class="user-float-left-no">––</div>
+        <div class="user-float-left-no"><%= link_to "Member", new_user_path %></div>
+        <div class="user-float-left"><%= link_to "Members", users_path %></div>
+        <div class="user-float-left-no">––</div>
+      </div>
+    <% else %>
+    <% end %>
+    
+    <% if current_user.nil? %>
+      <div class="user-bar-login-form">
+        <%= form_tag '/login' do %>
+        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
+        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
+        <div class="top-login-input-float"><button type="submit" class="blueformbutton">Log In</button></div>
+        <div class="clear"></div>
+        <% end %>
+      </div>
+    <% else current_user %>
+      <div class="user-bar-right-links-basic-user">
+        <div class="user-float-left-no"><%= link_to "Latest Comments", comments_path %></div>
+        <div class="user-float-left"><%= link_to "My Account", edit_user_path(current_user) %></div>
+        <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
+      </div>
+      <div class="clear"></div>
+    <% end %>
+
+  </div>
+  <div class="clear"></div>
+</div>
+
+<div class="wrap">
+
+<div class="site-title">
+THE <span class="site-title-spain">SPAIN</span> REPORT</div>
+<div class="site-description">
+<div class="site-description-right">
+<a href="https://twitter.com/thespainreport" class="twitter-follow-button" data-show-count="true">Follow @thespainreport</a>
+</div>
+<div class="site-description-left">Understand The News From Spain, In English</div>
+<div class="clear"></div>
+</div>
+
+<div class="top-nav">
+<div class="top-float-left"><%= link_to "Front Page", root_path %></div>
+<div class="top-nav-below-250">
+<div class="top-float-left"><%= link_to "Updates", newsitems_path %></div>
+<div class="top-float-left"><%= link_to "News", articles_news_path %></div>
+</div>
+<div class="top-float-left"><%= link_to "Editorial", articles_editorial_path %></div>
+<div class="top-float-left-no"><%= link_to "In-Depth", articles_in_depth_path %></div>
+<div class="top-nav-below-420">
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-middle-block">
+<div class="top-float-left"><%= link_to "Major Spain Stories", stories_path %></div>
+<div class="top-float-left"><%= link_to "Spanish Regions", regions_path %></div>
+<div class="top-float-left-no"><%= link_to "News Topics", categories_path %></div>
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-right-block">
+<div class="top-float-left" class="980invisible"><%= link_to "About", '/about/' %></div>
+<div class="top-float-left"><%= link_to "Blog", articles_blog_path %></div>
+<div class="top-float-left-no"><%= link_to "Contact", '/contact/' %></div>
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-below-420">
+<div class="top-float-left-no"><%= link_to "Subscribe", '/subscribe/' %></div>
+</div>
+<div class="clear"></div>
+</div>
+
+<%= yield %>
+
+<div style="width:100%; text-align: center; margin: 20px 0px; padding: 20px 0px; border-top: 1px dotted #999999;">Copyright © 2015 · The Spain Report Ltd. · Understand The News From Spain, In English</div>
+
+</div>
+
+<%= render partial: "layouts/google_analytics_pageview" %>
+</body>
+</html>

@@ -1,0 +1,67 @@
+<%= form_for @newsitem, :html => {:multipart => true} do |f| %>
+  
+  <% if @newsitem.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@newsitem.errors.count, "error") %> prohibited this newsitem from being saved:</h2>
+
+      <ul>
+      <% @newsitem.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+<div style="margin-top: 10px;">
+
+  <div style="margin-bottom: 10px;"><strong>Slug:</strong> 
+    <% if action_name == 'edit' %>
+      <%= f.text_field :slug, :size => "40" %>
+    <% elsif action_name == 'new' %>
+      <%= f.text_field :slug, :value => params[:breaking_slug], :size => "40" %>
+    <% end %>
+   <strong>Source:</strong> 
+    <% if action_name == 'edit' %>
+      <%= f.text_field :source, :size => "21" %>
+    <% elsif action_name == 'new' %>
+      <%= f.text_field :source, :value => params[:breaking_source], :size => "21" %>
+    <% end %>
+   <strong>URL:</strong> <%= f.text_field :url, :size => "35" %>
+   <strong>Video:</strong> <%= f.text_field :video, :size => "35" %>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <% if action_name == 'edit' %>
+      <%= f.text_area :item, :size => "134x5" %>
+    <% elsif action_name == 'new' %>
+      <%= f.text_area :item, :value => params[:breaking_text], :size => "134x5" %>
+    <% end %>
+  </div>
+<div class="admin-classify"><strong>Stories:</strong> <%= collection_check_boxes(:newsitem, :story_ids, @stories, :id, :story) %></div>
+<div class="admin-classify"><strong>Regions:</strong> <%= collection_check_boxes(:newsitem, :region_ids, @regions, :id, :region) %></div>
+<div class="admin-classify"><strong>Categories:</strong> <%= collection_check_boxes(:newsitem, :category_ids, @categories, :id, :category) %></div>
+
+<div style="text-align:right; margin-top: 10px;">
+  Created at: <%= f.datetime_field :created_at, :size => '50' %> Updated at: <%= f.datetime_field :updated_at, :size => '50' %>
+   <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
+   | <%= f.submit %>
+  </div>
+  
+  <div>
+  <h3>Related Article?</h3>
+  <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
+  </div>
+
+<h3>Update Image</h3>
+  <div>
+  <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
+   | <%= f.check_box :remove_main %> Remove?
+   | <strong>Caption:</strong> <%= f.text_field :caption, :size => '45' %>
+   | <strong>Source:</strong> <%= f.text_field :imagesource, :size => '25' %>
+  <br /><br />
+  <%= image_tag @newsitem.main.url if @newsitem.main? %>
+  </div>
+
+
+</div>
+
+<% end %>

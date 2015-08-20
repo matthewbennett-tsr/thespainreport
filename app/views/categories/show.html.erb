@@ -1,0 +1,98 @@
+<% title @category.category %>
+
+<%= render 'tickerstories' %>
+
+<h1><%= @category.category %> News In Spain</h1>
+
+<div class="article-lede"><%= @category.description unless @category.description.blank? %></div>
+
+<div class="index-non-home">
+  <div class="listing-left">Published</div>
+  <div class="listing-right">Latest Articles</div>
+  <div class="clear"></div>
+</div>
+
+<% @category.articles.published.lastseven.each do |article| %>
+  <div class="listing-article-container">
+    <div class="listing-left">
+    <% if article.urgency == 'majorbreaking' %>
+      <span class="breaking">
+    <% elsif article.urgency == 'breaking' %>
+      <span class="breaking">
+    <% elsif article.urgency == 'latest' %> 
+      <span class="latest">
+    <% elsif article.status == 'updated' %> 
+      <span class="updated">
+    <% elsif article.type.name == 'EDITORIAL' %> 
+      <span class="editorial">
+    <% else %>
+      <span>
+    <% end %>
+      <%= article.updated_at.to_formatted_s(:short) %></span>
+    </div>
+    <div class="listing-right">
+      <% if article.urgency == 'majorbreaking' %>
+        <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span>
+      <% elsif article.urgency == 'breaking' %>
+        <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
+      <% elsif article.urgency == 'latest' %>
+        <span class="latest">LATEST</span> <%= link_to article.headline, article %>
+      <% elsif article.status == 'updated' %>
+        <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %>
+      <% else %>  
+        <strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %>
+      <% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+
+<div class="index-updates">
+  <div class="listing-left">Published</div>
+  <div class="listing-right">Latest Updates</div>
+  <div class="clear"></div>
+</div>
+
+<% @category.newsitems.published.lastfifty.each do |newsitem| %>
+<div class="listing-update-container">
+  <div class="listing-left">
+    <%= newsitem.updated_at.to_formatted_s(:short) %>
+  </div>
+  <div class="listing-right">
+    <% if newsitem.main? %>
+        <div class="index-main-image">
+          <%= link_to(newsitem) do %>
+          <%= image_tag newsitem.main.url if newsitem.main? %>
+          <% end %>
+        </div>
+      <% elsif newsitem.video? %>
+        <div class="index-main-image">
+        <div class="video-wrapper">
+          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+        </div>
+        </div>
+      <% else %>
+      <% end %>
+  
+    <div class="listing-update-text">
+      <strong><%= link_to newsitem.slug, newsitem %>:</strong> <%= newsitem.item.html_safe %> (<%= link_to 'E', edit_newsitem_path(newsitem) %> <%= link_to 'D', newsitem, method: :delete, data: { confirm: 'Are you sure?' } %>)
+    </div>
+    <div class="clear"></div>
+    <div class="meta">
+      <strong>Source:</strong> 
+      <% if newsitem.url.blank? %>
+        <%= newsitem.source %>
+      <% else %>
+        <%= link_to newsitem.source, newsitem.url %>
+      <% end %>
+       || 
+      <%= raw(newsitem.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
+      <%= raw(newsitem.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
+      <%= raw(newsitem.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
+    </div>
+  </div>
+  <div class="clear"></div>
+</div>
+<% end %>

@@ -1,0 +1,27 @@
+<h1>Reset Your Password</h1>
+
+<%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
+  <div style="margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #000000; border-bottom: 1px dotted #000000;">
+  <p style="margin-bottom: 10px;">To reset your password, enter the new one here twice:</p>
+  <div class="field" style="float:left;">
+    <div class="email-input-float"><%= f.password_field :password, :class => "input170", :placeholder => "Enter new password…" %></div>
+    <div class="email-input-float" style="padding-top: 10px;"> + </div>
+    <div class="email-input-float"><%= f.password_field :password_confirmation, :class => "input170", :placeholder => "Confirm new password…" %></div>
+    <div class="clear"></div>
+    <button type="submit" class="blueformbutton">Save New Password</button>
+  </div>
+    
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2>Ejem…just <%= pluralize(@user.errors.count, "problem") %> with that particular attempt…</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      <li>Remember you can choose secure but easy-to-remember pass phrases like "$400 Chorizo Is Expensive" or "Rajoy is a 1st class #####!!"</li>
+      </ul>
+    </div>
+  <% end %>
+<% end %>
+<div class="clear"></div>

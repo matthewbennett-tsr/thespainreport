@@ -1,0 +1,44 @@
+<% title 'All Members' %>
+
+<h1>All Members</h1>
+
+<p style="margin-bottom: 10px;">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> and <strong><%= @readercount %> readers</strong> in total.</p>
+
+<table>
+  <thead>
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>Role</td>
+      <td>Name</td>
+      <td>E-mail</td>
+      <td>Twitter</td>
+      <td>Conf?</td>
+      <td>Sign Up URL</td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= link_to 'Edit', edit_user_path(user) %></td>
+        <td>
+        <% if user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 1px 5px;">
+          <% elsif user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 1px 5px;">
+          <% elsif user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 1px 5px;">
+          <% else %>
+            <span>
+          <% end %>
+        <%= user.role.to_s.humanize %></span></td>
+        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
+        <td><%= mail_to user.email %></td>
+        <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
+        <td><%= user.email_confirmed %></td>
+        <td><%= link_to user.sign_up_url.truncate(42), user.sign_up_url unless user.sign_up_url.blank? %></td>
+        <td><%= link_to 'Delete?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,32 @@
+<div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <strong><%= @comment.user.name unless @comment.user.blank? %></strong> | 
+          <% if @comment.user.blank? %>
+            Deleted User
+          <% else %>
+            <% if @comment.user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 2px 5px;">
+          <% elsif @comment.user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+          <% elsif @comment.user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+          <% else %>
+            <span>
+          <% end %>
+          <%= @comment.user.role.to_s.humanize unless @comment.user.blank? %></span>
+        <% end %> | <%= @comment.updated_at.strftime("%b %d %Y, %H:%M") %> | 
+        <% if @comment.commentable_type == 'Article' %>
+            <%= link_to @comment.commentable.headline.truncate(80), @comment.commentable %>
+           <% elsif @comment.commentable_type == 'Newsitem' %>
+            <%= link_to @comment.commentable.slug, @comment.commentable %>
+           <% else %>
+           <% end %>
+    </div>
+    <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
+      <%= @comment.comment %>
+    </div>
+    <div class="clear"></div>
+</div>
+
+<%= link_to 'Edit', edit_comment_path(@comment) %> |
+<%= link_to 'Back', comments_path %>

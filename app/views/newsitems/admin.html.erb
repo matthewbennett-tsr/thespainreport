@@ -1,0 +1,34 @@
+<h1>Edit All Newsitems</h1>
+
+<div class="index-non-home">
+  <div class="listing-left">Updated</div>
+  <div class="listing-right">Latest Newsitems</div>
+  <div class="clear"></div>
+</div>
+
+<% @newsitems.each do |newsitem| %>
+  <div style="width:100%; padding-top: 3px; font-size: 13px;">
+    <div style="width: 9%; float:left;">
+      <%= newsitem.updated_at.to_formatted_s(:short) %>
+    </div>
+    <div style="width: 10%; margin-right: 5px; float:left; text-align:right; font-size: 13px;">
+      <% if newsitem.status == 'draft' %>
+        <span class="admin-draft">
+      <% elsif newsitem.status == 'editing' %>
+        <span class="admin-editing">
+      <% elsif newsitem.status == 'published' %>
+        <span class="admin-published">
+      <% elsif newsitem.status == 'updated' %>
+        <span class="admin-updated">
+      <% else %>
+      
+      <% end %>
+      <%= newsitem.status.capitalize unless newsitem.status.blank? %></span> <%= link_to 'E', edit_newsitem_path(newsitem) %> <%= link_to 'D', newsitem, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
+    <div style="width: 80%; float:right; font-size: 13px;">
+        <strong><%= link_to newsitem.slug, newsitem unless newsitem.slug.nil? %>:</strong><%= newsitem.item.truncate(70) unless newsitem.item.nil? %>
+
+    </div>
+    <div style="clear:both;"></div>   
+  </div> 
+    <% end %>

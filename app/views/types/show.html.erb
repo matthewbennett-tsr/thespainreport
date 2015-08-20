@@ -1,0 +1,65 @@
+<%= render 'tickerstories' %>
+
+<h1>
+<% if @type.name == 'NEWS' %>
+Latest News Articles
+<% elsif @type.name == 'EDITORIAL' %>
+Editorials
+<% else %>
+<%= @type.name %>
+<% end %>
+</h1>
+
+<% if @type.name == 'NEWS' %>
+<div class="article-lede">Original, independent reporting. We talk to Spanish sources for you and human translate all the relevant quotes and information.</div>
+<% elsif @type.name == 'EDITORIAL' %>
+<div class="article-lede">After lots of original, independent reporting, our editorials give you lots of context and meaning to explain how it all fits together.</div>
+<% end %>
+
+<div class="index-non-home">
+  <div class="listing-left">Updated</div>
+  <div class="listing-right">Latest Articles</div>
+  <div class="clear"></div>
+</div>
+
+<% @type.articles.order('articles.updated_at DESC').each do |article| %>
+  <div class="listing-article-container" style="padding-top: 10px;">
+    <div class="listing-left">
+      <% if article.urgency == 'majorbreaking' %>
+        <span class="breaking">
+      <% elsif article.urgency == 'breaking' %>
+        <span class="breaking">
+      <% elsif article.urgency == 'latest' %>
+        <span class="latest">
+      <% elsif article.status == 'updated' %>
+        <span class="updated">
+      <% else %>
+        <span>
+      <% end %>
+      <%= article.updated_at.to_formatted_s(:short) %>
+    </div>
+    <div class="listing-right">
+      <% if article.urgency == 'majorbreaking' %>
+        <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span><br /><%= article.lede %>
+      <% elsif article.urgency == 'breaking' %>
+        <span class="breaking">BREAKING</span> <%= link_to article.headline, article %><br /><%= article.lede %>
+      <% elsif article.urgency == 'latest' %> 
+        <span class="latest">LATEST</span> <%= link_to article.headline, article %><br /><%= article.lede %>
+      <% elsif article.status == 'updated' %> 
+        <span class="updated">UPDATED</span> <%= link_to article.headline, article %><br /><%= article.lede %>
+      <% elsif article.type.name == 'EDITORIAL' %> 
+        <span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %><br /><%= article.lede %>
+      <% else %>
+        <strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %><br /><%= article.lede %>
+      <% end %>
+    
+    <div class="meta">
+        <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
+        <%= raw(article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
+        <%= raw(article.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
+      </div>
+    </div>
+    
+    <div class="clear"></div>
+  </div>
+<% end %>

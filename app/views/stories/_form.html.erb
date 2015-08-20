@@ -1,0 +1,24 @@
+<%= form_for(@story) do |f| %>
+  <% if @story.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@story.errors.count, "error") %> prohibited this story from being saved:</h2>
+
+      <ul>
+      <% @story.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.text_field :story, :class => "edit-headline", :size => '25' %><br /><br />
+    <%= f.text_field :description, :class => "edit-lede", :size => '117' %><br /><br />
+    <%= f.select :urgency, options_for_select([["Normal", "normal"], ["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @story.urgency) %><br /><br />
+    <%= f.select :status, options_for_select([["Active", "active"], ["Archived", "archived"]], @story.status) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

@@ -1,0 +1,12 @@
+<h1>An audio file</h1>
+
+<table>
+  <tr>
+    <td valign="top"><strong><%= @audio.updated_at.to_formatted_s(:short) %></strong></td>
+    <td valign="top">
+      <%= @audio.url %>
+      <br /><br />
+      <%= audio_tag @audio.url, autoplay: false, controls: true %>
+    </td>
+  </tr>
+</table>

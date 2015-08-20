@@ -1,0 +1,145 @@
+<% title @article.headline %>
+
+<%= render 'tickerstories' %>
+
+<h1><%= @article.headline %></h1>
+
+<% if @article.urgency == 'majorbreaking' %>
+  <div class="alert"><span class="breaking-label">MAJOR BREAKING NEWS</span></div>
+<% elsif @article.urgency == 'breaking' %>
+  <div class="alert"><span class="breaking-label">BREAKING NEWS</span></div>
+<% elsif @article.urgency == 'latest' %>
+  <div class="alert"><span class="latest-label">LATEST NEWS</span></div>
+<% elsif @article.type.name == 'EDITORIAL' %>
+  <div class="alert"><span class="editorial-label">EDITORIAL</span></div>
+<% else %>
+<% end %>
+
+<% if @articleupdates.present? && @article.status == "updated" %>
+<div class="alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+<% elsif @articleupdates.present? %>
+<div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+<% elsif @article.status == "updated" %>
+<div class="alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div>
+<% else %>
+<% end %>
+
+<div class="clear"></div>
+
+<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.name %></strong>—<%= @article.lede %></div>
+
+<% if @article.main? %>
+<div class="main-image">
+<%= link_to(@article.main.url) do %>
+<%= image_tag @article.main.url if @article.main? %>
+<% end %>
+<div class="main-caption">
+<%= @article.caption %> <strong>Source:</strong> <%= @article.source %>. (Click to enlarge)</div>
+</div>
+<% elsif @article.video? %>
+  <div class="main-image">
+  <div class="video-wrapper">
+    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %> 
+  </div>
+  <div class="main-caption">
+      <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>.
+  </div>
+  </div>
+<% else %>
+<% end %>
+
+<div class="article-text"><%= simple_format @article.body.html_safe %>
+
+<% @article.newsitems.each do |newsitem| %>
+<h3>Update:</h3>
+<div class="article-updates">
+<% if newsitem.main? %>
+  <div class="main-image-article-update">
+   <%= link_to newsitem do %>
+   <%= image_tag newsitem.main.url if newsitem.main? %>
+   <% end %>
+   <div class="main-caption">
+     <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+   </div>
+  </div>
+<% elsif newsitem.video? %>
+  <div class="main-image-article-update">
+  <div class="video-wrapper">
+    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %> 
+    <div class="main-caption">
+      <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+    </div>
+  </div>
+  </div> 
+<% else %>
+<% end %>
+<strong><%= newsitem.updated_at.strftime("%b %d %Y, %H:%M") %>—<%= link_to newsitem.slug, newsitem %>—</strong><%= newsitem.item.html_safe %>
+
+<div class="clear"></div>
+</div>
+<% end %>
+<div class="clear"></div>
+</div>
+
+<div class="meta">
+<strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
+<div class="meta-second-row">
+  <%= raw(@article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
+  <%= raw(@article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
+  <%= raw(@article.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
+</div>
+</div>
+
+<%= render 'latestaudio' %>
+<%= render 'emailsignup' %>
+<hr />
+<h2 >COMMENTS</h2>
+
+<% if current_user %>
+Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
+
+<%= form_for [@article, Comment.new] do |f| %>
+  <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <strong>Add your comment:</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
+      <%= f.text_area :comment, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
+      <br />
+      <button type="submit" class="blueformbutton">Add Your Comment</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+
+<% else %>
+<%= render 'login' %>
+<% end %>
+
+<div style="margin-top: 20px;">
+<% @comments.each do |comment| %>
+<div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <strong><%= comment.user.name unless comment.user.blank? %></strong> | 
+        <% if comment.user.blank? %>
+          Deleted User
+        <% else %>
+          <% if comment.user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 2px 5px;">
+          <% elsif comment.user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+          <% elsif comment.user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+          <% else %>
+            <span>
+          <% end %>
+          <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span>
+        <% end %>
+       | <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
+    </div>
+    <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
+      <%= comment.comment %>
+    </div>
+    <div class="clear"></div>
+</div>
+<% end %>
+<a name="commentcheck"></a>
+</div>

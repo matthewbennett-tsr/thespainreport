@@ -1,0 +1,73 @@
+<% title 'Major Spain Stories' %>
+
+<%= render 'tickerstories' %>
+
+<h1>Major Spain Stories</h1>
+
+<div class="article-lede">Latest articles in each major breaking story (accidents, attacks, disasters) or ongoing story (Podemos, Catalan independence, etc.).</div>
+
+<% @stories.each do |story| %>
+<div class="index-by-container">
+  <div class="index-by-header">
+    <span class="index-by-title"><%= link_to story.story, story %>
+      <% if current_user.nil? %>
+      
+      <% elsif current_user.role == 'editor' %>
+        (<%= link_to 'D', story, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% else %>
+      <% end %>
+    </span>
+    <p class="index-by-description"><%= story.description %></p>
+  </div>
+
+<% if story.articles.empty? %>
+  <div class="listing-article-container">
+    <div class="listing-left">
+      --/--
+    </div>
+    <div class="listing-right">
+    No articles for this story yet, likely because it is a breaking story, so stay tuned to this page. More information in a few minutes.
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+  
+  <% story.articles.published.lastseven.each do |article| %>
+    <div class="listing-article-container" >
+      <div class="listing-left">
+        <% if article.urgency == 'majorbreaking' %>
+          <span class="breaking">
+        <% elsif article.urgency == 'breaking' %>
+          <span class="breaking">
+        <% elsif article.urgency == 'latest' %> 
+          <span class="latest">
+        <% elsif article.status == 'updated' %> 
+          <span class="updated">
+        <% elsif article.type.name == 'EDITORIAL' %> 
+          <span class="editorial">
+        <% else %>
+          <span>
+        <% end %>
+        <%= article.updated_at.to_formatted_s(:short) %></span>
+      </div>
+      <div class="listing-right">
+        <% if article.urgency == 'majorbreaking' %>
+          <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span>
+        <% elsif article.urgency == 'breaking' %>
+          <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
+        <% elsif article.urgency == 'latest' %>
+          <span class="latest">LATEST</span> <%= link_to article.headline, article %>
+        <% elsif article.status == 'updated' %>
+          <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
+        <% elsif article.type.name == 'EDITORIAL' %>
+          <span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %>
+        <% else %>  
+          <strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %>
+        <% end %>  
+      </div>
+      <div class="clear"></div>
+    </div>
+  <% end %>
+
+</div>
+<% end %>

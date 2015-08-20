@@ -1,0 +1,58 @@
+<%= form_for(@user) do |f| %>
+
+  <div class="field">
+    <div class="email-input-float"><strong>Display Name</strong> <em>(max. 20 chars)</em><br/><%= f.text_field :name, :maxlength => 20, :class => "input200" %></div>
+    <div class="email-input-float"><strong>E-mail</strong><br/><%= f.text_field :email, :class => "input200" %></div>
+    <div class="email-input-float"><strong>Twitter <em>(max. 15 chars)</em>: @</strong><br/><%= f.text_field :twitter, :maxlength => 15, :class => "input200" %></div>
+    <div class="email-input-float">
+    <div style="margin-top: 23px;">
+    <% if current_user.role == 'editor' %>
+      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %>
+    <% else %>
+      <% if @user.role == 'editor' %>
+         <span style="background-color: green; color: white; padding: 2px 5px;">
+      <% elsif @user.role == 'subscriber' %>
+         <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+      <% elsif @user.role == 'reader' %>
+         <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+      <% else %>
+         <span>
+      <% end %>
+      <%= @user.role.to_s.humanize %></span>
+    <% end %>
+    </div>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <div class="field">
+    <strong>Bio. Tell us a bit about yourself</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
+      <%= f.text_area :bio, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
+  </div>
+  
+  <div style="margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #000000; border-bottom: 1px dotted #000000;">
+  <p style="margin-bottom: 10px;">If you want to change your password, enter the new one here twice:</p>
+  <div class="field" style="float:left;">
+    <div class="email-input-float"><%= f.password_field :password, :class => "input170", :placeholder => "Enter new password…" %></div>
+    <div class="email-input-float" style="padding-top: 10px;"> + </div>
+    <div class="email-input-float"><%= f.password_field :password_confirmation, :class => "input170", :placeholder => "Confirm new password…" %></div>
+    <div class="clear"></div>
+  </div>
+  
+  <% if @user.errors.any? %>
+    <div id="error_explanation">
+      <h2>Ejem…just <%= pluralize(@user.errors.count, "problem") %> with that particular attempt…</h2>
+
+      <ul>
+      <% @user.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      <li>Remember you can choose secure but easy-to-remember pass phrases like "$400 Chorizo Is Expensive" or "Rajoy is a 1st class #####!!"</li>
+      </ul>
+    </div>
+  <% end %>
+  <div class="clear"></div>
+  </div>
+  <div class="actions">
+    <button type="submit" class="blueformbutton">Save Changes</button>
+  </div>
+<% end %>

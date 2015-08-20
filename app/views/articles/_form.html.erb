@@ -1,0 +1,47 @@
+<%= form_for @article, :html => {:multipart => true} do |f| %>
+
+  <% if @article.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
+
+      <ul>
+      <% @article.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+<div style="margin-top: 10px; margin-bottom: 10px;"><strong>Type:</strong> <%= f.collection_select :type_id, @types, :id, :name %> | <strong>News Urgency:</strong> <%= f.select :urgency, options_for_select([["Normal", "normal"], ["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency) %></div>
+<div class="admin-classify"><strong>Stories:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
+<div class="admin-classify"><strong>Regions:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
+<div class="admin-classify"><strong>Categories:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
+  <div class="field">
+    <%= f.text_field :headline, :class => "edit-headline", :size => '85' %>
+  </div>
+  <div class="field">
+    <%= f.text_field :lede, :size => '79', :class => "edit-lede" %> | <strong>Video:</strong> <%= f.text_field :video, :size => "35" %>
+  </div>
+  <div class="field">
+    <%= f.text_area :body, :size => '134x27' %>
+  </div>
+  
+  
+  
+  <div>
+  Created at: <%= f.datetime_field :created_at, :size => '50' %> Updated at: <%= f.datetime_field :updated_at, :size => '50' %>
+   <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
+   | <%= f.submit %>
+  </div>
+  
+ 
+  <h3>Main Image</h3>
+  <div>
+  <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
+   | <%= f.check_box :remove_main %> Remove?
+   | <strong>Caption:</strong> <%= f.text_field :caption, :size => '45' %>
+   | <strong>Source:</strong> <%= f.text_field :source, :size => '25' %>
+  <br /><br />
+  <%= image_tag @article.main.url if @article.main? %>
+  </div>
+  
+<% end %>

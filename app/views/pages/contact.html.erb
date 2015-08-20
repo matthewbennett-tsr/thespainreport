@@ -1,0 +1,54 @@
+<% title 'Contact' %>
+
+<%= render 'tickerstories' %>
+
+<h1>Contact</h1>
+
+<div class="article-lede">It is always a pleasure to receive your enquiry.</div>
+
+<div class="article-text">
+
+<p>For subscription enquiries, pre-sales questions or problems with your account, please e-mail: <%= mail_to 'subscriptions@thespainreport.com', 'subscriptions@thespainreport.com' %></p>
+
+<p>For editorial matters, please e-mail the editor: <%= mail_to 'matthew@thespainreport.com', 'matthew@thespainreport.com' %></p>
+
+<h3>Global Media Enquiries For Major Spain Stories</h3>
+
+<p>Always happy to help if there's a major Spain story on and you want <a href="http://www.nbcnews.com/news/world/spain-asks-what-next-after-abdication-king-juan-carlos-n120346">a quote</a> for <a href="http://www.businessinsider.com/qa-on-catalan-independence-2014-9">your article</a> or a quick phone-in for your radio or TV programme.</p>
+
+<p><strong>BBC Radio Wales: Has Cervantes Been Found?</strong><br />
+<%= audio_tag '/audios/bbc-radio-wales-cervantes.mp3', autoplay: false, controls: true %>
+</p>
+
+<p><strong>BBC Tech Tent: Google News Closure in Spain</strong><br />
+<%= audio_tag '/audios/bbc-tech-tent-google-news-spain.mp3', autoplay: false, controls: true %>
+</p>
+
+<p><strong>NPR: Google News Closure in Spain</strong><br />
+<%= audio_tag '/audios/npr-google-news-closure.mp3', autoplay: false, controls: true %>
+</p>
+
+<p><strong>BBC World Service: 2nd Quarter Unemployment Figures In Spain</strong><br />
+<%= audio_tag '/audios/bbc-world-service-q22014-unemployment.mp3', autoplay: false, controls: true %>
+</p>
+
+<h3>Business Addresses & Phone Numbers</h3>
+
+<p>
+<strong>The Spain Report Ltd.</strong>
+<br />Suite LP26203, Lower Ground Floor
+<br />145-157 St John Street
+<br />London
+<br />EC1V 4PW
+<br />United Kingdom
+<br />(00 44) (0)20 760 85570
+</p>
+
+<p>
+<strong>The Spain Report Ltd. (Sucursal en España)</strong>
+<br />Avenida Doctor Pedro Guillen, 5
+<br />30100 Murcia
+<br />Spain
+</p>
+
+</div>

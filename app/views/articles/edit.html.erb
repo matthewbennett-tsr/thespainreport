@@ -1,0 +1,6 @@
+<h1>You are editing a <span class="red"><%= @article.status.upcase unless @article.status.blank? %></span> article…</h1>
+
+<%= render 'form' %>
+
+<%= link_to 'Show', @article %> |
+<%= link_to 'Back', articles_path %>

@@ -1,0 +1,44 @@
+<% title 'Latest In-Depth Articles' %>
+
+<%= render 'tickerstories' %>
+
+<h1>Latest In-Depth Articles</h1>
+
+<div class="article-lede">
+We take you deeper into the biggest stories and trends changing Spain with interviews, chronciles, analysis, features and opinion.
+</div>
+
+<%= render 'emailsignup' %>
+
+<div class="index-non-home">
+  <div class="listing-left">Updated</div>
+  <div class="listing-right">Latest Articles</div>
+  <div class="clear"></div>
+</div>
+
+<% @last30.each do |article| %>
+  <div style="width:100%; padding-top: 10px;">
+    <div class="listing-left">
+      <%= article.updated_at.to_formatted_s(:short) %>
+    </div>
+    <div class="listing-right">
+      <% if article.urgency == 'breaking' %>
+        <span class="breaking"><%= link_to 'BREAKING' + ': ' + article.headline, article %></span><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% elsif article.urgency == 'latest' %>
+        <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong></span><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% elsif article.status == 'updated' %>
+        <span class="updated">UPDATED</span> <strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% else %>  
+        <strong><%= article.type.name unless article.type.nil? %>:</strong> <strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
+      <% end %>
+      <div class="meta">
+        <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
+        <%= raw(article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
+        <%= raw(article.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
+      </div>
+    </div>
+    <div style="clear:both;"></div>   
+  </div> 
+    <% end %>

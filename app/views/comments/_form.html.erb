@@ -1,0 +1,23 @@
+<%= form_for(@comment) do |f| %>
+  <% if @comment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@comment.errors.count, "error") %> prohibited this comment from being saved:</h2>
+
+      <ul>
+      <% @comment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <strong>Edit comment:</strong> <em>(max. 1,000 characters &#8776; 175 words &#8776; size of this text box)</em><br />
+      <%= f.text_area :comment, :size => '105x9', :maxlength => 1000 %>
+      <br />
+      <button type="submit" class="blueformbutton">Add Your Comment</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>

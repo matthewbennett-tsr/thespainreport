@@ -1,0 +1,41 @@
+<% title 'Latest Comments' %>
+
+<h1>Latest Comments</h1>
+
+    <% @comments.each do |comment| %>
+      <div style="margin-bottom: 5px; padding: 10px 0px; border-bottom: 1px dotted #999999;">
+        <div><strong><%= comment.user.name unless comment.user.nil? %></strong> | 
+          <% if comment.user.blank? %>
+            Deleted User
+          <% else %>
+          <% if comment.user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 2px 5px;">
+          <% elsif comment.user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+          <% elsif comment.user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+          <% else %>
+            <span>
+          <% end %>
+            <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span> | <%= comment.updated_at.to_formatted_s(:short) %> | 
+            <% if comment.commentable_type == 'Article' %>
+            <%= link_to comment.commentable.headline.truncate(90), comment.commentable %>
+           <% elsif comment.commentable_type == 'Newsitem' %>
+            <%= link_to comment.commentable.slug, comment.commentable %>
+           <% else %>
+           <% end %>
+           <% end %>
+        </div>
+        <div class="clear"></div>
+        <div style="margin-top: 5px; line-height: 140%;">
+        <%= comment.comment %>
+        <% if current_user.nil? %>
+        
+        <% elsif current_user.role == 'editor' %>
+           | <%= link_to 'Edit', edit_comment_path(comment) %> / <%= link_to 'Destroy', comment, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% else %>
+        <% end %>  
+        </div>
+        </div>
+        
+    <% end %>
