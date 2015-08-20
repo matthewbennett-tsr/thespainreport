@@ -50,7 +50,7 @@
   <div class="clear"></div>
 </div>
 <div style="margin-top: 5px; ">
-<%= audio_tag a.url, autoplay: false, controls: true %>
+<audio controls="controls" preload="none"><source src="<%= a.url %>" ></audio>
 </div>
 <% end %>
 

@@ -2,7 +2,9 @@
 <div class="email-sign-up">
 <span class="email-sign-up-title">2 Minute Spain News: <%= a.updated_at.strftime("%b %d, %Y, %l:%M %P") %></span>
 <div style="margin-top: 10px; ">
-<%= audio_tag a.url, autoplay: false, controls: true %>
+
+<audio controls="controls" preload="none"><source src="<%= a.url %>" ></audio>
+
 </div>
 </div>
 <% end %>
