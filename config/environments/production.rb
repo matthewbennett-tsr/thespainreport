@@ -45,7 +45,7 @@ Rails.application.configure do
   # config.force_ssl = true
   
   # Mailer settings
-  config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
   config.action_mailer.default_url_options = { host: 'http://52.21.87.76/' }
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
