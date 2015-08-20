@@ -19,9 +19,9 @@
           <% end %>
             <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span> | <%= comment.updated_at.to_formatted_s(:short) %> | 
             <% if comment.commentable_type == 'Article' %>
-            <%= link_to comment.commentable.headline.truncate(90), comment.commentable %>
+            <%= link_to comment.commentable.headline.truncate(90), comment.commentable unless comment.user.blank? %>
            <% elsif comment.commentable_type == 'Newsitem' %>
-            <%= link_to comment.commentable.slug, comment.commentable %>
+            <%= link_to comment.commentable.slug, comment.commentable unless comment.user.blank? %>
            <% else %>
            <% end %>
            <% end %>
