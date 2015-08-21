@@ -3,7 +3,7 @@ class Newsitem < ActiveRecord::Base
   has_and_belongs_to_many :regions
   has_and_belongs_to_many :stories
   belongs_to :article
-  has_many :comments, as: :commentable
+  has_many :comments, as: :commentable, dependent: :destroy
 
   mount_uploader :main, MainUploader
   
