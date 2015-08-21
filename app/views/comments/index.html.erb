@@ -19,6 +19,14 @@
           <% end %>
             <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span> | <%= comment.updated_at.to_formatted_s(:short) %> | 
             
+            <% if comment.commentable_type == 'Article' %>
+              <%= link_to comment.commentable.headline.truncate(90), comment.commentable %>
+            <% elsif comment.commentable_type == 'Newsitem' %>
+              <%= link_to comment.commentable.slug, comment.commentable %>
+            <% else %>
+            
+            <% end %>
+           
            <% end %>
         </div>
         <div class="clear"></div>
