@@ -308,10 +308,11 @@ video { width: 100% !important; height: auto !important;}
   .main-image, .index-main-image {width: 100%;}
   audio {max-width: 100%;}
 }
-@media only screen and (max-width: 320px) {
+@media only screen and (max-width: 322px) {
   .input200, .input170 {width: 100px;}
   .top-nav {font-size: 15px;}
   h1 {font-size: 21px; line-height:130%;}
+  .top-nav-below-320 {display:none;}
   .main-image, .index-main-image {width: 100%;}
   audio {max-width: 100%;}
 }
@@ -321,7 +322,7 @@ video { width: 100% !important; height: auto !important;}
   .site-title {font-size: 30px;}
   .site-description {font-size: 13px;}
   .top-nav {font-size: 13px;}
-  .top-nav-below-250 {display:none;}
+  .top-nav-below-320 {display:none;}
   h1 {font-size: 21px; line-height:130%;}
   .main-image, .index-main-image {width: 100%;}
   audio {max-width: 100%;}
