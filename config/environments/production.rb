@@ -53,8 +53,8 @@ Rails.application.configure do
     address: 'smtp.mandrillapp.com',
     port: 587,
     domain: 'thespainreport.com',
-    user_name: '<%= ENV["MANDRILL_USER"] %>',
-    password: '<%= ENV["MANDRILL_API_KEY"] %>',
+    user_name: ENV["MANDRILL_USER"],
+    password: ENV["MANDRILL_API_KEY"],
     authentication: 'plain',
     enable_starttls_auto: true}
 
