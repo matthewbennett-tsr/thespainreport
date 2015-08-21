@@ -17,6 +17,7 @@ class StoriesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @stories = Story.all.order( 'stories.updated_at DESC' )
+      @storycount = Story.count
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."

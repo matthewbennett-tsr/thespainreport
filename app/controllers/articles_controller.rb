@@ -17,6 +17,10 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @articles = Article.all.order( 'articles.updated_at DESC' )
+      @newscount = Article.news.count
+      @editorialcount = Article.editorial.count
+      @indepthcount = Article.in_depth.count
+      @blogcount = Article.is_blog.count
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."

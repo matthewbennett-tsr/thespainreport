@@ -18,6 +18,7 @@ class NewsitemsController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitems = Newsitem.all.order( 'newsitems.updated_at DESC' )
+      @updatecount = Newsitem.count
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
