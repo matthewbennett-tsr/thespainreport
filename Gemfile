@@ -38,6 +38,9 @@ gem 'yaml_db'
 # envyable for env variables
 gem 'envyable'
 
+# rewrites and redirects
+gem 'rack-rewrite'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

@@ -23,5 +23,11 @@ module Myapp
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
     
+    # rewrites
+    config.middleware.insert_before(Rack::Runtime, Rack::Rewrite) do
+    r301 '/17504/home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine/', '/articles/65-150814103639-home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine'
+    r301 '/17487/spain-jobless-total-falls-by-74028-in-july/', '/newsitems/33-150729144807-update-average-wages-in-spain-fall-slightly'
+    end
+    
   end
 end
