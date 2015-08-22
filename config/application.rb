@@ -70,6 +70,9 @@ module Myapp
     r301 '/17504/home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine/', '/articles/65-150814103639-home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine'
     r301 '/17463/spanish-police-open-preliminary-investigation-into-corruption-crimes-at-spanish-stock-regulator-cnmv/', '/articles/31-150730112305-spanish-police-open-preliminary-investigation-into-corruption-crimes-at-stock-regulator-cnmv'
     r301 '/13954/greek-f16-crashes-spanish-air-base-albacete/', '/articles/105-150126154500-11-dead-and-20-injured-after-greek-f16-crashes-on-take-off-at-nato-air-base-in-albacete'
+    r301 '/10075/swiftair-confirms-missing-air-algerie-flight-md83-116-board/', '/articles/106-140604121245-swiftair-air-algerie-flight-ah5017-was-md-83-with-116-on-board-president-hollande-says-no-survivors'
+    r301 '/13159/disaster-brand-spain-google-news/', '/articles/107-141211124145-the-disaster-of-brand-spain-and-google-news'
+    r301 '/11829/four-new-suspected-ebola-cases-spain-infected-nurse-teresa-romeros-condition-improves-slightly/', '/articles/108-141016190045-spain-admits-four-new-suspected-ebola-cases-as-infected-nurse-teresa-romero-s-condition-improves'
 
     r301 '/category/major/politics/elections-in-spain/', '/stories/3-150726170313-spanish-general-election-2015'
     r301 '/16392/live-blog-spanish-local-regional-elections/', '/stories/34-150812205849-local-regional-elections-2015'
