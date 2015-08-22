@@ -72,14 +72,27 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     respond_to do |format|
+    if current_user.nil? 
       if @user.save
         UserMailer.registration_confirmation(@user).deliver_now
-        format.html { redirect_to :action => 'confirm', notice: 'User was successfully created.' }
+        format.html { redirect_to :action => 'confirm' }
         format.json { render :show, status: :created, location: @user }
       else
         format.html { render :newerrors, notice: 'There was a PROBLEM…!' }
         format.json { render json: @user.errors, status: :unprocessable_entity }
       end
+    elsif current_user.role == 'editor'
+      if @user.save
+        format.html { redirect_to users_path, notice: 'User was successfully created.' }
+        format.json { render :show, status: :created, location: @user }
+        flash[:notice] = "Great, you added a new member."
+      else
+        format.html { render :newerrors, notice: 'There was a PROBLEM…!' }
+        format.json { render json: @user.errors, status: :unprocessable_entity }
+      end
+    else
+      
+    end
     end
   end
 
