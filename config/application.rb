@@ -91,6 +91,7 @@ module Myapp
     
     r301 '/category/regions/', '/regions'
     
+    r301 '/category/type/news/', '/articles/news'
     r301 '/category/type/news/latest/', '/newsitems'
     r301 '/category/type/catch-up/', '/newsitems'
     r301 '/category/type/news/full/', '/articles/news'
