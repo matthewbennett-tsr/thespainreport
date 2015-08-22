@@ -68,6 +68,8 @@ module Myapp
     r301 '/17475/artur-mas-calls-early-regional-elections-in-catalonia/', '/articles/6-150803212147-artur-mas-calls-early-regional-elections-in-catalonia'
     r301 '/17487/spain-jobless-total-falls-by-74028-in-july/', '/newsitems/33-150729144807-update-average-wages-in-spain-fall-slightly'
     r301 '/17504/home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine/', '/articles/65-150814103639-home-secretary-fernandez-diaz-says-meeting-with-rato-was-in-no-way-secret-or-clandestine'
+    r301 '/17463/spanish-police-open-preliminary-investigation-into-corruption-crimes-at-spanish-stock-regulator-cnmv/', '/articles/31-150730112305-spanish-police-open-preliminary-investigation-into-corruption-crimes-at-stock-regulator-cnmv'
+    r301 '/13954/greek-f16-crashes-spanish-air-base-albacete/', '/articles/105-150126154500-11-dead-and-20-injured-after-greek-f16-crashes-on-take-off-at-nato-air-base-in-albacete'
 
     r301 '/category/major/politics/elections-in-spain/', '/stories/3-150726170313-spanish-general-election-2015'
     r301 '/16392/live-blog-spanish-local-regional-elections/', '/stories/34-150812205849-local-regional-elections-2015'
