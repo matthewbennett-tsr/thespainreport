@@ -20,7 +20,9 @@ a:hover {color: #F1BF00; background-color: #ffffff;}
 h1, input.edit-headline {font-family: Oswald, Arial, sans-serif; line-height: 1.1; font-size: 24px;}
 h2, h3 {font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 20px;}
 img {max-width:100%; margin: 0;}
-p, textarea {margin: 0x; font-family: Arial; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: 1; font-size: 14px;}
+p, textarea {margin: 0px; font-family: Arial; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: 1; font-size: 14px; line-height: 140%;}
+ul, ol {margin:15px 0px;}
+li {margin-bottom:4px; font-family: Arial; font-size: 15px; line-height: 130%;}
 input.edit-headline {font-family: Oswald, Arial, sans-serif; font-weight:bold;}
 input.edit-lede {font-family: Georgia; font-size: 16px; font-style: italic;}
 audio {background-color: #000;}

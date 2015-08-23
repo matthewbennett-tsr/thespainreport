@@ -31,9 +31,9 @@
   </div>
   <div style="margin-bottom: 10px;">
     <% if action_name == 'edit' %>
-      <%= f.text_area :item, :size => "134x5" %>
+      <%= f.text_area :item, :size => "131x7", :class => "inputtextarea", :maxlength => 1000 %>
     <% elsif action_name == 'new' %>
-      <%= f.text_area :item, :value => params[:breaking_text], :size => "134x5" %>
+      <%= f.text_area :item, :value => params[:breaking_text], :size => "131x7", :class => "inputtextarea", :maxlength => 1000 %>
     <% end %>
   </div>
 <div class="admin-classify"><strong>Stories:</strong> <%= collection_check_boxes(:newsitem, :story_ids, @stories, :id, :story) %></div>

@@ -41,6 +41,9 @@ gem 'envyable'
 # rewrites and redirects
 gem 'rack-rewrite'
 
+# Markdown
+gem 'redcarpet'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

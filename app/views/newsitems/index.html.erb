@@ -35,7 +35,9 @@
       <% else %>
       <% end %>
     <div class="listing-update-text">
-      <span class="listing-update-slug"><%= link_to newsitem.slug, newsitem %>:</span> <%= newsitem.item.html_safe %>
+      <span class="listing-update-slug"><%= link_to newsitem.slug, newsitem %></span>
+      <br />
+      <%= markdown(newsitem.item) %>
     </div>
     <div class="clear"></div>
     <div class="meta">

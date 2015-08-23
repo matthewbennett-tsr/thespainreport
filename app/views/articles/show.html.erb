@@ -48,7 +48,7 @@
 <% else %>
 <% end %>
 
-<div class="article-text"><%= simple_format @article.body.html_safe %>
+<div class="article-text"><%= markdown(@article.body) %>
 
 <% @article.newsitems.each do |newsitem| %>
 <h3>Update:</h3>

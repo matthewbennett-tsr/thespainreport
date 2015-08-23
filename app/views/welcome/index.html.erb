@@ -85,7 +85,9 @@
       <% end %>
   
       <div class="listing-update-text">
-        <strong><%= link_to newsitem.slug, newsitem %>:</strong> <%= newsitem.item.html_safe %>
+      <span class="listing-update-slug"><%= link_to newsitem.slug, newsitem %></span>
+      <br />
+      <%= markdown(newsitem.item) %>
       </div>
       <div class="clear"></div>
       <div class="meta">

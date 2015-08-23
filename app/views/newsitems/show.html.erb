@@ -31,12 +31,12 @@
 
 <% end %>
 
-<div class="update-text"><span class="article-slug"><%= @newsitem.updated_at.strftime("%b %d %Y") %>—<%= @newsitem.slug %>—</span><%= @newsitem.item.html_safe %></div>
+<div class="update-text"><p style="margin-bottom: 5px;"><span class="article-slug"><%= @newsitem.updated_at.strftime("%b %d %Y") %></span></p><%= markdown(@newsitem.item) %></div>
 <div class="clear"></div>
 </div>
 
 <% if @newsitem.article %>
-<div style="margin-bottom: 10px;">
+<div style="margin-bottom: 20px;">
 <span class="update-related-article"><strong>Update Related To:</strong> <%= link_to @newsitem.article.headline, @newsitem.article unless @newsitem.article.blank? %></span>
 </div>
 <% end %>
