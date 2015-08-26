@@ -52,6 +52,27 @@
   <% end %>
   <div class="clear"></div>
   </div>
+  
+  <div style="padding-bottom: 10px; border-bottom: 1px dotted #999999; margin-bottom: 10px;">
+  <h3>My Notifications</h3>
+  
+  <p>
+  <strong>Current setting:</strong>
+    <% if @user.emailpref == 'articlesupdates' %>
+      "Everything: Articles & Updates"
+    <% elsif @user.emailpref == 'justarticles' %>
+      "Just Articles, No Updates"
+    <% elsif @user.emailpref == 'nothing' %>
+      "I Don't Want Any E-mail"
+    <% else %>
+      "No Preference Set Yet"
+    <% end %>
+  </p>
+   <p style="margin-top: 10px;"><strong>Change your e-mail preference:</strong>
+  <%= f.select :emailpref, options_for_select([["Everything: Articles & Updates", "articlesupdates"], ["Just Articles, No Updates", "justarticles"], ["I Don't Want Any E-mail", "nothing"]], @user.emailpref) %>
+  </p>
+  </div>
+  
   <div class="actions">
     <button type="submit" class="blueformbutton">Save Changes</button>
   </div>

@@ -11,7 +11,7 @@
       </ul>
     </div>
   <% end %>
-<div style="margin-top: 10px; margin-bottom: 10px;"><strong>Type:</strong> <%= f.collection_select :type_id, @types, :id, :name %> | <strong>News Urgency:</strong> <%= f.select :urgency, options_for_select([["Normal", "normal"], ["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency) %></div>
+<div style="margin-top: 10px; margin-bottom: 10px;"><strong>Type:</strong> <%= f.collection_select :type_id, @types, :id, :name %> | <strong>News Urgency?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %></div>
 <div class="admin-classify"><strong>Stories:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
 <div class="admin-classify"><strong>Regions:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
 <div class="admin-classify"><strong>Categories:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>

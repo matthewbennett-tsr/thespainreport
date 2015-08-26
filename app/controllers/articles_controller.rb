@@ -85,6 +85,7 @@ class ArticlesController < ApplicationController
       @categories = Category.all.order(:category)
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
+      
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
@@ -116,7 +117,19 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
-        if @article.save
+        if @article.save && @article.status == 'published' && @article.created_at.today?
+          User.wantsarticles.editors.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantsarticles.subscribers.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantsarticles.readers.each do |user|
+            ArticleMailer.delay.send_article_teaser(@article, user)
+		  end
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @article.save
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
@@ -138,12 +151,21 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @article.update(article_params)
+        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today?
+          User.wantsarticles.editors.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantsarticles.subscribers.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantsarticles.readers.each do |user|
+            ArticleMailer.delay.send_article_teaser(@article, user)
+		  end
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else
-          format.html { render :edit }
-          format.json { render json: @article.errors, status: :unprocessable_entity }
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully updated.' }
+          format.json { render :show, status: :ok, location: @article }
         end
       end
     else

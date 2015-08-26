@@ -11,7 +11,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150819211514) do
+ActiveRecord::Schema.define(version: 20150825220938) do
+
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
 
   create_table "articles", force: :cascade do |t|
     t.string   "headline"
@@ -75,6 +78,22 @@ ActiveRecord::Schema.define(version: 20150819211514) do
     t.integer  "user_id"
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
   create_table "newsitems", force: :cascade do |t|
     t.text     "item"
     t.string   "source"
@@ -100,8 +119,8 @@ ActiveRecord::Schema.define(version: 20150819211514) do
     t.integer "region_id"
   end
 
-  add_index "newsitems_regions", ["newsitem_id"], name: "index_newsitems_regions_on_newsitem_id"
-  add_index "newsitems_regions", ["region_id"], name: "index_newsitems_regions_on_region_id"
+  add_index "newsitems_regions", ["newsitem_id"], name: "index_newsitems_regions_on_newsitem_id", using: :btree
+  add_index "newsitems_regions", ["region_id"], name: "index_newsitems_regions_on_region_id", using: :btree
 
   create_table "newsitems_stories", id: false, force: :cascade do |t|
     t.integer "newsitem_id"
@@ -147,8 +166,9 @@ ActiveRecord::Schema.define(version: 20150819211514) do
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
     t.string   "sign_up_url"
+    t.string   "emailpref"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

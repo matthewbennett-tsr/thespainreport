@@ -79,9 +79,15 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
-        if @newsitem.save
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully created.' }
-          format.json { render :show, status: :created, location: @newsitem}
+        if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
+          User.wantsupdates.each do |user|
+            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+		  end
+          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @newsitem.save
+          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
         else
           format.html { render :new }
           format.json { render json: @newsitem.errors, status: :unprocessable_entity }
@@ -101,9 +107,15 @@ class NewsitemsController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @newsitem.update(newsitem_params)
+        if @newsitem.update(newsitem_params) && @newsitem.status == 'published' && @newsitem.created_at.today?
+          User.wantsupdates.each do |user|
+            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+		  end
           format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
+        elsif @newsitem.update
+          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
         else
           format.html { render :edit }
           format.json { render json: @newsitem.errors, status: :unprocessable_entity }

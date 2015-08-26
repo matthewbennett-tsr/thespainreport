@@ -13,8 +13,12 @@ class User < ActiveRecord::Base
   before_create :set_default_role
 
   ROLES = %i[editor subscriber reader]
+  
   scope :subscribers, -> {where(role: 'subscriber')}
   scope :readers, -> {where(role: 'reader')}
+  scope :editors, -> {where(role: 'editor')}
+  scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
+  scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
   
   has_many :comments
   
@@ -44,7 +48,7 @@ class User < ActiveRecord::Base
   generate_token(:password_reset_token)
   self.password_reset_sent_at = Time.zone.now
   save!
-  UserMailer.password_reset(self).deliver
+  UserMailer.delay.password_reset(self)
   end
   
   def create_reset_digest
@@ -54,7 +58,7 @@ class User < ActiveRecord::Base
   end
   
   def send_password_reset_email
-    UserMailer.password_reset(self).deliver_now
+    UserMailer.delay.password_reset(self)
   end
   
   private

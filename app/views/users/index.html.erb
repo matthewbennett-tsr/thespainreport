@@ -13,6 +13,7 @@
       <td>E-mail</td>
       <td>Twitter</td>
       <td>Conf?</td>
+      <td>Notifications</td>
       <td>Sign Up URL</td>
     </tr>
   </thead>
@@ -36,7 +37,18 @@
         <td><%= mail_to user.email %></td>
         <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
         <td><%= user.email_confirmed %></td>
-        <td><%= link_to user.sign_up_url.truncate(42), user.sign_up_url unless user.sign_up_url.blank? %></td>
+        <td>
+          <% if user.emailpref == 'articlesupdates' %>
+            Articles & Updates
+          <% elsif user.emailpref == 'justarticles' %>
+            Just Articles
+          <% elsif user.emailpref == 'nothing' %>
+            No E-mail
+          <% else %>
+            Not Set
+          <% end %>
+        </td>
+        <td><%= link_to user.sign_up_url.truncate(35), user.sign_up_url unless user.sign_up_url.blank? %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

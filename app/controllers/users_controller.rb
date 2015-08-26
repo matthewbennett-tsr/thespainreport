@@ -74,7 +74,7 @@ class UsersController < ApplicationController
     respond_to do |format|
     if current_user.nil? 
       if @user.save
-        UserMailer.registration_confirmation(@user).deliver_now
+        UserMailer.delay.registration_confirmation(@user)
         format.html { redirect_to :action => 'confirm' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -156,7 +156,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :name, :bio, :role, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token)
+      params.require(:user).permit(:email, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token)
     end
 
 end

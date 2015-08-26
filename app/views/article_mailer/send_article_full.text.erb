@@ -1,0 +1,33 @@
+<%= @article.headline %>
+
+<% if @article.urgency == 'majorbreaking' %>
+MAJOR BREAKING <%= @article.type.name %>: <%= @article.lede %>
+<% elsif @article.urgency == 'breaking' %>
+BREAKING <%= @article.type.name %>: <%= @article.lede %>
+<% elsif @article.urgency == 'latest' %>
+LATEST <%= @article.type.name %>: <%= @article.lede %>
+<% else %>
+<%= @article.type.name %>: <%= @article.lede %>
+<% end %>
+
+<%= @article.created_at.strftime("%b %d %Y") %>
+
+<%= @article.body %>
+
+Leave your comment here:
+<%= article_url(@article) %>
+
+-----------------
+
+Thank you for subscribing to The Spain Report. 
+It is a great honour to be able to provide you with news and analysis of Spain, in English, that you find valuable.
+Your subscription also ensures our editorial independence, on your behalf, over the long term.
+
+-----------------
+
+The Spain Report Ltd.
+145-XXX St. John Street
+London
+XXX XXX
+
+https://www.thespainreport.com

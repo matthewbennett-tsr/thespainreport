@@ -1,0 +1,33 @@
+<%= @article.headline %>
+
+<% if @article.urgency == 'majorbreaking' %>
+MAJOR BREAKING <%= @article.type.name %>: <%= @article.lede %>
+<% elsif @article.urgency == 'breaking' %>
+BREAKING <%= @article.type.name %>: <%= @article.lede %>
+<% elsif @article.urgency == 'latest' %>
+LATEST <%= @article.type.name %>: <%= @article.lede %>
+<% else %>
+<%= @article.type.name %>: <%= @article.lede %>
+<% end %>
+
+<%= @article.created_at.strftime("%b %d %Y") %>
+
+<%= @article.body.truncate(300) %>
+
+Read the full story now:
+<%= article_url(@article) %>
+
+-----------------
+
+Subscribe now to: x, y and z.
+
+E-mail management options
+
+-----------------
+
+The Spain Report Ltd.
+145-XXX St. John Street
+London
+XXX XXX
+
+https://www.thespainreport.com

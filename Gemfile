@@ -42,6 +42,9 @@ gem 'envyable'
 # rewrites and redirects
 gem 'rack-rewrite'
 
+# background jobs with Delayed Job
+gem 'delayed_job_active_record'
+
 # Markdown
 gem 'redcarpet'
 
