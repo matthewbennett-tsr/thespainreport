@@ -9,11 +9,11 @@
     <tr style="font-weight: bold;">
       <td></td>
       <td>Role</td>
-      <td>Name</td>
       <td>E-mail</td>
+      <td>Display Name</td>
       <td>Twitter</td>
-      <td>Conf?</td>
       <td>E-mail Alerts</td>
+      <td>Conf?</td>
       <td></td>
     </tr>
   </thead>
@@ -34,10 +34,9 @@
           <% end %>
         <%= user.role.to_s.humanize %></span>
         </td>
-        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
         <td><%= mail_to user.email %></td>
+        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
         <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
-        <td><%= user.email_confirmed %></td>
         <td>
           <% if user.emailpref == 'articlesupdates' %>
             Articles & Updates
@@ -49,6 +48,7 @@
             Not Set
           <% end %>
         </td>
+        <td><%= user.email_confirmed %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

@@ -5,7 +5,7 @@ class UsersController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
-      @users = User.all.order ('users.name ASC')
+      @users = User.all.order ('users.role DESC, users.email ASC')
       @subscribercount = User.subscribers.count
       @readercount = User.readers.count
     else
