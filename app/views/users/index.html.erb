@@ -13,8 +13,8 @@
       <td>E-mail</td>
       <td>Twitter</td>
       <td>Conf?</td>
-      <td>Notifications</td>
-      <td>Sign Up URL</td>
+      <td>E-mail Alerts</td>
+      <td></td>
     </tr>
   </thead>
 
@@ -32,7 +32,8 @@
           <% else %>
             <span>
           <% end %>
-        <%= user.role.to_s.humanize %></span></td>
+        <%= user.role.to_s.humanize %></span>
+        </td>
         <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
         <td><%= mail_to user.email %></td>
         <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
@@ -48,7 +49,6 @@
             Not Set
           <% end %>
         </td>
-        <td><%= link_to user.sign_up_url.truncate(35), user.sign_up_url unless user.sign_up_url.blank? %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
