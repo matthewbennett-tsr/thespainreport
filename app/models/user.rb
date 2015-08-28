@@ -4,13 +4,14 @@ class User < ActiveRecord::Base
   validates_format_of :email, :with => /@/, message: ": are you sure that's your e-mail address?"
   validates :password, :on => :create, length: {minimum: 11, message: ": needs to be at least 11 characters long"}
   validates :password, :on => :update, length: {minimum: 11, message: ": needs to be at least 11 characters long"}, allow_blank: true
-  validates :name, :on => :update, :uniqueness => {:case_sensitive => false}, length: {maximum: 20}
+  validates :name, :on => :update, :uniqueness => {:case_sensitive => false}, length: {maximum: 20}, allow_blank: true
   validate :password_complexity
   validates :password_confirmation, :presence => true, :on => :create
   validates :password_confirmation, :presence => true, :on => :update, allow_blank: true
   
   before_create :confirmation_token
   before_create :set_default_role
+  before_create :set_default_emailpref
 
   ROLES = %i[editor subscriber reader]
   
@@ -47,7 +48,7 @@ class User < ActiveRecord::Base
   def send_password_reset
   generate_token(:password_reset_token)
   self.password_reset_sent_at = Time.zone.now
-  save!
+  save!(:validate => false)
   UserMailer.delay.password_reset(self)
   end
   
@@ -70,6 +71,10 @@ class User < ActiveRecord::Base
   
   def set_default_role
     self.role ||= 'reader'
+  end
+  
+  def set_default_emailpref
+    self.emailpref ||= 'articlesupdates'
   end
   
 end
