@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  post 'new_subscription' => 'subscriptions#new_subscription'
+  post 'new_spain_report_member' => 'subscriptions#new_spain_report_member'
+  resources :subscriptions
   get 'users/confirm'
   get 'users/newerrors'
   get '/login' => 'sessions#new'

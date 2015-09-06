@@ -6,7 +6,6 @@ class RegionsController < ApplicationController
   def index
     @regions = Region.all.order( 'regions.region ASC' )
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
 
   # GET /regions/1
@@ -14,7 +13,6 @@ class RegionsController < ApplicationController
   def show
     @last50items = Newsitem.published.lastfifty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
 
   # GET /regions/new

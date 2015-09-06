@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-
+source 'https://code.stripe.com'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.2.3'
@@ -47,6 +47,9 @@ gem 'delayed_job_active_record'
 
 # Markdown
 gem 'redcarpet'
+
+#Stripe
+gem 'stripe', '~> 1.25.0', :source => 'https://code.stripe.com/'
 
 # Use Unicorn as the app server
 # gem 'unicorn'

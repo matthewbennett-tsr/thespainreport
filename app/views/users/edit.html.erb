@@ -12,4 +12,59 @@
 
 <h3>My Subscription</h3>
 
-<p>Coming soon.</p>
+<% if current_user.role == 'editor' %>
+  <%= form_for(@user) do |f| %>
+    <div class="email-input-float"><strong>Customer ID:</strong> <%= f.text_field :stripe_customer_id, :class => "input200" %></div>
+    <div class="email-input-float"><button type="submit" class="blueformbutton">Save Changes</button></div>
+  <% end %>
+  <br /><br />
+<% else %>
+
+<% end %>
+
+<% if @user.stripe_customer_id? %>
+<strong>Customer ID:</strong> <%= @stripe_customer_details['id'] %><br />
+<strong>Customer E-mail:</strong> <%= @stripe_customer_details['description'] %><br />
+<strong>Customer Creation Date:</strong> <%= Time.at(@stripe_customer_details['created']).to_formatted_s(:long) %><br /><br />
+
+<strong>Credit Card:</strong> <%= @stripe_customer_details.sources.data[0].brand %><br />
+<strong>Card Country:</strong> <%= @stripe_customer_details.sources.data[0].country %><br />
+<strong>Ending In:</strong> **** **** **** <%= @stripe_customer_details.sources.data[0].last4 %><br />
+<strong>Expiry Month:</strong> <%= @stripe_customer_details.sources.data[0].exp_month %>/<%= @stripe_customer_details.sources.data[0].exp_year %><br /><br />
+
+<strong>Subscription Plan:</strong> <%= @stripe_customer_details.subscriptions.data[0].plan.name %><br />
+<strong>Subscription ID:</strong> <%= @stripe_customer_details.subscriptions.data[0].id %><br />
+<strong>Subscription Start Date:</strong> <%= Time.at(@stripe_customer_details.subscriptions.data[0].current_period_start).to_formatted_s(:long) %><br />
+<strong>Subscription Renewal Date:</strong> <%= Time.at(@stripe_customer_details.subscriptions.data[0].current_period_end).to_formatted_s(:long) %><br /><br />
+
+<div><strong>My Payments</strong>
+  
+  <div style="margin-top: 10px; padding: 5px;">
+    <div style="float:left; font-weight:bold; width:90px;">Date</div>
+    <div style="float:left; font-weight:bold; width:215px; padding-left: 5px;">Payment ID</div>
+    <div style="float:left; font-weight:bold; width:215px; padding-left: 5px;">Item</div>
+    <div style="float:left; font-weight:bold; width:25px; padding-right: 3px; text-align:right;">Qty</div>
+    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">Price</div>
+    <div style="float:left; font-weight:bold; width:60px; padding-right: 3px; text-align:right;">VAT %</div>
+    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">VAT</div>
+    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">Total</div>
+    <div class="clear"></div>
+  </div>
+
+  <% @stripe_invoices.each do |invoice| %>
+    <div style="border-top: 1px dotted #999999; padding: 5px;">
+    <div style="float:left; width:90px;"><%= Time.at(invoice.date).strftime("%b %d, %Y") %></div>
+    <div style="float:left; width:215px; border-left: 1px dotted #999999; padding-left: 5px;"><%= invoice.id %></div>
+    <div style="float:left; width:215px; border-left: 1px dotted #999999; padding-left: 5px;"><%= invoice.lines.data[0].type.capitalize %> (<%= invoice.lines.data[0].plan.name %>)</div>
+    <div style="float:left; width:25px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;"><%= invoice.lines.data[0].quantity %></div>
+    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.lines.data[0].plan.amount/100 %></div>
+    <div style="float:left; width:60px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;"><%= invoice.tax_percent %>%</div>
+    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.tax %></div>
+    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.total/100 %></div>
+    <div class="clear"></div>
+    </div>
+  <% end %>
+</div>
+<% else %>
+Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-no-turbolink" => true %>.
+<% end %>

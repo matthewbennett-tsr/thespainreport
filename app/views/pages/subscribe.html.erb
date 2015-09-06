@@ -6,6 +6,60 @@
 
 <div class="article-lede">We give you lots of Spain news and editorial analysis. You get to chooose how much you want to pay to read it all.</div>
 
+
+
+  <%= form_tag '/stripe_checkout', :class => '', :id => 'payment-form' do %>
+      <div style="margin-top: 20px;">
+        <label class="control-label" for="email">Email</label>
+        <input type="email" name="email" id="email" placeholder="you@example.com" style="width: 25em"/>
+      </div>
+      <div style="margin-top: 20px;">
+        <label class="control-label" for="number">Card Number</label>
+        <input type="text" size="20" data-stripe="number" id="number" placeholder="**** **** **** ****" pattern="[\d ]*" style="width: 18em"/>
+      </div>
+      <div style="margin-top: 20px;">
+        <label class="control-label" for="cvc">CVC</label>
+        <input type="text" style="width: 3em" size="3" data-stripe="cvc" id="cvc" placeholder="***" pattern="\d*"/>
+        <img id="card-image" src="/img/credit.png" style="height: 30px; padding-left: 10px; margin-top: -10px">
+      </div>
+      <div style="margin-top: 20px;">
+        <label class="control-label">Exp (MM/YYYY)</label>
+        <input style="width: 2em" type="text" size="2" id="exp-month" data-stripe="exp-month" placeholder="MM" pattern="\d*"/>
+        <span> / </span>
+        <input style="width: 3em" type="text" size="4" id="exp-year" data-stripe="exp-year" placeholder="YYYY" pattern="\d*"/>
+      </div>
+      <div class="price" style="margin-top: 20px;">$50</div>
+      <div style="">
+        <button type="submit" class="btn btn-primary btn-large">Buy Now</button>
+      </div>
+  <% end %>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<script type="text/javascript">
+$(function(){
+  Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
+});
+
+$('#payment-form').submit(function(event) {
+  var form = $(this);
+  form.find('button').prop('disabled', true);
+  Stripe.createToken(form, stripeResponseHandler);
+  return false;
+});
+
+function stripeResponseHandler(status, response) {
+  var form = $('#payment-form');
+  if (response.error) {
+    form.find('.payment-errors').text(response.error.message);
+    form.find('button').prop('disabled', false);
+  } else {
+    var token = response.id;
+    form.append($('<input type="hidden" name="stripeToken">').val(token));
+    form.get(0).submit();
+  }
+}
+</script>
+
 <div class="article-text">
 
 <h3>Version 4 Launch</h3>

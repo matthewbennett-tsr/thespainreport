@@ -30,7 +30,7 @@
     <% if flash.present? %>
       <% flash.each do |name, msg| %>
         <span style="background-color: #FEF9E6; padding: 0px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
-    <% end %>
+      <% end %>
     <% elsif current_user.nil? %>
       <% if current_page?('/') %>
         [STRIPE] Original, independent reporting. No ads, no spam.
@@ -123,7 +123,7 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
 <div class="top-float-left-no">––</div>
 </div>
 <div class="top-nav-below-420">
-<div class="top-float-left-no"><%= link_to "Subscribe", '/subscribe/' %></div>
+<div class="top-float-left-no"><%= link_to "Subscribe", '/subscriptions/new', :"data-no-turbolink" => true %></div>
 </div>
 <div class="clear"></div>
 </div>

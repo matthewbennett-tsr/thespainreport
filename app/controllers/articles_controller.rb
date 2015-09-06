@@ -6,7 +6,6 @@ class ArticlesController < ApplicationController
   def index
     @articles = Article.published.lastthirty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /articles/admin
@@ -32,7 +31,6 @@ class ArticlesController < ApplicationController
   def blog
     @is_blog = Article.is_blog.published.lastthirty.order( 'articles.updated_at DESC' )
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /articles/in-depth
@@ -40,7 +38,6 @@ class ArticlesController < ApplicationController
   def in_depth
     @last30 = Article.in_depth.published.lastthirty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /articles/news
@@ -48,7 +45,6 @@ class ArticlesController < ApplicationController
   def news
     @last30 = Article.news.published.lastthirty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /articles/editorial
@@ -56,7 +52,6 @@ class ArticlesController < ApplicationController
   def editorial
     @last30 = Article.editorial.published.lastthirty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /articles/1
@@ -71,7 +66,6 @@ class ArticlesController < ApplicationController
     @title = "some custom page title"
     @articleupdates = @article.newsitems
     @comments = @article.comments
-    @user = User.new
   end
 
   # GET /articles/new

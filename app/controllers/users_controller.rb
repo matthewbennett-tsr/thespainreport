@@ -50,7 +50,7 @@ class UsersController < ApplicationController
     user = User.find_by_confirm_token(params[:id])
     if user
       user.email_activate
-      flash[:success] = "Well done! Log in and click \"My Account\" to choose a display name and start commenting >>"
+      flash[:success] = "Well done! Check your e-mail again to choose your password."
       redirect_to root_url
     else
       flash[:error] = "Sorry, that link is not valid."
@@ -64,8 +64,16 @@ class UsersController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
+      if @user.stripe_customer_id?
+        @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
+        @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
+      end
     else
       @user = current_user
+      if @user.stripe_customer_id?
+        @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
+        @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
+      end
     end
   end
 
@@ -104,6 +112,11 @@ class UsersController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
+      if @user.stripe_customer_id?
+        @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
+        @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
+      else
+      end
       respond_to do |format|
         if @user.update(user_params)
           format.html { render :edit}
@@ -116,6 +129,10 @@ class UsersController < ApplicationController
       end
     else
       @user = current_user
+      if @user.stripe_customer_id?
+        @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
+        @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
+      end
       respond_to do |format|
         if @user.update(user_params)
           format.html { render :edit}
@@ -156,7 +173,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token)
+      params.require(:user).permit(:email, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id)
     end
 
 end

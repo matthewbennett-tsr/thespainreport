@@ -6,6 +6,8 @@
 
 <div class="article-lede">The latest articles in each major area of life in Spain. Click on the topic title to see more and all the latest updates.</div>
 
+<%= render 'emailsignup' %>
+
 <% @categories.each do |category| %>
 <div class="index-by-container">
 <% if category.articles.empty? %>

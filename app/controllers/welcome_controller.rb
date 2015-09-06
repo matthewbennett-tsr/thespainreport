@@ -4,6 +4,5 @@ class WelcomeController < ApplicationController
     @last30items = Newsitem.published.lastthirty
     @tickerstories = Story.bignews.latest.ticker
     @latestaudio = Audio.lastone
-    @user = User.new
   end
 end

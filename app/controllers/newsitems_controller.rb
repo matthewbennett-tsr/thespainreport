@@ -7,7 +7,6 @@ class NewsitemsController < ApplicationController
     @last30items = Newsitem.published.lastthirty
     @last50items = Newsitem.published.lastfifty
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
   
   # GET /newsitems/admin
@@ -34,7 +33,6 @@ class NewsitemsController < ApplicationController
     @tickerstories = Story.bignews.latest.ticker
     @latestaudio = Audio.lastone
     @comments = @newsitem.comments
-    @user = User.new
   end
 
   # GET /newsitems/new

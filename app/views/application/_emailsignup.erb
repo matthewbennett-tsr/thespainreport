@@ -1,19 +1,27 @@
 <% if current_user.nil? %>
-<div class="email-sign-up">
-<div style="float:right;">
-<%= image_tag "thespainreport-evssl-green.jpg", :height => "75px" %>
-</div>
-  <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> To Understand More</span>
-  <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
-  Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. Free members can read all updates, leave comments and get e-mail alerts.
-  </p>
-  <%= form_for(@user) do |f| %>
-  <div class="email-input-float"><%= f.text_field :email, :class => "input200", :placeholder => "Your e-mail…" %></div>
-  <div class="email-input-float"><%= f.password_field :password, :class => "input170", :placeholder => "Choose your password…" %></div>
-  <div class="email-input-float"><%= f.password_field :password_confirmation, :class => "input170", :placeholder => "Confirm your password…" %></div>
-  <div class="email-input-float"><button type="submit" class="blueformbutton">Join Now</button></div>
-  <div class="clear"></div>
-  <%= f.hidden_field :sign_up_url, :value => request.original_url %>
-  <% end %>
+  <div class="email-sign-up">
+  
+    <div style="float:right;">
+      <%= image_tag "thespainreport-evssl-green.jpg", :height => "75px" %>
+    </div>
+    
+    <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> To Understand More</span>
+    <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
+      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. As a free member, you can read all updates, leave comments and set your e-mail alerts.
+    </p>
+    
+    <%= form_tag '/new_spain_report_member', :class => '', :id => 'payment-form' do |f| %>
+      <div class="email-input-float inputgeneral">
+        <span style="font-family: Oswald; font-size: 15px;">Enter Your E-mail Address:</span>
+      </div>
+      <div class="email-input-float">
+        <input type="email" size="40" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
+      </div>
+      <div class="email-input-float">
+        <button type="submit" class="blueformbutton">Join Now</button>
+      </div>
+      <div class="clear"></div>
+    <% end %>
+
 </div>
 <% end %>

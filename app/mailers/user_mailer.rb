@@ -3,7 +3,17 @@ class UserMailer < ApplicationMailer
 
   def registration_confirmation(user)
     @user = user
-    mail(:to => "<#{user.email}>", :subject => "Join: click this link to confirm your registration")
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (I): confirm your e-mail")
+  end
+  
+  def password_choose(user)
+    @user = user
+    mail to: user.email, subject: "Welcome to The Spain Report (II): choose your password"
+  end
+  
+  def thank_you_for_subscribing(user)
+    @user = user
+    mail to: user.email, subject: "Welcome to The Spain Report (III): thank you for subscribing"
   end
   
   def password_reset(user)

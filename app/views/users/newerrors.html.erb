@@ -2,6 +2,7 @@
 
 <%= form_for(@user) do |f| %>
 <div style="width:100%;">
+  <div style="float:left; width:50%; padding:7px;">
   
   <% if @user.errors.any? %>
     <div id="error_explanation">
@@ -34,9 +35,10 @@
   </div>
       
     </div>
+    </div>
   <% end %>
   
-  <div class="error-explainer"><h2>Do Not Panic About 11-Character Passwords…</h2>
+<div class="error-explainer"><h2>Do Not Panic About 11-Character Passwords…</h2>
 <p>They are actually easier to remember for humans, as well as more secure. 
 <a href="http://xkcd.com/936/">This cartoon</a> explains it well. 
 And this <a href="http://rumkin.com/tools/password/passchk.php">password strength tool</a> shows you and explains a bit more.

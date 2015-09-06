@@ -1,0 +1,125 @@
+<%= form_tag '/new_subscription', :class => '', :id => 'payment-form' do %>
+
+  <div class="subscription-form-container">
+  
+    <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, id: "flash_#{name}_div" do -%>
+          <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+        <% end -%>
+      <% end %>
+    <% end %>
+    
+    <div class="subscription-form-section-top">
+      <div class="subscription-left-label-select">
+        Choose Your Price:
+      </div>
+      <div class="subscription-right-form-element">
+        <select name="plan" class="input200">
+          <optgroup label="Yearly Payments">
+            <option value="500year">£500/year</option>
+            <option value="250year">£250/year</option>
+            <option value="100year">£100/year</option>
+            <option value="50year">£50/year</option>
+            <option value="35year">£35/year</option>
+          </optgroup>
+          <optgroup label="Monthly Payments">
+            <option value="100month">£100/month</option>
+            <option value="75month">£75/month</option>
+            <option value="50month">£50/month</option>
+            <option value="25month">£25/month</option>
+            <option value="10month">£10/month</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle">
+      <div class="subscription-left-label-input">
+        Your E-mail Address:
+      </div>
+      <div class="subscription-right-form-element">
+        <input type="email" size="40" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
+      </div>
+      <div class="clear"></div>
+    </div>
+      
+    <div class="subscription-form-section-middle" style="background-image: url(http://localhost:3000/assets/thespainreport-evssl-white.jpg); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+      
+    <div> 
+      <div class="subscription-left-label-input">
+        Your Credit Card Number:
+      </div>  
+      <div class="subscription-right-form-element form-group">
+          <input type="tel" autocomplete="cc-number" id="cc-number" class="inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" />      
+      </div>
+      <div class="clear"></div>
+    </div>
+       
+    <div style="margin-top: 5px;">
+      <div class="subscription-left-label-select">
+        Card Expiry Date:    
+      </div>
+        
+      <div class="subscription-right-form-element">
+        <select data-stripe="exp-month" class="ccjs-month">
+          <option selected disabled>Month</option>
+          <option value="01">01</option>
+          <option value="02">02</option>
+          <option value="03">03</option>
+          <option value="04">04</option>
+          <option value="05">05</option>
+          <option value="06">06</option>
+          <option value="07">07</option>
+          <option value="08">08</option>
+          <option value="09">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+          
+        <select data-stripe="exp-year" class="ccjs-year">
+          <option selected disabled>Year</option>
+          <option value="15">15</option>
+          <option value="16">16</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+        </select>
+      </div>
+      <div class="clear"></div>
+    </div>
+          
+    <div style="margin-top: 5px;">  
+      <div class="subscription-left-label-input">
+        Card CVC/Security Code:
+      </div>
+      <div class="subscription-right-form-element">
+        <input type="text" id="cc-cvc" class="inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+  </div>
+    
+    <div class="subscription-form-section-bottom">  
+      <div class="subscription-left-label-input">
+        
+      </div>
+      <div class="subscription-right-form-element">
+        <button type="submit" class="blueformbutton">Subscribe Now</button>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+      <div class="clear"></div>
+    </div>
+    
+<% end %>

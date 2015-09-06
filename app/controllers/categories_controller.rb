@@ -6,7 +6,6 @@ class CategoriesController < ApplicationController
   def index
     @categories = Category.all.order( 'categories.category ASC' )
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
 
   # GET /categories/1
@@ -14,7 +13,6 @@ class CategoriesController < ApplicationController
   def show
     @newsitem = Category.find(params[:id])
     @tickerstories = Story.bignews.latest.ticker
-    @user = User.new
   end
 
   # GET /categories/new
