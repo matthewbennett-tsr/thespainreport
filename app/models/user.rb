@@ -24,8 +24,8 @@ class User < ActiveRecord::Base
   has_many :comments
   
   def password_complexity
-    if password.present? and not password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#$%&+=])(?=.*[\s])./)
-      errors.add :password, ": must include at least one of each: lowercase letter, capital letter, number, symbol (@#$%&+=), space."
+    if password.present? and not password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#!$%&+=])(?=.*[\s])./)
+      errors.add :password, ": must include at least a lowercase letter, a capital letter, a number, a space and one of these symbols: ! @ # $ % & + ="
     end
   end
   
