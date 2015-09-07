@@ -134,6 +134,37 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
 
 </div>
 
+ <div id="inline" style="display: none;">
+  <div style="padding-top: 20px; padding-left:20px; padding-right:20px;">
+  <h4 class="widget-title">Subscriber Access</h4>
+  <form name="loginform" id="loginform" action="https://www.thespainreport.com/wp-login.php" method="post">
+	<table style="border: none;">
+		<tr>
+		<td><label for="user_login">Username:</label></td>
+		<td><input type="text" name="log" id="user_login" class="input" value="" size="30" /></td>
+		<td><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever"  /> Remember Me</label></td>
+		</tr>
+		<tr>
+		<td><label for="user_pass">Password:</label></td>
+		<td><input type="password" name="pwd" id="user_pass" class="input" value="" size="30" /></td>
+		<td><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In" /> | <a href="https://www.thespainreport.com/wp-login.php?action=lostpassword" title="Password Lost and Found">Lost your password?</a>
+</td>
+		</tr>
+	</table>
+		<input type="hidden" name="redirect_to" value="xxxxx" />
+		<input type="hidden" name="testcookie" value="1" />
+</form>
+  </div>
+  <div style="padding-left:20px; padding-right:20px;">
+	<h4 class="widget-title">Subscribe Now To The Spain Report</h4>
+	<p style="margin-top: 10px; margin-bottom: 20px; font-size: 15px;">
+	<a href="https://www.thespainreport.com/subscribe-now/" id="paywall-subscribe-image"><img src="https://www.thespainreport.com/wp-content/themes/thespainreport/thespainreport-evssl-white.jpg" style="float:right; margin-left: 2px; margin-bottom: 0px;" /></a>
+	Either you have used up all your free articles or this story is only for subscribers. Online news subscriptions can cost up to £500/year but we have no idea what your personal economic situation is, so we just ask every reader to pay some amount to access all of our ad-free, original, independent Spain reporting. From £3–£100/month or £25–£500/year, you choose:
+	</p>
+	<p style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><a href="https://www.thespainreport.com/subscribe-now/" class="subscribebutton1" onClick="ga('send', 'event', 'Paywall', 'Click', 'Subscribe Now');">Subscribe Now</a></p>
+	<p style="margin-bottom: 10px; font-size: 15px; text-align: center;"><a href="https://www.thespainreport.com/subscribe-group/" style="text-decoration: underline;" id="paywall-subscribe-group">Or use this form for group or corporate subscriptions</a></p>
+ </div>
+
 <%= render partial: "layouts/google_analytics_pageview" %>
 </body>
 </html>
