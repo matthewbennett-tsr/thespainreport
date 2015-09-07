@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   scope :editors, -> {where(role: 'editor')}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
+  scope :lasttenusers, -> {order('updated_at DESC').limit(10)}
   
   has_many :comments
   
