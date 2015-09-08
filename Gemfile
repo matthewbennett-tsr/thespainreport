@@ -51,6 +51,9 @@ gem 'redcarpet'
 #Stripe
 gem 'stripe', '~> 1.25.0', :source => 'https://code.stripe.com/'
 
+# Stripe bug test install of bootstrap
+gem "twitter-bootstrap-rails"
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

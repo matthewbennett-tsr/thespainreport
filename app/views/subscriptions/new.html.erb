@@ -55,9 +55,9 @@
 <p>“If you want regular #news from #Spain in English, please subscribe to @thespainreport. It’ll be money well spent. Great resource. #media“—Patrick, London</p>
 </div>
 
-
-<script src="https://creditcardjs.com/creditcardjs-v0.10.12.min.js"></script>
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script src="/assets/jquery.payment.js"></script>
+
 <script>
     jQuery(function($) {
       $('[data-numeric]').payment('restrictNumeric');
@@ -86,7 +86,6 @@
     });
 </script>
 
-<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
 <script type="text/javascript">
 $(function(){
   Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
