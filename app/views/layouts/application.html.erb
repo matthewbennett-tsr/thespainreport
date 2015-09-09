@@ -20,6 +20,16 @@
   <%= csrf_meta_tags %>
   <%= favicon_link_tag 'favicon.ico' %>
   <%= render "layouts/google_analytics" %>
+  
+<% if current_user.nil? && controller_name == 'articles' && action_name == 'show' && paywall %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall').modal();
+    });
+  </script>
+<% end %>
+
+
 </head>
 <body>
 
@@ -134,36 +144,52 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
 
 </div>
 
- <div id="inline" style="display: none;">
-  <div style="padding-top: 20px; padding-left:20px; padding-right:20px;">
-  <h4 class="widget-title">Subscriber Access</h4>
-  <form name="loginform" id="loginform" action="https://www.thespainreport.com/wp-login.php" method="post">
-	<table style="border: none;">
-		<tr>
-		<td><label for="user_login">Username:</label></td>
-		<td><input type="text" name="log" id="user_login" class="input" value="" size="30" /></td>
-		<td><label for="rememberme"><input name="rememberme" type="checkbox" id="rememberme" value="forever"  /> Remember Me</label></td>
-		</tr>
-		<tr>
-		<td><label for="user_pass">Password:</label></td>
-		<td><input type="password" name="pwd" id="user_pass" class="input" value="" size="30" /></td>
-		<td><input type="submit" name="wp-submit" id="wp-submit" class="button button-primary button-large" value="Log In" /> | <a href="https://www.thespainreport.com/wp-login.php?action=lostpassword" title="Password Lost and Found">Lost your password?</a>
-</td>
-		</tr>
-	</table>
-		<input type="hidden" name="redirect_to" value="xxxxx" />
-		<input type="hidden" name="testcookie" value="1" />
-</form>
+<!-- Paywall -->
+<div class="modal" id="paywall" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="modal-open">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Please log in for instant access to your article</h1>
+      </div>
+      <div class="modal-body">
+        <div style="padding-bottom: 14px; border-bottom: 1px solid #AA151B; margin-bottom: 0px;">
+        <%= form_tag '/login' do %>
+        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
+        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
+        <div class="top-login-input-float"><button type="submit" class="blueformbutton" id="login">Log In</button></div>
+        <div class="top-login-input-float" style="margin-top:7px;">
+          <% if flash.present? %>
+            <% flash.each do |name, msg| %>
+              <span style="background-color: #FEF9E6; padding: 5px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="clear"></div>
+        <% end %>
+        </div>
+        <div style="background-image: url(<%= asset_path 'thespainreport-evssl-white.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+        <h3>If you are not currently a member, subscribe now…at a price you choose</h3>
+        <ul>
+        <li>Build a rich mental model of a changing Spain and understand more about Spaniards' struggles;</li>
+        <li>Original, timely, independent, ad-free reporting of the latest stories and major ongoing trends;</li>
+        <li>Get full and immediate access to all of our Spain news, reporting and analysis, past and present;</li>
+        <li>Full-text e-mails with complete articles right in your inbox as soon as they are news;</li>
+        <li>Clean, safe, fast-loading articles on all of your desktop, tablet and mobile devices;</li>
+        </ul>
+        <p style="text-align:center; margin: 20px 0 20px 0;"><a href="https://www.thespainreport.com/subscriptions/new" class="blueformbutton">Subscribe Now</a></p>
+        <p style="margin: 0; font-style: italic;">“Your reporting and comment are excellent – please keep up the good work!"—John, Catalonia</p>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <span style="font-family: Oswald; font-weight:bold; border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span>
+      </div>
+    </div>
   </div>
-  <div style="padding-left:20px; padding-right:20px;">
-	<h4 class="widget-title">Subscribe Now To The Spain Report</h4>
-	<p style="margin-top: 10px; margin-bottom: 20px; font-size: 15px;">
-	<a href="https://www.thespainreport.com/subscribe-now/" id="paywall-subscribe-image"><img src="https://www.thespainreport.com/wp-content/themes/thespainreport/thespainreport-evssl-white.jpg" style="float:right; margin-left: 2px; margin-bottom: 0px;" /></a>
-	Either you have used up all your free articles or this story is only for subscribers. Online news subscriptions can cost up to £500/year but we have no idea what your personal economic situation is, so we just ask every reader to pay some amount to access all of our ad-free, original, independent Spain reporting. From £3–£100/month or £25–£500/year, you choose:
-	</p>
-	<p style="text-align: center; margin-top: 30px; margin-bottom: 30px;"><a href="https://www.thespainreport.com/subscribe-now/" class="subscribebutton1" onClick="ga('send', 'event', 'Paywall', 'Click', 'Subscribe Now');">Subscribe Now</a></p>
-	<p style="margin-bottom: 10px; font-size: 15px; text-align: center;"><a href="https://www.thespainreport.com/subscribe-group/" style="text-decoration: underline;" id="paywall-subscribe-group">Or use this form for group or corporate subscriptions</a></p>
- </div>
+  
+
+  
+</div>
+<!-- End Of Paywall -->
 
 <%= render partial: "layouts/google_analytics_pageview" %>
 </body>

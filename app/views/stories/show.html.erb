@@ -5,11 +5,11 @@
 <h1><%= @story.story %>: Catch Up & Live Blog</h1>
 
 <% if @story.urgency == 'majorbreaking' %>
-  <div class="alert"><span class="breaking-label">MAJOR BREAKING NEWS LIVE BLOG</span></div>
+  <div class="news-alert"><span class="breaking-label">MAJOR BREAKING NEWS LIVE BLOG</span></div>
 <% elsif @story.urgency == 'breaking' %>
-  <div class="alert"><span class="breaking-label">BREAKING NEWS LIVE BLOG</span></div>
+  <div class="news-alert"><span class="breaking-label">BREAKING NEWS LIVE BLOG</span></div>
 <% elsif @story.urgency == 'latest' %>
-  <div class="alert"><span class="latest-label">LATEST NEWS LIVE BLOG</span></div>
+  <div class="news-alert"><span class="latest-label">LATEST NEWS LIVE BLOG</span></div>
 <% else %>
   
 <% end %>

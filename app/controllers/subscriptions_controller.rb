@@ -46,7 +46,7 @@ class SubscriptionsController < ApplicationController
       flash[:error] = "#{err[:message]}"
       redirect_to '/subscriptions/new'
     rescue Stripe::InvalidRequestError => e
-      flash[:error] = "There has been a problem. Please try again."
+      flash[:error] = "Invalid request to payment processor. Please try again."
       redirect_to '/subscriptions/new'
     rescue Stripe::AuthenticationError => e
       flash[:error] = "Could not connect to payment processor. Please try again."
@@ -55,7 +55,7 @@ class SubscriptionsController < ApplicationController
       flash[:error] = "Could not connect to payment processor. Please try again."
       redirect_to '/subscriptions/new'
     rescue Stripe::StripeError => e
-      flash[:error] = "There has been a problem. Please try again."
+      flash[:error] = "General payment processor problem. Please try again."
       redirect_to '/subscriptions/new'
     rescue => e
       flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."

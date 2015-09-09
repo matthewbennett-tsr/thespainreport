@@ -5,22 +5,22 @@
 <h1><%= @article.headline %></h1>
 
 <% if @article.urgency == 'majorbreaking' %>
-  <div class="alert"><span class="breaking-label">MAJOR BREAKING NEWS</span></div>
+  <div class="news-alert"><span class="breaking-label">MAJOR BREAKING NEWS</span></div>
 <% elsif @article.urgency == 'breaking' %>
-  <div class="alert"><span class="breaking-label">BREAKING NEWS</span></div>
+  <div class="news-alert"><span class="breaking-label">BREAKING NEWS</span></div>
 <% elsif @article.urgency == 'latest' %>
-  <div class="alert"><span class="latest-label">LATEST NEWS</span></div>
+  <div class="news-alert"><span class="latest-label">LATEST NEWS</span></div>
 <% elsif @article.type.name == 'EDITORIAL' %>
-  <div class="alert"><span class="editorial-label">EDITORIAL</span></div>
+  <div class="news-alert"><span class="editorial-label">EDITORIAL</span></div>
 <% else %>
 <% end %>
 
 <% if @articleupdates.present? && @article.status == "updated" %>
-<div class="alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+<div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
 <% elsif @articleupdates.present? %>
-<div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+<div class="news-alert"><span class="updated-label">UPDATES ADDED</span></div>
 <% elsif @article.status == "updated" %>
-<div class="alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div>
+<div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div>
 <% else %>
 <% end %>
 

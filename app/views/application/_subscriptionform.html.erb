@@ -42,7 +42,7 @@
         Your E-mail Address:
       </div>
       <div class="subscription-right-form-element">
-        <input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
+        <input type="email" size="40" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
       </div>
       <div class="clear"></div>
     </div>
@@ -54,7 +54,7 @@
         Your Credit Card Number:
       </div>  
       <div class="subscription-right-form-element form-group">
-          <input type="tel" autocomplete="cc-number" id="cc-number" class="inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" />      
+          <input type="tel" autocomplete="cc-number" id="cc-number" class="card-number inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" />      
       </div>
       <div class="clear"></div>
     </div>
@@ -65,7 +65,7 @@
       </div>
         
       <div class="subscription-right-form-element">
-        <select data-stripe="exp-month" class="ccjs-month">
+        <select data-stripe="exp-month" class="card-expiry-month ccjs-month">
           <option selected disabled>Month</option>
           <option value="01">01</option>
           <option value="02">02</option>
@@ -81,7 +81,7 @@
           <option value="12">12</option>
         </select>
           
-        <select data-stripe="exp-year" class="ccjs-year">
+        <select data-stripe="exp-year" class="card-expiry-year ccjs-year">
           <option selected disabled>Year</option>
           <option value="15">15</option>
           <option value="16">16</option>
@@ -104,7 +104,7 @@
         Card CVC/Security Code:
       </div>
       <div class="subscription-right-form-element">
-        <input type="text" id="cc-cvc" class="inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>
+        <input type="text" id="cc-cvc" class="card-cvc inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>
       </div>
       <div class="clear"></div>
     </div>
