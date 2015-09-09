@@ -2,11 +2,12 @@
 
 <h1>All Members</h1>
 
-<div class="article-lede">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> and <strong><%= @readercount %> readers</strong> in total.</div>
+<div class="article-lede">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> (<%= @activesubscribercount %> active & <%= @straysubscribercount %> stray) and <strong><%= @readercount %> readers</strong>
+</div>
 
 <h3>Latest Members</h3>
 
-<table>
+<table class="admin-table">
   <thead>
     <tr style="font-weight: bold;">
       <td></td>
@@ -15,8 +16,9 @@
       <td>E-mail</td>
       <td>Display Name</td>
       <td>Twitter</td>
-      <td>E-mail Alerts</td>
+      <td>E-mails</td>
       <td>Conf?</td>
+      <td>Stripe ID</td>
       <td></td>
     </tr>
   </thead>
@@ -24,8 +26,8 @@
   <tbody>
     <% @latestusers.each do |user| %>
       <tr>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= user.created_at.to_formatted_s(:short) %></td>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
             <span style="background-color: green; color: white; padding: 1px 5px;">
@@ -43,7 +45,7 @@
         <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
         <td>
           <% if user.emailpref == 'articlesupdates' %>
-            Articles & Updates
+            Everything
           <% elsif user.emailpref == 'justarticles' %>
             Just Articles
           <% elsif user.emailpref == 'nothing' %>
@@ -53,6 +55,7 @@
           <% end %>
         </td>
         <td><%= user.email_confirmed %></td>
+        <td style="padding: 0px 1px;"><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -61,7 +64,7 @@
 
 <h3>All Members</h3>
 
-<table>
+<table class="admin-table">
   <thead>
     <tr style="font-weight: bold;">
       <td></td>
@@ -70,8 +73,9 @@
       <td>E-mail</td>
       <td>Display Name</td>
       <td>Twitter</td>
-      <td>E-mail Alerts</td>
+      <td>E-mails</td>
       <td>Conf?</td>
+      <td>Stripe ID</td>
       <td></td>
     </tr>
   </thead>
@@ -79,8 +83,8 @@
   <tbody>
     <% @users.each do |user| %>
       <tr>
-        <td><%= link_to 'Edit', edit_user_path(user) %></td>
-        <td><%= user.created_at.strftime("%b %d, %Y") %></td>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
             <span style="background-color: green; color: white; padding: 1px 5px;">
@@ -98,7 +102,7 @@
         <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
         <td>
           <% if user.emailpref == 'articlesupdates' %>
-            Articles & Updates
+            Everything
           <% elsif user.emailpref == 'justarticles' %>
             Just Articles
           <% elsif user.emailpref == 'nothing' %>
@@ -108,6 +112,7 @@
           <% end %>
         </td>
         <td><%= user.email_confirmed %></td>
+        <td><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>

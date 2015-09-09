@@ -8,6 +8,8 @@ class UsersController < ApplicationController
       @users = User.all.order ('users.role DESC, users.email ASC')
       @latestusers = User.lasttenusers
       @subscribercount = User.subscribers.count
+      @activesubscribercount = User.activesubscribers.count
+      @straysubscribercount = User.straysubscribers.count
       @readercount = User.readers.count
     else
       redirect_to root_url

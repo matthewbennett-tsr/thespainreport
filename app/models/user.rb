@@ -16,6 +16,8 @@ class User < ActiveRecord::Base
   ROLES = %i[editor subscriber reader]
   
   scope :subscribers, -> {where(role: 'subscriber')}
+  scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
+  scope :straysubscribers, -> {where(stripe_customer_id: '')}
   scope :readers, -> {where(role: 'reader')}
   scope :editors, -> {where(role: 'editor')}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
