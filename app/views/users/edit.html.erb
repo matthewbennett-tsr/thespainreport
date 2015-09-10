@@ -52,7 +52,7 @@
 
   <% @stripe_invoices.each do |invoice| %>
     <tr>
-    <td><%= Time.at(invoice.date).strftime("%b %d, %Y") %></td>
+    <td><%= Time.at(invoice.date).strftime("%d/%m/%Y") %></td>
     <td><%= invoice.id %></td>
     <td><%= invoice.lines.data[0].type.capitalize %> (<%= invoice.lines.data[0].plan.name %>)</td>
     <td class="right"><%= invoice.lines.data[0].quantity %></td>

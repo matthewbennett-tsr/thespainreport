@@ -172,7 +172,7 @@ th {font-weight:bold;}
 
 .invoice-table {margin-top: 10px;}
 .invoice-table th {padding: 0px 15px 0px 0px;}
-.invoice-table td {padding: 5px 15px 5px 0px;}
+.invoice-table td {padding: 7px 15px 0px 0px;}
 
 
 #error_explanation {width: 95%; float:left; background-color: #FEF9E6; border-color: #F1BF00;}
