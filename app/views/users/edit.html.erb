@@ -38,32 +38,32 @@
 <strong>Subscription Renewal Date:</strong> <%= Time.at(@stripe_customer_details.subscriptions.data[0].current_period_end).to_formatted_s(:long) %><br /><br />
 
 <div><strong>My Payments</strong>
-  
-  <div style="margin-top: 10px; padding: 5px;">
-    <div style="float:left; font-weight:bold; width:90px;">Date</div>
-    <div style="float:left; font-weight:bold; width:215px; padding-left: 5px;">Payment ID</div>
-    <div style="float:left; font-weight:bold; width:215px; padding-left: 5px;">Item</div>
-    <div style="float:left; font-weight:bold; width:25px; padding-right: 3px; text-align:right;">Qty</div>
-    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">Price</div>
-    <div style="float:left; font-weight:bold; width:60px; padding-right: 3px; text-align:right;">VAT %</div>
-    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">VAT</div>
-    <div style="float:left; font-weight:bold; width:50px; padding-right: 3px; text-align:right;">Total</div>
-    <div class="clear"></div>
-  </div>
+  <table class="invoice-table">
+  <tr>
+    <th>Date</th>
+    <th>Payment ID</th>
+    <th>Item</th>
+    <th class="right">Qty</th>
+    <th class="right">Price</th>
+    <th class="right">VAT %</th>
+    <th class="right">VAT</th>
+    <th class="right">Total</th>
+  </tr>
 
   <% @stripe_invoices.each do |invoice| %>
-    <div style="border-top: 1px dotted #999999; padding: 5px;">
-    <div style="float:left; width:90px;"><%= Time.at(invoice.date).strftime("%b %d, %Y") %></div>
-    <div style="float:left; width:215px; border-left: 1px dotted #999999; padding-left: 5px;"><%= invoice.id %></div>
-    <div style="float:left; width:215px; border-left: 1px dotted #999999; padding-left: 5px;"><%= invoice.lines.data[0].type.capitalize %> (<%= invoice.lines.data[0].plan.name %>)</div>
-    <div style="float:left; width:25px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;"><%= invoice.lines.data[0].quantity %></div>
-    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.lines.data[0].plan.amount/100 %></div>
-    <div style="float:left; width:60px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;"><%= invoice.tax_percent %>%</div>
-    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.tax %></div>
-    <div style="float:left; width:50px; border-left: 1px dotted #999999; padding-right: 3px; text-align:right;">£<%= invoice.total/100 %></div>
-    <div class="clear"></div>
-    </div>
+    <tr>
+    <td><%= Time.at(invoice.date).strftime("%b %d, %Y") %></td>
+    <td><%= invoice.id %></td>
+    <td><%= invoice.lines.data[0].type.capitalize %> (<%= invoice.lines.data[0].plan.name %>)</td>
+    <td class="right"><%= invoice.lines.data[0].quantity %></td>
+    <td class="right">£<%= invoice.lines.data[0].plan.amount/100 %></td>
+    <td class="right"><%= invoice.tax_percent %>%</td>
+    <td class="right">£<%= invoice.tax %></td>
+    <td class="right">£<%= invoice.total/100 %></td>
+    </tr>
   <% end %>
+  
+  </table>
 </div>
 <% else %>
 Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-no-turbolink" => true %>.
