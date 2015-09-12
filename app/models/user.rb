@@ -17,7 +17,7 @@ class User < ActiveRecord::Base
   
   scope :subscribers, -> {where(role: 'subscriber')}
   scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
-  scope :straysubscribers, -> {where(stripe_customer_id: '')}
+  scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}
   scope :readers, -> {where(role: 'reader')}
   scope :editors, -> {where(role: 'editor')}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}

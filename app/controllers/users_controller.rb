@@ -9,7 +9,7 @@ class UsersController < ApplicationController
       @latestusers = User.lasttenusers
       @subscribercount = User.subscribers.count
       @activesubscribercount = User.activesubscribers.count
-      @straysubscribercount = User.straysubscribers.count
+      @straysubscribercount = User.subscribers.where('stripe_customer_id is null').count
       @readercount = User.readers.count
     else
       redirect_to root_url
