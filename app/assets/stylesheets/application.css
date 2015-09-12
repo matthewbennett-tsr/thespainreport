@@ -32,7 +32,7 @@
 /* HTML TAGS*/
 a, a:visited {color: #005BBF; text-decoration:none;}
 a:hover {color: #F1BF00; background-color: #ffffff;}
-h1, input.edit-headline {font-family: Oswald, Arial, sans-serif !important; font-weight: bold; line-height: 1.1; font-size: 24px; margin: 15px 0px;}
+h1 {font-family: Oswald, Arial, sans-serif !important; font-weight: bold; line-height: 1.1; font-size: 24px; margin: 15px 0px;}
 h2, h3 {font-family: Oswald, Arial, sans-serif; font-weight:bold; line-height: 1; font-size: 20px; margin: 15px 0px;}
 img {max-width:100%; margin: 0;}
 p, textarea {margin: 0px; font-family: Arial; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: 1; font-size: 14px; line-height: 140%;}
@@ -168,8 +168,6 @@ table {border-collapse: collapse;}
 th {font-weight:bold;}
 .right {text-align:right;}
 
-.admin-table td {padding: 1px 2px;}
-
 .invoice-table {margin-top: 10px;}
 .invoice-table th {padding: 0px 15px 0px 0px;}
 .invoice-table td {padding: 7px 15px 0px 0px;}
@@ -224,12 +222,17 @@ th {font-weight:bold;}
 	text-shadow:0 1px 1px #213256;
 	}
 
-.admin-classify {margin-bottom: 5px; font-size: 12px;}
+.admin-classify {margin-bottom: 5px; font-size: 12px; line-height: 100%;}
+.admin-classify label {font-weight:normal; margin-right: 12px;}
+.admin-classify input[type=checkbox] {margin-right: 2px; display: inline;}
+input[type='file'] {margin-right: 2px; display: inline;}
+input.edit-headline {font-family: Oswald, Arial, sans-serif !important; font-weight: bold; line-height: 1.1; font-size: 24px; margin: 0px 0px;}
 .red {color: #AA151B;}
 .admin-draft {background-color: #FAF2AD; color: #000000; padding: 2px 3px;}
 .admin-editing {background-color: red; color: #ffffff; padding: 2px 3px;}
 .admin-published {background-color: #00CC00; color: #ffffff; padding: 2px 3px;}
 .admin-updated {background-color: #005BBF; color: #ffffff; padding: 2px 3px;}
+.admin-table td {padding: 1px 2px;}
 
 video { width: 100% !important; height: auto !important;}
 .video-wrapper {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}

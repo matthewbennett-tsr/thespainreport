@@ -14,53 +14,56 @@
 
 <div style="margin-top: 10px;">
 
-  <div style="margin-bottom: 10px;"><strong>Slug:</strong> 
+  <div style="margin-bottom: 5px;"><strong>SLUG</strong> 
     <% if action_name == 'edit' %>
-      <%= f.text_field :slug, :size => "40" %>
+      <%= f.text_field :slug, :size => "50" %>
     <% elsif action_name == 'new' %>
-      <%= f.text_field :slug, :value => params[:breaking_slug], :size => "40" %>
+      <%= f.text_field :slug, :value => params[:breaking_slug], :size => "70" %>
     <% end %>
-   <strong>Source:</strong> 
+  </div>
+  <div style="margin-bottom: 5px;">
+  <strong>SOURCE:</strong> 
     <% if action_name == 'edit' %>
       <%= f.text_field :source, :size => "21" %>
     <% elsif action_name == 'new' %>
       <%= f.text_field :source, :value => params[:breaking_source], :size => "21" %>
     <% end %>
    <strong>URL:</strong> <%= f.text_field :url, :size => "35" %>
-   <strong>Video:</strong> <%= f.text_field :video, :size => "35" %>
+   <strong>VIDEO:</strong> <%= f.text_field :video, :size => "35" %>
   </div>
-  <div style="margin-bottom: 10px;">
+  <div style="margin-bottom: 5px;">
     <% if action_name == 'edit' %>
       <%= f.text_area :item, :size => "131x7", :class => "inputtextarea", :maxlength => 1000 %>
     <% elsif action_name == 'new' %>
       <%= f.text_area :item, :value => params[:breaking_text], :size => "131x7", :class => "inputtextarea", :maxlength => 1000 %>
     <% end %>
   </div>
-<div class="admin-classify"><strong>Stories:</strong> <%= collection_check_boxes(:newsitem, :story_ids, @stories, :id, :story) %></div>
-<div class="admin-classify"><strong>Regions:</strong> <%= collection_check_boxes(:newsitem, :region_ids, @regions, :id, :region) %></div>
-<div class="admin-classify"><strong>Categories:</strong> <%= collection_check_boxes(:newsitem, :category_ids, @categories, :id, :category) %></div>
+<div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:newsitem, :story_ids, @stories, :id, :story) %></div>
+<div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:newsitem, :region_ids, @regions, :id, :region) %></div>
+<div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:newsitem, :category_ids, @categories, :id, :category) %></div>
 
-<div style="text-align:right; margin-top: 10px;">
-  Created at: <%= f.datetime_field :created_at, :size => '50' %> Updated at: <%= f.datetime_field :updated_at, :size => '50' %>
+  <div style="margin-bottom: 10px; font-size: 12px;">
+  <strong>RELATED ARTICLE?</strong> <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
+  </div>
+
+  <div style="margin-bottom: 10px; font-size: 12px;">
+  <strong>IMAGE?</strong> <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
+   | <%= f.check_box :remove_main %> Remove?
+   | <strong>CAPTION:</strong> <%= f.text_field :caption, :size => '40' %>
+   | <strong>SOURCE:</strong> <%= f.text_field :imagesource, :size => '20' %>
+  <br />
+  <% if @newsitem.main? %>
+    <div style="margin: 10px 0px;">
+    <%= image_tag @newsitem.main.url %>
+    </div>
+  <% end %>
+  </div>
+
+<div style="text-align:left; font-size: 12px;">
+  <strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '38' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '38' %>
    <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
    | <%= f.submit %>
-  </div>
-  
-  <div>
-  <h3>Related Article?</h3>
-  <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
-  </div>
-
-<h3>Update Image</h3>
-  <div>
-  <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
-   | <%= f.check_box :remove_main %> Remove?
-   | <strong>Caption:</strong> <%= f.text_field :caption, :size => '45' %>
-   | <strong>Source:</strong> <%= f.text_field :imagesource, :size => '25' %>
-  <br /><br />
-  <%= image_tag @newsitem.main.url if @newsitem.main? %>
-  </div>
-
+</div>
 
 </div>
 
