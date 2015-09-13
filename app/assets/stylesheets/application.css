@@ -172,10 +172,10 @@ th {font-weight:bold;}
 .invoice-table th {padding: 0px 15px 0px 0px;}
 .invoice-table td {padding: 7px 15px 0px 0px;}
 
-.article-text table {margin-top: 25px; margin-bottom: 25px;}
-.article-text table tr {border-bottom: 1px dotted #999999;}
-.article-text table th {padding: 10px 10px 4px 10px; font-family: Oswald; font-size: 17px;}
-.article-text table td {padding: 10px 10px 2px 10px; font-family: Arial;}
+.article-text table, .update-text table {margin-top: 25px; margin-bottom: 25px;}
+.article-text table tr, .update-text table tr {border-bottom: 1px dotted #999999;}
+.article-text table th, .update-text table th {padding: 10px 10px 4px 10px; font-family: Oswald; font-size: 17px;}
+.article-text table td, .update-text table td {padding: 10px 10px 2px 10px; font-family: Arial;}
 
 
 #error_explanation {width: 95%; float:left; background-color: #FEF9E6; border-color: #F1BF00;}
