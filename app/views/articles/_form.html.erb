@@ -30,13 +30,24 @@
   </div>
  
   <div class="field">
-    <%= f.text_field :headline, :class => "edit-headline", :size => '85' %>
+    <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
   </div>
   <div class="field">
     <%= f.text_field :lede, :size => '79', :class => "edit-lede" %> | <strong>VIDEO:</strong> <%= f.text_field :video, :size => "25" %>
   </div>
   <div class="field">
-    <%= f.text_area :body, :size => '134x27', :class => "inputtextarea" %>
+    
+<textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
+<% if action_name == 'new' %>
+REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards
+CONTEXT: significance, environment, surroundings, (infra)structure, related events, debates, trends, driving forces, rhetoric, discourses, history, country comparison, ideals, core
+PLAYERS: protagonist, antagonist, groups, sides, alliances, struggles, goals, glory, identity, thoughts, emotions, values, beliefs, (re)actions, background, influences, 
+STORY: conflict, story moments, acts, arcs, tension, unknowns, threats, gaps, opportunities, possibilities, realisation, change, consequences, 
+STRATEGIES: resources, vision, planning, loops, speed, phases, level/coherence of execution, logistics, investment, commitment, habits & routines
+<% else %>
+<%= @article.body %>
+<% end %>
+</textarea>
   </div>
 
   
