@@ -22,5 +22,10 @@ class Article < ActiveRecord::Base
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
   scope :lastten, -> {order('updated_at DESC').limit(10)}
   scope :lastthirty, -> {order('updated_at DESC').limit(30)}
+  scope :today, -> {where(:created_at => 1.days.ago..DateTime.now).limit(20)}
+  scope :tomorrow, -> {where('created_at <= ? and created_at >= now()', 1.days.from_now).limit(20)}
+  scope :restofweek, -> {where('created_at <= ? and created_at >= ?', 8.days.from_now, 1.days.from_now).limit(20)}
+  scope :weekafter, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 8.days.from_now).limit(20)}
+  scope :restofmonth, -> {where('created_at <= ? and created_at >= ?', 30.days.from_now, 14.days.from_now).limit(20)}
 
 end
