@@ -18,9 +18,9 @@ class ArticlesController < ApplicationController
       @articles = Article.all.order( 'articles.updated_at DESC' )
       @articlestoday = Article.today
       @articlestomorrow = Article.tomorrow
-      @articlesrestofweek = Article.restofweek
-      @articlesweekafter = Article.weekafter
-      @articlesrestofmonth = Article.restofmonth
+      @articlesrestofweek = Article.restofweek.order( 'articles.created_at DESC' )
+      @articlesweekafter = Article.weekafter.order( 'articles.created_at DESC' )
+      @articlesrestofmonth = Article.restofmonth.order( 'articles.created_at DESC' )
       @newscount = Article.news.count
       @editorialcount = Article.editorial.count
       @indepthcount = Article.in_depth.count
