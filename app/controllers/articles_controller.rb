@@ -16,8 +16,8 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @articles = Article.all.order( 'articles.updated_at DESC' )
-      @articlestoday = Article.today
-      @articlestomorrow = Article.tomorrow
+      @articlestoday = Article.today.( 'articles.created_at DESC' )
+      @articlestomorrow = Article.tomorrow.( 'articles.created_at DESC' )
       @articlesrestofweek = Article.restofweek.order( 'articles.created_at DESC' )
       @articlesweekafter = Article.weekafter.order( 'articles.created_at DESC' )
       @articlesrestofmonth = Article.restofmonth.order( 'articles.created_at DESC' )
