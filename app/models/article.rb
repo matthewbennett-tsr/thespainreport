@@ -22,10 +22,11 @@ class Article < ActiveRecord::Base
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
   scope :lastten, -> {order('updated_at DESC').limit(10)}
   scope :lastthirty, -> {order('updated_at DESC').limit(30)}
-  scope :today, -> {where(:created_at => 1.days.ago..DateTime.now).limit(20)}
-  scope :tomorrow, -> {where('created_at <= ? and created_at >= now()', 1.days.from_now).limit(20)}
-  scope :restofweek, -> {where('created_at <= ? and created_at >= ?', 8.days.from_now, 1.days.from_now).limit(20)}
-  scope :weekafter, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 8.days.from_now).limit(20)}
-  scope :restofmonth, -> {where('created_at <= ? and created_at >= ?', 30.days.from_now, 14.days.from_now).limit(20)}
+  scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
+  scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone).limit(20)}
+  scope :next24, -> {where('created_at <= ? and created_at >= now()', 24.hours.from_now).limit(20)}
+  scope :following5days, -> {where('created_at <= ? and created_at >= ?', 6.days.from_now, 1.days.from_now).limit(20)}
+  scope :following614days, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 6.days.from_now).limit(20)}
+  scope :upto30days, -> {where('created_at <= ? and created_at >= ?', 30.days.from_now, 14.days.from_now).limit(20)}
 
 end

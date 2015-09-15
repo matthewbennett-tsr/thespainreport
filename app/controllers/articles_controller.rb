@@ -16,11 +16,12 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @articles = Article.all.order( 'articles.updated_at DESC' )
-      @articlestoday = Article.today.order( 'articles.created_at DESC' )
-      @articlestomorrow = Article.tomorrow.order( 'articles.created_at DESC' )
-      @articlesrestofweek = Article.restofweek.order( 'articles.created_at DESC' )
-      @articlesweekafter = Article.weekafter.order( 'articles.created_at DESC' )
-      @articlesrestofmonth = Article.restofmonth.order( 'articles.created_at DESC' )
+      @articleslastfewdays = Article.lastfewdays.order( 'articles.created_at DESC' )
+      @articleslast24 = Article.last24.order( 'articles.created_at DESC' )
+      @articlesnext24 = Article.next24.order( 'articles.created_at DESC' )
+      @articlesfollowing5days = Article.following5days.order( 'articles.created_at DESC' )
+      @articlesfollowing614days = Article.following614days.order( 'articles.created_at DESC' )
+      @articlesupto30days = Article.upto30days.order( 'articles.created_at DESC' )
       @newscount = Article.news.count
       @editorialcount = Article.editorial.count
       @indepthcount = Article.in_depth.count

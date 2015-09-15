@@ -104,7 +104,8 @@ module Myapp
     r301 '/category/type/blog/', '/articles/blog'
     r301 '/category/type/video-blog/', '/articles/editorial'
 
-    r301 '/subscribe-now/', '/subscribe/'    
+    r301 '/subscribe-now/', '/subscribe/'
+    r301 '/subscribe/', '/subscriptions/new'    
     end
 
   end
