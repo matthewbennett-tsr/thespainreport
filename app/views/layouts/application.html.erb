@@ -37,6 +37,7 @@
 <div class="user-bar">
 
   <div class="user-bar-flash">
+  [AUTORESPONDERS]
     <% if flash.present? %>
       <% flash.each do |name, msg| %>
         <span style="background-color: #FEF9E6; padding: 0px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
