@@ -57,7 +57,7 @@
   
   <div class="user-bar-right-links">
     <% if current_user.nil? %>
-      
+      <div class="user-float-left-no"><%= link_to "Sales Email", new_salesemail_path %></div>
     <% elsif current_user.role == 'editor' %>
       <div style="float:left; padding-top: 6px;">
         <div class="user-float-left-no"><%= link_to "Update", new_newsitem_path %></div>

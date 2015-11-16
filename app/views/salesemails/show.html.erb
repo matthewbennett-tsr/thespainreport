@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Subject: <%= @salesemail.subject %></h1>
+
+<strong>To:</strong> <%= @salesemail.to.to_s.humanize %>
+<br />
+<strong>After:</strong> <%= @salesemail.delay_number %> <%= @salesemail.delay_period %>
+
+<h3>Message</h3>
+<div class="article-text"><%= markdown(@salesemail.message) %></div>
+
+<br /><br />
+<%= link_to 'Edit', edit_salesemail_path(@salesemail) %> |
+<%= link_to 'Back', salesemails_path %>

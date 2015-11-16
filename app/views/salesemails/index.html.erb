@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sales Emails For New Readers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @salesemails_readers.each do |salesemail| %>
+   <tr>
+        <td><%= salesemail.send_order %></td>
+        <td><%= salesemail.delay_number %> <%= salesemail.delay_period %></td>
+        <td><%= link_to salesemail.subject, salesemail %></td>
+        <td><%= link_to 'Edit', edit_salesemail_path(salesemail) %> / <%= link_to 'Destroy', salesemail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+<% end %>
+  </tbody>
+</table>
+
+<h1>Sales Emails For New Subscribers</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @salesemails_subscribers.each do |salesemail| %>
+   <tr>
+        <td><%= salesemail.send_order %></td>
+        <td><%= salesemail.delay_number %> <%= salesemail.delay_period %></td>
+        <td><%= link_to salesemail.subject, salesemail %></td>
+        <td><%= link_to 'Edit', edit_salesemail_path(salesemail) %> / <%= link_to 'Destroy', salesemail, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+<% end %>
+  </tbody>
+</table>
+
+<br>
+<%= link_to 'New Salesemail', new_salesemail_path %>
+
+

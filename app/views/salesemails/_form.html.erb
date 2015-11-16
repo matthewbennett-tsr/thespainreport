@@ -1,0 +1,44 @@
+<%= form_for(@salesemail) do |f| %>
+  <% if @salesemail.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@salesemail.errors.count, "error") %> prohibited this salesemail from being saved:</h2>
+
+      <ul>
+      <% @salesemail.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+  
+  <div class="field">
+  <strong>Send Order:</strong>
+  <%= f.text_field :send_order, :size => '2' %>
+  </div>
+  
+  <div class="field">
+  <strong>To:</strong>
+  <%= f.select :to, options_for_select([["Readers", "reader"], ["Subscribers", "subscriber"]], @salesemail.to) %>
+  </div>
+  
+  <div class="field">
+  <strong>Delay:</strong>
+  <%= f.select :delay_number, (1..30) %>
+  <%= f.select :delay_period, options_for_select([["Minutes", "minutes"], ["Hours", "hours"], ["Days", "days"]], @salesemail.delay_period) %>
+  </div>
+  
+  <div class="field">
+  <strong>Subject:</strong>
+    <%= f.text_field :subject, :class => "edit-headline", :size => '84' %>
+  </div>
+  
+  <div class="field">
+  <strong>Message:</strong>
+  <%= f.text_area :message, :size => "131x7", :class => "inputtextarea", :maxlength => 2000 %>
+  <%= f.submit %>
+  </div>
+  
+  </div>
+<% end %>
