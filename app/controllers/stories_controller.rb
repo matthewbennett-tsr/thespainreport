@@ -5,7 +5,7 @@ class StoriesController < ApplicationController
   # GET /stories.json
   def index
     @stories = Story.all.order( 'stories.updated_at DESC' )
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /stories/admin
@@ -26,7 +26,7 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.json
   def show
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /stories/new
@@ -64,25 +64,7 @@ class StoriesController < ApplicationController
     elsif current_user.role == 'editor'
       @story = Story.new(story_params)
       respond_to do |format|
-        if @story.save(story_params) && @story.urgency == 'latest' && @story.created_at.today?
-          User.wantsarticles.each do |user|
-            StoryMailer.delay.send_story_alert(@story, user)
-		  end
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
-          format.json { render :show, status: :ok, location: @newsitem }
-        elsif @story.save(story_params) && @story.urgency == 'breaking' && @story.created_at.today?
-          User.wantsarticles.each do |user|
-            StoryMailer.delay.send_story_alert(@story, user)
-		  end
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
-          format.json { render :show, status: :ok, location: @newsitem }
-        elsif @story.save(story_params) && @story.urgency == 'majorbreaking' && @story.created_at.today?
-          User.wantsarticles.each do |user|
-            StoryMailer.delay.send_story_alert(@story, user)
-		  end
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
-          format.json { render :show, status: :ok, location: @newsitem }
-        elsif @story.save(story_params)
+        if @story.save(story_params)
           format.html { redirect_to :action => 'admin', notice: 'Story was successfully created.' }
           format.json { render :show, status: :created, location: @story }
         else
@@ -104,19 +86,7 @@ class StoriesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @story.update(story_params) && @story.urgency == 'breaking' && @story.created_at.today?
-          User.wantsarticles.each do |user|
-            StoryMailer.delay.send_story_alert(@story, user)
-		  end
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
-          format.json { render :show, status: :ok, location: @newsitem }
-        elsif @story.update(story_params) && @story.urgency == 'majorbreaking' && @story.created_at.today?
-          User.wantsarticles.each do |user|
-            StoryMailer.delay.send_story_alert(@story, user)
-		  end
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
-          format.json { render :show, status: :ok, location: @newsitem }
-        elsif @story.update(story_params)
+        if @story.update(story_params)
           format.html { redirect_to :action => 'admin', notice: 'Story was successfully updated.' }
           format.json { render :show, status: :ok, location: @story }
         else

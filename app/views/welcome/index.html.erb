@@ -1,5 +1,38 @@
 <%= render 'tickerstories' %>
 
+<% @breakingonly.each do |article| %>
+
+    <div style="background-color: #f5f5f5; padding: 5px 10px; margin-top: 5px;">
+    <h1><%= link_to article.headline, article %></h1>
+      <% if article.main? %>
+        <div class="main-image-home-breaking">
+          <%= link_to(article) do %>
+          <%= image_tag article.main.url if article.main? %>
+          <% end %>
+        <div class="main-caption">
+          <%= article.caption %> <strong>Source:</strong> <%= article.source %>. (Click to enlarge)
+        </div>
+        </div>
+      <% elsif article.video? %>
+        <div class="main-image-home-breaking">
+          <div class="video-wrapper">
+          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
+          </div>
+          <div class="main-caption">
+          <%= article.caption %> <strong>Source:</strong> <%= article.source %>
+          </div>
+        </div>
+    <% else %>
+    <% end %>
+    
+    <div class="article-text"><%= markdown(truncate(article.body, :length => 800)) %></div>
+    <div class="clear"></div>
+    </div>
+    
+  
+<% end %>
+
+
 <div class="index-home">
   <div class="listing-left">Updated</div>
   <div class="listing-right">Latest Articles</div>
@@ -31,6 +64,8 @@
         <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <%= link_to article.headline, article %>
+      <% elsif article.type.name == "LIVE BLOG" %>
+        <span class="breaking">LIVE BLOG</span> <%= link_to article.headline, article %>
       <% elsif article.status == 'updated' %>
         <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
       <% elsif article.type.name == 'EDITORIAL' %>

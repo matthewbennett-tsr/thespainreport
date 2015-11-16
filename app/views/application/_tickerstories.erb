@@ -1,15 +1,15 @@
-<% @tickerstories.each do |story| %>
-  <% if story.urgency == 'majorbreaking' %>
+<% @tickerstories.each do |article| %>
+  <% if article.urgency == 'majorbreaking' %>
     <div class="major-breaking-news-top">
-        <span class="breaking"><%= link_to 'MAJOR BREAKING NEWS LIVE BLOG' + ': ' + story.story, story %></span>
+        <span class="breaking"><%= link_to 'MAJOR BREAKING NEWS' + ': ' + article.headline, article %></span>
     </div>
-  <% elsif story.urgency == 'breaking' %>
+  <% elsif article.urgency == 'breaking' %>
   <div class="breaking-news-top">
-        <%= link_to story do %><span class="breaking">BREAKING NEWS LIVE BLOG</span><% end %> <strong><%= link_to story.story, story %></strong>
+        <%= link_to article do %><span class="breaking">BREAKING NEWS</span><% end %> <strong><%= link_to article.headline, article %></strong>
   </div>
-  <% elsif story.urgency == 'latest' %>
+  <% elsif article.urgency == 'latest' %>
     <div class="latest-news-top">
-        <%= link_to story do %><span class="latest">LATEST NEWS LIVE BLOG</span><% end %> <strong><%= link_to story.story, story %></strong>
+        <%= link_to article do %><span class="latest">LATEST NEWS</span><% end %> <strong><%= link_to article.headline, article %></strong>
     </div>
   <% else %>
   <% end %>

@@ -5,14 +5,14 @@ class RegionsController < ApplicationController
   # GET /regions.json
   def index
     @regions = Region.all.order( 'regions.region ASC' )
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /regions/1
   # GET /regions/1.json
   def show
     @last50items = Newsitem.published.lastfifty
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /regions/new

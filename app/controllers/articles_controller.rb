@@ -5,7 +5,7 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     @articles = Article.published.lastthirty
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/admin
@@ -36,28 +36,28 @@ class ArticlesController < ApplicationController
   # GET /articles/blog.json
   def blog
     @is_blog = Article.is_blog.published.lastthirty.order( 'articles.updated_at DESC' )
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/in-depth
   # GET /articles/in-depth.json
   def in_depth
     @last30 = Article.in_depth.published.lastthirty
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/news
   # GET /articles/news.json
   def news
     @last30 = Article.news.published.lastthirty
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/editorial
   # GET /articles/editorial.json
   def editorial
     @last30 = Article.editorial.published.lastthirty
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/1
@@ -67,7 +67,7 @@ class ArticlesController < ApplicationController
     @category = Article.find(params[:id])
     @story = Article.find(params[:id])
     @type = Article.find(params[:id])
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
     @latestaudio = Audio.lastone
     @title = "some custom page title"
     @articleupdates = @article.newsitems

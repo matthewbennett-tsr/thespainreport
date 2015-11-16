@@ -1,7 +1,7 @@
 class PagesController < ApplicationController
 
   def show
-    @tickerstories = Story.bignews.latest.ticker
+    @tickerstories = Article.bignews.latest.ticker
     render template: "pages/#{params[:page]}"
   end
 

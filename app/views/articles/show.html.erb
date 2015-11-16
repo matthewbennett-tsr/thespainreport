@@ -15,12 +15,17 @@
 <% else %>
 <% end %>
 
-<% if @articleupdates.present? && @article.status == "updated" %>
-<div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+<% if @article.type.name == "LIVE BLOG" %>
+  <div class="news-alert"><span class="breaking-label">LIVE BLOG</span></div>
+<% else %>
+<% end %>
+
+<% if @articleupdates.present? && @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
+  <div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
 <% elsif @articleupdates.present? %>
-<div class="news-alert"><span class="updated-label">UPDATES ADDED</span></div>
-<% elsif @article.status == "updated" %>
-<div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div>
+  <div class="news-alert"><span class="updated-label">UPDATES ADDED</span></div>
+<% elsif @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
+  <div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div>
 <% else %>
 <% end %>
 
@@ -48,7 +53,48 @@
 <% else %>
 <% end %>
 
-<div class="article-text"><%= markdown(@article.body) %>
+<% if @article.type.name == "LIVE BLOG" %>
+  <h2>Summary So Far…</h2>
+<% else %>
+<% end %>
+
+<div class="article-text">
+
+<%= markdown(@article.body) %>
+
+<% if @article.type.name == "LIVE BLOG" %>
+  <h2 style="margin-top:30px;">Latest Updates…</h2>
+<% @article.newsitems.order('created_at DESC').each do |newsitem| %>
+<div class="liveblog-updates">
+  <span class="red" style="font-style: italic;"><%= time_ago_in_words(newsitem.updated_at).capitalize %> ago: <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
+<h3><%= newsitem.slug %></h3>
+<% if newsitem.main? %>
+  <div class="main-image-liveblog-update">
+   <%= link_to newsitem do %>
+   <%= image_tag newsitem.main.url if newsitem.main? %>
+   <% end %>
+   <div class="liveblog-caption">
+     <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+   </div>
+  </div>
+<% elsif newsitem.video? %>
+  <div class="main-image-liveblog-update-video">
+  <div class="video-wrapper">
+    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %> 
+   </div>
+    <div class="liveblog-caption">
+      <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+    </div>
+  
+  </div> 
+<% else %>
+<% end %>
+<strong></strong><%= markdown(newsitem.item.html_safe) %>
+<div class="clear"></div>
+</div>
+<% end %>
+
+<% else %>
 
 <% @article.newsitems.each do |newsitem| %>
 <h3>Update:</h3>
@@ -73,11 +119,12 @@
   </div> 
 <% else %>
 <% end %>
-<strong><%= newsitem.updated_at.strftime("%b %d %Y, %H:%M") %>—<%= link_to newsitem.slug, newsitem %>—</strong><%= newsitem.item.html_safe %>
-
+<strong><%= newsitem.updated_at.strftime("%b %d %Y, %H:%M") %>—<%= link_to newsitem.slug, newsitem %>—</strong><%= markdown(newsitem.item.html_safe) %>
 <div class="clear"></div>
 </div>
 <% end %>
+<% end %>
+
 <div class="clear"></div>
 </div>
 
