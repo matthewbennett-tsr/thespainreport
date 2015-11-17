@@ -68,6 +68,14 @@ class NewsitemsController < ApplicationController
     end 	
   end
 
+  def updatelink
+    if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
+      article_url(@newsitem.article)
+    else
+      newsitem_url(@newsitem)
+    end
+  end
+
   # POST /newsitems
   # POST /newsitems.json
   def create
@@ -81,6 +89,13 @@ class NewsitemsController < ApplicationController
           User.wantsupdates.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
+		  @tweet = 'UPDATE: ' + @newsitem.slug + ' ' + updatelink
+		  @image = @newsitem.main.url
+		  if @newsitem.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
           format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save
@@ -109,6 +124,13 @@ class NewsitemsController < ApplicationController
           User.wantsupdates.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
+          @tweet = 'UPDATE: ' + @newsitem.slug + ' ' + updatelink
+          @image = @newsitem.main.url
+		  if @newsitem.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
           format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update

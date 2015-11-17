@@ -108,6 +108,18 @@ class ArticlesController < ApplicationController
     end  
   end
 
+  def articleurgency
+    if @article.urgency == 'majorbreaking'
+      "MAJOR BREAKING"
+    elsif @article.urgency == 'breaking'
+      "BREAKING"
+    elsif @article.urgency == 'latest'
+      "LATEST"
+    else
+      "#{@article.type.name}"
+    end
+  end
+
   # POST /articles
   # POST /articles.json
   def create
@@ -127,6 +139,13 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + article_url(@article)
+          @image = @article.main.url
+		  if @article.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.save
@@ -161,6 +180,13 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + article_url(@article)
+		  @image = @article.main.url
+		  if @article.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else
