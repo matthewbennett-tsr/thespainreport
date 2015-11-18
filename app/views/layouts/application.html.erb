@@ -21,14 +21,9 @@
   <%= favicon_link_tag 'favicon.ico' %>
   <%= render "layouts/google_analytics" %>
   
-<% if current_user.nil? && controller_name == 'articles' && action_name == 'show' && paywall %>
-    <script type="text/javascript" data-turbolinks-track="false">
-    $(window).load(function(){
-        $('#paywall').modal();
-    });
-  </script>
+<% if controller_name == 'articles' && action_name == 'show' %>
+    <%= yield(:articlepaywall) %>
 <% end %>
-
 
 </head>
 <body>

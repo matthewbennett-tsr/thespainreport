@@ -1,3 +1,15 @@
+<% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.name) %>
+  <% if current_user.nil? && paywall %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall').modal();
+    });
+    </script>
+    <% end %>
+  <% end %>
+<% end %>
+
 <% title @article.headline %>
 
 <%= render 'tickerstories' %>

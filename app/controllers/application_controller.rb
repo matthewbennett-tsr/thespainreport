@@ -17,15 +17,19 @@ class ApplicationController < ActionController::Base
   end
   
   def increment_counter
+  if controller_name == 'articles' && action_name == 'show'
     @pageviews = cookies[:visits].to_i
     if @pageviews.nil?
       @pageviews == 0
     end
       @pageviews += 1
+  else
+    @pageviews = cookies[:visits].to_i
+  end
   end
 
   def paywall
-    cookies[:visits].to_i > 9
+    cookies[:visits].to_i > 5
   end
   helper_method :paywall
   
