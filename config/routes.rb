@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :salesemails
   post 'new_subscription' => 'subscriptions#new_subscription'
   post 'new_spain_report_member' => 'subscriptions#new_spain_report_member'
   resources :subscriptions
