@@ -1,11 +1,11 @@
 namespace :sales do
 
-task :all => [:onboard_one, :onboard_two]
+task :all => [:onboard_1_min, :onboard_2_min, :onboard_3_min, :onboard_4_min]
 
-desc "Sends onboarding e-mail(s) to readers after 5 min"
-task :onboard_5_min => :environment do
-  salesemail = Salesemail.readers.one.hours
-  user = User.readers.onehour
+desc "Sends onboarding e-mail(s) to readers after 1 min"
+task :onboard_1_min => :environment do
+  salesemail = Salesemail.readers.one.minutes
+  user = User.readers.oneminute
   if user.present? && salesemail.present?
     user.each do |user|
       salesemail.each do |email|
@@ -16,10 +16,10 @@ task :onboard_5_min => :environment do
   end
 end
 
-desc "Sends onboarding e-mail(s) to readers after 15 minutes"
-task :onboard_15_min => :environment do
-  salesemail = Salesemail.readers.two.hours
-  user = User.readers.twohours
+desc "Sends onboarding e-mail(s) to readers after 2 minutes"
+task :onboard_2_min => :environment do
+  salesemail = Salesemail.readers.two.minutes
+  user = User.readers.twominutes
   if user.present? && salesemail.present?
     user.each do |user|
       salesemail.each do |email|
@@ -30,10 +30,10 @@ task :onboard_15_min => :environment do
   end
 end
 
-desc "Sends onboarding e-mail(s) to readers after 30 minutes"
-task :onboard_30_min => :environment do
-  salesemail = Salesemail.readers.two.hours
-  user = User.readers.twohours
+desc "Sends onboarding e-mail(s) to readers after 3 minutes"
+task :onboard_3_min => :environment do
+  salesemail = Salesemail.readers.three.minutes
+  user = User.readers.threeminutes
   if user.present? && salesemail.present?
     user.each do |user|
       salesemail.each do |email|
@@ -44,10 +44,10 @@ task :onboard_30_min => :environment do
   end
 end
 
-desc "Sends onboarding e-mail(s) to readers after 1 hour"
-task :onboard_1_hour => :environment do
-  salesemail = Salesemail.readers.one.hours
-  user = User.readers.onehour
+desc "Sends onboarding e-mail(s) to readers after 4 minutes"
+task :onboard_4_min => :environment do
+  salesemail = Salesemail.readers.four.minutes
+  user = User.readers.fourminutes
   if user.present? && salesemail.present?
     user.each do |user|
       salesemail.each do |email|

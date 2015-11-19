@@ -23,9 +23,10 @@ class User < ActiveRecord::Base
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
   scope :lasttenusers, -> {order('created_at DESC').limit(10)}
-  scope :onehour, -> {where('created_at <= ? and created_at >= ?', 0.minutes.ago, 60.minutes.ago)}
-  scope :twohours, -> {where('created_at <= ? and created_at >= ?', 60.minutes.ago, 120.minutes.ago)}
-  scope :threehours, -> {where('created_at <= ? and created_at >= ?', 120.minutes.ago, 180.minutes.ago)}
+  scope :oneminute, -> {where('created_at <= ? and created_at >= ?', 0.minutes.ago, 1.minutes.ago)}
+  scope :twominutes, -> {where('created_at <= ? and created_at >= ?', 1.minutes.ago, 2.minutes.ago)}
+  scope :threeminutes, -> {where('created_at <= ? and created_at >= ?', 2.minutes.ago, 3.minutes.ago)}
+  scope :fourminutes, -> {where('created_at <= ? and created_at >= ?', 3.minutes.ago, 4.minutes.ago)}
   
   has_many :comments
   

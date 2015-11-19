@@ -27,7 +27,7 @@ class Salesemail < ActiveRecord::Base
   scope :twentyone, -> {where(delay_number: '21')}
   scope :twentytwo, -> {where(delay_number: '22')}
   scope :twentythree, -> {where(delay_number: '23')}
-  scope :twentyfour, -> {where(delay_number: '24)'}
+  scope :twentyfour, -> {where(delay_number: '24')}
   scope :twentyfive, -> {where(delay_number: '25')}
   scope :twentysix, -> {where(delay_number: '26')}
   scope :twentyseven, -> {where(delay_number: '27')}
