@@ -23,10 +23,27 @@ class User < ActiveRecord::Base
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
   scope :lasttenusers, -> {order('created_at DESC').limit(10)}
-  scope :oneminute, -> {where('created_at <= ? and created_at >= ?', 0.minutes.ago, 1.minutes.ago)}
-  scope :twominutes, -> {where('created_at <= ? and created_at >= ?', 1.minutes.ago, 2.minutes.ago)}
-  scope :threeminutes, -> {where('created_at <= ? and created_at >= ?', 2.minutes.ago, 3.minutes.ago)}
-  scope :fourminutes, -> {where('created_at <= ? and created_at >= ?', 3.minutes.ago, 4.minutes.ago)}
+  scope :oneday, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 24.hours.ago)}
+  scope :twodays, -> {where('created_at <= ? and created_at >= ?', 24.hours.ago, 48.hours.ago)}
+  scope :threedays, -> {where('created_at <= ? and created_at >= ?', 48.hours.ago, 72.hours.ago)}
+  scope :fourdays, -> {where('created_at <= ? and created_at >= ?', 72.hours.ago, 96.hours.ago)}
+  scope :fivedays, -> {where('created_at <= ? and created_at >= ?', 96.hours.ago, 120.hours.ago)}
+  scope :sixdays, -> {where('created_at <= ? and created_at >= ?', 120.hours.ago, 144.hours.ago)}
+  scope :sevendays, -> {where('created_at <= ? and created_at >= ?', 144.hours.ago, 168.hours.ago)}
+  scope :eightdays, -> {where('created_at <= ? and created_at >= ?', 168.hours.ago, 192.hours.ago)}
+  scope :ninedays, -> {where('created_at <= ? and created_at >= ?', 192.hours.ago, 216.hours.ago)}
+  scope :tendays, -> {where('created_at <= ? and created_at >= ?', 216.hours.ago, 240.hours.ago)}
+  scope :elevendays, -> {where('created_at <= ? and created_at >= ?', 240.hours.ago, 264.hours.ago)}
+  scope :twelvedays, -> {where('created_at <= ? and created_at >= ?', 264.hours.ago, 288.hours.ago)}
+  scope :thirteendays, -> {where('created_at <= ? and created_at >= ?', 288.hours.ago, 312.hours.ago)}
+  scope :fourteendays, -> {where('created_at <= ? and created_at >= ?', 312.hours.ago, 336.hours.ago)}
+  scope :fifteendays, -> {where('created_at <= ? and created_at >= ?', 336.hours.ago, 360.hours.ago)}
+  scope :sixteendays, -> {where('created_at <= ? and created_at >= ?', 360.hours.ago, 384.hours.ago)}
+  scope :seventeendays, -> {where('created_at <= ? and created_at >= ?', 384.hours.ago, 408.hours.ago)}
+  scope :eighteendays, -> {where('created_at <= ? and created_at >= ?', 408.hours.ago, 432.hours.ago)}
+  scope :nineteendays, -> {where('created_at <= ? and created_at >= ?', 432.hours.ago, 456.hours.ago)}
+  scope :twentydays, -> {where('created_at <= ? and created_at >= ?', 456.hours.ago, 480.hours.ago)}
+  scope :twentyonedays, -> {where('created_at <= ? and created_at >= ?', 480.hours.ago, 504.hours.ago)}
   
   has_many :comments
   

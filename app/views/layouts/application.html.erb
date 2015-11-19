@@ -21,14 +21,9 @@
   <%= favicon_link_tag 'favicon.ico' %>
   <%= render "layouts/google_analytics" %>
   
-<% if current_user.nil? && controller_name == 'articles' && action_name == 'show' && paywall %>
-    <script type="text/javascript" data-turbolinks-track="false">
-    $(window).load(function(){
-        $('#paywall').modal();
-    });
-  </script>
+<% if controller_name == 'articles' && action_name == 'show' %>
+    <%= yield(:articlepaywall) %>
 <% end %>
-
 
 </head>
 <body>
@@ -37,7 +32,6 @@
 <div class="user-bar">
 
   <div class="user-bar-flash">
-  [AUTORESPONDERS]
     <% if flash.present? %>
       <% flash.each do |name, msg| %>
         <span style="background-color: #FEF9E6; padding: 0px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
@@ -57,7 +51,7 @@
   
   <div class="user-bar-right-links">
     <% if current_user.nil? %>
-      <div class="user-float-left-no"><%= link_to "Sales Email", new_salesemail_path %></div>
+      
     <% elsif current_user.role == 'editor' %>
       <div style="float:left; padding-top: 6px;">
         <div class="user-float-left-no"><%= link_to "Update", new_newsitem_path %></div>
@@ -71,6 +65,7 @@
         <div class="user-float-left-no">––</div>
         <div class="user-float-left-no"><%= link_to "Member", new_user_path %></div>
         <div class="user-float-left"><%= link_to "Members", users_path %></div>
+        <div class="user-float-left"><%= link_to "Sales", salesemails_path %></div>
         <div class="user-float-left-no">––</div>
       </div>
     <% else %>
@@ -114,7 +109,7 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
 <div class="top-float-left"><%= link_to "Front Page", root_path %></div>
 <div class="top-nav-below-320">
 <div class="top-float-left"><%= link_to "Updates", newsitems_path %></div>
-<div class="top-float-left"><%= link_to "News", articles_news_path %></div>
+<div class="top-float-left"><%= link_to "Spain News", articles_news_path %></div>
 </div>
 <div class="top-float-left"><%= link_to "Editorials", articles_editorial_path %></div>
 <div class="top-float-left-no"><%= link_to "In-Depth", articles_in_depth_path %></div>
@@ -122,7 +117,7 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
 <div class="top-float-left-no">––</div>
 </div>
 <div class="top-nav-middle-block">
-<div class="top-float-left"><%= link_to "Major Spain Stories", stories_path %></div>
+<div class="top-float-left"><%= link_to "Major Stories", stories_path %></div>
 <div class="top-float-left"><%= link_to "Spanish Regions", regions_path %></div>
 <div class="top-float-left-no"><%= link_to "News Topics", categories_path %></div>
 <div class="top-float-left-no">––</div>
