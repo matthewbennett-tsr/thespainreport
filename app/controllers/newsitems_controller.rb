@@ -78,8 +78,11 @@ class NewsitemsController < ApplicationController
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
         if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
-          User.wantsupdates.each do |user|
+          User.wantsupdates.subscribers.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+		  end
+          User.wantsupdates.readers.each do |user|
+            NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
 		  end
           format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
