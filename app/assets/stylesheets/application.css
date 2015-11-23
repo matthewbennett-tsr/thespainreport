@@ -80,8 +80,8 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .breaking-news-top a:hover {color: #F1BF00; background-color: #ffffff;}
 
 .latest-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #ffffff; font-weight:bold;}
-.latest-news-top a, .latest-news-top a:visited {color: #F1BF00; text-decoration:none;}
-.latest-news-top a:hover {color: #AA151B; background-color: #ffffff;}
+.latest-news-top a, .latest-news-top a:visited {color: #005BBF; text-decoration:none;}
+.latest-news-top a:hover {color: #F1BF00; background-color: #ffffff;}
 
 .index-home {font-weight:bold; margin-top:10px; padding-bottom: 5px; border-bottom: 1px solid #000000;}
 .index-non-home {font-weight:bold; padding-bottom: 5px; border-bottom: 1px solid #000000;}
