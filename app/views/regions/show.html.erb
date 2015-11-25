@@ -2,7 +2,7 @@
 
 <%= render 'tickerstories' %>
 
-<h1>News From <%= @region.region %></h1>
+<h1><%= @region.region %>: News, Updates & Analysis</h1>
 
 <div class="article-lede"><%= @region.description unless @region.description.blank? %></div>
 
