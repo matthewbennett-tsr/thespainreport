@@ -78,7 +78,7 @@ class NewsitemsController < ApplicationController
 
   def updatelink
     if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
-      article_url(@newsitem.article, anchor: newsitem.id)
+      article_url(@newsitem.article) + '#' + @newsitem.id.to_s
     else
       newsitem_url(@newsitem)
     end

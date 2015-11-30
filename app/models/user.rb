@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
   scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}
   scope :readers, -> {where(role: 'reader')}
   scope :editors, -> {where(role: 'editor')}
+  scope :wantssummariesbreaking, -> {where(emailpref: 'justsummariesbreaking')}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
   scope :lasttenusers, -> {order('created_at DESC').limit(10)}
