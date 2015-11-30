@@ -68,11 +68,27 @@ class NewsitemsController < ApplicationController
     end 	
   end
 
+  def updateslug
+    if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
+      'LIVE BLOG: '
+    else
+      'UPDATE: '
+    end
+  end
+
   def updatelink
     if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
-      article_url(@newsitem.article)
+      article_url(@newsitem.article, anchor: newsitem.id)
     else
       newsitem_url(@newsitem)
+    end
+  end
+  
+  def updatelinktest
+    if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
+      'https://www.thespainreport.com/live-blog/#' + @newsitem.id.to_s
+    else
+      'https://www.thespainreport.com/'
     end
   end
 
@@ -86,7 +102,7 @@ class NewsitemsController < ApplicationController
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
         if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
-          @tweet = 'UPDATE: ' + @newsitem.slug + ' ' + updatelink
+          @tweet = updateslug + @newsitem.slug + ' ' + updatelinktest
 		  @image = @newsitem.main.url
 		  if @newsitem.main?
 		    $client.update_with_media(@tweet, open(@image))

@@ -7,7 +7,12 @@
 Source: <%= @newsitem.source %>
 
 Leave your comment here:
-<%= newsitem_url(@newsitem) %>
+
+<% if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG" %>
+  <%= article_url(@newsitem.article, anchor: @newsitem.id) %>
+<% else %>
+  <%= newsitem_url(@newsitem) %>
+<% end %>
 
 Thank you for reading The Spain Report.
 ----------
