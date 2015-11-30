@@ -14,7 +14,12 @@
 
 <%= render 'tickerstories' %>
 
-<h1><%= @article.headline %></h1>
+<h1>
+<% if @article.type.name == "LIVE BLOG" %>
+  LIVE BLOG: 
+<% else %>
+<% end %>
+<%= @article.headline %></h1>
 
 <% if @article.urgency == 'majorbreaking' %>
   <div class="news-alert"><span class="breaking-label">MAJOR BREAKING NEWS</span></div>

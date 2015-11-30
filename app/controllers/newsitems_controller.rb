@@ -140,10 +140,13 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @newsitem.update(newsitem_params) && @newsitem.status == 'published' && @newsitem.created_at.today?
-          User.wantsupdates.each do |user|
+          User.wantsupdates.subscribers.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
-          @tweet = 'UPDATE: ' + @newsitem.slug + ' ' + updatelink
+		  User.wantsupdates.readers.each do |user|
+            NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
+		  end
+          @tweet = updateslug + @newsitem.slug + ' ' + updatelink
           @image = @newsitem.main.url
 		  if @newsitem.main?
 		    $client.update_with_media(@tweet, open(@image))
