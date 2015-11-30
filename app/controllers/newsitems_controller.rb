@@ -102,7 +102,7 @@ class NewsitemsController < ApplicationController
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
         if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
-          @tweet = updateslug + @newsitem.slug + ' ' + updatelinktest
+          @tweet = updateslug + @newsitem.slug + ' ' + updatelink
 		  @image = @newsitem.main.url
 		  if @newsitem.main?
 		    $client.update_with_media(@tweet, open(@image))

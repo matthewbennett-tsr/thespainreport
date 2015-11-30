@@ -75,6 +75,8 @@
 <%= markdown(@article.body) %>
 
 <% if @article.type.name == "LIVE BLOG" %>
+<p>Refresh the page for updates as they are reported. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> on Twitter or <a href="https://www.thespainreport.com">sign-up for e-mail alerts</a> if you want notifications pushed to you.</p>
+
   <h2 style="margin-top:30px;">Latest Updates…</h2>
 <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
 <div class="liveblog-updates">
