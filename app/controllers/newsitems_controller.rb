@@ -109,6 +109,9 @@ class NewsitemsController < ApplicationController
           else
             $client.update(@tweet)
           end
+          User.wantsupdates.editors.each do |user|
+            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+		  end
           User.wantsupdates.subscribers.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
@@ -140,6 +143,9 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @newsitem.update(newsitem_params) && @newsitem.status == 'published' && @newsitem.created_at.today?
+          User.wantsupdates.editors.each do |user|
+            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+		  end
           User.wantsupdates.subscribers.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end

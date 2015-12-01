@@ -120,6 +120,14 @@ class ArticlesController < ApplicationController
     end
   end
 
+  def updatelink
+    article_url(@article)
+  end
+  
+  def updatelinktest
+    'https://www.thespainreport.com/'
+  end
+
   # POST /articles
   # POST /articles.json
   def create
@@ -129,7 +137,26 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
-        if @article.save && @article.status == 'published' && @article.created_at.today?
+        if @article.save && @article.status == 'published' && @article.created_at.today? && @article.type.name == 'SUMMARY' || @article.save && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
+          User.wantssummariesbreaking.editors.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantssummariesbreaking.subscribers.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantssummariesbreaking.readers.each do |user|
+            ArticleMailer.delay.send_article_teaser(@article, user)
+		  end
+		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+          @image = @article.main.url
+		  if @article.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @article.save && @article.status == 'published' && @article.created_at.today?
           User.wantsarticles.editors.each do |user|
             ArticleMailer.delay.send_article_full(@article, user)
 		  end
@@ -139,7 +166,7 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + article_url(@article)
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
           @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
@@ -170,7 +197,26 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today?
+        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && @article.type.name == 'SUMMARY' || @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
+          User.wantssummariesbreaking.editors.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantssummariesbreaking.subscribers.each do |user|
+            ArticleMailer.delay.send_article_full(@article, user)
+		  end
+		  User.wantssummariesbreaking.readers.each do |user|
+            ArticleMailer.delay.send_article_teaser(@article, user)
+		  end
+		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+          @image = @article.main.url
+		  if @article.main?
+		    $client.update_with_media(@tweet, open(@image))
+          else
+            $client.update(@tweet)
+          end
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @article.update(article_params) && @article.status == 'published' && @article.created_at.today?
           User.wantsarticles.editors.each do |user|
             ArticleMailer.delay.send_article_full(@article, user)
 		  end
@@ -180,8 +226,8 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + article_url(@article)
-		  @image = @article.main.url
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+          @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
           else

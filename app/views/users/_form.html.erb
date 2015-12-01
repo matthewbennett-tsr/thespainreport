@@ -59,7 +59,7 @@
   <p>
   <strong>Current setting:</strong>
     <% if @user.emailpref == 'articlesupdates' %>
-      "Everything: Articles & Updates"
+      "Everything: All Articles & Updates"
     <% elsif @user.emailpref == 'justarticles' %>
       "Just Articles, No Updates"
     <% elsif @user.emailpref == 'justsummariesbreaking' %>
@@ -71,7 +71,7 @@
     <% end %>
   </p>
    <p style="margin-top: 10px;"><strong>Change your e-mail preference:</strong>
-  <%= f.select :emailpref, options_for_select([["Everything: Articles & Updates", "articlesupdates"], ["Just Articles, No Updates", "justarticles"], ["Just Summaries & Breaking News", "justsummariesbreaking"], ["I Don't Want Any E-mail", "nothing"]], @user.emailpref) %>
+  <%= f.select :emailpref, options_for_select([["Everything: All Articles & Updates", "articlesupdates"], ["Just Articles, No Updates", "justarticles"], ["Just Summaries & Breaking News", "justsummariesbreaking"], ["I Don't Want Any E-mail", "nothing"]], @user.emailpref) %>
   </p>
   </div>
   

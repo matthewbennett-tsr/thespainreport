@@ -64,7 +64,7 @@
         <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <%= link_to article.headline, article %>
-      <% elsif article.type.name == "LIVE BLOG" %>
+      <% elsif article.type.name == "LIVE BLOG" && article.updated_at.today? %>
         <span class="breaking">LIVE BLOG</span> <%= link_to article.headline, article %>
       <% elsif article.status == 'updated' %>
         <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
