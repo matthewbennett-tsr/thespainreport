@@ -137,7 +137,7 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
-        if @article.save && @article.status == 'published' && @article.created_at.today? && @article.type.name == 'SUMMARY' || @article.save && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
+        if @article.save && @article.status == 'published' && @article.created_at.today? && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.save && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
           User.wantssummariesbreaking.editors.each do |user|
             ArticleMailer.delay.send_article_full(@article, user)
 		  end
@@ -147,7 +147,7 @@ class ArticlesController < ApplicationController
 		  User.wantssummariesbreaking.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
           @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
@@ -166,7 +166,7 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
           @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
@@ -197,7 +197,7 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && @article.type.name == 'SUMMARY' || @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
+        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
           User.wantssummariesbreaking.editors.each do |user|
             ArticleMailer.delay.send_article_full(@article, user)
 		  end
@@ -207,7 +207,7 @@ class ArticlesController < ApplicationController
 		  User.wantssummariesbreaking.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
           @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
@@ -226,7 +226,7 @@ class ArticlesController < ApplicationController
 		  User.wantsarticles.readers.each do |user|
             ArticleMailer.delay.send_article_teaser(@article, user)
 		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelinktest
+          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
           @image = @article.main.url
 		  if @article.main?
 		    $client.update_with_media(@tweet, open(@image))
