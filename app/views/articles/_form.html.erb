@@ -11,23 +11,12 @@
       </ul>
     </div>
   <% end %>
-<div style="margin-top: 10px; margin-bottom: 10px; font-size: 12px;"><strong>TYPE:</strong> <%= f.collection_select :type_id, @types, :id, :name %> | <strong>NEWS URGENCY?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %></div>
-<div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
-<div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
-<div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
- 
- <div style="font-size: 12px; margin-bottom: 10px;">
-  <strong>MAIN IMAGE</strong> <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
-   | <%= f.check_box :remove_main %> Remove?
-   | <strong>CAPTION:</strong> <%= f.text_field :caption, :size => '40' %>
-   | <strong>SOURCE:</strong> <%= f.text_field :source, :size => '20' %>
-  <br />
-  <% if @article.main? %>
-    <div style="margin: 10px 0px;">
-    <%= image_tag @article.main.url %>
-    </div>
-  <% end %>
-  </div>
+<div style="margin-top: 10px; margin-bottom: 10px; font-size: 12px;">
+<strong>TYPE:</strong> <%= f.collection_select :type_id, @types, :id, :name %>
+ | <strong>NEWS URGENCY?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+ | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
+ | <%= f.submit %>
+</div>
  
   <div class="field">
     <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
@@ -50,13 +39,28 @@ STRATEGIES: resources, vision, planning, loops, speed, phases, level/coherence o
 </textarea>
   </div>
 
-  
+  <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
+<div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
+<div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
+ 
+ <div style="font-size: 12px; margin-bottom: 10px;">
+  <strong>MAIN IMAGE</strong> <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
+   | <%= f.check_box :remove_main %> Remove?
+   | <strong>CAPTION:</strong> <%= f.text_field :caption, :size => '40' %>
+   | <strong>SOURCE:</strong> <%= f.text_field :source, :size => '20' %>
+  <br />
+  <% if @article.main? %>
+    <div style="margin: 10px 0px;">
+    <%= image_tag @article.main.url %>
+    </div>
+  <% end %>
+  </div>
+
   
   
   <div style="font-size: 12px;">
   <strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '35' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '35' %>
-   <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
-   | <%= f.submit %>
+   
   </div>
   
 <% end %>

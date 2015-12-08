@@ -120,7 +120,13 @@
       <% end %>
   
       <div class="listing-update-text">
-      <span class="listing-update-slug"><%= link_to newsitem.slug, newsitem %></span>
+      <span class="listing-update-slug">
+      <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+        LIVE BLOG: <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
+      <% else %>
+        <%= link_to newsitem.slug, newsitem %>
+      <% end %>
+      </span>
       <br />
       <%= markdown(newsitem.item) %>
       </div>
