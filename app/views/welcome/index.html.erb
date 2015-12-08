@@ -104,31 +104,18 @@
     </div>
     <div class="listing-right">
       
-      <% if newsitem.main? %>
-        <div class="index-main-image">
-          <%= link_to(newsitem) do %>
-          <%= image_tag newsitem.main.url if newsitem.main? %>
-          <% end %>
-        </div>
-      <% elsif newsitem.video? %>
-        <div class="index-main-image">
-        <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-        </div>
-        </div>
-      <% else %>
-      <% end %>
+      
   
       <div class="listing-update-text">
       <span class="listing-update-slug">
       <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
         LIVE BLOG: <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
       <% else %>
-        <%= link_to newsitem.slug, newsitem %>
+        UPDATE: <%= link_to newsitem.slug, newsitem %>
       <% end %>
       </span>
       <br />
-      <%= markdown(newsitem.item) %>
+      <%= markdown(newsitem.item.truncate(265)) %>
       </div>
       <div class="clear"></div>
       <div class="meta">
