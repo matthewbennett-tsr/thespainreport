@@ -1,0 +1,59 @@
+<div style="margin: 10px auto;">
+<p><strong>WORLD:</strong> <%= link_to "All World Latest", entries_world_all_path %> | <%= link_to "World Home Pages", entries_world_home_path %> | <%= link_to "World Foreign Affairs", entries_world_foreign_affairs_path %> | <%= link_to "World Politics", entries_world_politics_path %> | <%= link_to "World Economy", entries_world_economy_path %> | <%= link_to "Media & Journalism", entries_world_media_path %></p>
+<p><strong>SPAIN:</strong> <%= link_to "All Spain Latest", entries_spain_all_path %> | <%= link_to "Spain in English", entries_spain_english_path %> | <%= link_to "Spain Home Pages", entries_spain_home_path %> | <%= link_to "Spain Opinion", entries_spain_opinion_path %> | <%= link_to "Spain International", entries_spain_international_path %> | <%= link_to "Spain National", entries_spain_national_path %> | <%= link_to "Spain Economy", entries_spain_economy_path %> | <%= link_to "Spain Other", entries_spain_other_path %></p>
+<p><strong>SPAIN (MEDIA):</strong> <%= link_to "5 Días", entries_cincodias_path %> | <%= link_to "ABC", entries_abc_path %> | <%= link_to "Antena 3", entries_antenatres_path %> | <%= link_to "COPE", entries_cope_path %> | <%= link_to "EFE", entries_efe_path %> | <%= link_to "El Confidencial", entries_elconfidencial_path %> |  <%= link_to "ECD", entries_elconfidencialdigital_path %> | <%= link_to "El Diario", entries_eldiario_path %> | <%= link_to "El Economista", entries_eleconomista_path %> | <%= link_to "El Español", entries_elespanol_path %> | <%= link_to "El Mundo", entries_elmundo_path %> | <%= link_to "El País", entries_elpais_path %> | <%= link_to "El Periódico", entries_elperiodico_path %> | <%= link_to "Europa Press", entries_europapress_path %> | <%= link_to "Expansión", entries_expansion_path %> | <%= link_to "InfoLibre", entries_infolibre_path %> | <%= link_to "La Sexta", entries_lasexta_path %> | <%= link_to "La Razón", entries_larazon_path %> | <%= link_to "La Vanguardia", entries_lavanguardia_path %> | <%= link_to "Libertad Digital", entries_libertaddigital_path %> | <%= link_to "Onda Cero", entries_ondacero_path %> | <%= link_to "Público", entries_publico_path %> | <%= link_to "SER", entries_ser_path %> | <%= link_to "Tele 5", entries_telecinco_path %> | <%= link_to "TVE", entries_tve_path %> | <%= link_to "Vozpópuli", entries_vozpopuli_path %></p>
+</div>
+
+<table width="100%">
+  <thead>
+    <tr style="border-bottom: 1px solid #000000;">
+      <th style="width: 100px;">Time</th>
+      <th style="width: 60px;">Feed</th>
+      <th>Title</th>
+    </tr>
+  </thead>
+  <tbody>
+  
+  <% if current_user.nil? %>
+  <tr><td colspan="3" style="padding: 20px;">
+  The Spain Report's News Reader constantly watches <%= Feed.count %> Spain news feeds for you and organises them into easy-to-use pages for you.
+  New articles appear as soon as they are published. Subscribers can search all <%= Entry.count %> articles. Never miss another Spain story.
+  
+  <%= render 'emailsignup' %>
+  </td></tr>
+  <tr><td colspan="3">
+  <h3 style="margin-top: -10px;">Last 10 World Stories</h3>
+  </td></tr>
+    <% @teaser_world_entries.each do |entry| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="width: 100px; padding-right: 10px; text-align:left;"><%= entry.created_at.strftime("%d/%m, %H:%M") %></td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;"><%= entry.feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to entry.title.truncate(115), entry.url, :target => "_blank" %></td>
+      </tr>
+    <% end %>
+  
+  <tr><td colspan="3">
+  <h3>Last 10 Spain Stories</h3>
+  </td></tr>
+    <% @teaser_spain_entries.each do |entry| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="width: 100px; padding-right: 10px; text-align:left;"><%= entry.created_at.strftime("%d/%m, %H:%M") %></td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;"><%= entry.feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to entry.title.truncate(115), entry.url, :target => "_blank" %></td>
+      </tr>
+    <% end %>
+  
+  <% elsif ["editor", "subscriber"].include?(current_user.role) %>
+    <% entries.each do |entry| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="width: 100px; padding-right: 10px; text-align:left;"><%= entry.created_at.strftime("%d/%m, %H:%M") %></td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;"><%= entry.feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to entry.title.truncate(115), entry.url, :target => "_blank" %></td>
+      </tr>
+    <% end %>
+
+  <% else %>
+  <% end %>
+
+</tbody>
+</table>

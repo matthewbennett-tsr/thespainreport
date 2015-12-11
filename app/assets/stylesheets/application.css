@@ -173,6 +173,10 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 table {border-collapse: collapse;}
 th {font-weight:bold;}
 .right {text-align:right;}
+tr.odd {background-color: #FEF9E6;}
+tr.even {background-color: #FFFFFF;}
+tr.odd > td, tr.even > td {padding-top: 3px; padding-bottom: 3px;}
+td {font-family: Arial; font-size: 14px; vertical-align: top;}
 
 .invoice-table {margin-top: 10px;}
 .invoice-table th {padding: 0px 15px 0px 0px;}

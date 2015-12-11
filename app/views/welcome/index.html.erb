@@ -16,7 +16,7 @@
       <% elsif article.video? %>
         <div class="main-image-home-breaking">
           <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
+          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
           </div>
           <div class="main-caption">
           <%= article.caption %> <strong>Source:</strong> <%= article.source %>
