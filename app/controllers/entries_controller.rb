@@ -28,7 +28,11 @@ class EntriesController < ApplicationController
     feed_teasers
     entry_count
     feed_count
-    search_entries
+    if params[:search]
+      @entries = Entry.search(params[:search]).order("created_at DESC")
+    else
+      @entries = Entry.indexlimit.order('created_at DESC')
+    end
   end
   
   def world_all
