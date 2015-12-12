@@ -16,7 +16,7 @@
   <tbody>
     <% @feeds.each do |feed| %>
       <tr class="<%= cycle("odd", "even") -%>">
-        <td style="padding-right: 10px; text-align:left;"><%= feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= feed.slug unless feed.slug.blank? %></td>
         <td style="padding-right: 10px; text-align:left;"><%= feed.category.humanize.titleize %></td>
         <td style="padding-right: 10px; text-align:left;"><%= link_to feed.title, feed.url %></td>
         <td style="padding-right: 10px; text-align:left;"><%= feed.status %></td>
