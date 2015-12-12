@@ -20,12 +20,11 @@ class EntriesController < ApplicationController
     if params[:search]
       @entries = Entry.search(params[:search]).order("created_at DESC")
     else
-      @entries = Entry.all.order('created_at DESC')
+      @entries = Entry.indexlimit.order('created_at DESC')
     end
   end
   
   def index
-    @entries = Entry.indexlimit
     feed_teasers
     entry_count
     feed_count
