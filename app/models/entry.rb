@@ -7,6 +7,10 @@ class Entry < ActiveRecord::Base
 		order('created_at DESC')
 	}
   
+  def self.search(search)
+    where("title @@ ?", search)
+  end
+  
   scope :indexlimit, -> {order('updated_at DESC').limit(250)}
   scope :world_all, -> {joins(:feed).merge(Feed.world_all)}
   scope :spain_all, -> {joins(:feed).merge(Feed.spain_all)}

@@ -24,10 +24,6 @@
     <%= f.text_field :url %>
   </div>
   <div class="field">
-    <%= f.label :status %><br>
-    <%= f.text_field :status %>
-  </div>
-  <div class="field">
   <%= f.collection_select(:category, Feed::CATEGORIES, :to_s, lambda{|i| i.to_s.humanize.titleize}) %>
   </div>
   <div class="actions">

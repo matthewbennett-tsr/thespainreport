@@ -1,3 +1,18 @@
+<div style="float:left;">
+<%= form_tag(entries_path, :method => "get", id: "search-form") do %>
+<%= text_field_tag :search, params[:search], placeholder: "Search Stories" %>
+<%= submit_tag "Search" %>
+<% end %>
+</div>
+
+<% if params[:search] %>
+<div style="float:left; background-color: #FEF9E6; margin-left: 20px; padding: 4px 10px 1px 10px;">
+<p>There are <strong><%= @entries.count %></strong> stories containing "<strong><%= params[:search] %></strong>".</p>
+</div>
+<% else %>
+<% end %>
+<div class="clear"></div>
+
 <div style="margin: 10px auto;">
 <p><strong>WORLD:</strong> <%= link_to "All World Latest", entries_world_all_path %> | <%= link_to "World Home Pages", entries_world_home_path %> | <%= link_to "World Foreign Affairs", entries_world_foreign_affairs_path %> | <%= link_to "World Politics", entries_world_politics_path %> | <%= link_to "World Economy", entries_world_economy_path %> | <%= link_to "Media & Journalism", entries_world_media_path %></p>
 <p><strong>SPAIN:</strong> <%= link_to "All Spain Latest", entries_spain_all_path %> | <%= link_to "Spain in English", entries_spain_english_path %> | <%= link_to "Spain Home Pages", entries_spain_home_path %> | <%= link_to "Spain Opinion", entries_spain_opinion_path %> | <%= link_to "Spain International", entries_spain_international_path %> | <%= link_to "Spain National", entries_spain_national_path %> | <%= link_to "Spain Economy", entries_spain_economy_path %> | <%= link_to "Spain Other", entries_spain_other_path %></p>

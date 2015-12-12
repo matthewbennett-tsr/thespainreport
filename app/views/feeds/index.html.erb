@@ -1,12 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Feeds</h1>
+<h1>Feeds</h1>
 
 <table>
   <thead>
-    <tr>
+    <tr style="border-bottom: 1px solid #000000;">
+      <th>Slug</th>
+      <th>Group</th>
       <th>Title</th>
-      <th>Url</th>
       <th>Status</th>
       <th colspan="4"></th>
     </tr>
@@ -14,14 +15,15 @@
 
   <tbody>
     <% @feeds.each do |feed| %>
-      <tr>
-        <td><%= feed.title %></td>
-        <td><%= feed.url %></td>
-        <td><%= feed.status %></td>
-        <td><%= link_to 'Retrieve', retrieve_feed_path(feed) %></td>
-        <td><%= link_to 'Show', feed %></td>
-        <td><%= link_to 'Edit', edit_feed_path(feed) %></td>
-        <td><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="padding-right: 10px; text-align:left;"><%= feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= feed.category.humanize.titleize %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to feed.title, feed.url %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= feed.status %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to 'Retrieve', retrieve_feed_path(feed) %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to 'Show', feed %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to 'Edit', edit_feed_path(feed) %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to 'Destroy', feed, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>

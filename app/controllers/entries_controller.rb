@@ -16,11 +16,20 @@ class EntriesController < ApplicationController
     @feed_count = Feed.count
   end
   
+  def search_entries
+    if params[:search]
+      @entries = Entry.search(params[:search]).order("created_at DESC")
+    else
+      @entries = Entry.all.order('created_at DESC')
+    end
+  end
+  
   def index
     @entries = Entry.indexlimit
     feed_teasers
     entry_count
     feed_count
+    search_entries
   end
   
   def world_all

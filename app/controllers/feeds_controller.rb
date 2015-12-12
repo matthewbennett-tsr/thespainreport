@@ -12,7 +12,7 @@ class FeedsController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
-      @feeds = Feed.all
+      @feeds = Feed.all.order('slug ASC, title ASC')
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
