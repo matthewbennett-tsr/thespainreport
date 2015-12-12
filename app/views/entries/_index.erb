@@ -62,7 +62,7 @@
     <% @entries.each do |entry| %>
       <tr class="<%= cycle("odd", "even") -%>">
         <td style="width: 100px; padding-right: 10px; text-align:left;"><%= entry.created_at.strftime("%d/%m, %H:%M") %></td>
-        <td style="width: 60px; padding-right: 10px; text-align:left;">x</td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;"><%= entry.feed.try(:slug) %></td>
         <td style="padding-right: 10px; text-align:left;"><%= link_to entry.title.truncate(115), entry.url, :target => "_blank" %></td>
       </tr>
     <% end %>
