@@ -52,6 +52,22 @@
       </tr>
     <% end %>
 
+  <% elsif ["reader"].include?(current_user.role) %>
+    <% entries.limit(5).each do |entry| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="width: 100px; padding-right: 10px; text-align:left;"><%= entry.created_at.strftime("%d/%m, %H:%M") %></td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;"><%= entry.feed.slug %></td>
+        <td style="padding-right: 10px; text-align:left;"><%= link_to entry.title.truncate(115), entry.url, :target => "_blank" %></td>
+      </tr>
+    <% end %>
+      <tr class="even">
+        <td style="width: 100px; padding-right: 10px; text-align:left;">……</td>
+        <td style="width: 60px; padding-right: 10px; text-align:left;">…</td>
+        <td style="padding-right: 10px; text-align:left;">……</td>
+      </tr>
+      <tr><td colspan="3" style="padding: 20px;">
+      Free readers limited to 5 headlines. Subscribers get full access to our Spain News Reader. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a>
+      </td></tr>
   <% else %>
   <% end %>
 

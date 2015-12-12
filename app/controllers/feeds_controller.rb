@@ -14,6 +14,8 @@ class FeedsController < ApplicationController
     elsif current_user.role == 'editor'
       @feeds = Feed.all
     else
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -26,6 +28,8 @@ class FeedsController < ApplicationController
     elsif current_user.role == 'editor'
     
     else
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -37,6 +41,8 @@ class FeedsController < ApplicationController
     elsif current_user.role == 'editor'
       @feed = Feed.new
     else
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -48,6 +54,8 @@ class FeedsController < ApplicationController
     elsif current_user.role == 'editor'
     
     else
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 

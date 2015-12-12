@@ -82,7 +82,8 @@
       </div>
     <% else current_user %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left-no"><%= link_to "Latest Comments", comments_path %></div>
+        <div class="user-float-left-no"><%= link_to "News Reader", entries_path %></div>
+        <div class="user-float-left"><%= link_to "Latest Comments", comments_path %></div>
         <div class="user-float-left"><%= link_to "My Account", edit_user_path(current_user) %></div>
         <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
       </div>
