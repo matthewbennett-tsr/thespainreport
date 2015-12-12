@@ -10,7 +10,7 @@ SuperfeedrEngine::Engine.feed_class = "Feed"
 SuperfeedrEngine::Engine.base_path = "/superfeedr_engine/"
 # Base path for the engine don't forget the trailing / and make it hard to guess!
 
-SuperfeedrEngine::Engine.host = "22d2cd06.ngrok.io" # Your hostname (no http). Used for webhooks!
+SuperfeedrEngine::Engine.host = "www.thespainreport.com" # Your hostname (no http). Used for webhooks!
 # When debugging, you can use tools like https://www.runscope.com/docs/passageway to share your local web server with superfeedr's API via a public URL
 
 # Superfeedr username
