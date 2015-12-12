@@ -1,0 +1,22 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Title:</strong>
+  <%= @feed.title %>
+</p>
+
+<p>
+  <strong>Url:</strong>
+  <%= @feed.url %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @feed.status %>
+</p>
+
+<%= link_to 'Retrieve', retrieve_feed_path(@feed) %> | 
+<%= link_to 'Edit', edit_feed_path(@feed) %> |
+<%= link_to 'All Feeds', feeds_path %>
+
+<%= render :partial => 'entries/index', :locals => {:entries =>  @feed.entries} %>

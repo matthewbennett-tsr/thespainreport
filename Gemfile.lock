@@ -140,6 +140,8 @@ GEM
     pg (0.18.2)
     rack (1.6.4)
     rack-rewrite (1.5.1)
+    rack-superfeedr (0.4.6)
+      rack
     rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.2.3)
@@ -195,6 +197,9 @@ GEM
     stripe (1.25.0)
       json (~> 1.8.1)
       rest-client (~> 1.4)
+    superfeedr_engine (0.1.7)
+      rack-superfeedr (~> 0.4.4)
+      rails (~> 4.2.0)
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
@@ -255,6 +260,7 @@ DEPENDENCIES
   spring
   sqlite3
   stripe (~> 1.25.0)!
+  superfeedr_engine
   turbolinks
   twitter
   twitter-bootstrap-rails

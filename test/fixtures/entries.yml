@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  feed_id: 1
+  atom_id: MyString
+  title: MyString
+  url: MyString
+  content: MyString
+
+two:
+  feed_id: 1
+  atom_id: MyString
+  title: MyString
+  url: MyString
+  content: MyString
