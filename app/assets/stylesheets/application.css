@@ -197,6 +197,7 @@ td {font-family: Arial; font-size: 14px; vertical-align: top;}
 .field_with_errors {background-color: #F1BF00; border-color: #F1BF00;}
 #flash_success {color: green !important;}
 #flash_success_div {width: 100; border: 2px solid green; background-color: #FEF9E6; margin: 10px 0px; text-align:center; padding: 10px;}
+#flash_success_div_left {width: 100; border: 2px solid green; background-color: #FEF9E6; margin: 10px 0px; text-align:left; padding: 10px;}
 #flash_error {color: #AA151B !important;}
 #flash_error_div {width: 100; border: 2px solid #AA151B; background-color: #FEF9E6; margin: 10px 0px; text-align:center; padding: 10px;}
 

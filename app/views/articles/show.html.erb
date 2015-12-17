@@ -1,5 +1,7 @@
 <% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.name) %>
-  <% if current_user.nil? && paywall %>
+  <% if current_user.nil? && !paywall %>
+    <% flash[:notice] = "No paywall yet" %>
+  <% elsif current_user.nil? && paywall %>
     <% content_for :articlepaywall do %>
     <script type="text/javascript" data-turbolinks-track="false">
     $(window).load(function(){
@@ -7,6 +9,25 @@
     });
     </script>
     <% end %>
+  <% elsif current_user.role == 'reader' && paywall %>
+    <% flash[:notice] = "Time to subscribe!" %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-reader').modal();
+    });
+    </script>
+    <% end %>
+  <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+    <% flash[:notice] = "Please re-subscribe." %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-resubscribe').modal();
+    });
+    </script>
+    <% end %>
+  <% else %>
   <% end %>
 <% end %>
 

@@ -73,7 +73,7 @@ class ArticlesController < ApplicationController
     @articleupdates = @article.newsitems
     @comments = @article.comments
   end
-
+  
   # GET /articles/new
   def new
     if current_user.nil? 
