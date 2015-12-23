@@ -28,72 +28,72 @@ class EntriesController < ApplicationController
   end
   
   def world_all
-    @entries = Entry.joins(:feed).merge(Feed.world_all)
+    @entries = Entry.joins(:feed).merge(Feed.world_all).indexlimit
     feed_teasers
   end
   
   def world_home
-    @entries = Entry.joins(:feed).merge(Feed.world_home)
+    @entries = Entry.joins(:feed).merge(Feed.world_home).indexlimit
     feed_teasers
   end
   
   def world_politics
-    @entries = Entry.joins(:feed).merge(Feed.world_politics)
+    @entries = Entry.joins(:feed).merge(Feed.world_politics).indexlimit
     feed_teasers
   end
   
   def world_economy
-    @entries = Entry.joins(:feed).merge(Feed.world_economy)
+    @entries = Entry.joins(:feed).merge(Feed.world_economy).indexlimit
     feed_teasers
   end
   
   def world_foreign_affairs
-    @entries = Entry.joins(:feed).merge(Feed.world_foreign_affairs)
+    @entries = Entry.joins(:feed).merge(Feed.world_foreign_affairs).indexlimit
     feed_teasers
   end
   
   def world_media
-    @entries = Entry.joins(:feed).merge(Feed.world_media)
+    @entries = Entry.joins(:feed).merge(Feed.world_media).indexlimit
     feed_teasers
   end
   
   def spain_english
-    @entries = Entry.joins(:feed).merge(Feed.spain_english)
+    @entries = Entry.joins(:feed).merge(Feed.spain_english).indexlimit
     feed_teasers
   end
   
   def spain_all
-    @entries = Entry.joins(:feed).merge(Feed.spain_all)
+    @entries = Entry.joins(:feed).merge(Feed.spain_all).indexlimit
     feed_teasers
   end
   
   def spain_home
-    @entries = Entry.joins(:feed).merge(Feed.spain_home)
+    @entries = Entry.joins(:feed).merge(Feed.spain_home).indexlimit
     feed_teasers
   end
   
   def spain_opinion
-    @entries = Entry.joins(:feed).merge(Feed.spain_opinion)
+    @entries = Entry.joins(:feed).merge(Feed.spain_opinion).indexlimit
     feed_teasers
   end
   
   def spain_international
-    @entries = Entry.joins(:feed).merge(Feed.spain_international)
+    @entries = Entry.joins(:feed).merge(Feed.spain_international).indexlimit
     feed_teasers
   end
   
   def spain_national
-    @entries = Entry.joins(:feed).merge(Feed.spain_national)
+    @entries = Entry.joins(:feed).merge(Feed.spain_national).indexlimit
     feed_teasers
   end
   
   def spain_economy
-    @entries = Entry.joins(:feed).merge(Feed.spain_economy)
+    @entries = Entry.joins(:feed).merge(Feed.spain_economy).indexlimit
     feed_teasers
   end
   
   def spain_other
-    @entries = Entry.joins(:feed).merge(Feed.spain_other)
+    @entries = Entry.joins(:feed).merge(Feed.spain_other).indexlimit
     feed_teasers
   end
   
