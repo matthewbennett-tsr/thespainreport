@@ -68,11 +68,34 @@ class NewsitemsController < ApplicationController
     end 	
   end
 
+  def twitter
+    if @newsitem.main? && params[:tweet] == '1'
+      $client.update_with_media(tweet, open(tweetimage))
+    elsif params[:tweet] == '1'
+      $client.update(tweet)
+    else
+    end
+  end
+
+  def tweet
+    updateslug + updatetext + ' ' + updatelinktest
+  end
+
   def updateslug
-    if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
+    if params[:short_slug].present?
+      params[:short_slug] + ': '
+    elsif @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
       'LIVE BLOG: '
     else
       'UPDATE: '
+    end
+  end
+
+  def updatetext
+    if params[:short_headline].present?
+      params[:short_headline]
+    else
+      @newsitem.slug
     end
   end
 
@@ -92,6 +115,10 @@ class NewsitemsController < ApplicationController
     end
   end
 
+  def tweetimage
+    @newsitem.main.url
+  end
+
   # POST /newsitems
   # POST /newsitems.json
   def create
@@ -102,13 +129,7 @@ class NewsitemsController < ApplicationController
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
         if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
-          @tweet = updateslug + @newsitem.slug + ' ' + updatelink
-		  @image = @newsitem.main.url
-		  if @newsitem.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
+          twitter
           User.wantsupdates.editors.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
@@ -143,6 +164,7 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @newsitem.update(newsitem_params) && @newsitem.status == 'published' && @newsitem.created_at.today?
+          twitter
           User.wantsupdates.editors.each do |user|
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 		  end
@@ -152,16 +174,9 @@ class NewsitemsController < ApplicationController
 		  User.wantsupdates.readers.each do |user|
             NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
 		  end
-          @tweet = updateslug + @newsitem.slug + ' ' + updatelink
-          @image = @newsitem.main.url
-		  if @newsitem.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
           format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
-        elsif @newsitem.update
+        elsif @newsitem.update(newsitem_params)
           format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else

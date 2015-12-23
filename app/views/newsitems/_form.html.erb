@@ -14,15 +14,28 @@
 
 <div style="margin-top: 10px;">
 
-  <div style="margin-bottom: 5px;"><strong>SLUG</strong> 
-    <% if action_name == 'edit' %>
-      <%= f.text_field :slug, :size => "70" %>
-    <% elsif action_name == 'new' %>
-      <%= f.text_field :slug, :value => params[:breaking_slug], :size => "70" %>
-    <% end %>
+  <div style="margin-bottom: 5px;">
+  
+  <div style="margin-bottom: 5px;">
+  <div style="float:left; width: 55px; border-right: 1px solid #000; margin-right: 5px;"><strong>TITLE</strong></div>
+  <div style="float:left; text-align:left;">
+   <%= f.text_field :slug, :size => "82", :maxlength => 87 %>
    | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
    | <%= f.submit %>
+   </div>
+   <div class="clear"></div>
+   </div>
+   
+   <div style="float:left; width: 55px; border-right: 1px solid #000; margin-right: 5px;"><strong>SHORT</strong></div>
+   <div style="float:left; text-align:left;">
+   <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
+   <%= text_field_tag 'short_headline', '', size: 70, maxlength: 70 %>
+   | Tweet? <%= check_box_tag 'tweet' %> | E-mail? <%= check_box_tag 'email' %>
+   </div>
+   <div class="clear"></div>    
+
   </div>
+  
   <div style="margin-bottom: 5px;">
   
   <div style="margin-bottom: 5px;">
