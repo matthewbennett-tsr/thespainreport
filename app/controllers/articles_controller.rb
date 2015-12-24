@@ -109,14 +109,37 @@ class ArticlesController < ApplicationController
   end
 
   def articleurgency
-    if @article.urgency == 'majorbreaking'
-      "MAJOR BREAKING"
+    if params[:short_slug].present?
+      params[:short_slug] + ': '
+    elsif @article.urgency == 'majorbreaking'
+      "MAJOR BREAKING: "
     elsif @article.urgency == 'breaking'
-      "BREAKING"
+      "BREAKING: "
     elsif @article.urgency == 'latest'
-      "LATEST"
+      "LATEST: "
     else
-      "#{@article.type.name}"
+      "#{@article.type.name}: "
+    end
+  end
+
+  def twitter
+    if @article.main? && params[:tweet] == '1'
+      $client.update_with_media(tweet, open(tweetimage))
+    elsif params[:tweet] == '1'
+      $client.update(tweet)
+    else
+    end
+  end
+
+  def tweet
+    articleurgency + updatetext + ' ' + updatelinktest
+  end
+  
+  def updatetext
+    if params[:short_headline].present?
+      params[:short_headline]
+    else
+      @article.headline
     end
   end
 
@@ -126,6 +149,38 @@ class ArticlesController < ApplicationController
   
   def updatelinktest
     'https://www.thespainreport.com/'
+  end
+  
+  def tweetimage
+    @article.main.url
+  end
+
+  def emailsummaries
+    if params[:email] == '1'
+      User.wantssummariesbreaking.editors.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+	  User.wantssummariesbreaking.subscribers.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+	  User.wantssummariesbreaking.readers.each do |user|
+        ArticleMailer.delay.send_article_teaser(@article, user)
+	  end
+	end
+  end
+  
+  def emailarticles
+    if params[:email] == '1'
+      User.wantsarticles.editors.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+	  User.wantsarticles.subscribers.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+	  User.wantsarticles.readers.each do |user|
+        ArticleMailer.delay.send_article_teaser(@article, user)
+	  end
+	end
   end
 
   # POST /articles
@@ -137,45 +192,17 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
-        if @article.save && @article.status == 'published' && @article.created_at.today? && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.save && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
-          User.wantssummariesbreaking.editors.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantssummariesbreaking.subscribers.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantssummariesbreaking.readers.each do |user|
-            ArticleMailer.delay.send_article_teaser(@article, user)
-		  end
-		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
-          @image = @article.main.url
-		  if @article.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
+        if @article.save && ["draft", "editing"].include?(@article.status)
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.save && @article.status == 'published' && @article.created_at.today?
-          User.wantsarticles.editors.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantsarticles.subscribers.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantsarticles.readers.each do |user|
-            ArticleMailer.delay.send_article_teaser(@article, user)
-		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
-          @image = @article.main.url
-		  if @article.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
+        elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
+          emailsummaries
+		  twitter
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.save
+        elsif @article.save && ["published", "updated"].include?(@article.status)
+          emailarticles
+          twitter
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
@@ -197,42 +224,17 @@ class ArticlesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.update(article_params) && @article.status == 'published' && @article.created_at.today? && ["breaking", "majorbreaking"].include?(@article.urgency)
-          User.wantssummariesbreaking.editors.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantssummariesbreaking.subscribers.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantssummariesbreaking.readers.each do |user|
-            ArticleMailer.delay.send_article_teaser(@article, user)
-		  end
-		  @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
-          @image = @article.main.url
-		  if @article.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
-          format.html { redirect_to :action => 'admin', notice: 'Article was successfully created.' }
+        if @article.update(article_params) && ["draft", "editing"].include?(@article.status)
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully updated.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.update(article_params) && @article.status == 'published' && @article.created_at.today?
-          User.wantsarticles.editors.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantsarticles.subscribers.each do |user|
-            ArticleMailer.delay.send_article_full(@article, user)
-		  end
-		  User.wantsarticles.readers.each do |user|
-            ArticleMailer.delay.send_article_teaser(@article, user)
-		  end
-          @tweet = articleurgency + ': ' + @article.headline + ' ' + updatelink
-          @image = @article.main.url
-		  if @article.main?
-		    $client.update_with_media(@tweet, open(@image))
-          else
-            $client.update(@tweet)
-          end
+        elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
+          emailsummaries
+		  twitter
+          format.html { redirect_to :action => 'admin', notice: 'Article was successfully udpated.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
+          emailarticles
+          twitter
           format.html { redirect_to :action => 'admin', notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else

@@ -11,12 +11,25 @@
       </ul>
     </div>
   <% end %>
-<div style="margin-top: 10px; margin-bottom: 10px; font-size: 12px;">
+  
+<div style="margin-top: 10px;">
+ <div style="float:left; width: 55px; border-right: 1px solid #000; margin-right: 5px;"><strong>SHORT</strong></div>
+   <div style="float:left; text-align:left;">
+   <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
+   <%= text_field_tag 'short_headline', '', size: 70, maxlength: 70 %>
+   | Tweet? <%= check_box_tag 'tweet' %> | E-mail? <%= check_box_tag 'email' %>
+   </div>
+   <div class="clear"></div> 
+   </div>   
+
+<div style="margin-top: 10px; margin-bottom: 10px; font-size: 12px;"> 
 <strong>TYPE:</strong> <%= f.collection_select :type_id, @types, :id, :name %>
- | <strong>NEWS URGENCY?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+ | <strong>URGENCY?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
  | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
  | <%= f.submit %>
 </div>
+ 
+
  
   <div class="field">
     <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>

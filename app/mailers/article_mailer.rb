@@ -13,11 +13,11 @@ class ArticleMailer < ApplicationMailer
   
   def send_article_subject
     if @article.urgency == 'majorbreaking'
-      "MAJOR BREAKING NEWS: #{@article.headline}"
+      "MAJOR BREAKING: #{@article.headline}"
     elsif @article.urgency == 'breaking'
-      "BREAKING NEWS: #{@article.headline}"
+      "BREAKING: #{@article.headline}"
     elsif @article.urgency == 'latest'
-      "LATEST NEWS: #{@article.headline}"
+      "LATEST: #{@article.headline}"
     else
       "#{@article.type.name}: #{@article.headline}"
     end
