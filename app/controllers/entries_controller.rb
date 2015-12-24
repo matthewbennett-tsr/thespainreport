@@ -297,6 +297,6 @@ class EntriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def entry_params
-      params.require(:entry).permit(:feed_id, :atom_id, :title, :url, :content)
+      params.require(:entry).permit(:feed_id, :atom_id, :title, :url)
     end
 end
