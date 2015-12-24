@@ -32,12 +32,6 @@
    | <strong>V:</strong> <%= f.text_field :video, :size => "15" %>
    || <strong>C:</strong> <%= f.text_field :caption, :size => '40' %>
    | <strong>S:</strong> <%= f.text_field :imagesource, :size => '20' %>
-  <br />
-  <% if @newsitem.main? %>
-    <div style="margin: 10px 0px;">
-    <%= image_tag @newsitem.main.url %>
-    </div>
-  <% end %>
   </div>
   </div>
   
@@ -50,7 +44,7 @@
   
   <div class="admin-block">
     <% if action_name == 'edit' %>
-      <%= f.text_area :item, :size => "131x7", :class => "inputtextarea", :maxlength => 1200 %>
+      <%= f.text_area :item, :size => "130x8", :class => "inputtextarea", :maxlength => 1200 %>
     <% elsif action_name == 'new' %>
       <%= f.text_area :item, :value => params[:breaking_text], :size => "131x7", :class => "inputtextarea", :maxlength => 1200 %>
     <% end %>
@@ -73,7 +67,11 @@
 <div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:newsitem, :category_ids, @categories, :id, :category) %></div>
 </div>
 
-
+<% if @newsitem.main? %>
+    <div class="admin-block">
+      <%= image_tag @newsitem.main.url %>
+    </div>
+  <% end %>
 
 <div class="admin-block">
 <div style="text-align:left; font-size: 12px;">
