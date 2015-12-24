@@ -78,7 +78,7 @@ class NewsitemsController < ApplicationController
   end
 
   def tweet
-    updateslug + updatetext + ' ' + updatelinktest
+    updateslug + updatetext + ' ' + updatelink
   end
 
   def updateslug
@@ -119,6 +119,20 @@ class NewsitemsController < ApplicationController
     @newsitem.main.url
   end
 
+  def email
+    if params[:email] == '1'
+      User.wantsupdates.editors.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
+      User.wantsupdates.subscribers.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
+	  User.wantsupdates.readers.each do |user|
+        NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
+	  end
+	end
+  end
+
   # POST /newsitems
   # POST /newsitems.json
   def create
@@ -128,17 +142,12 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
-        if @newsitem.save && @newsitem.status == 'published' && @newsitem.created_at.today?
+        if @newsitem.save && ["draft", "editing"].include?(@newsitem.status)
+          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.json { render :show, status: :created, location: @article }
+        elsif @newsitem.save && ["published", "updated"].include?(@newsitem.status)
           twitter
-          User.wantsupdates.editors.each do |user|
-            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-		  end
-          User.wantsupdates.subscribers.each do |user|
-            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-		  end
-		  User.wantsupdates.readers.each do |user|
-            NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
-		  end
+          email
           format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save
@@ -163,17 +172,12 @@ class NewsitemsController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
-        if @newsitem.update(newsitem_params) && @newsitem.status == 'published' && @newsitem.created_at.today?
+        if @newsitem.update(newsitem_params) && ["draft", "editing"].include?(@newsitem.status)
+          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
+          format.json { render :show, status: :ok, location: @newsitem }
+        elsif @newsitem.update(newsitem_params) && ["published", "updated"].include?(@newsitem.status)
           twitter
-          User.wantsupdates.editors.each do |user|
-            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-		  end
-          User.wantsupdates.subscribers.each do |user|
-            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-		  end
-		  User.wantsupdates.readers.each do |user|
-            NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
-		  end
+          email
           format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update(newsitem_params)
