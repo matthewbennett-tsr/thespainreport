@@ -78,7 +78,11 @@ class NewsitemsController < ApplicationController
   end
 
   def tweet
-    updateslug + updatetext + ' ' + updatelink
+    if @newsitem.video?
+      updateslug + updatetext + ' ' + updatelinktest + ' ' + tweetvideo
+    else
+      updateslug + updatetext + ' ' + updatelink
+    end
   end
 
   def updateslug
@@ -118,7 +122,11 @@ class NewsitemsController < ApplicationController
   def tweetimage
     @newsitem.main.url
   end
-
+  
+  def tweetvideo
+   'https://www.youtube.com/watch?v=' + @newsitem.video
+  end
+  
   def email
     if params[:email] == '1'
       User.wantsupdates.editors.each do |user|

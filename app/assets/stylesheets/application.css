@@ -244,6 +244,8 @@ input.edit-headline {font-family: Oswald, Arial, sans-serif !important; font-wei
 .admin-published {background-color: #00CC00; color: #ffffff; padding: 2px 3px;}
 .admin-updated {background-color: #005BBF; color: #ffffff; padding: 2px 3px;}
 .admin-table td {padding: 1px 2px;}
+.admin-block {margin-top: 5px; padding:5px; background-color: #E3EDED; width: 100%;}
+.admin-block-notify {margin-top: 5px; padding:5px; background-color: #b9ddf8; width: 100%;}
 
 video { width: 100% !important; height: auto !important;}
 .video-wrapper {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}

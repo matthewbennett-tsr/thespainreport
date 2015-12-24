@@ -132,7 +132,11 @@ class ArticlesController < ApplicationController
   end
 
   def tweet
-    articleurgency + updatetext + ' ' + updatelinktest
+    if @article.video?
+      articleurgency + updatetext + ' ' + updatelinktest + ' ' + tweetvideo
+    else
+      articleurgency + updatetext + ' ' + updatelinktest
+    end
   end
   
   def updatetext
@@ -153,6 +157,10 @@ class ArticlesController < ApplicationController
   
   def tweetimage
     @article.main.url
+  end
+
+  def tweetvideo
+   'https://www.youtube.com/watch?v=' + @article.video
   end
 
   def emailsummaries

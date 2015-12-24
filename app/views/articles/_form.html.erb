@@ -12,35 +12,44 @@
     </div>
   <% end %>
   
-<div style="margin-top: 10px;">
- <div style="float:left; width: 55px; border-right: 1px solid #000; margin-right: 5px;"><strong>SHORT</strong></div>
-   <div style="float:left; text-align:left;">
-   <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
-   <%= text_field_tag 'short_headline', '', size: 70, maxlength: 70 %>
-   | Tweet? <%= check_box_tag 'tweet' %> | E-mail? <%= check_box_tag 'email' %>
-   </div>
-   <div class="clear"></div> 
-   </div>   
-
-<div style="margin-top: 10px; margin-bottom: 10px; font-size: 12px;"> 
-<strong>TYPE:</strong> <%= f.collection_select :type_id, @types, :id, :name %>
- | <strong>URGENCY?</strong> <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
- | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
- | <%= f.submit %>
-</div>
- 
-
- 
-  <div class="field">
-    <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
+  <div class="admin-block-notify">
+    <div style="float:left; text-align:left; width: 830px;">
+      <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
+      <%= text_field_tag 'short_headline', '', size: 70, maxlength: 70 %>
+      | T <%= check_box_tag 'tweet' %> | E <%= check_box_tag 'email' %>
+      | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
+    </div>
+    <div style="float:left; width: 55px; border-left: 1px solid #000; margin-left: 5px; padding-left: 5px; text-align:right;">
+      <%= f.submit %>
+    </div>
+    <div class="clear"></div> 
   </div>
-  <div class="field">
-    <%= f.text_field :lede, :size => '79', :class => "edit-lede" %> | <strong>VIDEO:</strong> <%= f.text_field :video, :size => "25" %>
+ 
+  <div class="admin-block">
+    <div style="font-size: 12px;">
+      <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
+      | <%= f.check_box :remove_main %> R?
+      | <strong>V:</strong> <%= f.text_field :video, :size => "15" %>
+      || <strong>C:</strong> <%= f.text_field :caption, :size => '40' %>
+      | <strong>S:</strong> <%= f.text_field :source, :size => '20' %>
+    </div>
   </div>
-  <div class="field">
-    
-<textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
-<% if action_name == 'new' %>
+  
+  <div class="admin-block">
+    <div>
+      <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
+    </div>
+    <div style="margin-top: 5px;">
+      <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+      | <%= f.collection_select :type_id, @types, :id, :name %>
+      | <%= f.text_field :lede, :size => '79', :class => "edit-lede" %>
+    </div>
+  </div>
+  
+  <div class="admin-block">
+    <div>
+      <textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
+        <% if action_name == 'new' %>
 REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards
 CONTEXT: significance, environment, surroundings, (infra)structure, related events, debates, trends, driving forces, rhetoric, discourses, history, country comparison, ideals, core
 PLAYERS: protagonist, antagonist, groups, sides, alliances, struggles, goals, glory, identity, thoughts, emotions, values, beliefs, (re)actions, background, influences, 
@@ -50,30 +59,25 @@ STRATEGIES: resources, vision, planning, loops, speed, phases, level/coherence o
 <%= @article.body %>
 <% end %>
 </textarea>
+    </div>
   </div>
 
-  <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
-<div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
-<div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
- 
- <div style="font-size: 12px; margin-bottom: 10px;">
-  <strong>MAIN IMAGE</strong> <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
-   | <%= f.check_box :remove_main %> Remove?
-   | <strong>CAPTION:</strong> <%= f.text_field :caption, :size => '40' %>
-   | <strong>SOURCE:</strong> <%= f.text_field :source, :size => '20' %>
-  <br />
+  <div class="admin-block">
+    <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
+    <div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
+    <div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
+  </div>
+  
   <% if @article.main? %>
-    <div style="margin: 10px 0px;">
-    <%= image_tag @article.main.url %>
+    <div class="admin-block">
+      <%= image_tag @article.main.url %>
     </div>
   <% end %>
-  </div>
-
   
-  
-  <div style="font-size: 12px;">
-  <strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '35' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '35' %>
-   
+  <div class="admin-block">
+    <div style="font-size: 12px;">
+      <strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '35' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '35' %>
+    </div>
   </div>
   
 <% end %>
