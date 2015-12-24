@@ -133,9 +133,9 @@ class ArticlesController < ApplicationController
 
   def tweet
     if @article.video?
-      articleurgency + updatetext + ' ' + updatelinktest + ' ' + tweetvideo
+      articleurgency + updatetext + ' ' + updatelink + ' ' + tweetvideo
     else
-      articleurgency + updatetext + ' ' + updatelinktest
+      articleurgency + updatetext + ' ' + updatelink
     end
   end
   

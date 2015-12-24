@@ -79,7 +79,7 @@ class NewsitemsController < ApplicationController
 
   def tweet
     if @newsitem.video?
-      updateslug + updatetext + ' ' + updatelinktest + ' ' + tweetvideo
+      updateslug + updatetext + ' ' + updatelink + ' ' + tweetvideo
     else
       updateslug + updatetext + ' ' + updatelink
     end
