@@ -23,7 +23,7 @@ class EntriesController < ApplicationController
     if params[:search] && params[:all] == '1'
       @entries = Entry.search(params[:search]).order("created_at DESC")
     elsif params[:search] && params[:any] == '1'
-      terms = params[:search].split
+      terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" OR ")
       @entries = Entry.where(query).order("created_at DESC")
     elsif params[:search]
