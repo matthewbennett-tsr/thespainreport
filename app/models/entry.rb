@@ -12,7 +12,7 @@ class Entry < ActiveRecord::Base
   end
   
   scope :indexlimit, -> {order('updated_at DESC').limit(250)}
-  scope :searchlimit, -> {order('updated_at DESC').limit(500)}
+  scope :searchlimit, -> {order('updated_at DESC').limit(300)}
   scope :world_all, -> {joins(:feed).merge(Feed.world_all)}
   scope :spain_all, -> {joins(:feed).merge(Feed.spain_all)}
   scope :teaser_limit, -> {order('updated_at DESC').limit(10)}
