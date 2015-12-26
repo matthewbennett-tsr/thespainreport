@@ -27,15 +27,15 @@ class EntriesController < ApplicationController
     entry_count
     feed_count
     if params[:search] && params[:all] == '1'
-      @entries = Entry.search(params[:search]).order("created_at DESC")
+      @entries = Entry.search(params[:search]).searchlimit.order("created_at DESC")
       feedsearches
     elsif params[:search] && params[:any] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" OR ")
-      @entries = Entry.where(query).order("created_at DESC")
+      @entries = Entry.where(query).searchlimit.order("created_at DESC")
       feedsearches
     elsif params[:search]
-      @entries = Entry.search(params[:search]).order("created_at DESC")
+      @entries = Entry.search(params[:search]).searchlimit.order("created_at DESC")
       feedsearches
     else
       @entries = Entry.indexlimit.order('created_at DESC')
