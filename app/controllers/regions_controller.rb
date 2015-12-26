@@ -112,6 +112,6 @@ class RegionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def region_params
-      params.require(:region).permit(:description, :region, :article_ids => [], :newsitem_ids => [])
+      params.require(:region).permit(:description, :region, :keywords, :article_ids => [], :newsitem_ids => [])
     end
 end

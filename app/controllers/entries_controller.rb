@@ -16,226 +16,277 @@ class EntriesController < ApplicationController
     @feed_count = Feed.count
   end
   
+  def feedsearches
+    @stories = Story.all.order( 'stories.updated_at DESC' )
+    @categories = Category.all.order( 'categories.category ASC' )
+    @regions = Region.all.order( 'regions.region ASC' )
+  end
+  
   def index
     feed_teasers
     entry_count
     feed_count
     if params[:search] && params[:all] == '1'
       @entries = Entry.search(params[:search]).order("created_at DESC")
+      feedsearches
     elsif params[:search] && params[:any] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" OR ")
       @entries = Entry.where(query).order("created_at DESC")
+      feedsearches
     elsif params[:search]
       @entries = Entry.search(params[:search]).order("created_at DESC")
+      feedsearches
     else
       @entries = Entry.indexlimit.order('created_at DESC')
+      feedsearches
     end
   end
   
   def world_all
     @entries = Entry.joins(:feed).merge(Feed.world_all).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def world_home
     @entries = Entry.joins(:feed).merge(Feed.world_home).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def world_politics
     @entries = Entry.joins(:feed).merge(Feed.world_politics).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def world_economy
     @entries = Entry.joins(:feed).merge(Feed.world_economy).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def world_foreign_affairs
     @entries = Entry.joins(:feed).merge(Feed.world_foreign_affairs).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def world_media
     @entries = Entry.joins(:feed).merge(Feed.world_media).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_english
     @entries = Entry.joins(:feed).merge(Feed.spain_english).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_all
     @entries = Entry.joins(:feed).merge(Feed.spain_all).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_home
     @entries = Entry.joins(:feed).merge(Feed.spain_home).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_opinion
     @entries = Entry.joins(:feed).merge(Feed.spain_opinion).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_international
     @entries = Entry.joins(:feed).merge(Feed.spain_international).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_national
     @entries = Entry.joins(:feed).merge(Feed.spain_national).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_economy
     @entries = Entry.joins(:feed).merge(Feed.spain_economy).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def spain_other
     @entries = Entry.joins(:feed).merge(Feed.spain_other).indexlimit
     feed_teasers
+    feedsearches
   end
   
   def cincodias
     @entries = Entry.cincodias.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def abc
     @entries = Entry.abc.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def antenatres
     @entries = Entry.antenatres.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def cope
     @entries = Entry.cope.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def efe
     @entries = Entry.efe.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def elconfidencial
     @entries = Entry.elconfidencial.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def elconfidencialdigital
     @entries = Entry.elconfidencialdigital.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def eldiario
     @entries = Entry.eldiario.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def eleconomista
     @entries = Entry.eleconomista.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def elespanol
     @entries = Entry.elespanol.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def elmundo
    @entries = Entry.elmundo.indexlimit
    feed_teasers
+   feedsearches
   end
   
   def elpais
     @entries = Entry.elpais.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def libertaddigital
     @entries = Entry.libertaddigital.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def elperiodico
     @entries = Entry.elperiodico.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def europapress
     @entries = Entry.europapress.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def expansion
     @entries = Entry.expansion.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def infolibre
     @entries = Entry.infolibre.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def lasexta
     @entries = Entry.lasexta.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def larazon
     @entries = Entry.larazon.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def lavanguardia
     @entries = Entry.lavanguardia.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def libertaddigital
     @entries = Entry.libertaddigital.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def ondacero
     @entries = Entry.ondacero.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def publico
     @entries = Entry.publico.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def ser
     @entries = Entry.ser.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def telecinco
     @entries = Entry.telecinco.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def tve
     @entries = Entry.tve.indexlimit
     feed_teasers
+    feedsearches
   end
   
   def vozpopuli
     @entries = Entry.vozpopuli.indexlimit
     feed_teasers
+    feedsearches
   end
 
   # GET /entries/1
