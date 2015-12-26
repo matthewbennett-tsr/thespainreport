@@ -50,7 +50,7 @@ $(document).ready(function(){
 
 <p class="topics" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
 <% @categories.all.each do |category| %>
-     <a href="http://localhost:3000/entries?utf8=%E2%9C%93&any=1&toggletopics=open&search=<%= category.keywords %>">
+     <a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&toggletopics=open&search=<%= category.keywords %>">
      <%= category.category %>
      </a> · 
   <% end %>
@@ -58,7 +58,7 @@ $(document).ready(function(){
 
 <p class="regions" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
 <% @regions.all.each do |region| %>
-     <a href="http://localhost:3000/entries?utf8=%E2%9C%93&any=1&toggleregions=open&search=<%= region.keywords %>">
+     <a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&toggleregions=open&search=<%= region.keywords %>">
      <%= region.region %>
      </a> · 
   <% end %>
