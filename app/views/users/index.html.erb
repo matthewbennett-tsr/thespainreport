@@ -5,7 +5,66 @@
 <div class="article-lede">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> (<%= @activesubscribercount %> active & <%= @straysubscribercount %> stray) and <strong><%= @readercount %> readers</strong>
 </div>
 
-<h3>Latest Members</h3>
+<h3>Latest Subscribers</h3>
+
+<table class="admin-table">
+  <thead>
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>Joined</td>
+      <td>Role</td>
+      <td>E-mail</td>
+      <td>Display Name</td>
+      <td>Twitter</td>
+      <td>E-mails</td>
+      <td>Conf?</td>
+      <td>Stripe ID</td>
+      <td></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @latestsubscribers.each do |user| %>
+      <tr>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
+        <td>
+        <% if user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 1px 5px;">
+          <% elsif user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 1px 5px;">
+          <% elsif user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 1px 5px;">
+          <% else %>
+            <span>
+          <% end %>
+        <%= user.role.to_s.humanize %></span>
+        </td>
+        <td><%= mail_to user.email %></td>
+        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
+        <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
+        <td>
+          <% if user.emailpref == 'articlesupdates' %>
+            Everything
+          <% elsif user.emailpref == 'justarticles' %>
+            Just Articles
+          <% elsif user.emailpref == 'justsummariesbreaking' %>
+            Summaries
+          <% elsif user.emailpref == 'nothing' %>
+            No E-mail
+          <% else %>
+            Not Set
+          <% end %>
+        </td>
+        <td><%= user.email_confirmed %></td>
+        <td style="padding: 0px 1px;"><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
+        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3>Latest Readers</h3>
 
 <table class="admin-table">
   <thead>

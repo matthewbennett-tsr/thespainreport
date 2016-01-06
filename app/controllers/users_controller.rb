@@ -6,7 +6,8 @@ class UsersController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @users = User.all.order ('users.role DESC, users.email ASC')
-      @latestusers = User.lasttenusers
+      @latestusers = User.readers.lastfew
+      @latestsubscribers = User.subscribers.lastfew
       @subscribercount = User.subscribers.count
       @activesubscribercount = User.activesubscribers.count
       @straysubscribercount = User.subscribers.where('stripe_customer_id is null').count
