@@ -24,7 +24,7 @@ class Article < ActiveRecord::Base
   scope :published, -> {where(status: ['published', 'updated'])}
   scope :lastfive, -> {order('updated_at DESC').limit(5)}
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
-  scope :lastten, -> {order('updated_at DESC').limit(10)}
+  scope :lastten, -> {order('created_at DESC').limit(10)}
   scope :lastthirty, -> {order('updated_at DESC').limit(30)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
   scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone).limit(20)}

@@ -22,13 +22,13 @@ Original, independent reporting. We talk to Spanish sources for you and human tr
       <%= article.updated_at.to_formatted_s(:short) %>
     </div>
     <div class="listing-right">
-      <% if article.urgency == 'majorbreaking' %>
+      <% if article.urgency == 'majorbreaking' && article.updated_at.today? %>
          <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span><br /><%= article.lede %>
-      <% elsif article.urgency == 'breaking' %>
+      <% elsif article.urgency == 'breaking' && article.updated_at.today? %>
         <span class="breaking">BREAKING</span> <strong><%= link_to article.headline, article %></strong></span><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
-      <% elsif article.urgency == 'latest' %>
+      <% elsif article.urgency == 'latest' && article.updated_at.today? %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong></span><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
-      <% elsif article.type.name == "LIVE BLOG" %>
+      <% elsif article.type.name == "LIVE BLOG" && article.updated_at.today? %>
         <span class="breaking">LIVE BLOG</span> <strong><%= link_to article.headline, article %></strong></span><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
       <% elsif article.type.name == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
