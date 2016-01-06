@@ -37,11 +37,11 @@
   <% story.articles.published.lastseven.each do |article| %>
     <div class="listing-article-container" >
       <div class="listing-left">
-        <% if article.urgency == 'majorbreaking' && article.updated_at.today? %>
+        <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
           <span class="breaking">
-        <% elsif article.urgency == 'breaking' && article.updated_at.today? %>
+        <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
           <span class="breaking">
-        <% elsif article.urgency == 'latest' && article.updated_at.today? %> 
+        <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %> 
           <span class="latest">
         <% elsif article.status == 'updated' %> 
           <span class="updated">
@@ -53,11 +53,11 @@
         <%= article.updated_at.to_formatted_s(:short) %></span>
       </div>
       <div class="listing-right">
-        <% if article.urgency == 'majorbreaking' && article.updated_at.today? %>
+        <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
           <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span>
-        <% elsif article.urgency == 'breaking' && article.updated_at.today? %>
+        <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
           <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
-        <% elsif article.urgency == 'latest' && article.updated_at.today? %>
+        <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
           <span class="latest">LATEST</span> <%= link_to article.headline, article %>
         <% elsif article.status == 'updated' %>
           <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
