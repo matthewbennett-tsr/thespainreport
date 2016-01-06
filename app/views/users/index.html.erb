@@ -5,6 +5,17 @@
 <div class="article-lede">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> (<%= @activesubscribercount %> active & <%= @straysubscribercount %> stray) and <strong><%= @readercount %> readers</strong>
 </div>
 
+  <%= form_tag(users_path, :method => "get", id: "search-form") do %>
+    <div style="float:left;">
+      <%= text_field_tag :search, params[:search], :size => 50, placeholder: "Search Stories" %>
+    </div>
+    <div style="float:left; margin-left: 10px;">
+      <%= submit_tag "Search" %>
+    </div>
+    <div class="clear"></div>
+  <% end %>
+
+<% unless params[:search] %>
 <h3>Latest Subscribers</h3>
 
 <table class="admin-table">
@@ -122,6 +133,8 @@
     <% end %>
   </tbody>
 </table>
+
+<% end %>
 
 <h3>All Members</h3>
 

@@ -15,6 +15,10 @@ class User < ActiveRecord::Base
 
   ROLES = %i[editor subscriber reader]
   
+  def self.search(search)
+    where("email @@ ?", search)
+  end
+  
   scope :subscribers, -> {where(role: 'subscriber')}
   scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
   scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}

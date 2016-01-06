@@ -5,13 +5,21 @@ class UsersController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
-      @users = User.all.order ('users.role DESC, users.email ASC')
+      if params[:search]
+      terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
+      query = terms.map { |term| "email ILIKE '%#{term}%'" }.join(" OR ")
+      @users = User.all.where(query).order("created_at DESC")
+      @latestusers = User.readers.lastfew
+      @latestsubscribers = User.subscribers.lastfew
+      else
+      @users = User.lastfew.order ('users.role DESC, users.email ASC')
       @latestusers = User.readers.lastfew
       @latestsubscribers = User.subscribers.lastfew
       @subscribercount = User.subscribers.count
       @activesubscribercount = User.activesubscribers.count
       @straysubscribercount = User.subscribers.where('stripe_customer_id is null').count
       @readercount = User.readers.count
+      end
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
