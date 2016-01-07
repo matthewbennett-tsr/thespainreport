@@ -5,7 +5,6 @@ class StoriesController < ApplicationController
   # GET /stories.json
   def index
     @stories = Story.all.order( 'stories.updated_at DESC' )
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /stories/admin
@@ -26,7 +25,6 @@ class StoriesController < ApplicationController
   # GET /stories/1
   # GET /stories/1.json
   def show
-    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /stories/new

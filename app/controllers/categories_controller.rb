@@ -5,14 +5,12 @@ class CategoriesController < ApplicationController
   # GET /categories.json
   def index
     @categories = Category.all.order( 'categories.category ASC' )
-    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /categories/1
   # GET /categories/1.json
   def show
     @newsitem = Category.find(params[:id])
-    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /categories/new

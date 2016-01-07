@@ -6,7 +6,6 @@ class NewsitemsController < ApplicationController
   def index
     @last30items = Newsitem.published.lastthirty
     @last50items = Newsitem.published.lastfifty
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /newsitems/admin
@@ -30,7 +29,6 @@ class NewsitemsController < ApplicationController
     @region = Newsitem.find(params[:id])
     @category = Newsitem.find(params[:id])
     @story = Newsitem.find(params[:id])
-    @tickerstories = Article.bignews.latest.ticker
     @latestaudio = Audio.lastone
     @comments = @newsitem.comments
   end

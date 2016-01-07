@@ -5,7 +5,6 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     @articles = Article.published.lastthirty
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/admin
@@ -26,6 +25,7 @@ class ArticlesController < ApplicationController
       @editorialcount = Article.editorial.count
       @indepthcount = Article.in_depth.count
       @blogcount = Article.is_blog.count
+      @bignews = Article.bignews.order('updated_at DESC')
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
@@ -36,28 +36,24 @@ class ArticlesController < ApplicationController
   # GET /articles/blog.json
   def blog
     @is_blog = Article.is_blog.published.lastthirty.order( 'articles.updated_at DESC' )
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/in-depth
   # GET /articles/in-depth.json
   def in_depth
     @last30 = Article.in_depth.published.lastthirty
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/news
   # GET /articles/news.json
   def news
     @last30 = Article.news.published.lastthirty
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/editorial
   # GET /articles/editorial.json
   def editorial
     @last30 = Article.editorial.published.lastthirty
-    @tickerstories = Article.bignews.latest.ticker
   end
   
   # GET /articles/1
@@ -67,7 +63,6 @@ class ArticlesController < ApplicationController
     @category = Article.find(params[:id])
     @story = Article.find(params[:id])
     @type = Article.find(params[:id])
-    @tickerstories = Article.bignews.latest.ticker
     @latestaudio = Audio.lastone
     @title = "some custom page title"
     @articleupdates = @article.newsitems

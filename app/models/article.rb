@@ -12,6 +12,10 @@ class Article < ActiveRecord::Base
   "#{id}-#{created_at.strftime("%y%m%d%H%M%S")}-#{headline.parameterize}"
   end
   
+  def self.tickerstories
+    Article.bignews.published.latest.ticker
+  end
+  
   scope :is_blog, -> {where(:type_id => 26)}
   scope :not_blog, -> {where.not(:type_id => 26)}
   scope :in_depth, -> {where(:type_id => [3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,25])}

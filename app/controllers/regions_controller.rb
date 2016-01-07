@@ -1,18 +1,20 @@
 class RegionsController < ApplicationController
   before_action :set_region, only: [:show, :edit, :update, :destroy]
 
+  def tickerstories
+    @tickerstories = Article.bignews.published.latest.ticker
+  end
+  
   # GET /regions
   # GET /regions.json
   def index
     @regions = Region.all.order( 'regions.region ASC' )
-    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /regions/1
   # GET /regions/1.json
   def show
     @last50items = Newsitem.published.lastfifty
-    @tickerstories = Article.bignews.latest.ticker
   end
 
   # GET /regions/new
