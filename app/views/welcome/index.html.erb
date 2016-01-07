@@ -34,7 +34,7 @@
 
 
 <div class="index-home">
-  <div class="listing-left">Updated</div>
+  <div class="listing-left">Date</div>
   <div class="listing-right">Latest Articles</div>
   <div class="clear"></div>
 </div>
@@ -55,7 +55,7 @@
     <% else %>
       <span>
     <% end %>
-    <%= article.updated_at.to_formatted_s(:short) %></span>
+    <%= article.created_at.to_formatted_s(:short) %></span>
     </div>
     <div class="listing-right">
       <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
@@ -92,7 +92,7 @@
 <%= render 'emailsignup' %>
 
 <div class="index-updates">
-  <div class="listing-left">Updated</div>
+  <div class="listing-left">Date</div>
   <div class="listing-right">Latest Updates</div>
   <div class="clear"></div>
 </div>
@@ -100,7 +100,7 @@
 <% @last30items.each do |newsitem| %>
   <div class="listing-update-container">
     <div class="listing-left">
-      <%= newsitem.updated_at.to_formatted_s(:short) %>
+      <%= newsitem.created_at.to_formatted_s(:short) %>
     </div>
     <div class="listing-right">
   
