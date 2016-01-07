@@ -37,7 +37,7 @@ h2, h3 {font-family: Oswald, Arial, sans-serif; font-weight:bold; line-height: 1
 img {max-width:100%; margin: 0;}
 p, textarea {margin: 0px; font-family: Arial; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: 1; font-size: 14px; line-height: 140%;}
 ul, ol {margin:15px 0px;}
-li {margin-bottom:4px; font-family: Arial; font-size: 15px; line-height: 130%;}
+li {margin-bottom:4px; font-family: Georgia; font-size: 16px; line-height: 150%;}
 input.edit-headline {font-family: Oswald, Arial, sans-serif; font-weight:bold;}
 input.edit-lede {font-family: Georgia; font-size: 16px; font-style: italic;}
 audio {background-color: #000;}
@@ -71,19 +71,19 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .top-float-left {float:left; margin-right: 5px; border-right: 1px solid #ffffff; padding-right: 5px;}
 .top-float-left-no {float:left; margin-right: 5px;}
 
-.major-breaking-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #AA151B; font-weight:bold;}
+.major-breaking-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #AA151B; font-weight:bold; font-family: Oswald;}
 .major-breaking-news-top a, .major-breaking-news-top a:visited {color: #ffffff; text-decoration:none;}
 .major-breaking-news-top a:hover {color: #F1BF00; background-color: #AA151B;}
 
-.breaking-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #ffffff; font-weight:bold;}
+.breaking-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #ffffff; font-weight:bold; font-family: Oswald;}
 .breaking-news-top a, .breaking-news-top a:visited {color: #AA151B; text-decoration:none;}
 .breaking-news-top a:hover {color: #F1BF00; background-color: #ffffff;}
 
-.latest-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #ffffff; font-weight:bold;}
+.latest-news-top {margin-top: 3px; padding: 3px 10px; line-height: 1.5; background-color: #ffffff; font-weight:bold; font-family: Oswald;}
 .latest-news-top a, .latest-news-top a:visited {color: #005BBF; text-decoration:none;}
 .latest-news-top a:hover {color: #F1BF00; background-color: #ffffff;}
 
-.index-home {font-weight:bold; margin-top:10px; padding-bottom: 5px; border-bottom: 1px solid #000000;}
+.index-home {font-weight:bold; margin-top:10px; padding-bottom: 5px; border-bottom: 1px solid #000000; margin-bottom: 5px;}
 .index-non-home {font-weight:bold; padding-bottom: 5px; border-bottom: 1px solid #000000;}
 .index-updates {font-weight:bold; margin-top: 10px; padding-bottom: 5px; border-bottom: 1px solid #000000;}
 .index-main-image {margin-top: 5px; float:right; width: 40%; margin-left: 15px; margin-bottom: 10px;}
@@ -92,43 +92,45 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .index-by-title {font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 18px; margin-bottom:0px;}
 .index-by-description {border-top: 1px dotted #999; margin-top: 3px; margin-bottom: 0px; padding-top: 4px; font-style:italic; font-weight: normal; font-size: 15px;}
 
-.listing-left {width: 11%; float:left;}
-.listing-right {width: 89%; float:right;}
-.listing-article-container {width:100%; padding-top: 4px;}
+.listing-left {width: 11%; float:left; font-size: 15px; font-weight: normal; font-family: Oswald, Arial; line-height: 120%;}
+.listing-right {width: 89%; float:right; font-size: 15px; font-weight: bold; font-family: Oswald, Arial; line-height: 120%;}
+.listing-article-container {width:100%; padding-top: 6px;}
 .listing-update-container {width:100%; padding-top: 12px;}
-.listing-update-slug {font-weight: bold;}
-.listing-update-text {margin-bottom: 3px; font-size: 14px; font-family: Arial; line-height: 140%;}
+.listing-update-slug {font-weight: normal; font-size: 14px; font-family: Oswald; line-height: 120%;}
+.listing-update-text {margin-bottom: 3px; font-size: 14px; font-family: Arial; line-height: 120%;}
+.listing-update-text p {margin-top: 3px; font-size: 14px; font-weight: normal; font-family: Georgia; line-height: 150%;}
 
 .news-alert {margin-bottom: 15px; margin-right: 15px; float:left;}
 .news-alert-update {margin-bottom: 15px; float:left;}
 
-.breaking {background-color: #AA151B; color: #ffffff; padding: 2px 5px; font-weight: bold; }
+.breaking {background-color: #AA151B; color: #ffffff; padding: 2px 5px; font-weight: normal; }
 .breaking a, .breaking a:visited {background-color: #AA151B; color: #ffffff;}
 .breaking a:hover {background-color: #AA151B; color: #F1BF00;}
 .breaking-label {background-color: #AA151B; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
 
-.latest {background-color: #F1BF00; color: #ffffff; padding: 2px 5px; font-weight:bold;}
+.latest {background-color: #F1BF00; color: #ffffff; padding: 2px 5px; font-weight:normal;}
 .latest a, .latest a:visited {background-color: #F1BF00; color: #ffffff;}
 .latest a:hover {background-color: #F1BF00; color: #AA151B;}
 .latest-label {background-color: #F1BF00; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
 
-.updated {background-color: #005BBF; color: #ffffff; padding: 2px 5px; font-weight:bold;}
-.updated a, .updated a:visited {background-color: #005BBF; color: #ffffff;}
-.updated a:hover {background-color: #005BBF; color: #F1BF00;}
-.updated-label {background-color: #005BBF; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
-.editorial {background-color: green; color: #ffffff; padding: 2px 5px; font-weight:bold;}
+.editorial {background-color: green; color: #ffffff; padding: 2px 5px; font-weight:normal;}
 .editorial a, .editorial a:visited {background-color: green; color: #ffffff;}
 .editorial a:hover {background-color: green; color: #F1BF00;}
 .editorial-label {background-color: green; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
 h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; font-family: Oswald, Arial, sans-serif; line-height: 1.1; font-size: 24px;}
 
+.updated {background-color: #005BBF; color: #ffffff; padding: 2px 5px; font-weight:normal;}
+.updated a, .updated a:visited {background-color: #005BBF; color: #ffffff;}
+.updated a:hover {background-color: #005BBF; color: #F1BF00;}
+.updated-label {background-color: #005BBF; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
+
 .article-lede {margin: 0px 0px 10px 0px; font-family: Georgia; font-size: 16px; font-style: italic; line-height: 130%; padding-top: 5px; border-top: 1px dotted #999; padding-bottom: 5px; border-bottom: 1px dotted #999;}
 .article-slug {font-weight:bold;}
-.article-text {width: 100%; margin-bottom: 20px; font-size: 14px; line-height: 140%; font-family: Arial;}
-.article-text p {margin-bottom: 10px; font-size: 15px; line-height: 140%; font-family: Arial;}
+.article-text {width: 100%; margin-bottom: 20px; font-size: 16px; line-height: 150%; font-family: Georgia;}
+.article-text p {margin-bottom: 10px; font-size: 16px; line-height: 150%; font-family: Georgia;}
 .article-text a, .article-text a:visited {color: #005BBF; text-decoration:underline;}
 .article-text a:hover {color: #F1BF00; background-color: #ffffff;}
-.update-text {margin-bottom: 20px; font-size: 14px; line-height: 140%; font-family: Arial;}
+.update-text, .update-text p {margin-bottom: 20px; font-size: 16px; line-height: 150%; font-family: Georgia;}
 .update-text a, .update-text a:visited {color: #005BBF; text-decoration:underline;}
 .update-text a:hover {color: #F1BF00; background-color: #ffffff;}
 
@@ -138,7 +140,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .main-image-liveblog-update {width: 75%; margin-left: 10px; margin-bottom: 5px; }
 .main-image-liveblog-update-video {width: 75%; margin-left: 10px; margin-bottom: 15px; }
 
-.meta {margin-top: 2px; border-top: 1px dotted #999999; padding-top: 2px; padding-bottom: 2px; border-bottom: 1px dotted #999999; font-size: 13px;}
+.meta {margin-top: 2px; font-weight: normal; border-top: 1px dotted #999999; padding-top: 2px; padding-bottom: 2px; border-bottom: 1px dotted #999999; font-size: 13px;}
 .meta-second-row {margin-top: 2px;}
 .update-related-article {background-color: #FCF2CC; padding: 2px 7px;}
 .update-related-article a:hover {background-color: #FCF2CC;}
@@ -150,7 +152,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .email-sign-up .email-submit {font-family: Oswald, Arial, sans-serif !important; line-height: 1.5 !important; font-size: 40px !important; margin-bottom:0px; font-weight:bold; padding: 10px;}
 .email-input-float {float:left; margin-right: 4px;}
 .happy-subscribers {width: 90%; background-color: #FCF2CC; margin: 0 auto; border-top: 1px dotted #999999; padding: 5px 15px;}
-.happy-subscribers p {margin-bottom: 15px; font-style:italic; font-size: 15px; line-height: 140%;}
+.happy-subscribers p {margin-bottom: 15px; font-family: Georgia; font-style:italic; font-size: 16px; line-height: 150%;}
 
 .top-login-input-float {float:left; margin-right: 4px;}
 

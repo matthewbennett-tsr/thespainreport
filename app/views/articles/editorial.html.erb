@@ -22,11 +22,9 @@ After lots of original, independent reporting, our editorials give you lots of c
       <%= article.updated_at.to_formatted_s(:short) %>
     </div>
     <div class="listing-right">
-      <% if article.type.name == 'EDITORIAL' %>
-        <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
-      <% else %>  
-        <strong><%= article.type.name unless article.type.nil? %>:</strong><strong><%= link_to article.headline, article %></strong><br /><%= article.lede %> (<%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>)
-      <% end %>
+    <div class="listing-update-text">
+        <span class="listing-update-slug"><span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p> 
+    </div>
       <div class="meta">
         <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
         <%= raw(article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,

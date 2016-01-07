@@ -38,9 +38,9 @@
       <span class="listing-update-slug">
       
       <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
-        LIVE BLOG: <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
+        <strong>LIVE BLOG:</strong> <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
       <% else %>
-        <%= link_to newsitem.slug, newsitem %>
+        <strong>UPDATE:</strong> <%= link_to newsitem.slug, newsitem %>
       <% end %>
       
       </span>

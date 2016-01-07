@@ -38,35 +38,39 @@
   
     <div class="listing-article-container" >
       <div class="listing-left">
+      <div class="listing-update-text">
         <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
-          <span class="breaking">
+          <span class="listing-update-slug"><span class="breaking">
         <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
-          <span class="breaking">
+          <span class="listing-update-slug"><span class="breaking">
         <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %> 
-          <span class="latest">
+          <span class="listing-update-slug"><span class="latest">
         <% elsif article.status == 'updated' %> 
-          <span class="updated">
+          <span class="listing-update-slug"><span class="updated">
         <% elsif article.type.name == 'EDITORIAL' %> 
-          <span class="editorial">
+          <span class="listing-update-slug"><span class="editorial">
         <% else %>
-          <span>
+          <span class="listing-update-slug"><span>
         <% end %>
-        <%= article.updated_at.to_formatted_s(:short) %></span>
+        <%= article.updated_at.to_formatted_s(:short) %></span></span>
+      </div>
       </div>
       <div class="listing-right">
-        <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
-          <span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span>
-        <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
-          <span class="breaking">BREAKING</span> <%= link_to article.headline, article %>
-        <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
-          <span class="latest">LATEST</span> <%= link_to article.headline, article %>
-        <% elsif article.status == 'updated' %>
-          <span class="updated">UPDATED</span> <%= link_to article.headline, article %>
-        <% elsif article.type.name == 'EDITORIAL' %>
-          <span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %>
-        <% else %>  
-          <strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %>
-        <% end %>  
+        <div class="listing-update-text">
+      <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span></span>
+      <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking">BREAKING</span> <%= link_to article.headline, article %></span>
+      <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+        <span class="listing-update-slug"><span class="latest">LATEST</span> <%= link_to article.headline, article %></span>
+      <% elsif article.status == 'updated' %>
+        <span class="listing-update-slug"><span class="updated">UPDATED</span> <%= link_to article.headline, article %></span>
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="listing-update-slug"><span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %></span>
+      <% else %>  
+        <span class="listing-update-slug"><strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %></span>
+      <% end %>
+    </div>   
       </div>
       <div class="clear"></div>
     </div>
