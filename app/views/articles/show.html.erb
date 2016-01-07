@@ -41,27 +41,27 @@
 <%= @article.headline %></h1>
 
 <% if @article.urgency == 'majorbreaking' && @article.updated_at >= 3.hours.ago %>
-  <div class="news-alert"><span class="breaking-label">MAJOR BREAKING NEWS</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">MAJOR BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'breaking' && @article.updated_at >= 3.hours.ago %>
-  <div class="news-alert"><span class="breaking-label">BREAKING NEWS</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'latest' && @article.updated_at >= 12.hours.ago %>
-  <div class="news-alert"><span class="latest-label">LATEST NEWS</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label">LATEST NEWS</span></span></div>
 <% elsif @article.type.name == 'EDITORIAL' %>
-  <div class="news-alert"><span class="editorial-label">EDITORIAL</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label">EDITORIAL</span></span></div>
 <% else %>
 <% end %>
 
 <% if @article.type.name == "LIVE BLOG" %>
-  <div class="news-alert"><span class="breaking-label">LIVE BLOG</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">LIVE BLOG</span></span></div>
 <% else %>
 <% end %>
 
 <% if @articleupdates.present? && @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
-  <div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div> <div class="alert-update"><span class="updated-label">UPDATES ADDED</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div> <div class="alert-update"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
 <% elsif @articleupdates.present? %>
-  <div class="news-alert"><span class="updated-label">UPDATES ADDED</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
 <% elsif @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
-  <div class="news-alert"><span class="updated-label">ORIGINAL UPDATED</span></div>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div>
 <% else %>
 <% end %>
 
