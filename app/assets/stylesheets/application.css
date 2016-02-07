@@ -50,6 +50,8 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .user-bar {margin-top: 0px; height: 47px; background-color: #f5f5f5; padding: 7px 10px; font-family: Oswald, Arial, sans-serif; font-size: 16px; text-align:right;}
 .user-bar a, .user-bar a:visited {color: #000; text-decoration:none;}
 .user-bar a:hover {color: #F1BF00; background-color: #eeeeee;}
+.user-bar a.subscribe, .user-bar a.subscribe:visited {color: #005BBF; text-decoration:underline;}
+.user-bar a.subscribe:hover {color: #F1BF00; background-color: #eeeeee;}
 .user-float-left {float:left; margin-left: 5px; border-left: 1px solid #000000; padding-left: 5px;}
 .user-float-left-no {float:left; margin-left: 5px;}
 .user-bar-flash {float:left; padding-left: 20px; padding-top: 8px; color: green;}

@@ -38,9 +38,9 @@
       <% end %>
     <% elsif current_user.nil? %>
       <% if current_page?('/') %>
-        Original, independent reporting. No ads, no spam. <a href="https://www.thespainreport.com/subscriptions/new" title="Subscribe Now">Subscribe now</a>.
+        Original, independent reporting. No ads, no spam. <a href="https://www.thespainreport.com/subscriptions/new" class="subscribe" title="Subscribe Now">Subscribe now</a>.
       <% elsif %>
-        Original, independent reporting. No ads, no spam. <a href="https://www.thespainreport.com/subscriptions/new" title="Subscribe Now">Subscribe now</a>.
+        Original, independent reporting. No ads, no spam. <a href="https://www.thespainreport.com/subscriptions/new" class="subscribe" title="Subscribe Now">Subscribe now</a>.
       <% end %>
     <% elsif current_user %>
 
@@ -165,7 +165,7 @@ THE <span class="site-title-spain">SPAIN</span> REPORT</div>
         <% end %>
         </div>
         <div style="background-image: url(<%= asset_path 'thespainreport-evssl-white.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
-        <h3>If you are not currently a member, subscribe now…at a price you choose</h3>
+        <h3>Subscribe now to understand more about the most important news from Spain, in English</h3>
         <ul>
         <li>Build a rich mental model of a changing Spain and understand more about Spaniards' struggles;</li>
         <li>Original, timely, independent, ad-free reporting of the latest stories and major ongoing trends;</li>
