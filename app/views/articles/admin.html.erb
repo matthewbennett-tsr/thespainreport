@@ -295,8 +295,8 @@
 
 <% @articles.each do |article| %>
   <div style="width:100%; padding-top: 3px; font-size: 13px;">
-    <div style="width: 9%; float:left;">
-      <%= article.updated_at.to_formatted_s(:short) %>
+    <div style="width: 12%; float:left;">
+      <%= article.created_at.strftime("%d/%m/%y") %> | <%= article.updated_at.strftime("%d/%m/%y") %>
     </div>
     <div style="width: 10%; margin-right: 5px; float:left; text-align:right; font-size: 13px;">
       <% if article.status == 'draft' %>
@@ -312,7 +312,7 @@
       <% end %>
       <%= article.status.capitalize unless article.status.blank? %></span> <%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>
       </div>
-    <div style="width: 80%; float:right; font-size: 13px;">
+    <div style="width: 77%; float:right; font-size: 13px;">
       <% if article.urgency == 'majorbreaking' %>
         <span class="breaking">MAJOR BREAKING</span> <strong><%= link_to article.headline, article %></strong>
       <% elsif article.urgency == 'breaking' %>

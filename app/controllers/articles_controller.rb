@@ -14,7 +14,7 @@ class ArticlesController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
-      @articles = Article.all.order( 'articles.updated_at DESC' )
+      @articles = Article.all.order( 'articles.created_at DESC' )
       @articleslastfewdays = Article.lastfewdays.order( 'articles.created_at DESC' )
       @articleslast24 = Article.last24.order( 'articles.created_at DESC' )
       @articlesnext24 = Article.next24.order( 'articles.created_at DESC' )
