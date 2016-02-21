@@ -17,6 +17,8 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       @newsitems = Newsitem.all.order( 'newsitems.updated_at DESC' )
       @updatecount = Newsitem.count
+      @updatesbymonth = Newsitem.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
+      @updatesbyweek = Newsitem.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."

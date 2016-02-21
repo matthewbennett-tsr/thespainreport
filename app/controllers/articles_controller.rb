@@ -26,6 +26,8 @@ class ArticlesController < ApplicationController
       @indepthcount = Article.in_depth.count
       @blogcount = Article.is_blog.count
       @bignews = Article.bignews.order('updated_at DESC')
+      @articlesbymonth = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
+      @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."

@@ -4,6 +4,7 @@
 
 <div class="article-lede">There are <strong><%= @newscount %></strong> news stories, <strong><%= @editorialcount %></strong> editorials, <strong><%= @indepthcount %></strong> in-depth articles and <strong><%= @blogcount %></strong> blog posts.</div>
 
+
 <div class="index-non-home">
   <div class="listing-left">Updated</div>
   <div class="listing-right">Latest Articles</div>
@@ -290,6 +291,54 @@
     <div style="clear:both;"></div>   
   </div> 
     <% end %>
+
+<h2>Monthly Summary</h2>
+<p style="margin-bottom: 20px;">
+<% @articlesbymonth.each do |month, articles| %>
+<strong><%= month.strftime("%B %Y") %>:</strong> <%= articles.count %><br />
+<% end %>
+</p>
+
+<% @articlesbyweek.each do |week, articles| %>
+<h2><%= week.strftime("Week %U, %Y") %>: <%= articles.count %></h2>
+<% articles.each do |article| %>
+  <div style="width:100%; padding-top: 3px; font-size: 13px;">
+    <div style="width: 11%; float:left;">
+      <%= article.created_at.strftime("%a %d/%m, %H:%M") %>
+    </div>
+    <div style="width: 10%; margin-right: 5px; float:left; text-align:right; font-size: 13px;">
+      <% if article.status == 'draft' %>
+        <span class="admin-draft">
+      <% elsif article.status == 'editing' %>
+        <span class="admin-editing">
+      <% elsif article.status == 'published' %>
+        <span class="admin-published">
+      <% elsif article.status == 'updated' %>
+        <span class="admin-updated">
+      <% else %>
+      
+      <% end %>
+      <%= article.status.capitalize unless article.status.blank? %></span> <%= link_to 'E', edit_article_path(article) %> <%= link_to 'D', article, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </div>
+    <div style="width: 78%; float:right; font-size: 13px;">
+      <% if article.urgency == 'majorbreaking' %>
+        <span class="breaking">MAJOR BREAKING</span> <strong><%= link_to article.headline, article %></strong>
+      <% elsif article.urgency == 'breaking' %>
+        <span class="breaking">BREAKING</span> <strong><%= link_to article.headline, article %></strong>
+      <% elsif article.urgency == 'latest' %>
+        <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
+      
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
+      <% else %>  
+        <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
+      <% end %>
+
+    </div>
+    <div style="clear:both;"></div>   
+  </div> 
+<% end %>
+<% end %>
 
 <h3>All</h3>
 
