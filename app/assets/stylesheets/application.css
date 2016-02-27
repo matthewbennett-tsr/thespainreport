@@ -85,6 +85,40 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .latest-news-top a, .latest-news-top a:visited {color: #005BBF; text-decoration:none;}
 .latest-news-top a:hover {color: #F1BF00; background-color: #ffffff;}
 
+.content-wrapper {margin-top: 3px;}
+.content-left {float:left; width: 60%; margin-top: 0px; padding-right: 5px;}
+.content-left-top {}
+.content-left-top h1 a, h3 a, h1 a:visited, h3 a:visited {color:#000000;}
+.content-left-top h1 a:hover, h3 a:hover {color:#F1BF00; background-color: none; text-decoration:none; }
+.content-right {float:right; width: 40%; height: 520px; overflow-y: scroll; border-left: 1px solid #cccccc; margin-top: 0px; padding-left: 5px; padding-right: 5px;}
+.content-right-update-block {padding: 5px 5px 10px 5px; border-bottom: 1px solid #cccccc;}
+.content-right-update-block p {font-size: 12px;}
+.content-right a {color: #000000; text-decoration: none;}
+.content-right a:hover .content-right-update-block {background: #f6f6ee; color: #000000; text-decoration: none;}
+.content-right a:active {color: #000000; text-decoration: none;}
+.content-right a:visited {color: #000000; text-decoration: none;}
+/* Let's get this party started */
+.content-right::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+/* Track */
+.content-right::-webkit-scrollbar-track {
+    background: #eeeeee; 
+}
+ 
+/* Handle */
+.content-right::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 8px;
+    border-radius: 8px;
+    height: 200px;
+    background: #b3b3b3; 
+}
+.content-right::-webkit-scrollbar-thumb:window-inactive {
+	background: #b3b3b3; 
+}
+
+
 .index-home {font-weight:bold; margin-top:10px; padding-bottom: 5px; border-bottom: 1px solid #000000; margin-bottom: 5px;}
 .index-non-home {font-weight:bold; padding-bottom: 5px; border-bottom: 1px solid #000000;}
 .index-updates {font-weight:bold; margin-top: 10px; padding-bottom: 5px; border-bottom: 1px solid #000000;}
@@ -109,22 +143,28 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .breaking a, .breaking a:visited {background-color: #AA151B; color: #ffffff;}
 .breaking a:hover {background-color: #AA151B; color: #F1BF00;}
 .breaking-label {background-color: #AA151B; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
+.breaking-label-mini {background-color: #AA151B; color: #ffffff; padding: 1px 4px; font-size: 11px;}
 
 .latest {background-color: #F1BF00; color: #ffffff; padding: 2px 5px; font-weight:normal;}
 .latest a, .latest a:visited {background-color: #F1BF00; color: #ffffff;}
 .latest a:hover {background-color: #F1BF00; color: #AA151B;}
 .latest-label {background-color: #F1BF00; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
+.latest-label-mini {background-color: #F1BF00; color: #ffffff; padding: 1px 4px; font-size: 11px;}
 
 .editorial {background-color: green; color: #ffffff; padding: 2px 5px; font-weight:normal;}
 .editorial a, .editorial a:visited {background-color: green; color: #ffffff;}
 .editorial a:hover {background-color: green; color: #F1BF00;}
 .editorial-label {background-color: green; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
 h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; font-family: Oswald, Arial, sans-serif; line-height: 1.1; font-size: 24px;}
+.editorial-label-mini {background-color: green; color: #ffffff; padding: 1px 4px; font-size: 11px;}
+
+.in-depth-label-mini {background-color: black; color: #ffffff; padding: 1px 4px; font-size: 11px;}
 
 .updated {background-color: #005BBF; color: #ffffff; padding: 2px 5px; font-weight:normal;}
 .updated a, .updated a:visited {background-color: #005BBF; color: #ffffff;}
 .updated a:hover {background-color: #005BBF; color: #F1BF00;}
 .updated-label {background-color: #005BBF; color: #ffffff; padding: 5px; font-weight:bold; font-size: 13px;}
+.updated-label-mini {background-color: #005BBF; color: #ffffff; padding: 1px 4px; font-size: 11px;}
 
 .article-lede {margin: 0px 0px 10px 0px; font-family: Georgia; font-size: 16px; font-style: italic; line-height: 130%; padding-top: 5px; border-top: 1px dotted #999; padding-bottom: 5px; border-bottom: 1px dotted #999;}
 .article-slug {font-weight:bold;}

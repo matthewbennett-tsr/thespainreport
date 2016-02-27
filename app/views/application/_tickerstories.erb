@@ -1,14 +1,14 @@
 <% Article.tickerstories.each do |article| %>
 
-  <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
+  <% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
     <div class="major-breaking-news-top">
         <span class="listing-update-slug"><span class="breaking"><%= link_to 'MAJOR BREAKING NEWS' + ': ' + article.headline, article %></span></span>
     </div>
-  <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
+  <% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
   <div class="breaking-news-top">
         <%= link_to article do %><span class="listing-update-slug"><span class="breaking">BREAKING NEWS</span><% end %> <strong><%= link_to article.headline, article %></strong></span>
   </div>
-  <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+  <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
     <div class="latest-news-top">
         <%= link_to article do %><span class="listing-update-slug"><span class="latest">LATEST NEWS</span><% end %> <strong><%= link_to article.headline, article %></strong></span>
     </div>

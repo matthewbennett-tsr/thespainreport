@@ -5,4 +5,8 @@ class Category < ActiveRecord::Base
   def to_param
   "#{id}-spain-#{category.parameterize}"
   end
+  
+  scope :politics, -> {where(:id => 1)}
+  scope :economy, -> {where(:id => 2)}
+  scope :diplomacy, -> {where(:id => 9)}
 end

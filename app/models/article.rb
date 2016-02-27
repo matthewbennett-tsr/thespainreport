@@ -21,11 +21,16 @@ class Article < ActiveRecord::Base
   scope :in_depth, -> {where(:type_id => [3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,25])}
   scope :editorial, -> {where(:type_id => 1)}
   scope :news, -> {where(:type_id => [2,31,32])}
+  scope :topstory, -> {where(:type_id => 2)}
   scope :bignews, -> {where(:urgency => ['latest', 'breaking', 'majorbreaking'])}
   scope :breakingonly, -> {where(:urgency => ['breaking', 'majorbreaking'])}
   scope :latest, -> {order('updated_at DESC').where(:updated_at => (Time.now - 24.hours)..Time.now)}
   scope :ticker, -> {limit(1)}
+  scope :politics, -> {joins(:categories).merge(Category.politics)}
+  scope :economy, -> {joins(:categories).merge(Category.economy)}
+  scope :diplomacy, -> {joins(:categories).merge(Category.diplomacy)}
   scope :published, -> {where(status: ['published', 'updated'])}
+  scope :lastone, -> {order('updated_at DESC').limit(1)}
   scope :lastfive, -> {order('updated_at DESC').limit(5)}
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
   scope :lastten, -> {order('created_at DESC').limit(10)}
