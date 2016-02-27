@@ -31,6 +31,10 @@
   <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>
 <% else %>
 <% end %>
+<% if article.type.name == "LIVE BLOG" && article.created_at >= 12.hours.ago %>
+<span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span> 
+<% else %>
+<% end %>
 </div>
 <% end %>
 </div>
