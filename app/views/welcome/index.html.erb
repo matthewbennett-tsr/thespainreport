@@ -157,45 +157,60 @@
 <% @last30items.each do |newsitem| %>
       <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
         <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-        <div class="content-right-update-block">
-        
-        <% if newsitem.main? %>
-        <div style="width:100%; margin-bottom: 3px;">
-          <%= image_tag newsitem.main.url if newsitem.main? %>
-        </div>
-      <% elsif newsitem.video? %>
-        <div style="width:100%; margin-bottom: 3px;">
-          <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
           </div>
-        </div>
-    <% else %>
-    <% end %>
-        
-        <%= markdown(newsitem.item.truncate(265)) %>
-        <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
-         </div>
+        <% end %>
+      <% elsif newsitem.article.present? %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+          </div>
         <% end %>
       <% else %>
         <%= link_to newsitem do %>
-        <div class="content-right-update-block">
-        
-        <% if newsitem.main? %>
-        <div style="width:100%; margin-bottom: 3px;">
-          <%= image_tag newsitem.main.url if newsitem.main? %>
-        </div>
-      <% elsif newsitem.video? %>
-        <div style="width:100%; margin-bottom: 3px;">
-          <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+              <div class="video-wrapper">
+                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
           </div>
-        </div>
-    <% else %>
-    <% end %>
-        
-        <%= markdown(newsitem.item.truncate(265)) %>
-        <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
-         </div>
         <% end %>
       <% end %>
 <% end %>

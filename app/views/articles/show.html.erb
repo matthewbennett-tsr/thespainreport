@@ -138,8 +138,11 @@
 
 <% else %>
 
+<% if @articleupdates.present? %>
+<h3>Updates</h3>
+<% end %>
+
 <% @article.newsitems.each do |newsitem| %>
-<h3>Update:</h3>
 <div class="article-updates">
 <% if newsitem.main? %>
   <div class="main-image-article-update">
@@ -161,7 +164,11 @@
   </div> 
 <% else %>
 <% end %>
-<strong><%= newsitem.updated_at.strftime("%b %d %Y, %H:%M") %>—<%= link_to newsitem.slug, newsitem %>—</strong><%= markdown(newsitem.item.html_safe) %>
+<%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
+  <span class="article-update-slug"><%= newsitem.slug %></span><br />
+  <% end %>
+<%= markdown(newsitem.item.html_safe) %>
+<span style="font-size: 11px; color: #999999;"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
 <div class="clear"></div>
 </div>
 <% end %>

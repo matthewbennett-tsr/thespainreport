@@ -2,7 +2,7 @@
 
 <%= render 'tickerstories' %>
 
-<h1>UPDATE: <%= @newsitem.slug %></h1>
+<h1><%= @newsitem.slug %></h1>
 
 <% if @newsitem.status == 'updated' %>
   <div class="news-alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div>
@@ -28,10 +28,9 @@
     </div>
   </div>
 <% else %>
-
 <% end %>
 
-<div class="update-text"><p style="margin-bottom: 5px;"><span class="article-slug"><%= @newsitem.updated_at.strftime("%b %d %Y") %></span></p><%= markdown(@newsitem.item) %></div>
+<div class="update-text"><%= markdown(@newsitem.item) %></div>
 <div class="clear"></div>
 </div>
 
