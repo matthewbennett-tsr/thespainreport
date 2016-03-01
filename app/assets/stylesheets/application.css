@@ -106,6 +106,7 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
     height: 200px;
     background: #b3b3b3;}
 .content-right-scroll::-webkit-scrollbar-thumb:window-inactive {background: #b3b3b3;}
+.content-right-scroll ul li {font-family: Arial; font-size: 12px; line-height: 140%;}
 .content-right-block {padding: 5px 5px 10px 5px;}
 
 .article-update-slug {font-weight: normal; font-size: 16px; font-family: Oswald; line-height: 120%;}
