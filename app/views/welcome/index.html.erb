@@ -145,6 +145,8 @@
 </div>
 
 <div class="content-right">
+<div class="content-right-scroll">
+
 <% @latestaudio.each do |a| %>
 <div class="content-right-update-block">
   <span style="font-size: 12px; font-weight: bold;">2 Minute Spain News, <%= a.updated_at.to_formatted_s(:short) %></span>
@@ -214,6 +216,15 @@
         <% end %>
       <% end %>
 <% end %>
+</div>
+
+<div class="content-right-block">
+<h3>Follow These Spain Stories</h3>
+<% @activestories.each do |story| %>
+<p><%= link_to story.story, story %></p>
+<% end %>
+</div>
+
 </div>
 
 <div class="clear"></div>

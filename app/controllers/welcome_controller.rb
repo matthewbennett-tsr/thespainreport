@@ -12,6 +12,7 @@ class WelcomeController < ApplicationController
     @breakingonly = Article.breakingonly.published.latest.ticker
     @latestaudio = Audio.lastone
     @tickerstories = Article.bignews.published.latest.ticker
+    @activestories = Story.active
   end
 
 end

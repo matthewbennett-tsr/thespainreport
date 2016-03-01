@@ -9,5 +9,5 @@ class Story < ActiveRecord::Base
   scope :bignews, -> {where(:urgency => ['latest', 'breaking', 'majorbreaking'])}
   scope :latest, -> {order('updated_at DESC').where(:updated_at => (Time.now - 24.hours)..Time.now)}
   scope :ticker, -> {limit(1)}
-  
+  scope :active, -> {where(:status => ['active'])}
 end
