@@ -107,9 +107,9 @@
   
   <% @article.stories.each do |story| %> <%# LIVE-BLOG LATEST FULL STORIES %>
     <h3>Full Articles & Analysis</h3>
-    <% if story.articles.reject {|a| a == @article}.present? %>
+    <% if story.articles.published.reject {|a| a == @article}.present? %>
       <ul style="list-style-type: none;">
-        <% story.articles.lastsix.reject {|a| a == @article}.each do |article| %>
+        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
           <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
         <% end %>
       </ul>
@@ -225,9 +225,9 @@
   
   <% @article.stories.each do |story| %> <%# OTHER ARTICLES IN THIS STORY %>
     <h3><%= story.story %></h3>
-      <% if story.articles.reject {|a| a == @article}.present? %>
+      <% if story.articles.published.reject {|a| a == @article}.present? %>
         <ul style="list-style-type: none;">
-          <% story.articles.lastfour.reject {|a| a == @article}.each do |article| %>
+          <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
             <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
           <% end %>
         </ul>
