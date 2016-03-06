@@ -156,7 +156,7 @@
 </div>
 <% end %>
 
-<% @last30items.each do |newsitem| %>
+    <% @last30items.each do |newsitem| %>
       <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
         <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
           <div class="content-right-update-block">

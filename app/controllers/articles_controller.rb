@@ -69,6 +69,7 @@ class ArticlesController < ApplicationController
     @title = "some custom page title"
     @articleupdates = @article.newsitems
     @comments = @article.comments
+    @last30items = Newsitem.published.lastthirty
   end
   
   # GET /articles/new

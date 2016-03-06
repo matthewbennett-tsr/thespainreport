@@ -29,7 +29,11 @@
   <% end %>
 <% end %>
 
-<% title @article.headline %>
+<% if @article.type.name == "LIVE BLOG" %>
+  <% title 'LIVE BLOG: ' + @article.headline %>
+<% else %>
+  <% title @article.headline %>
+<% end %>
 
 <%= render 'tickerstories' %>
 
@@ -38,7 +42,8 @@
   LIVE BLOG: 
 <% else %>
 <% end %>
-<%= @article.headline %></h1>
+<%= @article.headline %>
+</h1>
 
 <% if @article.urgency == 'majorbreaking' && @article.updated_at >= 3.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">MAJOR BREAKING NEWS</span></span></div>
@@ -69,113 +74,321 @@
 
 <div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.name %></strong>—<%= @article.lede %></div>
 
-<% if @article.main? %>
-<div class="main-image">
-<%= link_to(@article.main.url) do %>
-<%= image_tag @article.main.url if @article.main? %>
-<% end %>
-<div class="main-caption">
-<%= @article.caption %> <strong>Source:</strong> <%= @article.source %>. (Click to enlarge)</div>
-</div>
-<% elsif @article.video? %>
-  <div class="main-image">
-  <div class="video-wrapper">
-    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %> 
-  </div>
-  <div class="main-caption">
-      <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>.
-  </div>
-  </div>
-<% else %>
-<% end %>
+<% if @article.type.name == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
 
-<% if @article.type.name == "LIVE BLOG" %>
-  <h2>Summary So Far…</h2>
-<% else %>
-<% end %>
-
-<div class="article-text">
-
-<%= markdown(@article.body) %>
-
-<% if @article.type.name == "LIVE BLOG" %>
-<p>Refresh the page for updates. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> or <a href="https://www.thespainreport.com">sign-up for e-mail alerts</a> if you want notifications pushed to you. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe here</a></p>
-
-  <h2 style="margin-top:30px;">Latest Updates…</h2>
-<% @article.newsitems.order('created_at DESC').each do |newsitem| %>
-<div class="liveblog-updates">
-  <span class="red" style="font-style: italic;">
-  <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
-  <%= time_ago_in_words(newsitem.updated_at).capitalize %> ago: <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %>
-  <% end %>
-  </span>
-<h3><%= newsitem.slug %></h3>
-<% if newsitem.main? %>
-  <div class="main-image-liveblog-update">
-   <%= link_to newsitem do %>
-   <%= image_tag newsitem.main.url if newsitem.main? %>
-   <% end %>
-   <div class="liveblog-caption">
-     <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
-   </div>
-  </div>
-<% elsif newsitem.video? %>
-  <div class="main-image-liveblog-update-video">
-  <div class="video-wrapper">
-    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %> 
-   </div>
-    <div class="liveblog-caption">
-      <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
-    </div>
-  
-  </div> 
-<% else %>
-<% end %>
-<strong></strong><%= markdown(newsitem.item.html_safe) %>
-<div class="clear"></div>
-</div>
-<% end %>
-
-<% else %>
-
-<% if @articleupdates.present? %>
-<h3>Updates</h3>
-<% end %>
-
-<% @article.newsitems.each do |newsitem| %>
-<div class="article-updates">
-<% if newsitem.main? %>
-  <div class="main-image-article-update">
-   <%= link_to newsitem do %>
-   <%= image_tag newsitem.main.url if newsitem.main? %>
-   <% end %>
-   <div class="main-caption">
-     <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
-   </div>
-  </div>
-<% elsif newsitem.video? %>
-  <div class="main-image-article-update">
-  <div class="video-wrapper">
-    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %> 
+  <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
+    <div class="main-image">
+      <%= link_to(@article.main.url) do %>
+        <%= image_tag @article.main.url if @article.main? %>
+      <% end %>
     <div class="main-caption">
-      <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+      <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>. (Click to enlarge)
     </div>
-  </div>
-  </div> 
-<% else %>
-<% end %>
-<%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
-  <span class="article-update-slug"><%= newsitem.slug %></span><br />
+    </div>
+  <% elsif @article.video? %>
+    <div class="main-image">
+      <div class="video-wrapper">
+        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
+      </div>
+      <div class="main-caption">
+        <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>.
+      </div>
+    </div>
+  <% else %>
   <% end %>
-<%= markdown(newsitem.item.html_safe) %>
-<span style="font-size: 11px; color: #999999;"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
-<div class="clear"></div>
-</div>
-<% end %>
-<% end %>
+  
+  <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
+  <div class="article-text">
+    <%= markdown(@article.body) %>
+  
+  <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
+    Refresh for updates. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> or sign-up for e-mail alerts if you want notifications. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe here</a>
+  </p>
+  
+  <% @article.stories.each do |story| %> <%# LIVE-BLOG LATEST FULL STORIES %>
+    <h3>Full Articles & Analysis</h3>
+    <% if story.articles.reject {|a| a == @article}.present? %>
+      <ul style="list-style-type: none;">
+        <% story.articles.lastsix.reject {|a| a == @article}.each do |article| %>
+          <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p style="font-style:italic;">No full articles or analysis for this new story yet.</p>
+    <% end %>
+  <% end %>
+  
+  <h2 style="margin-top:30px;">Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
+  
+    <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
+      <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
+        <div class="liveblog-updates">
+          <span class="red" style="font-style: italic;"> <%# LIVE-BLOG ENTRY DATE & LINK %>
+            <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
+              <%= time_ago_in_words(newsitem.updated_at).capitalize %> ago: <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %>
+            <% end %>
+          </span>
+          <h3><%= newsitem.slug %></h3> <%# LIVE-BLOG SLUG TITLE %>
+          <% if newsitem.main? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+            <div class="main-image-liveblog-update">
+              <%= link_to newsitem do %>
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              <% end %>
+              <div class="liveblog-caption">
+                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+              </div>
+            </div>
+          <% elsif newsitem.video? %>
+            <div class="main-image-liveblog-update-video">
+              <div class="video-wrapper">
+                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              </div>
+              <div class="liveblog-caption">
+                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+              </div>
+            </div> 
+          <% else %>
+          <% end %>
+          <%= markdown(newsitem.item.html_safe) %> <%# LIVE-BLOG ENTRY TEXT %>
+          <div class="clear"></div>
+        </div>
+      <% end %> <%# END OF LIVE-BLOG ENTRIES %>
+    <% else %> <%# IF THERE ARE NO LIVE-BLOG ENTRIES YET… %>
+      <p style="font-style:italic;">
+        Brand new live blog for breaking story, standby for first update very shortly. Refresh page.
+      </p>
+    <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
+  
+    </div> <%# END OF LIVE-BLOG ARTICLE TEXT & ENTRIES %>
+  
+<% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
 
-<div class="clear"></div>
-</div>
+  <div class="content-left"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+  
+  <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
+    <div class="main-image">
+      <%= link_to(@article.main.url) do %>
+        <%= image_tag @article.main.url if @article.main? %>
+      <% end %>
+    <div class="main-caption">
+      <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>. (Click to enlarge)
+    </div>
+    </div>
+  <% elsif @article.video? %>
+    <div class="main-image">
+      <div class="video-wrapper">
+        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
+      </div>
+      <div class="main-caption">
+        <%= @article.caption %> <strong>Source:</strong> <%= @article.source %>.
+      </div>
+    </div>
+  <% else %>
+  <% end %>
+  
+  <div class="article-text"> <%# MAIN TEXT %>
+    <%= markdown(@article.body) %>
+
+  <% if @articleupdates.present? %> <%# POST ANY UPDATES TO THE ARTICLE %>
+    <h3>Updates</h3>
+    <% @article.newsitems.each do |newsitem| %>
+      <div class="article-updates">
+        <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
+          <span class="article-update-slug"><%= newsitem.slug %></span><br />
+        <% end %>
+        <% if newsitem.main? %>
+          <div class="main-image-article-update">
+            <%= link_to newsitem do %>
+              <%= image_tag newsitem.main.url if newsitem.main? %>
+            <% end %>
+            <div class="main-caption">
+              <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+            </div>
+          </div>
+        <% elsif newsitem.video? %>
+          <div class="main-image-article-update">
+            <div class="video-wrapper">
+              <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              <div class="main-caption">
+                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+              </div>
+            </div>
+          </div> 
+        <% else %>
+        <% end %>
+        <%= markdown(newsitem.item.html_safe) %>
+        <span style="font-size: 11px; color: #999999;"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
+        <div class="clear"></div>
+      </div>
+    <% end %>
+  <% end %> <%# END OF ARTICLE UPDATES %>
+  
+  <% @article.stories.each do |story| %> <%# OTHER ARTICLES IN THIS STORY %>
+    <h3><%= story.story %></h3>
+      <% if story.articles.reject {|a| a == @article}.present? %>
+        <ul style="list-style-type: none;">
+          <% story.articles.lastfour.reject {|a| a == @article}.each do |article| %>
+            <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p style="font-style:italic;">
+          No other articles for this story yet.
+        </p>
+      <% end %>
+  <% end %>
+
+  </div> <%# END OF ARTICLE TEXT %>
+  </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
+  
+  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+    <div class="content-right-scroll"> <%# START OF RIGHT-HAND SCROLL BLOCK %>
+      
+      <% @latestaudio.each do |a| %> <%# AUDIO NEWS %>
+        <div class="content-right-update-block">
+          <span style="font-size: 12px; font-weight: bold;">2 Minute Spain News, <%= a.updated_at.to_formatted_s(:short) %></span>
+          <div style="margin-top: 5px; ">
+            <audio controls="controls" preload="none"><source src="<%= a.url %>" ></audio>
+          </div>
+        </div>
+      <% end %>
+      
+      <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
+      
+      <% @article.stories.each do |story| %>
+        <% story.newsitems.lasttwenty.order('created_at DESC').each do |newsitem| %> 
+          <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+          <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+            <div class="content-right-update-block">
+              <% if newsitem.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag newsitem.main.url if newsitem.main? %>
+                </div>
+              <% elsif newsitem.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <%= markdown(newsitem.item.truncate(265)) %>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
+            </div>
+          <% end %>
+        <% elsif newsitem.article.present? %>
+          <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+            <div class="content-right-update-block">
+              <% if newsitem.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag newsitem.main.url if newsitem.main? %>
+                </div>
+              <% elsif newsitem.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <%= markdown(newsitem.item.truncate(265)) %>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+            </div>
+          <% end %>
+        <% else %>
+          <%= link_to newsitem do %>
+            <div class="content-right-update-block">
+              <% if newsitem.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag newsitem.main.url if newsitem.main? %>
+                </div>
+              <% elsif newsitem.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <%= markdown(newsitem.item.truncate(265)) %>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+            </div>
+          <% end %>
+        <% end %>
+        <% end %>
+      <% end %>
+      
+      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
+        
+    <% @last30items.each do |newsitem| %>
+      <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
+          </div>
+        <% end %>
+      <% elsif newsitem.article.present? %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% else %>
+        <%= link_to newsitem do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+              <div class="video-wrapper">
+                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
+        
+      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
+
+    </div> <%# END OF RIGHT-HAND SCROLL BLOCK %>
+  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
+  
+  <div class="clear"></div>
+
+<% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>
 
 <div class="meta">
 <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
@@ -186,9 +399,9 @@
 </div>
 </div>
 
-<%= render 'latestaudio' %>
 <%= render 'emailsignup' %>
 <hr />
+
 <h2 >COMMENTS</h2>
 
 <% if current_user %>
