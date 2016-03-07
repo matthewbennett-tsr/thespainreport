@@ -96,8 +96,8 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .content-left-top {}
 .content-left-top h1 a, h3 a, h1 a:visited, h3 a:visited {color:#000000;}
 .content-left-top h1 a:hover, h3 a:hover {color:#F1BF00; background-color: none; text-decoration:none; }
-.content-right {float:right; width: 40%; border-left: 1px solid #cccccc; margin-top: 0px; padding-left: 5px; padding-right: 5px;}
-.content-right-update-block {padding: 5px 5px 10px 5px; border-bottom: 1px solid #cccccc;}
+.content-right {float:right; width: 40%; border-left: 1px solid #cccccc; margin-top: 0px; padding-left: 5px; padding-right: 0px;}
+.content-right-update-block {padding: 5px 5px 7px 5px; border-bottom: 1px solid #cccccc;}
 .content-right-update-block p {font-size: 12px;}
 .content-right-scroll {height: 690px; overflow-y: scroll; margin-top: 0px; border-bottom: 1px solid #cccccc;}
 .content-right-scroll a {color: #000000; text-decoration: none;}
