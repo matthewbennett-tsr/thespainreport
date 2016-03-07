@@ -331,7 +331,8 @@ video { width: 100% !important; height: auto !important;}
 @media only screen and (max-width: 802px) {
   h1 {font-size: 19px;}
   .listing-update-container .index-main-image {width: 50%;}
-  .modal-dialog {width: 95%;}
+  .modal {position: fixed; top: 5%; left: 50%; margin-top: -5%; margin-left: -50%;}
+  .modal-dialog {width: 95%; overflow:scroll-y;}
   h1.modal-title {font-size: 18px;}
 }
 
