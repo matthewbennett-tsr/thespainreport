@@ -3,6 +3,10 @@ module ApplicationHelper
     content_for :title, page_title.to_s
   end
   
+  def meta
+    content_for :meta
+  end
+  
   def resource_name
     :user
   end
