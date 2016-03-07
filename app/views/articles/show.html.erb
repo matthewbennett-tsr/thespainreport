@@ -189,7 +189,7 @@
   <div class="article-text"> <%# MAIN TEXT %>
     <%= markdown(@article.body) %>
 
-  <% if @articleupdates.present? %> <%# POST ANY UPDATES TO THE ARTICLE %>
+  <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <h3>Updates</h3>
     <% @article.newsitems.each do |newsitem| %>
       <div class="article-updates">
@@ -198,9 +198,7 @@
         <% end %>
         <% if newsitem.main? %>
           <div class="main-image-article-update">
-            <%= link_to newsitem do %>
-              <%= image_tag newsitem.main.url if newsitem.main? %>
-            <% end %>
+            <%= image_tag newsitem.main.url if newsitem.main? %>
             <div class="main-caption">
               <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
             </div>
@@ -216,7 +214,7 @@
           </div> 
         <% else %>
         <% end %>
-        <%= markdown(newsitem.item.html_safe) %>
+        <div class="article-update-text"><%= markdown(newsitem.item.html_safe) %></div>
         <span style="font-size: 11px; color: #999999;"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
         <div class="clear"></div>
       </div>
@@ -274,7 +272,7 @@
       
       <% @article.stories.each do |story| %>
       
-        <% story.newsitems.lasttwenty.order('created_at DESC').each do |newsitem| %> 
+        <% story.newsitems.published.lasttwenty.order('created_at DESC').each do |newsitem| %> 
           <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
           <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
             <div class="content-right-update-block">
@@ -410,15 +408,9 @@
 
 <div class="meta">
 <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
-<div class="meta-second-row">
-  <%= raw(@article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
-  <%= raw(@article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
-  <%= raw(@article.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
-</div>
 </div>
 
 <%= render 'emailsignup' %>
-<hr />
 
 <h2 >COMMENTS</h2>
 

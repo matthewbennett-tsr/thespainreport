@@ -118,6 +118,7 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .content-right-block {padding: 5px 5px 10px 5px;}
 
 .article-update-slug {font-weight: normal; font-size: 16px; font-family: Oswald; line-height: 120%;}
+.content-left .article-update-text p {font-family: Arial; font-size: 14px;}
 
 .index-home {font-weight:bold; margin-top:10px; padding-bottom: 5px; border-bottom: 1px solid #000000; margin-bottom: 5px;}
 .index-non-home {font-weight:bold; padding-bottom: 5px; border-bottom: 1px solid #000000;}
@@ -178,7 +179,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 
 .main-image {float:right; width: 50%; margin-left: 20px; }
 .main-image-home-breaking {float:right; width: 40%; margin-left: 20px; }
-.main-image-article-update {float:right; width: 40%; margin-left: 20px; margin-bottom: 5px; }
+.main-image-article-update {width: 100%; margin-top: 5px; margin-bottom: 5px; }
 .main-image-liveblog-update {width: 75%; margin-left: 10px; margin-bottom: 5px; }
 .main-image-liveblog-update-video {width: 75%; margin-left: 10px; margin-bottom: 15px; }
 

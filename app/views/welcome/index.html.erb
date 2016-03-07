@@ -77,7 +77,7 @@
         <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
  <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
         <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
-  <% elsif article.type.name == "LIVE BLOG" && article.created_at >= 12.hours.ago %>
+  <% elsif article.type.name == "LIVE BLOG" %>
         <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
     <% elsif article.type.name == 'EDITORIAL' %>
         <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
@@ -102,7 +102,7 @@
         <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
  <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
         <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
-  <% elsif article.type.name == "LIVE BLOG" && article.created_at >= 12.hours.ago %>
+  <% elsif article.type.name == "LIVE BLOG" %>
         <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
     <% elsif article.type.name == 'EDITORIAL' %>
         <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
@@ -127,7 +127,7 @@
         <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
  <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
         <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
-  <% elsif article.type.name == "LIVE BLOG" && article.created_at >= 12.hours.ago %>
+  <% elsif article.type.name == "LIVE BLOG" %>
         <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
     <% elsif article.type.name == 'EDITORIAL' %>
         <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
