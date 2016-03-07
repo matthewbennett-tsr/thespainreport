@@ -99,7 +99,7 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .content-right {float:right; width: 40%; border-left: 1px solid #cccccc; margin-top: 0px; padding-left: 5px; padding-right: 5px;}
 .content-right-update-block {padding: 5px 5px 10px 5px; border-bottom: 1px solid #cccccc;}
 .content-right-update-block p {font-size: 12px;}
-.content-right-scroll {height: 520px; overflow-y: scroll; margin-top: 0px; border-bottom: 1px solid #cccccc;}
+.content-right-scroll {height: 690px; overflow-y: scroll; margin-top: 0px; border-bottom: 1px solid #cccccc;}
 .content-right-scroll a {color: #000000; text-decoration: none;}
 .content-right-scroll a:hover .content-right-update-block {background: #f6f6ee; color: #000000; text-decoration: none;}
 .content-right-scroll a:active {color: #000000; text-decoration: none;}
