@@ -242,6 +242,23 @@
   </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
   
   <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+    
+    <% if @article.stories.present? %> <%# SUB-TITLE BLOCK: CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
+        <div class="content-right-header">
+        <% @article.stories.each do |story| %>
+          <div class="content-right-header-sub">
+            <%= story.story %>
+          </div>
+        <% end %>
+        </div>
+      <% else %>
+        <div class="content-right-header">
+          <div class="content-right-header-sub">
+            Latest Spain News Updates
+          </div>
+        </div>
+      <% end %>
+  
     <div class="content-right-scroll"> <%# START OF RIGHT-HAND SCROLL BLOCK %>
       
       <% @latestaudio.each do |a| %> <%# AUDIO NEWS %>
@@ -256,6 +273,7 @@
       <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
       
       <% @article.stories.each do |story| %>
+      
         <% story.newsitems.lasttwenty.order('created_at DESC').each do |newsitem| %> 
           <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
           <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
