@@ -1,5 +1,28 @@
 <% title @newsitem.slug %>
 
+<% content_for :meta do %>
+  <% if @newsitem.main? %>
+  <meta property="twitter:card" content="summary_large_image"/>
+  <% else %>
+  <meta property="twitter:card" content="summary"/>
+  <% end %>
+  <meta property="twitter:site" content="@thespainreport"/>
+  <meta property="twitter:title" content="<%= @newsitem.slug %>"/>
+  <meta property="twitter:description" content="<%= @newsitem.item.truncate(200) %>"/>
+  <% if @newsitem.main? %>
+  <meta property="twitter:image" content="<%= @newsitem.main %>"/>
+  <% end %>
+  
+  <meta property="og:url" content="<%= request.original_url %>"/>
+  <meta property="og:title" content="<%= @newsitem.slug %>"/>
+  <meta property="og:description" content="<%= @newsitem.item.truncate(200) %>"/>
+  <% if @newsitem.main? %>
+  <meta property="og:image" content="<%= @newsitem.main %>"/>
+  <% end %>
+  <meta property="og:site_name" content="The Spain Report"/>
+  <meta property="og:updated_time" content="<%= @newsitem.updated_at %>"/>
+<% end %>
+
 <%= render 'tickerstories' %>
 
 <h1><%= @newsitem.slug %></h1>

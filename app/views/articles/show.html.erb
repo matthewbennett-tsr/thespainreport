@@ -37,9 +37,9 @@
 
 <% content_for :meta do %>
   <% if @article.main? %>
-    <meta property="twitter:card" content="summary_large_image"/>
+  <meta property="twitter:card" content="summary_large_image"/>
   <% else %>
-    <meta property="twitter:card" content="summary"/>
+  <meta property="twitter:card" content="summary"/>
   <% end %>
   <meta property="twitter:site" content="@thespainreport"/>
   <meta property="twitter:title" content="<%= @article.headline %>"/>
@@ -50,7 +50,7 @@
   <meta property="og:title" content="<%= @article.headline %>"/>
   <meta property="og:description" content="<%= @article.lede %>"/>
   <% if @article.main? %>
-    <meta property="og:image" content="<%= @article.main %>"/>
+  <meta property="og:image" content="<%= @article.main %>"/>
   <% end %>
   <meta property="og:site_name" content="The Spain Report"/>
   <meta property="og:updated_time" content="<%= @article.updated_at %>"/>

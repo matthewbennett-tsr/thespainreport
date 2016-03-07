@@ -33,6 +33,7 @@ class NewsitemsController < ApplicationController
     @story = Newsitem.find(params[:id])
     @latestaudio = Audio.lastone
     @comments = @newsitem.comments
+    @last30items = Newsitem.published.lastthirty
   end
 
   # GET /newsitems/new
