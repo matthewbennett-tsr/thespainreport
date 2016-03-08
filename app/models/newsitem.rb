@@ -15,4 +15,5 @@ class Newsitem < ActiveRecord::Base
   scope :lasttwenty, -> {order('created_at DESC').limit(20)}
   scope :lastthirty, -> {order('created_at DESC').limit(30)}
   scope :lastfifty, -> {order('created_at DESC').limit(50)}
+  scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
 end

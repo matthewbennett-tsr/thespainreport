@@ -237,6 +237,40 @@
 <strong>First published:</strong> <%= @newsitem.created_at.strftime("%b %d, %Y, %H:%M") %> | <strong>Last updated:</strong> <%= @newsitem.updated_at.strftime("%b %d, %Y, %H:%M") %>
 </div>
 
+
+<%# TESTING TESTING %>
+
+<h3>Last 24 Hours</h3>
+
+<% @updateslast24.each do |newsitem| %>
+  
+          <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+          
+            <div class="content-right-update-block">
+              <strong><%= newsitem.slug.upcase %>:</strong> <%= newsitem.item.truncate(265) %> (
+              (<%= link_to 'Read full update', article_url(newsitem.article, anchor: newsitem.id) %>)
+            </div>
+          
+        <% elsif newsitem.article.present? %>
+          
+            <div class="content-right-update-block">
+              <strong><%= newsitem.slug.upcase %>:</strong> <%= newsitem.item.truncate(265) %>
+              (<%= link_to 'Read full update', article_url(newsitem.article, anchor: newsitem.id) %>)
+            </div>
+          
+        <% else %>
+
+            <div class="content-right-update-block">
+              <strong><%= newsitem.slug.upcase %>:</strong> <%= newsitem.item.truncate(265) %>
+              (<%= link_to 'Read full update', newsitem %>)
+            </div>
+
+        <% end %>
+
+<% end %>
+
+<%# END OF TESTING %>
+
 <%= render 'emailsignup' %>
 
 <h2>COMMENTS</h2>

@@ -40,7 +40,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -80,7 +80,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -120,7 +120,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -160,7 +160,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -201,7 +201,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -241,7 +241,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -281,7 +281,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -328,7 +328,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>
@@ -369,7 +369,7 @@
       <% elsif article.urgency == 'latest' %>
         <span class="latest">LATEST</span> <strong><%= link_to article.headline, article %></strong>
       
-      <% elsif article.type.name == 'EDITORIAL' %>
+      <% elsif article.type.try(:name) == 'EDITORIAL' %>
         <span class="editorial">EDITORIAL</span> <strong><%= link_to article.headline, article %></strong>
       <% else %>  
         <strong><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></strong>

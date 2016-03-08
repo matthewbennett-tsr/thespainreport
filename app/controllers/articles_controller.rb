@@ -83,7 +83,6 @@ class ArticlesController < ApplicationController
       @categories = Category.all.order(:category)
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
-      
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
@@ -187,6 +186,22 @@ class ArticlesController < ApplicationController
         ArticleMailer.delay.send_article_teaser(@article, user)
 	  end
 	end
+  end
+
+  def new_summary
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
+    elsif current_user.role == 'editor'
+      @article = Article.new
+      @regions = Region.all.order(:region)
+      @categories = Category.all.order(:category)
+      @stories = Story.all.order(:story)
+      @types = Type.all.order(:name)
+    else
+      redirect_to root_url
+      flash[:success] = "Now then, now then, you're not allowed to do that."
+    end
   end
 
   # POST /articles

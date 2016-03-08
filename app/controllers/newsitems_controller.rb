@@ -34,6 +34,7 @@ class NewsitemsController < ApplicationController
     @latestaudio = Audio.lastone
     @comments = @newsitem.comments
     @last30items = Newsitem.published.lastthirty
+    @updateslast24 = Newsitem.last24
   end
 
   # GET /newsitems/new

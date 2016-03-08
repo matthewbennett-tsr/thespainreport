@@ -1,4 +1,4 @@
-<% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.name) %>
+<% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
   <% if current_user.nil? && !paywall %>
 
   <% elsif current_user.nil? && paywall %>
@@ -29,7 +29,7 @@
   <% end %>
 <% end %>
 
-<% if @article.type.name == "LIVE BLOG" %>
+<% if @article.type.try(:name) == "LIVE BLOG" %>
   <% title 'LIVE BLOG: ' + @article.headline %>
 <% else %>
   <% title @article.headline %>
@@ -59,7 +59,7 @@
 <%= render 'tickerstories' %>
 
 <h1>
-<% if @article.type.name == "LIVE BLOG" %>
+<% if @article.type.try(:name) == "LIVE BLOG" %>
   LIVE BLOG: 
 <% else %>
 <% end %>
@@ -72,30 +72,30 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'latest' && @article.updated_at >= 12.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="latest-label">LATEST NEWS</span></span></div>
-<% elsif @article.type.name == 'EDITORIAL' %>
+<% elsif @article.type.try(:name) == 'EDITORIAL' %>
   <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label">EDITORIAL</span></span></div>
 <% else %>
 <% end %>
 
-<% if @article.type.name == "LIVE BLOG" %>
+<% if @article.type.try(:name) == "LIVE BLOG" %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">LIVE BLOG</span></span></div>
 <% else %>
 <% end %>
 
-<% if @articleupdates.present? && @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
+<% if @articleupdates.present? && @article.status == "updated" && !@article.type.try(:name) == "LIVE BLOG" %>
   <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div> <div class="alert-update"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
 <% elsif @articleupdates.present? %>
   <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
-<% elsif @article.status == "updated" && !@article.type.name == "LIVE BLOG" %>
+<% elsif @article.status == "updated" && !@article.type.try(:name) == "LIVE BLOG" %>
   <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div>
 <% else %>
 <% end %>
 
 <div class="clear"></div>
 
-<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.name %></strong>—<%= @article.lede %></div>
+<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %></div>
 
-<% if @article.type.name == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
+<% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
 
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
@@ -209,6 +209,12 @@
   
   <div class="article-text"> <%# MAIN TEXT %>
     <%= markdown(@article.body) %>
+    
+  <% if @article.type.try(:name) == 'SUMMARY' %>
+    <% Newsitem.last24.each do |newsitem| %>
+    <%= newsitem.slug %>
+    <% end %>
+  <% end %> 
 
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <h3>Updates</h3>
@@ -294,7 +300,7 @@
       <% @article.stories.each do |story| %>
       
         <% story.newsitems.published.lasttwenty.order('created_at DESC').each do |newsitem| %> 
-          <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+          <% if newsitem.article.present? && newsitem.article.type.try(:name) == "LIVE BLOG" %>
           <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
             <div class="content-right-update-block">
               <% if newsitem.main? %>
@@ -358,7 +364,7 @@
       <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
         
     <% @last30items.each do |newsitem| %>
-      <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+      <% if newsitem.article.present? && newsitem.article.type.try(:name) == "LIVE BLOG" %>
         <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
           <div class="content-right-update-block">
             <% if newsitem.main? %>
