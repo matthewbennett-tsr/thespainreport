@@ -38,7 +38,7 @@ class Article < ActiveRecord::Base
   scope :lastten, -> {order('created_at DESC').limit(10)}
   scope :lastthirty, -> {order('updated_at DESC').limit(30)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
-  scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone).limit(20)}
+  scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
   scope :next24, -> {where('created_at <= ? and created_at >= now()', 24.hours.from_now).limit(20)}
   scope :following5days, -> {where('created_at <= ? and created_at >= ?', 6.days.from_now, 1.days.from_now).limit(20)}
   scope :following614days, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 6.days.from_now).limit(20)}

@@ -24,7 +24,12 @@
     </div>
     <div class="clear"></div> 
   </div>
- 
+  
+  <div class="admin-block">
+    <%= f.text_field :summary_slug, :size => 25, :maxlength => 20, :style => 'padding:5px; margin-bottom: 5px;' %>
+    <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
+  </div>
+  
   <div class="admin-block">
     <div style="font-size: 12px;">
       <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
@@ -38,7 +43,7 @@
   <div class="admin-block">
     <div>
       <% if action_name == 'new_summary' %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '84', :value => 'Spain News ' %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '84', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
       <% else %>
         <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
       <% end %>
@@ -47,7 +52,7 @@
       <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
       | 
       <% if action_name == 'new_summary' %>
-        <%= f.collection_select :type_id, @types, :id, :name, :selected => 27 %>
+        <%= f.collection_select :type_id, @types, :id, :name, :selected => 32 %>
       <% else %>
         <%= f.collection_select :type_id, @types, :id, :name %>
       <% end %>
@@ -59,15 +64,23 @@
     <div>
       <textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
 <% if action_name == 'new_summary' %>
-<% Article.last24.each do |article| %>
-**<%= article.headline.upcase %>:** <%= truncate(article.try(:body), :length => 265) %> ([Read full article](<%= article_url(article) %>))
+<% Article.last24.published.each do |article| %>
+**<%= article.try(:summary_slug) %>:** <%= article.try(:summary) %> ([Read full article](<%= article_url(article) %>))
 
 <% end %>
-<% Newsitem.last24.each do |newsitem| %>
-**<%= newsitem.slug.upcase %>:** <%= truncate(newsitem.try(:item), :length => 265) %> ([Read full update](<%= newsitem_url(newsitem) %>))
+<% Newsitem.last24.published.each do |newsitem| %>
+**<%= newsitem.try(:summary_slug) %>:** <%= newsitem.try(:summary) %> ([Read full update](
+<% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+<%= article_url(newsitem.article, anchor: newsitem.id) %>      
+<% elsif newsitem.article.present? %>
+<%= article_url(newsitem.article, anchor: newsitem.id) %>
+<% else %>
+<%= newsitem_url(newsitem) %>
+<% end %>
+))
 
 <% end %>
-<% elsif %>
+<% elsif action_name == 'new' %>
 REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards
 CONTEXT: significance, environment, surroundings, (infra)structure, related events, debates, trends, driving forces, rhetoric, discourses, history, country comparison, ideals, core
 PLAYERS: protagonist, antagonist, groups, sides, alliances, struggles, goals, glory, identity, thoughts, emotions, values, beliefs, (re)actions, background, influences, 

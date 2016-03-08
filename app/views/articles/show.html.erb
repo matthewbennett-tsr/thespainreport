@@ -209,12 +209,6 @@
   
   <div class="article-text"> <%# MAIN TEXT %>
     <%= markdown(@article.body) %>
-    
-  <% if @article.type.try(:name) == 'SUMMARY' %>
-    <% Newsitem.last24.each do |newsitem| %>
-    <%= newsitem.slug %>
-    <% end %>
-  <% end %> 
 
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <h3>Updates</h3>

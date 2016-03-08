@@ -26,6 +26,11 @@
   </div>
   
   <div class="admin-block">
+    <%= f.text_field :summary_slug, :size => 25, :maxlength => 20, :style => 'padding:5px; margin-bottom: 5px;' %>
+    <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
+  </div>
+  
+  <div class="admin-block">
   <div style="font-size: 12px;">
   <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
    | <%= f.check_box :remove_main %> R?
