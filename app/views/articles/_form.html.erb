@@ -26,26 +26,11 @@
   </div>
   
   <div class="admin-block">
-    <%= f.text_field :summary_slug, :size => 25, :maxlength => 20, :style => 'padding:5px; margin-bottom: 5px;' %>
-    <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
-  </div>
-  
-  <div class="admin-block">
-    <div style="font-size: 12px;">
-      <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">Existing…</span><% end %>
-      | <%= f.check_box :remove_main %> R?
-      | <strong>V:</strong> <%= f.text_field :video, :size => "15" %>
-      || <strong>C:</strong> <%= f.text_field :caption, :size => '40' %>
-      | <strong>S:</strong> <%= f.text_field :source, :size => '20' %>
-    </div>
-  </div>
-  
-  <div class="admin-block">
     <div>
       <% if action_name == 'new_summary' %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '84', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '83', :style => 'padding:5px;', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
       <% else %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '84' %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '83', :style => 'padding:5px;' %>
       <% end %>
     </div>
     <div style="margin-top: 5px;">
@@ -56,9 +41,19 @@
       <% else %>
         <%= f.collection_select :type_id, @types, :id, :name %>
       <% end %>
-      | <%= f.text_field :lede, :size => '79', :class => "edit-lede" %>
+      | <%= f.text_field :lede, :size => '79', :class => "edit-lede", :style => 'padding:5px;' %>
     </div>
   </div>
+  
+  <div class="admin-block">
+    <%= f.text_field :summary_slug, :size => 25, :maxlength => 20, :style => 'padding:5px; margin-bottom: 5px;' %>
+    <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
+      <%= f.check_box :remove_main %>
+      | <%= f.text_field :video, :size => "13", :style => 'padding:5px;' %>
+      | <%= f.text_field :caption, :size => '42', :style => 'padding:5px;' %>
+    <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
+  </div>
+
   
   <div class="admin-block">
     <div>
