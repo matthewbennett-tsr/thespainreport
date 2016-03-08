@@ -4,15 +4,14 @@
 
 <%= @newsitem.item %>
 
-Source: <%= @newsitem.source %>
-
 Leave your comment here:
-
-<% if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG" %>
-  <%= article_url(@newsitem.article, anchor: @newsitem.id) %>
+<% if @newsitem.article.present? %>
+  <%= link_to 'Read online & leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id) %>
 <% else %>
-  <%= newsitem_url(@newsitem) %>
+  <%= link_to 'Read online & leave your comment here', newsitem_url(@newsitem) %>
 <% end %>
+
+**Published on:** <%= @newsitem.created_at.strftime("%b %d, %Y, %H:%M") %>
 
 Thank you for reading The Spain Report.
 ----------
@@ -29,9 +28,8 @@ EC1V 4PW
 United Kingdom
 
 (0044) (0)2076085570
-subscriptions@thespainreport.com
-
 https://www.thespainreport.com
+
 Understand The News From Spain, In English
 
 Copyright © 2015 The Spain Report Ltd, All rights reserved.
