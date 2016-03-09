@@ -52,29 +52,31 @@
       | <%= f.text_field :video, :size => "13", :style => 'padding:5px;' %>
       | <%= f.text_field :caption, :size => '42', :style => 'padding:5px;' %>
     <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
+    <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   </div>
 
   
-  <div class="admin-block">
-    <div>
+<div class="admin-block">
       <textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
 <% if action_name == 'new_summary' %>
-<% Article.last24.published.each do |article| %>
+
+  <% Article.last24.published.each do |article| %>
 **<%= article.try(:summary_slug) %>:** <%= article.try(:summary) %> ([Read full article](<%= article_url(article) %>))
 
-<% end %>
-<% Newsitem.last24.published.each do |newsitem| %>
-**<%= newsitem.try(:summary_slug) %>:** <%= newsitem.try(:summary) %> ([Read full update](
-<% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
-<%= article_url(newsitem.article, anchor: newsitem.id) %>      
-<% elsif newsitem.article.present? %>
-<%= article_url(newsitem.article, anchor: newsitem.id) %>
-<% else %>
-<%= newsitem_url(newsitem) %>
-<% end %>
-))
+  <% end %>
 
-<% end %>
+  <% Newsitem.last24.published.each do |newsitem| %>
+**<%= newsitem.try(:summary_slug) %>:** <%= newsitem.try(:summary) %> ([Read full update](
+    <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+<%= article_url(newsitem.article, anchor: newsitem.id) %>      
+    <% elsif newsitem.article.present? %>
+<%= article_url(newsitem.article, anchor: newsitem.id) %>
+    <% else %>
+<%= newsitem_url(newsitem) %>
+    <% end %>
+))
+  <% end %>
+
 <% elsif action_name == 'new' %>
 REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards
 CONTEXT: significance, environment, surroundings, (infra)structure, related events, debates, trends, driving forces, rhetoric, discourses, history, country comparison, ideals, core
@@ -85,8 +87,7 @@ STRATEGIES: resources, vision, planning, loops, speed, phases, level/coherence o
 <%= @article.body %>
 <% end %>
 </textarea>
-    </div>
-  </div>
+</div>
 
   <div class="admin-block">
     <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
