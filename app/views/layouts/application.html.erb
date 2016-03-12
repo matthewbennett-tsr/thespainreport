@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <title>
     <% if current_page?('/') %>
       The Spain Report | Understand Important Spain News, In English
@@ -8,6 +9,7 @@
       <%= yield(:title) %> | The Spain Report
     <% end %>
   </title>
+  
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Oswald:400,700", media: "all" %>
   <!--[if IE]>
@@ -24,13 +26,16 @@
   <%= favicon_link_tag 'favicon.ico' %>
   <%= render "layouts/google_analytics" %>
   
-<% if controller_name == 'articles' && action_name == 'show' %>
+  <% if controller_name == 'articles' && action_name == 'show' %>
     <%= yield(:articlepaywall) %>
-<% end %>
+  <% end %>
+  
+  <% if controller_name == 'newsitems' && action_name == 'show' %>
+    <%= yield(:articlepaywall) %>
+  <% end %>
 
 </head>
 <body>
-
 
 <div class="user-bar">
 

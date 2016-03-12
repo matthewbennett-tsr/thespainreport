@@ -1,3 +1,32 @@
+<% if current_user.nil? && !paywall %>
+
+<% elsif current_user.nil? && paywall %>
+  <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall').modal();
+    });
+    </script>
+  <% end %>
+<% elsif current_user.role == 'reader' && paywall %>
+  <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-reader').modal();
+    });
+    </script>
+  <% end %>
+<% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+  <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-resubscribe').modal();
+    });
+    </script>
+  <% end %>
+<% else %>
+<% end %>
+
 <% title @newsitem.slug %>
 
 <% content_for :meta do %>
