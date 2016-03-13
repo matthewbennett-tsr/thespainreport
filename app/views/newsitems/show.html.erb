@@ -268,8 +268,6 @@
 
 <%= render 'emailsignup' %>
 
-<h2>COMMENTS</h2>
-
 <% if current_user %>
 Now it's your turn <strong><%= current_user.name unless current_user.name.blank? %></strong>. What do you think?
 
@@ -286,10 +284,14 @@ Now it's your turn <strong><%= current_user.name unless current_user.name.blank?
 <% end %>
 
 <% else %>
-<%= render 'login' %>
 <% end %>
 
 <div style="margin-top: 20px;">
+
+<% if @comments.present? %>
+<h2 >COMMENTS</h2>
+<% end %>
+
 <% @comments.each do |comment| %>
 <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
     <div style="width: 100%;">

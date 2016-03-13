@@ -433,8 +433,6 @@
 
 <%= render 'emailsignup' %>
 
-<h2 >COMMENTS</h2>
-
 <% if current_user %>
 Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
 
@@ -451,7 +449,10 @@ Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
 <% end %>
 
 <% else %>
-<%= render 'login' %>
+<% end %>
+
+<% if @comments.present? %>
+<h2 >COMMENTS</h2>
 <% end %>
 
 <div style="margin-top: 20px;">
