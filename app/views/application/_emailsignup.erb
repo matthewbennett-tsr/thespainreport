@@ -1,37 +1,48 @@
 <% if current_user.nil? %>
+
   <div class="email-sign-up">
-  
-    <div style="float:right;">
-      <%= image_tag "thespainreport-evssl-green.jpg", :height => "75px" %>
+    
+    <div class="email-sign-up-image">
+      <%= image_tag "tsr-multiple-green-300.jpg" %>
     </div>
     
+    <div class="email-sign-up-text">
     <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> To Understand More</span>
     <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
-      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. As a free member, you can read all updates, leave comments, set your e-mail preferences and access our Spain News Reader (RSS).
+      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. Hits your inbox seconds after we press 'publish', works on all your devices, leave comments and access our Spain News Reader (RSS).
     </p>
     
+    <div class="email-sign-up-form">
     <%= form_tag '/new_spain_report_member', :class => '', :id => 'payment-form' do |f| %>
-      <div class="email-input-float inputgeneral">
-        <span style="font-family: Oswald; font-size: 15px;">Enter Your E-mail Address:</span>
+      <div class="email-sign-up-prompt">
+        <span style="font-family: Oswald; font-size: 15px;">Enter Your E-mail:</span>
       </div>
       <div class="email-input-float">
         <input type="email" size="40" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
       </div>
-      <div class="email-input-float">
+      <div class="email-input-float email-button">
         <button type="submit" class="blueformbutton">Join Now</button>
       </div>
       <div class="clear"></div>
     <% end %>
+    </div>
+    
+    <div style="width:100%;">
+      <div class="email-sign-up-ssl-image">
+        <%= image_tag 'thespainreport-evssl-green.jpg', :height => '50px' %>
+      </div>
+      <div class="email-sign-up-quote">
+       “Your reporting and comment are excellent – please keep up the good work!"
+       <br />—John, Catalonia
+      </div>
+      <div class="clear"></div>
+    </div>
 
+    </div>
+    <div class="clear"></div>
+    
+    
+    
   </div>
-  
-  <div class="email-sign-up">
-	<ul style="margin-left: 20px; margin-top: 0px; margin-bottom: 0px;">
-	  <li style="font-family: Arial; font-size: 14px;"><a href="https://www.thespainreport.com/articles/487-151125153235-a-message-from-the-editor">The Spain Report: More About The Editor & How It All Started</a></li>
-	  <li style="font-family: Arial; font-size: 14px;"><a href="https://www.thespainreport.com/articles/488-151125155002-the-attention-economy-21st-century-news">The Attention Economy & 21st Century News</a></li>
-	  <li style="font-family: Arial; font-size: 14px;"><a href="https://www.thespainreport.com/articles/489-151125155059-ad-distraction-vs-deep-reader-value">Ad Distraction vs. Deep Reader Value</a></li>
-	</ul>
-  </div>
-
 
 <% end %>

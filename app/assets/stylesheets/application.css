@@ -191,9 +191,14 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .liveblog-updates {background-color: #f5f5f5; margin-top:10px; padding: 20px; border-top: 1px solid #999999;}
 
 .email-sign-up {margin-top: 20px; margin-bottom: 20px; padding: 10px; background-color: #E3EDED; border: 1px solid #999999;}
+.email-sign-up-image {float:right; width: 30%;}
+.email-sign-up-text {float:left;  width: 70%;}
 .email-sign-up-title {font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 19px; margin-bottom:0px; font-weight:bold; padding-bottom: 0;}
 .email-sign-up .email-submit {font-family: Oswald, Arial, sans-serif !important; line-height: 1.5 !important; font-size: 40px !important; margin-bottom:0px; font-weight:bold; padding: 10px;}
 .email-input-float {float:left; margin-right: 4px;}
+.email-sign-up-prompt {float:left; margin-right: 4px;}
+.email-sign-up-ssl-image {float:left; width: 10%;}
+.email-sign-up-quote {float:right; width: 90%; padding-left: 20px; padding-top: 10px; font-family: Georgia; font-style: italic;}
 .happy-subscribers {width: 90%; float:right; margin-top: 10px; margin-bottom: 20px;  margin-right: 0px; background-color: #FCF2CC; border-top: 1px dotted #999999; padding: 5px 15px; text-align: right;}
 .happy-subscribers p {margin-bottom: 10px; font-family: Georgia; font-style:italic; font-size: 15px; line-height: 150%; }
 
@@ -349,19 +354,31 @@ video { width: 100% !important; height: auto !important;}
   .input200, .input170 {width: 150px;}
   .main-image-liveblog-update {width: 100%; margin-left: 0px; margin-bottom: 5px; }
   .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
+  .email-sign-up-form {margin-bottom: 10px;}
+  .email-sign-up-image {width: 40%;}
+  .email-sign-up-text {width: 60%;}
+  .email-sign-up-prompt {width: 100%;}
+  .email-sign-up-ssl-image {float:left; width: 20%;}
+  .email-sign-up-quote {float:right; width: 80%; padding-left: 0px; padding-top: 0px;}
 }
 @media only screen and (max-width: 670px) {
   .user-bar-flash {text-align:left; margin-bottom: 5px; padding-left: 0; font-size: 14px;}
   .input200, .input170 {width: 120px;}
   h1 {font-size: 28px;}
   .top-nav-right-block {display:none;}
-  .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
+  .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
+  
 }
+
+@media only screen and (max-width: 665px) {
+  .email-button {margin-top: 5px;}
+}
+
 @media only screen and (max-width: 645px) {
   .input200, .input170 {width: 115px;}
   h1 {font-size: 28px;}
   .top-nav-right-block {display:none;}
-  .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
+  
 }
 @media only screen and (max-width: 605px) {
   .user-bar-flash {text-align:left; margin-bottom: 5px; padding-left: 0; font-size: 14px;}
@@ -369,19 +386,26 @@ video { width: 100% !important; height: auto !important;}
   h1 {font-size: 28px;}
   .top-nav-right-block {display:none;}
   .top-nav-middle-block {display:none;}
-  .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
+  .email-button {margin-top: 0px;}
 }
+
+@media only screen and (max-width: 590px) {
+  .email-sign-up-image {width: 100%;}
+  .email-sign-up-text {width: 100%;}
+}
+
 @media only screen and (max-width: 570px) {
   .user-bar {padding-top: 0; height: 60px;}
   .user-bar-flash {width: 100%; text-align:left; margin-bottom: 5px; padding-left: 0; font-size: 14px;}
   .input200, .input170 {width: 120px;}
   h1 {font-size: 26px;}
   .top-nav-right-block {display:none;}
-  .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
+  .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
   .main-image, .index-main-image, .main-image-article-update {width: 100%;}
   .listing-update-container .index-main-image {width: 100%;}
   audio {max-width: 100%;}
   .user-bar-right-links-basic-user {margin-top: 16px;}
+  
 }
 @media only screen and (max-width: 535px) {
   .user-bar {padding-top: 0; height: 60px;}
@@ -392,6 +416,7 @@ video { width: 100% !important; height: auto !important;}
   .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
   .main-image, .index-main-image {width: 100%;}
   audio {max-width: 100%;}
+  .email-button {margin-top: 5px;}
 }
 @media only screen and (max-width: 485px) {
   .user-bar {padding-top: 0; height: 60px;}
@@ -401,6 +426,7 @@ video { width: 100% !important; height: auto !important;}
   .email-input-float, .email-input-float .input200, .email-input-float .input170 {width: 100%; box-sizing: border-box; margin-bottom:2px;}
   .main-image, .index-main-image {width: 100%;}
   audio {max-width: 100%;}
+  
 }
 @media only screen and (max-width: 420px) {
   .user-bar {padding-top: 0; height: 60px;}
