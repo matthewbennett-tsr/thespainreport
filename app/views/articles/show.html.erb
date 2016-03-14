@@ -9,7 +9,7 @@
     });
     </script>
     <% end %>
-  <% elsif current_user.role == 'reader' && paywall %>
+  <% elsif current_user.role == 'reader' && paywall_reader %>
     <% content_for :articlepaywall do %>
     <script type="text/javascript" data-turbolinks-track="false">
     $(window).load(function(){
