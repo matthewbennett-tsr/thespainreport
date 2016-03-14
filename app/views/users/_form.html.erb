@@ -40,13 +40,13 @@
   
   <% if @user.errors.any? %>
     <div id="error_explanation">
-      <h2>Ejem…just <%= pluralize(@user.errors.count, "problem") %> with that particular attempt…</h2>
+      <h2>Ejem…just a little problem with that particular attempt…</h2>
 
       <ul>
       <% @user.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
-      <li>Remember you can choose secure but easy-to-remember pass phrases like "$400 Chorizo Is Expensive" or "Rajoy is a 1st class #####!!"</li>
+      <li>Remember you can choose secure but easy-to-remember human pass phrases like "Chorizo is expensive" or "I really love Spain!"</li>
       </ul>
     </div>
   <% end %>

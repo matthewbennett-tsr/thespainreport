@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   validates :email, :uniqueness => {:case_sensitive => false}
   validates_format_of :email, :with => /@/, message: ": are you sure that's your e-mail address?"
-  validates :password, :on => :create, length: {minimum: 11, message: ": needs to be at least 11 characters long"}
-  validates :password, :on => :update, length: {minimum: 11, message: ": needs to be at least 11 characters long"}, allow_blank: true
+  validates :password, :on => :create, length: {minimum: 15, message: ": needs to be at least 15 characters long"}
+  validates :password, :on => :update, length: {minimum: 15, message: ": needs to be at least 15 characters long"}, allow_blank: true
   validates :name, :on => :update, :uniqueness => {:case_sensitive => false}, length: {maximum: 20}, allow_blank: true
   validate :password_complexity
   validates :password_confirmation, :presence => true, :on => :create
@@ -53,8 +53,12 @@ class User < ActiveRecord::Base
   has_many :comments
   
   def password_complexity
-    if password.present? and not password.match(/^(?=.*[a-zA-Z])(?=.*[0-9])(?=.*[@#!$%&+=])(?=.*[\s])./)
-      errors.add :password, ": must include at least a lowercase letter, a capital letter, a number, a space and one of these symbols: ! @ # $ % & + ="
+    if password.present? and not password.match(/^(?=.*[A-Z])./) and not password.match(/^(?=.*[\s])./)
+      errors.add :password, ": must include at least one capital letter and one space"
+    elsif password.present? and not password.match(/^(?=.*[\s])./)
+      errors.add :password, ": must include at least one space"
+    elsif password.present? and not password.match(/^(?=.*[A-Z])./)
+      errors.add :password, ": must include at least one capital letter"
     end
   end
   
