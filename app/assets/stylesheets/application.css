@@ -42,7 +42,7 @@ h2, h3 {font-family: Oswald, Arial, sans-serif; font-weight:bold; line-height: 1
 img {max-width:100%; margin: 0;}
 p, textarea {margin: 0px; font-family: Arial; -webkit-margin-before: 0; -webkit-margin-after: 0; line-height: 1; font-size: 14px; line-height: 140%;}
 ul, ol {margin-top:15px; margin-bottom: 15px; margin-left: 20px;}
-li {margin-bottom:4px; font-family: Georgia; font-size: 16px; line-height: 150%;}
+li {margin-bottom:4px; font-family: Georgia; font-size: 16px; line-height: 140%;}
 input.edit-headline {font-family: Oswald, Arial, sans-serif; font-weight:bold;}
 input.edit-lede {font-family: Georgia; font-size: 16px; font-style: italic;}
 audio {background-color: #000;}
@@ -135,7 +135,7 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .listing-update-container {width:100%; padding-top: 12px;}
 .listing-update-slug {font-weight: normal; font-size: 14px; font-family: Oswald; line-height: 120%;}
 .listing-update-text {margin-bottom: 3px; font-size: 14px; font-family: Arial; line-height: 120%;}
-.listing-update-text p {margin-top: 3px; font-size: 14px; font-weight: normal; font-family: Georgia; line-height: 150%;}
+.listing-update-text p {margin-top: 3px; font-size: 14px; font-weight: normal; font-family: Georgia; line-height: 140%;}
 
 .news-alert {margin-bottom: 15px; margin-right: 15px; float:left;}
 .news-alert-update {margin-bottom: 15px; float:left;}
@@ -169,11 +169,11 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 
 .article-lede {margin: 0px 0px 10px 0px; font-family: Georgia; font-size: 16px; font-style: italic; line-height: 130%; padding-top: 5px; border-top: 1px dotted #999; padding-bottom: 5px; border-bottom: 1px dotted #999;}
 .article-slug {font-weight:bold;}
-.article-text {width: 100%; margin-bottom: 20px; font-size: 16px; line-height: 150%; font-family: Georgia;}
-.article-text p {margin-bottom: 10px; font-size: 16px; line-height: 150%; font-family: Georgia;}
+.article-text {width: 100%; margin-bottom: 20px; font-size: 16px; line-height: 140%; font-family: Georgia;}
+.article-text p {margin-bottom: 10px; font-size: 16px; line-height: 140%; font-family: Georgia;}
 .article-text a, .article-text a:visited {color: #005BBF; text-decoration:underline;}
 .article-text a:hover {color: #F1BF00; background-color: #ffffff;}
-.update-text, .update-text p {margin-bottom: 20px; font-size: 16px; line-height: 150%; font-family: Georgia;}
+.update-text, .update-text p {margin-bottom: 20px; font-size: 16px; line-height: 140%; font-family: Georgia;}
 .update-text a, .update-text a:visited {color: #005BBF; text-decoration:underline;}
 .update-text a:hover {color: #F1BF00; background-color: #ffffff;}
 
@@ -200,7 +200,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .email-sign-up-ssl-image {float:left; width: 10%;}
 .email-sign-up-quote {float:right; width: 90%; padding-left: 20px; padding-top: 10px; font-family: Georgia; font-style: italic;}
 .happy-subscribers {width: 90%; float:right; margin-top: 10px; margin-bottom: 20px;  margin-right: 0px; background-color: #FCF2CC; border-top: 1px dotted #999999; padding: 5px 15px; text-align: right;}
-.happy-subscribers p {margin-bottom: 10px; font-family: Georgia; font-style:italic; font-size: 15px; line-height: 150%; }
+.happy-subscribers p {margin-bottom: 10px; font-family: Georgia; font-style:italic; font-size: 16px; line-height: 140%; }
 
 .top-login-input-float {float:left; margin-right: 4px;}
 
