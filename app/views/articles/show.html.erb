@@ -196,6 +196,8 @@
       <%= render 'quick_login' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
+    <% elsif current_user.role == 'editor' %>
+      <%= markdown(@article.body) %>
     <% else %>
     <% end %>
   <% elsif ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
@@ -210,6 +212,8 @@
       <%= markdown(@article.body.truncate(600)) %>
       <%= render 'quick_login' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+      <%= markdown(@article.body) %>
+    <% elsif current_user.role == 'editor' %>
       <%= markdown(@article.body) %>
     <% else %>
     <% end %>

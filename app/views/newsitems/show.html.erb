@@ -67,6 +67,8 @@
       <%= render 'quick_login' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@newsitem.item) %>
+    <% elsif current_user.role == 'editor' %>
+      <%= markdown(@newsitem.item) %>
     <% else %>
     <% end %>
 <%# TESTING STUFF ENDS %>
