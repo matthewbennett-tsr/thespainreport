@@ -1,3 +1,34 @@
+<% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
+  <% if current_user.nil? && !paywall %>
+
+  <% elsif current_user.nil? && paywall %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall').modal();
+    });
+    </script>
+    <% end %>
+  <% elsif current_user.role == 'reader' && paywall_reader %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-reader').modal();
+    });
+    </script>
+    <% end %>
+  <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+    <% content_for :articlepaywall do %>
+    <script type="text/javascript" data-turbolinks-track="false">
+    $(window).load(function(){
+        $('#paywall-resubscribe').modal();
+    });
+    </script>
+    <% end %>
+  <% else %>
+  <% end %>
+<% end %>
+
 <% if @article.type.try(:name) == "LIVE BLOG" %>
   <% title 'LIVE BLOG: ' + @article.headline %>
 <% else %>
@@ -23,11 +54,6 @@
   <% end %>
   <meta property="og:site_name" content="The Spain Report"/>
   <meta property="og:updated_time" content="<%= @article.updated_at %>"/>
-  
-  <% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
-  <meta name="robots" content="noarchive">
-  <% else %>
-  <% end %>
 <% end %>
 
 <%= render 'tickerstories' %>
@@ -94,7 +120,7 @@
   
   <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
   <div class="article-text">
-      <%= markdown(@article.body) %>
+    <%= markdown(@article.body) %>
   
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
     Refresh for updates. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> or sign-up for e-mail alerts if you want notifications. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe here</a>
@@ -182,39 +208,7 @@
   <% end %>
   
   <div class="article-text"> <%# MAIN TEXT %>
-    
-<%# TESTING STUFF STARTS %>
-  <% if @article.type.try(:name) == "EDITORIAL" %>
-    <% if current_user.nil? && !paywall %>
-      <%= markdown(@article.body.truncate(1000)) %>
-      <%= render 'quick_login' %>
-    <% elsif current_user.nil? && paywall %>
-      <%= markdown(@article.body.truncate(1000)) %>
-      <%= render 'quick_login' %>
-    <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@article.body.truncate(1000)) %>
-      <%= render 'quick_login' %>
-    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
-      <%= markdown(@article.body) %>
-    <% else %>
-    <% end %>
-  <% elsif ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
     <%= markdown(@article.body) %>
-  <% else %>
-    <% if current_user.nil? && !paywall %>
-      <%= markdown(@article.body) %>
-    <% elsif current_user.nil? && paywall %>
-      <%= markdown(@article.body.truncate(1000)) %>
-      <%= render 'quick_login' %>
-    <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@article.body.truncate(1000)) %>
-      <%= render 'quick_login' %>
-    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
-      <%= markdown(@article.body) %>
-    <% else %>
-    <% end %>
-  <% end %>
-<%# TESTING STUFF ENDS %>
 
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <h3>Updates</h3>

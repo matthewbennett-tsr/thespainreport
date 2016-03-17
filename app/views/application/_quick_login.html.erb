@@ -1,0 +1,39 @@
+<div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title" id="myModalLabel">Please log in for instant access to your article…</h1>
+      </div>
+      <div class="modal-body">
+        <div style="padding-bottom: 14px; border-bottom: 1px solid #AA151B; margin-bottom: 0px;">
+        <%= form_tag '/login' do %>
+        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
+        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
+        <div class="top-login-input-float"><button type="submit" class="blueformbutton" id="login">Log In</button></div>
+        <div class="top-login-input-float" style="margin-top:7px;">
+          <% if flash.present? %>
+            <% flash.each do |name, msg| %>
+              <span style="background-color: #FEF9E6; padding: 5px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="clear"></div>
+        <% end %>
+        </div>
+        <div style="background-image: url(<%= asset_path 'thespainreport-evssl-white.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+        <h3 style="line-height: 120%;">…or subscribe now to understand more about Spain, in English</h3>
+        <p style="text-align:center; margin: 20px 0 20px 0;"><a href="https://www.thespainreport.com/subscriptions/new" class="blueformbutton">Subscribe Now</a></p>
+        <ul>
+        <li>Fast, original, independent reporting of Spain news, in English;</li>
+        <li>In-depth articles and editorial insight to help you understand Spain;</li>
+        <li>No ads, no spam: we value your time and our independence;</li>
+        <li>Instant access to everything: all our news, all our analysis;</li>
+        <li>Clean, lightning fast pages load on all of your devices;</li>
+        <li>Full-text e-mails hit your inbox as soon as we press 'publish'</li>
+        <li>You guarantee freedom of the press in the 21st Century;</li>
+        </ul>
+        <p style="margin: 0; width: 85%; font-style: italic;">“Your reporting and comment are excellent – please keep up the good work!"—John, Catalonia</p>
+        </div>
+        </div>
+      <div class="modal-footer">
+        <span style="font-family: Oswald; font-weight:bold; border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span>
+      </div>
+    </div>
