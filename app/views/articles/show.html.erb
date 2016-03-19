@@ -186,13 +186,13 @@
 <%# TESTING STUFF STARTS %>
   <% if @article.type.try(:name) == "EDITORIAL" %>
     <% if current_user.nil? && !paywall %>
-      <%= markdown(@article.body.truncate(1000)) %>
+      <%= markdown(@article.body.truncate(1250)) %>
       <%= render 'quick_login' %>
     <% elsif current_user.nil? && paywall %>
-      <%= markdown(@article.body.truncate(1000)) %>
+      <%= markdown(@article.body.truncate(1250)) %>
       <%= render 'quick_login' %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@article.body.truncate(1000)) %>
+      <%= markdown(@article.body.truncate(1250)) %>
       <%= render 'quick_login' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
