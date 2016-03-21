@@ -191,10 +191,16 @@
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'quick_login' %>
+    <% elsif current_user.role == 'reader' && !paywall_reader %>
+      <%= markdown(@article.body.truncate(1600)) %>
+      <%= render 'editorial_reader' %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
       <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'quick_login' %>
+      <%= render 'editorial_reader' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+      <%= markdown(@article.body.truncate(1600)) %>
+      <%= render 'resubscribe' %>
+    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
     <% elsif current_user.role == 'editor' %>
       <%= markdown(@article.body) %>
@@ -208,10 +214,15 @@
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(600)) %>
       <%= render 'quick_login' %>
+    <% elsif current_user.role == 'reader' && !paywall_reader %>
+      <%= markdown(@article.body) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
       <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'quick_login' %>
+      <%= render 'reader_subscribe' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+      <%= markdown(@article.body.truncate(600)) %>
+      <%= render 'resubscribe' %>
+    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
     <% elsif current_user.role == 'editor' %>
       <%= markdown(@article.body) %>

@@ -62,10 +62,15 @@
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@newsitem.item.truncate(100)) %>
       <%= render 'quick_login' %>
+    <% elsif current_user.role == 'reader' && !paywall_reader %>
+      <%= markdown(@newsitem.item) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
       <%= markdown(@newsitem.item.truncate(100)) %>
-      <%= render 'quick_login' %>
+      <%= render 'reader_subscribe' %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+      <%= markdown(@newsitem.item) %>
+      <%= render 'resubscribe' %>
+    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@newsitem.item) %>
     <% elsif current_user.role == 'editor' %>
       <%= markdown(@newsitem.item) %>
