@@ -1,0 +1,54 @@
+<% if current_user.nil? %>
+
+  <div class="sidebar-sign-up" >
+    <div style="background-image: url(<%= asset_path 'thespainreport-evssl-green.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+    <div class="email-sign-up-image">
+      <%= image_tag "tsr-multiple-green-300.jpg" %>
+    </div>
+    
+    <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> Now</span>
+    <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
+      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. Hits your inbox seconds after we press 'publish', works on all your devices. Join now to get extra free articles.
+    </p>
+    
+    <div class="email-sign-up-form">
+    <%= form_tag '/new_spain_report_member', :class => '', :id => 'payment-form' do |f| %>
+      <div class="email-input-float">
+        <input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
+      </div>
+      <div class="email-input-float email-button">
+        <button type="submit" class="blueformbutton">Join Now</button>
+      </div>
+      <div class="clear"></div>
+    <% end %>
+    </div>
+    
+    <div class="sidebar-sign-up-quote">
+      “Your reporting and comment are excellent – please keep up the good work!"—John, Catalonia
+    </div>
+
+    
+    <div class="clear"></div>
+  </div>
+  </div>
+  
+  <div class="sidebar-sign-up">
+    <div style="background-image: url(<%= asset_path 'thespainreport-evssl-green.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+        <span class="email-sign-up-title">Subscribe to understand more about Spain</span>
+        <ul>
+        <li>Fast, original, independent reporting, in English;</li>
+        <li>In-depth articles and editorial insight;</li>
+        <li>No ads, no spam, we value your time and attention;</li>
+        <li>Instant access to all our news and analysis;</li>
+        <li>Clean, lightning fast pages load on all your devices;</li>
+        <li>Full-text e-mails arrive as soon as we press publish;</li>
+        <li>You guarantee a free press in the 21st Century;</li>
+        </ul>
+        <p style="text-align:center; margin: 20px 0 20px 0;"><a href="https://www.thespainreport.com/subscriptions/new" class="blueformbutton">Subscribe Now</a></p>
+        <div class="sidebar-sign-up-quote">
+          “I enjoy reading The Spain Report and it’s my go to when I want to understand the news in Spain"—Geoff
+        </div>
+    </div>
+  </div>
+
+<% end %>

@@ -189,6 +189,12 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .update-related-article a:hover {background-color: #FCF2CC;}
 .article-updates {width: 90%; background-color: #FCF2CC; margin: 0 auto; border-top: 1px dotted #999999; padding: 7px 7px;}
 .liveblog-updates {background-color: #f5f5f5; margin-top:10px; padding: 20px; border-top: 1px solid #999999;}
+.liveblog-updates p {font-family: Arial; font-size: 14px; }
+
+.sidebar-sign-up {margin-top: 0px; margin-bottom: 10px; padding: 10px; background-color: #E3EDED; border: 1px solid #999999;}
+.sidebar-sign-up ul {margin-left: 30px;}
+.sidebar-sign-up ul li {font-family: Arial; font-size: 14px;}
+.sidebar-sign-up-quote {margin-top: 10px; font-style: italic; width: 80%;}
 
 .email-sign-up {margin-top: 20px; margin-bottom: 20px; padding: 10px; background-color: #E3EDED; border: 1px solid #999999;}
 .email-sign-up-image {float:right; width: 30%;}

@@ -69,8 +69,12 @@
 
 <div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %></div>
 
-<% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
 
+
+<% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
+  
+  <div class="content-left"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+  
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
       <%= link_to(@article.main.url) do %>
@@ -97,7 +101,7 @@
       <%= markdown(@article.body) %>
   
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
-    Refresh for updates. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> or sign-up for e-mail alerts if you want notifications. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe here</a>
+    Our live blogs are free to read. Refresh for updates. Follow <a href="https://twitter.com/thespainreport">@thespainreport</a> or sign-up for e-mail alerts if you want notifications. <a href="https://www.thespainreport.com/subscriptions/new">Subscribe here</a>
   </p>
   
   <% @article.stories.each do |story| %> <%# LIVE-BLOG LATEST FULL STORIES %>
@@ -155,7 +159,16 @@
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
   
     </div> <%# END OF LIVE-BLOG ARTICLE TEXT & ENTRIES %>
+  </div>
   
+  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+        
+        <%= render 'emailsignup_sidebar' %>
+   
+  </div>
+  
+  <div class="clear"></div>
+
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
 
   <div class="content-left"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
