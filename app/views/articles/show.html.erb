@@ -104,18 +104,7 @@
     Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts if you want notifications pushed to your device as soon as we publish them.
   </p>
   
-  <% @article.stories.each do |story| %> <%# LIVE-BLOG LATEST FULL STORIES %>
-    <h3>Full Articles & Analysis</h3>
-    <% if story.articles.published.reject {|a| a == @article}.present? %>
-      <ul style="list-style-type: none;">
-        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
-          <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p style="font-style:italic;">No full articles or analysis for this new story yet.</p>
-    <% end %>
-  <% end %>
+
   
   <h2 style="margin-top:30px;">Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
   
