@@ -24,10 +24,7 @@
   <meta property="og:site_name" content="The Spain Report"/>
   <meta property="og:updated_time" content="<%= @article.updated_at %>"/>
   
-  <% unless ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
   <meta name="robots" content="noarchive">
-  <% else %>
-  <% end %>
 <% end %>
 
 <%= render 'tickerstories' %>
