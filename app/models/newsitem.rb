@@ -12,6 +12,7 @@ class Newsitem < ActiveRecord::Base
   end
   
   scope :published, -> {where(status: ['published', 'updated'])}
+  scope :lastfive, -> {order('created_at DESC').limit(5)}
   scope :lasttwenty, -> {order('created_at DESC').limit(20)}
   scope :lastthirty, -> {order('created_at DESC').limit(30)}
   scope :lastfifty, -> {order('created_at DESC').limit(50)}

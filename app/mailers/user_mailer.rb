@@ -1,19 +1,35 @@
 class UserMailer < ApplicationMailer
+  helper ApplicationHelper
   default :from => "The Spain Report <matthew@thespainreport.com>"
 
   def registration_confirmation(user)
     @user = user
-    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (I): confirm your e-mail")
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (1): confirm your e-mail")
   end
   
   def password_choose(user)
     @user = user
-    mail to: user.email, subject: "Welcome to The Spain Report (II): choose your password"
+    mail to: user.email, subject: "Welcome to The Spain Report (2): choose your password"
+  end
+  
+  def new_user_stories(user)
+    @user = user
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (3): latest news articles to catch up")
+  end
+  
+  def new_user_indepth(user)
+    @user = user
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (4): FREE in-depth article")
+  end
+  
+  def new_user_editorial(user)
+    @user = user
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (5): FREE editorial")
   end
   
   def thank_you_for_subscribing(user)
     @user = user
-    mail to: user.email, subject: "Welcome to The Spain Report (III): thank you for subscribing"
+    mail to: user.email, subject: "Welcome to The Spain Report: thank you for subscribing"
   end
   
   def password_reset(user)

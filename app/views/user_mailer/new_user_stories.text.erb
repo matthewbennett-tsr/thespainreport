@@ -1,0 +1,16 @@
+Hi,
+
+Here are some stories to get you started
+  
+  <ul>
+    <% Article.published.lastten.order('created_at DESC').each do |article| %>
+      <li><%= link_to article.headline, article %></il>
+    <% end %>
+  </ul>
+  
+Thanks for reading.
+
+Kindest regards,
+
+Matthew Bennett
+Editor

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <table>
+      <tr>
+        <td style="font-family: Oswald, Arial; font-size: 16px;"><h1 style="font-family: Oswald, Arial; font-size: 16px;">Catch Up On The Latest Spain News</h1></td>
+      </tr>
+      <tr>
+        <td>
+          <p><span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;WELCOME&nbsp;&nbsp;</span></p>
+          <p>Hi,</p>
+          <p>A very warm welcome to The Spain Report!</p>
+          <p>Here is the list of the latest full articles we have published, so you can catch up:</p>          
+          <ul>
+            <% Article.news.published.lastfive.each do |article| %>
+              <li><%= link_to article.headline, article %></il>
+            <% end %>
+          </ul>
+          <p>And here are the latest five quick updates (a shorter format we use for announcements, press conference quotes, data points, live blogs and for updating full articles with the latest information; you might find them at the end of articles, in live blogs or on their own page):</p>          
+          <ul>
+            <% Newsitem.published.lastfive.each do |newsitem| %>
+              <li><%= link_to newsitem.slug, newsitem %></il>
+            <% end %>
+          </ul>
+          <p>Very kindest regards,</p>
+          <p>Matthew Bennett<br />Editor</p>
+          <p>(<strong>P.S.</strong> If you have <em>any problems at all</em> with the sign-up process, just e-mail us and we'll help you fix them right away.)</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-top: 1px solid #cccccc; font-family: Georgia, Times New Roman;">
+          <p><strong>E-MAIL ADMIN:</strong> Thank you for reading and subscribing to The Spain Report.
+            <ul>
+              <li>To manage your e-mail preferences, log in to <%= link_to "My Account", edit_user_url(@user) %>;</li>
+              <li>You can choose: "Everything: Articles & Updates", "Just Articles" or "I Don't Want Any E-mail";</li>
+              <li>You may update your e-mail preferences as often as you like;</li>
+            </ul>
+          </p>
+          <p>If you ever want to delete your account completely, please e-mail: subscriptions@thespainreport.com;</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="border-top: 1px solid #cccccc; font-family: Georgia, Times New Roman;">
+          <p>
+            The Spain Report Ltd.<br />
+            145-157 St John Street<br />
+            London<br />
+            EC1V 4PW<br />
+            United Kingdom<br /><br />
+            (0044) (0)2076085570<br />
+            https://www.thespainreport.com<br /><br />
+            Understand Important Spain News, In English<br /><br />
+            Copyright © 2015 The Spain Report Ltd, All rights reserved.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

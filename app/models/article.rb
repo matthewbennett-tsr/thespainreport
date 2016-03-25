@@ -32,7 +32,7 @@ class Article < ActiveRecord::Base
   scope :published, -> {where(status: ['published', 'updated'])}
   scope :lastone, -> {order('updated_at DESC').limit(1)}
   scope :lastfour, -> {order('updated_at DESC').limit(4)}
-  scope :lastfive, -> {order('updated_at DESC').limit(5)}
+  scope :lastfive, -> {order('created_at DESC').limit(5)}
   scope :lastsix, -> {order('updated_at DESC').limit(6)}
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
   scope :lastten, -> {order('created_at DESC').limit(10)}
