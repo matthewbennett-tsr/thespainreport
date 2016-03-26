@@ -206,7 +206,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .email-sign-up-prompt {float:left; margin-right: 4px;}
 .email-sign-up-ssl-image {float:left; width: 10%;}
 .email-sign-up-quote {float:right; width: 90%; padding-left: 20px; padding-top: 10px; font-family: Georgia; font-style: italic;}
-.happy-subscribers {width: 90%; float:right; margin-top: 10px; margin-bottom: 20px;  margin-right: 0px; background-color: #FCF2CC; border-top: 1px dotted #999999; padding: 5px 15px; text-align: right;}
+.happy-subscribers {width: 95%; float:left; margin-top: 10px; margin-bottom: 20px;  margin-left: 30px; background-color: #FCF2CC; border-top: 1px dotted #999999; padding: 5px 15px; text-align: left;}
 .happy-subscribers p {margin-bottom: 10px; font-family: Georgia; font-style:italic; font-size: 16px; line-height: 140%; }
 
 .top-login-input-float {float:left; margin-right: 4px;}
@@ -218,7 +218,10 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .inputtextarea {padding: 10px; line-height:140%;}
 .remember {margin-top: 5px; margin-right: 10px;}
 
-.subscription-form-container {width: 430px; margin: 15px auto;}
+.subscription-wrapper {margin-top: 20px; margin-bottom: 20px;}
+.subscription-image {float:right; width: 38%; margin-top: 10px; padding-right: 20px;}
+.subscription-form {float:right; width: 62%;}
+.subscription-form-container {width: 470px; margin: 0px 0px 0px 20px; background-color: #E3EDED; padding: 10px 20px; border: 1px solid #999999;}
 .subscription-form-section-top {padding-bottom: 5px;}
 .subscription-form-section-middle {margin-top: 5px; padding-top: 5px; margin-bottom: 10px; border-top: 1px dotted #999;}
 .subscription-form-section-bottom {margin-top: 5px; padding-top: 5px; border-top: 1px dotted #999;}
@@ -226,6 +229,7 @@ h1 .editorial-label {background-color: green; color: #ffffff; padding: 5px 7px; 
 .subscription-left-label-input {float:left; width: 160px; text-align: right; padding-top: 10px; padding-right: 5px; padding-left: 0px; font-family: Oswald;}
 .subscription-right-form-element {float:left;  text-align: left; padding-top: 5px;}
 .form-control {border-radius: 0;}
+.list-green-tick {background-image: url('green_tick.jpg'); background-repeat: no-repeat; background-position: left 2px; background-size: 20px 20px; padding: 0px 0px 7px 30px; list-style-type: none; line-height: 130%;}
 
 table {border-collapse: collapse;}
 th {font-weight:bold;}
@@ -333,11 +337,13 @@ video { width: 100% !important; height: auto !important;}
   .listing-update-text {font-size: 13px;}
   .meta {font-size: 11px;}
   .top-nav-right-block {display:none;}
+  .email-sign-up-title {font-size: 16px;}
 }
 
 @media only screen and (max-width: 855px) {
   h1 {font-size: 20px;}
   .input200, .input170 {width: 150px;}
+  .email-sign-up-title {font-size: 15px;}
 }
 
 @media only screen and (max-width: 802px) {
@@ -346,6 +352,9 @@ video { width: 100% !important; height: auto !important;}
   .modal {position: fixed; top: 5%; left: 50%; margin-top: -5%; margin-left: -50%;}
   .modal-dialog {width: 95%; overflow:scroll-y;}
   h1.modal-title {font-size: 18px;}
+  .subscription-wrapper {margin-top: 0px; margin-bottom: 0px;}
+  .subscription-image {width: 100%; margin-bottom: 20px;}
+  .subscription-form {width: 100%;}
 }
 
 @media only screen and (max-width: 770px) {

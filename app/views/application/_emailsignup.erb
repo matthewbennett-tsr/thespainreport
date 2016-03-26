@@ -9,7 +9,7 @@
     <div class="email-sign-up-text">
     <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> To Understand More</span>
     <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
-      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. Hits your inbox seconds after we press 'publish', works on all your devices. Join now to get some extra free articles.
+      Timely, original, independent reporting and analysis of the most important stories changing Spain, in English. No ads. No spam. Hits your inbox seconds after we press 'publish', works on all your devices. Join now to get some extra free articles and a free editorial.
     </p>
     
     <div class="email-sign-up-form">
@@ -24,7 +24,13 @@
         <button type="submit" class="blueformbutton">Join Now</button>
       </div>
       <div class="clear"></div>
-      
+      <%= hidden_field_tag 'sign_up_url', request.original_url %>
+      <% if controller_name == 'articles' && action_name == 'show' %>
+        <%= hidden_field_tag 'sign_up_stories', @article.stories.try(:ids) %>
+      <% elsif controller_name == 'newsitems' && action_name == 'show' %>
+        <%= hidden_field_tag 'sign_up_stories', @newsitem.stories.try(:ids) %>
+      <% else %>
+      <% end %> 
         
     <% end %>
     </div>
