@@ -1,0 +1,10 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Quotes</h1>
+
+<% @quotes.each do |quote| %>
+<div class="reporting-block">
+  <p><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %></strong> | <%= link_to quote.source.try(:name), quote.source %>, <%= quote.source.try(:job) %> <%= link_to quote.source.try(:organisation).try(:name), quote.source.try(:organisation) %></p>
+  <%= quote.quote.truncate(320) %> <%= link_to "Full Quote", quote %>
+</div>
+<% end %>

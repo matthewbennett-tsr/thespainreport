@@ -1,0 +1,23 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sources</h1>
+
+<table>
+  <tbody>
+    <% @sources.each do |source| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td style="padding: 2px 5px;"><%= link_to 'E', edit_source_path(source) %></td>
+        <td style="padding: 2px 5px;"><%= link_to source.name, source %></td>
+        <td style="padding: 2px 5px;"><%= source.job %></td>
+        <td style="padding: 2px 5px;"><%= link_to source.organisation.name, source.organisation %></td>
+        <td style="padding: 2px 5px;"><%= source.phone1 %></td>
+        <td style="padding: 2px 5px;"><%= source.email1 %></td>  
+        <td style="padding: 2px 5px;"><%= link_to 'D', source, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Source', new_source_path %>

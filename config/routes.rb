@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  resources :quotes
+  resources :organisations
+  resources :sources
   get 'entries/world_all'
   get 'entries/world_home'
   get 'entries/world_politics'

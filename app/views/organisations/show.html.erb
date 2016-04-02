@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @organisation.name %></h1>
+
+<div class="reporting-block">
+<p><strong>Website: </strong><%= link_to @organisation.website, @organisation.website %></p>
+<p><strong>Twitter: </strong><%= link_to '@' + @organisation.try(:twitter), 'https://twitter.com/' + @organisation.twitter %></p>
+<p><strong>Facebook: </strong><%= link_to @organisation.try(:facebook), 'https://www.facebook.com/' + @organisation.facebook %></p>
+<p><strong>YouTube: </strong><%= link_to @organisation.try(:youtube), 'https://www.youtube.com/user/' + @organisation.youtube.to_s + '/videos' %></p>
+</div>
+
+<div class="reporting-block">
+<p><strong>General E-mail: </strong><%= mail_to @organisation.generalemail, @organisation.generalemail %></p>
+<p><strong>General Phone: </strong><%= @organisation.generalphone %></p>
+</div>
+
+<div class="reporting-block">
+<p><strong>Press Page: </strong><%= link_to @organisation.presspage, @organisation.presspage %></p>
+<p><strong>Press E-mail: </strong><%= mail_to @organisation.pressemail, @organisation.pressemail %></p>
+<p><strong>Press Phone: </strong><%= @organisation.pressphone %></p>
+</div>
+
+<div style="float:left;"><h2>Sources</h2></div>
+<div style="float:left; margin-left: 10px; padding-top: 17px;"><%= link_to 'New Source', {:controller => "sources", :action => "new", :organisation_id => @organisation.id } %></div>
+<div class="clear"></div>
+
+<% if @organisation.sources.present? %>
+  <% @organisation.sources.order("name ASC").each do |source| %>
+    <div class="reporting-block">
+      <p style="margin-bottom: 3px;"><strong><%= link_to source.name, source %></strong> | <%= source.job %> | <%= source.phone1 %> | <%= source.email1 %> | <%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => source.id } %></p>
+      <% if source.quotes.present? %>
+        <div style="margin-left: 15px;">
+          <% source.quotes.order("created_at DESC").each do |quote| %>
+            <p><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %>:</strong> <%= link_to quote.quote.truncate(120), quote %></p>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>
+
+<%= link_to 'Edit', edit_organisation_path(@organisation) %> |
+<%= link_to 'Back', organisations_path %>

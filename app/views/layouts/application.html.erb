@@ -62,20 +62,18 @@
       
     <% elsif current_user.role == 'editor' %>
       <div style="float:left; padding-top: 6px;">
-        <div class="user-float-left-no"><%= link_to "Update", new_newsitem_path %></div>
-        <div class="user-float-left"><%= link_to "Article", new_article_path %></div>
-        <div class="user-float-left"><%= link_to "Summary", '/articles/new_summary' %></div>
-        <div class="user-float-left"><%= link_to "Story", new_story_path %></div>
-        <div class="user-float-left"><%= link_to "Audio", new_audio_path %></div>
-        <div class="user-float-left-no">––</div>
-        <div class="user-float-left-no"><%= link_to "Updates", newsitems_admin_path %></div>
-        <div class="user-float-left"><%= link_to "Articles", articles_admin_path %></div>
-        <div class="user-float-left"><%= link_to "Stories", stories_admin_path %></div>
-        <div class="user-float-left-no">––</div>
-        <div class="user-float-left-no"><%= link_to "Member", new_user_path %></div>
-        <div class="user-float-left"><%= link_to "Members", users_path %></div>
-        <div class="user-float-left"><%= link_to "Sales", salesemails_path %></div>
-        <div class="user-float-left-no">––</div>
+        <div class="user-float-left"><%= link_to "St", new_story_path %>——<%= link_to "Sts", stories_admin_path %></div>
+        <div class="user-float-left"><%= link_to "A", new_article_path %>——<%= link_to "Su", '/articles/new_summary' %>——<%= link_to "As", articles_admin_path %></div>
+        <div class="user-float-left"><%= link_to "U", new_newsitem_path %>——<%= link_to "Us", newsitems_admin_path %></div>
+        <div class="user-float-left"><%= link_to "Au", new_audio_path %></div>
+        <div class="user-float-left">———</div>
+        <div class="user-float-left"><%= link_to "Qs", quotes_path %></div>
+        <div class="user-float-left"><%= link_to "So", new_source_path %>——<%= link_to "Sos", sources_path %></div>
+        <div class="user-float-left"><%= link_to "O", new_organisation_path %>——<%= link_to "Os", organisations_path %></div>
+        <div class="user-float-left">———</div>
+        <div class="user-float-left"><%= link_to "M", new_user_path %>——<%= link_to "Ms", users_path %></div>
+        <div class="user-float-left"><%= link_to "Sa", new_salesemail_path %>——<%= link_to "Sas", salesemails_path %></div>
+        <div class="user-float-left">———</div>
       </div>
     <% else %>
     <% end %>

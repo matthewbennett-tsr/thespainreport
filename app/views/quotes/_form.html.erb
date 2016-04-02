@@ -1,0 +1,26 @@
+<%= form_for(@quote) do |f| %>
+  <% if @quote.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@quote.errors.count, "error") %> prohibited this quote from being saved:</h2>
+
+      <ul>
+      <% @quote.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="admin-block">
+    <% if params[:action] == "new" %>
+      <%= f.text_field :source_id, :value => params[:source_id], :readonly => true %>
+    <% else %>
+      <%= f.text_field :source_id, :readonly => true %>
+    <% end %>
+  <%= f.text_area :quote, :size => '130x10' %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

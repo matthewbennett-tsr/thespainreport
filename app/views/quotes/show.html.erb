@@ -1,0 +1,9 @@
+<p id="notice"><%= notice %></p>
+
+<div class="reporting-quote-block">
+  <p style="margin-bottom: 10px;"><strong><%= link_to @quote.source.name, @quote.source %> — <%= @quote.source.phone1 %> — <%= @quote.source.email1 %> | <%= @quote.created_at.strftime("%l:%M %P, %b %d %Y") %></strong></p>
+  <%= markdown(@quote.quote) %>
+</div>
+
+<%= link_to 'Edit', edit_quote_path(@quote) %> |
+<%= link_to 'Back', quotes_path %>

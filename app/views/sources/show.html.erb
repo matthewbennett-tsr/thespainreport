@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= @source.name %></h1>
+
+<div class="reporting-block">
+  <p><strong>Job:</strong> <%= @source.job %></p>
+  <p><strong>Organisation:</strong> <%= link_to @source.organisation.name, @source.organisation %></p>
+</div>
+
+<div class="reporting-block">
+  <p><strong>Twitter:</strong> <%= link_to '@' + @source.try(:twitter), 'https://twitter.com/' + @source.twitter %></p>
+  <p><strong>Facebook: </strong><%= link_to @source.try(:facebook), 'https://www.facebook.com/' + @source.facebook %></p>
+  <p><strong>YouTube: </strong><%= link_to @source.try(:youtube), 'https://www.youtube.com/user/' + @source.youtube.to_s + '/videos' %></p>
+  <p><strong>Blog: </strong><%= link_to @source.try(:blog), @source.try(:blog) %></p>
+</div>
+
+<div class="reporting-block">
+  <p><strong>E-mail 1:</strong> <%= mail_to @source.email1, @source.email1 %></p>
+  <p><strong>E-mail 2:</strong> <%= mail_to @source.email2, @source.email2 %></p>
+  <p><strong>E-mail 3:</strong> <%= mail_to @source.email3, @source.email3 %></p>
+</div>
+
+<div class="reporting-block">
+  <p><strong>Phone 1:</strong> <%= @source.phone1 %></p>
+  <p><strong>Phone 2:</strong> <%= @source.phone2 %></p>
+  <p><strong>Phone 3:</strong> <%= @source.phone3 %></p>
+</div>
+
+
+<div style="float:left;"><h2>Quotes & Notes</h2></div>
+<div style="float:left; margin-left: 10px; padding-top: 17px;"><%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => @source.id } %></div>
+<div class="clear"></div>
+
+<% if @source.quotes.present? %>
+  <% @source.quotes.order("created_at DESC").each do |quote| %>
+    <div class="reporting-quote-block">
+      <p style="margin-bottom: 10px;"><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %></strong></p>
+      <p><%= markdown(quote.quote) %></p>
+    </div>
+  <% end %>
+<% end %>
+
+<%= link_to 'Edit', edit_source_path(@source) %> |
+<%= link_to 'Back', sources_path %>

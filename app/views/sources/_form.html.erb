@@ -1,0 +1,47 @@
+<%= form_for(@source) do |f| %>
+  <% if @source.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@source.errors.count, "error") %> prohibited this source from being saved:</h2>
+
+      <ul>
+      <% @source.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="admin-block">
+  <p><strong>Name:</strong> <%= f.text_field :name %></p>
+  <p><strong>Job:</strong> <%= f.text_field :job %></p>
+  <p><strong>Organisation:</strong>
+  <% if params[:action] == "new" %>
+  <%= f.collection_select :organisation_id, Organisation.all.order("name ASC"), :id, :name, :selected => params[:organisation_id] %>
+  <% else %>
+  <%= f.collection_select :organisation_id, Organisation.all.order("name ASC"), :id, :name %>
+  <% end %>
+  </div>
+  
+  <div class="admin-block">
+  <p><strong>Twitter:</strong> <%= f.text_field :twitter %></p>
+  <p><strong>Facebook:</strong> <%= f.text_field :facebook %></p>
+  <p><strong>YouTube:</strong> <%= f.text_field :youtube %></p>
+  <p><strong>Blog:</strong> <%= f.text_field :blog %></p>
+  </div>
+  
+  <div class="admin-block">
+  <p><strong>E-mail 1:</strong> <%= f.text_field :email1 %></p>
+  <p><strong>E-mail 2:</strong> <%= f.text_field :email2 %></p>
+  <p><strong>E-mail 3:</strong> <%= f.text_field :email3 %></p>
+</div>
+
+<div class="admin-block">
+  <p><strong>Phone 1:</strong> <%= f.text_field :phone1 %></p>
+  <p><strong>Phone 2:</strong> <%= f.text_field :phone2 %></p>
+  <p><strong>Phone 3:</strong> <%= f.text_field :phone3 %></p>
+</div>
+  
+  <div class="admin-block">
+    <%= f.submit %>
+  </div>
+<% end %>

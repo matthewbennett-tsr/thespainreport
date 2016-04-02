@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160308153114) do
+ActiveRecord::Schema.define(version: 20160402180133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,6 +153,28 @@ ActiveRecord::Schema.define(version: 20160308153114) do
     t.integer "story_id"
   end
 
+  create_table "organisations", force: :cascade do |t|
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.string   "generalphone"
+    t.string   "generalemail"
+    t.string   "website"
+    t.string   "name"
+    t.string   "twitter"
+    t.string   "facebook"
+    t.string   "presspage"
+    t.string   "pressemail"
+    t.string   "pressphone"
+    t.string   "youtube"
+  end
+
+  create_table "quotes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "quote"
+    t.integer  "source_id"
+  end
+
   create_table "regions", force: :cascade do |t|
     t.string   "region"
     t.datetime "created_at",  null: false
@@ -170,6 +192,24 @@ ActiveRecord::Schema.define(version: 20160308153114) do
     t.string   "subject"
     t.text     "message"
     t.string   "send_order"
+  end
+
+  create_table "sources", force: :cascade do |t|
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+    t.string   "name"
+    t.string   "email1"
+    t.string   "email2"
+    t.string   "email3"
+    t.string   "phone1"
+    t.string   "phone2"
+    t.string   "phone3"
+    t.string   "twitter"
+    t.string   "facebook"
+    t.string   "youtube"
+    t.string   "job"
+    t.string   "blog"
+    t.integer  "organisation_id"
   end
 
   create_table "stories", force: :cascade do |t|

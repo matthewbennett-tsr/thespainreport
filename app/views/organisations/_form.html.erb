@@ -1,0 +1,36 @@
+<%= form_for(@organisation) do |f| %>
+  <% if @organisation.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@organisation.errors.count, "error") %> prohibited this organisation from being saved:</h2>
+
+      <ul>
+      <% @organisation.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  
+  <div class="admin-block">
+  <p>Name: <%= f.text_field :name %></p>
+  <p>Website: <%= f.text_field :website %></p>
+  <p>Twitter: <%= f.text_field :twitter %></p>
+  <p>Facebook: <%= f.text_field :facebook %></p>
+  <p>YouTube: <%= f.text_field :youtube %></p>
+  </div>
+  
+  <div class="admin-block">
+  <p>General E-mail: <%= f.text_field :generalemail %></p>
+  <p>General Phone: <%= f.text_field :generalphone %></p>
+  </div>
+  
+  <div class="admin-block">
+  <p>Press Page: <%= f.text_field :presspage %></p>
+  <p>Press E-mail: <%= f.text_field :pressemail %></p>
+  <p>Press Phone: <%= f.text_field :pressphone %></p>
+  </div>
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
