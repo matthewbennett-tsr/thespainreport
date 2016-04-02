@@ -1,0 +1,25 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Provinces</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @provinces.each do |province| %>
+      <tr class="<%= cycle("odd", "even") -%>">
+        <td class="reporting-td"><%= link_to 'E', edit_province_path(province) %></td>
+        <td class="reporting-td"><%= link_to province.name, province %></td>
+        <td class="reporting-td"><%= link_to 'D', province, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Province', new_province_path %>

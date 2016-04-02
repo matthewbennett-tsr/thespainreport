@@ -1,23 +1,21 @@
 <p id="notice"><%= notice %></p>
 
-<h1><%= @organisation.name %></h1>
+<h1><%= link_to @organisation.name, edit_organisation_path(@organisation) %></h1>
+
+<div class="reporting-block">
+<p><strong>Province: </strong><%= link_to @organisation.province.try(:name), @organisation.province unless @organisation.province.nil? %></p>
+</div>
 
 <div class="reporting-block">
 <p><strong>Website: </strong><%= link_to @organisation.website, @organisation.website %></p>
-<p><strong>Twitter: </strong><%= link_to '@' + @organisation.try(:twitter), 'https://twitter.com/' + @organisation.twitter %></p>
-<p><strong>Facebook: </strong><%= link_to @organisation.try(:facebook), 'https://www.facebook.com/' + @organisation.facebook %></p>
-<p><strong>YouTube: </strong><%= link_to @organisation.try(:youtube), 'https://www.youtube.com/user/' + @organisation.youtube.to_s + '/videos' %></p>
+<p><strong>Twitter: </strong><%= link_to '@' + @organisation.try(:twitter), 'https://twitter.com/' + @organisation.twitter unless @organisation.twitter.empty? %></p>
+<p><strong>Facebook: </strong><%= link_to @organisation.try(:facebook), 'https://www.facebook.com/' + @organisation.facebook unless @organisation.facebook.empty? %></p>
+<p><strong>YouTube: </strong><%= link_to @organisation.try(:youtube), 'https://www.youtube.com/user/' + @organisation.youtube.to_s + '/videos' unless @organisation.youtube.empty? %></p>
 </div>
 
 <div class="reporting-block">
 <p><strong>General E-mail: </strong><%= mail_to @organisation.generalemail, @organisation.generalemail %></p>
 <p><strong>General Phone: </strong><%= @organisation.generalphone %></p>
-</div>
-
-<div class="reporting-block">
-<p><strong>Press Page: </strong><%= link_to @organisation.presspage, @organisation.presspage %></p>
-<p><strong>Press E-mail: </strong><%= mail_to @organisation.pressemail, @organisation.pressemail %></p>
-<p><strong>Press Phone: </strong><%= @organisation.pressphone %></p>
 </div>
 
 <div style="float:left;"><h2>Sources</h2></div>
@@ -38,6 +36,3 @@
     </div>
   <% end %>
 <% end %>
-
-<%= link_to 'Edit', edit_organisation_path(@organisation) %> |
-<%= link_to 'Back', organisations_path %>

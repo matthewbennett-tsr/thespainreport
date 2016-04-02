@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :provinces
   resources :quotes
   resources :organisations
   resources :sources

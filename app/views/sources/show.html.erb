@@ -1,10 +1,11 @@
 <p id="notice"><%= notice %></p>
 
-<h1><%= @source.name %></h1>
+<h1><%= link_to @source.name, edit_source_path(@source) %></h1>
 
 <div class="reporting-block">
   <p><strong>Job:</strong> <%= @source.job %></p>
   <p><strong>Organisation:</strong> <%= link_to @source.organisation.name, @source.organisation %></p>
+  <p><strong>Province: </strong><%= link_to @source.province.name, @source.province unless @source.province.nil? %></p>
 </div>
 
 <div class="reporting-block">
@@ -26,7 +27,6 @@
   <p><strong>Phone 3:</strong> <%= @source.phone3 %></p>
 </div>
 
-
 <div style="float:left;"><h2>Quotes & Notes</h2></div>
 <div style="float:left; margin-left: 10px; padding-top: 17px;"><%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => @source.id } %></div>
 <div class="clear"></div>
@@ -39,6 +39,3 @@
     </div>
   <% end %>
 <% end %>
-
-<%= link_to 'Edit', edit_source_path(@source) %> |
-<%= link_to 'Back', sources_path %>

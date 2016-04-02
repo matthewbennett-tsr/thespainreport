@@ -19,7 +19,8 @@
   <%= f.collection_select :organisation_id, Organisation.all.order("name ASC"), :id, :name, :selected => params[:organisation_id] %>
   <% else %>
   <%= f.collection_select :organisation_id, Organisation.all.order("name ASC"), :id, :name %>
-  <% end %>
+  <% end %></p>
+  <p>Province: <%= f.collection_select :province_id, Province.all.order("name ASC"), :id, :name %></p>
   </div>
   
   <div class="admin-block">

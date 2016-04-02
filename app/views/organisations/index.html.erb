@@ -9,15 +9,8 @@
       <tr class="<%= cycle("odd", "even") -%>">
         <td style="padding: 2px 5px;"><%= link_to 'E', edit_organisation_path(organisation) %></td>
         <td style="padding: 2px 5px;"><%= link_to organisation.name, organisation %></td>
+        <td style="padding: 2px 5px;"><%= link_to organisation.province.name, organisation.province unless organisation.province.nil? %></td>
         <td style="padding: 2px 5px;"><%= organisation.generalphone %></td>
-        <td style="padding: 2px 5px;"><%= organisation.pressphone %></td>
-        <td style="padding: 2px 5px;"><%= organisation.pressemail %></td>
-        <td style="padding: 2px 5px;">
-           <% if organisation.presspage.present? %>
-            <%= link_to 'Press Page', organisation.presspage %>
-           <% else %>
-           <% end %>        
-        </td>
         <td style="padding: 2px 5px;">
           <% if organisation.twitter.present? %>
             <%= link_to '@' + organisation.twitter, 'https://twitter.com/' + organisation.twitter %>
@@ -31,7 +24,3 @@
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Organisation', new_organisation_path %>

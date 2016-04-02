@@ -1,0 +1,32 @@
+<p id="notice"><%= notice %></p>
+
+<h1><%= link_to @province.name, edit_province_path(@province) %></h1>
+
+<div class="reporting-quote-block">
+<strong>Towns:</strong> <%= @province.towns %>
+</div>
+
+<% if @province.organisations.present? %>
+<h2>Organisations</h2>
+<div class="reporting-quote-block">
+  <% @province.organisations.order("name ASC").each do |org| %>
+    <p style="margin-bottom: 2px;"><strong><%= link_to org.name, org %></strong> <%= org.generalphone %> <%= mail_to "E-mail", org.generalemail %> <%= link_to "Web", org.website %> <%= link_to "Twitter", 'https://twitter.com/' + org.twitter %></p>
+  <% end %>
+</div>
+<% end %>
+
+<% if @province.sources.present? %>
+<h2>Sources</h2>
+<div class="reporting-block">
+  <% @province.sources.order("name ASC").each do |source| %>
+    <p style="margin-bottom: 2px;"><strong><%= link_to source.name, source %></strong> <%= source.phone1 %> <%= source.phone2 %> </p>
+    <% if source.quotes.present? %>
+        <div style="margin-left: 15px; margin-bottom: 7px;">
+          <% source.quotes.order("created_at DESC").each do |quote| %>
+            <p><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %>:</strong> <%= link_to quote.quote.truncate(120), quote %></p>
+          <% end %>
+        </div>
+      <% end %>
+  <% end %>
+</div>
+<% end %>

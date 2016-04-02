@@ -1,0 +1,26 @@
+<%= form_for(@province) do |f| %>
+  <% if @province.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@province.errors.count, "error") %> prohibited this province from being saved:</h2>
+
+      <ul>
+      <% @province.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="reporting-block">
+    <strong>Name:</strong> <%= f.text_field :name %>
+  </div>
+  
+  <div class="reporting-block">
+    <strong>Towns:</strong><br />
+    <%= f.text_area :towns, :size => '130x10' %>
+  </div>
+  
+  <div class="reporting-block">
+    <%= f.submit %>
+  </div>
+<% end %>

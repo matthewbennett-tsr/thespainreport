@@ -12,22 +12,20 @@
   <% end %>
   
   <div class="admin-block">
-  <p>Name: <%= f.text_field :name %></p>
-  <p>Website: <%= f.text_field :website %></p>
-  <p>Twitter: <%= f.text_field :twitter %></p>
-  <p>Facebook: <%= f.text_field :facebook %></p>
-  <p>YouTube: <%= f.text_field :youtube %></p>
+  <p><strong>Name:</strong> <%= f.text_field :name %></p>
+  <p><strong>Province:</strong> <%= f.collection_select :province_id, Province.all.order("name ASC"), :id, :name %></p>
   </div>
   
   <div class="admin-block">
-  <p>General E-mail: <%= f.text_field :generalemail %></p>
-  <p>General Phone: <%= f.text_field :generalphone %></p>
+  <p><strong>Website:</strong> <%= f.text_field :website %></p>
+  <p><strong>Twitter:</strong> <%= f.text_field :twitter %></p>
+  <p><strong>Facebook:</strong> <%= f.text_field :facebook %></p>
+  <p><strong>YouTube:</strong> <%= f.text_field :youtube %></p>
   </div>
   
   <div class="admin-block">
-  <p>Press Page: <%= f.text_field :presspage %></p>
-  <p>Press E-mail: <%= f.text_field :pressemail %></p>
-  <p>Press Phone: <%= f.text_field :pressphone %></p>
+  <p><strong>General E-mail:</strong> <%= f.text_field :generalemail %></p>
+  <p><strong>General Phone:</strong> <%= f.text_field :generalphone %></p>
   </div>
   
   <div class="actions">
