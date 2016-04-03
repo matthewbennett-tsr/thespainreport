@@ -101,6 +101,6 @@ class QuotesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def quote_params
-      params[:quote].permit(:quote, :source_id)
+      params[:quote].permit(:messagetype, :quote, :source_id)
     end
 end

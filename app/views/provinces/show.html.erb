@@ -19,7 +19,7 @@
 <h2>Sources</h2>
 <div class="reporting-block">
   <% @province.sources.order("name ASC").each do |source| %>
-    <p style="margin-bottom: 2px;"><strong><%= link_to source.name, source %></strong> <%= source.phone1 %> <%= source.phone2 %> </p>
+    <p style="margin-bottom: 2px;"><strong><%= link_to source.name, source %></strong> <%= source.job %> <%= source.organisation.name unless source.organisation.nil? %> | <%= source.phone1 %> | <%= source.phone2 %> | <%= mail_to source.email1, source.email1 %> | <%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => source.id } %> </p>
     <% if source.quotes.present? %>
         <div style="margin-left: 15px; margin-bottom: 7px;">
           <% source.quotes.order("created_at DESC").each do |quote| %>

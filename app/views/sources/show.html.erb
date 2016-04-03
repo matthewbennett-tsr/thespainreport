@@ -34,7 +34,7 @@
 <% if @source.quotes.present? %>
   <% @source.quotes.order("created_at DESC").each do |quote| %>
     <div class="reporting-quote-block">
-      <p style="margin-bottom: 10px;"><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %></strong></p>
+      <p style="margin-bottom: 10px;"><strong><%= quote.created_at.strftime("%l:%M %P, %b %d %Y") %> | <%= quote.messagetype.to_s.humanize %></strong></p>
       <p><%= markdown(quote.quote) %></p>
     </div>
   <% end %>

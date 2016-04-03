@@ -17,6 +17,7 @@
     <% else %>
       <%= f.text_field :source_id, :readonly => true %>
     <% end %>
+  <%= f.collection_select(:messagetype, Quote::TYPES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %>
   <%= f.text_area :quote, :size => '130x10' %>
   </div>
 
