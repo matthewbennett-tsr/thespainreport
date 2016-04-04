@@ -11,40 +11,22 @@ Original, independent reporting. We talk to Spanish sources for you and human tr
 <%= render 'emailsignup' %>
 
 <div class="index-non-home">
-  <div class="listing-left">Updated</div>
-  <div class="listing-right">Latest Articles</div>
+  <div class="listing-left">Date</div>
+  <div class="listing-right">Latest Spain News</div>
   <div class="clear"></div>
 </div>
 
-<% @last30.each do |article| %>
+<% (Article.published.lastthirty + Newsitem.published.lastthirty).sort_by { |obj| obj.created_at }.reverse.each do |article| %>
   <div style="width:100%; padding-top: 10px;">
     <div class="listing-left">
-      <%= article.updated_at.to_formatted_s(:short) %>
+      <%= article.created_at.to_formatted_s(:short) %>
     </div>
-    <div class="listing-right">
+    <div class="listing-right" style="border-bottom: 1px dotted #999999;">
     <div class="listing-update-text">
-      <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
-        <span class="breaking listing-update-slug"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span><p><%= article.lede %></p>
-      <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
-        <span class="listing-update-slug"><span class="breaking">BREAKING</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
-        <span class="listing-update-slug"><span class="latest">LATEST</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% elsif article.type.name == "LIVE BLOG" && article.updated_at >= 12.hours.ago %>
-        <span class="listing-update-slug"><span class="breaking">LIVE BLOG</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% elsif article.type.name == 'EDITORIAL' %>
-        <span class="listing-update-slug"><span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% elsif article.status == 'updated' %>
-        <span class="listing-update-slug"><span class="updated">UPDATED</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% else %>  
-        <span class="listing-update-slug"><%= article.type.name unless article.type.nil? %>: <%= link_to article.headline, article %></span><p><%= article.lede %></p>
-      <% end %> 
-      </div>
-      <div class="meta">
-        <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
-        <%= raw(article.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
-        <%= raw(article.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
-      </div>
+      <span class="listing-update-slug"><%= link_to article.headline, article %></span>
+      <p><%= article.lede.truncate(130) %></p>
     </div>
-    <div style="clear:both;"></div>   
-  </div> 
-    <% end %>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>

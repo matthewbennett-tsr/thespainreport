@@ -20,4 +20,5 @@ class Newsitem < ActiveRecord::Base
   scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
   
   alias_attribute :headline, :slug
+  alias_attribute :lede, :item
 end
