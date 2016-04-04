@@ -25,7 +25,7 @@
 <% if @organisation.sources.present? %>
   <% @organisation.sources.order("name ASC").each do |source| %>
     <div class="reporting-block">
-      <p style="margin-bottom: 3px;"><strong><%= link_to source.name, source %></strong> | <%= source.job %> | <%= source.phone1 %> | <%= source.email1 %> | <%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => source.id } %></p>
+      <p style="margin-bottom: 3px;"><strong><%= link_to source.name, source %></strong> | <%= source.job %> | <%= link_to source.province.name, source.province unless source.province.nil? %> | <%= source.phone1 %>  | <%= source.phone2 %> | <%= mail_to source.email1, 'E-mail' unless source.email1.empty? %> | <%= link_to 'Twitter', 'https://twitter.com/' + source.twitter unless source.twitter.empty? %> | <%= link_to 'New Quote', {:controller => "quotes", :action => "new", :source_id => source.id } %></p>
       <% if source.quotes.present? %>
         <div style="margin-left: 15px;">
           <% source.quotes.order("created_at DESC").each do |quote| %>

@@ -11,14 +11,9 @@
         <td style="padding: 2px 5px;"><%= link_to organisation.name, organisation %></td>
         <td style="padding: 2px 5px;"><%= link_to organisation.province.name, organisation.province unless organisation.province.nil? %></td>
         <td style="padding: 2px 5px;"><%= organisation.generalphone %></td>
-        <td style="padding: 2px 5px;">
-          <% if organisation.twitter.present? %>
-            <%= link_to '@' + organisation.twitter, 'https://twitter.com/' + organisation.twitter %>
-          <% else %>
-          <% end %>
-        </td>
-        <td style="padding: 2px 5px;"><%= link_to organisation.try(:facebook), 'https://www.facebook.com/' + organisation.try(:facebook) %></td>
-        <td style="padding: 2px 5px;"><%= link_to organisation.try(:youtube), 'https://www.youtube.com/user/' + organisation.youtube.to_s + '/videos' %></td>
+        <td style="padding: 2px 5px;"><%= link_to 'Twitter', 'https://twitter.com/' + organisation.twitter unless organisation.twitter.empty? %></td>
+        <td style="padding: 2px 5px;"><%= link_to 'Facebook', 'https://www.facebook.com/' + organisation.try(:facebook) unless organisation.facebook.empty? %></td>
+        <td style="padding: 2px 5px;"><%= link_to 'YouTube', 'https://www.youtube.com/user/' + organisation.youtube.to_s + '/videos' unless organisation.youtube.empty? %></td>
         <td style="padding: 2px 5px;"><%= link_to 'D', organisation, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
