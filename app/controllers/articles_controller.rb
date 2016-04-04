@@ -71,7 +71,7 @@ class ArticlesController < ApplicationController
     @comments = @article.comments
     @last30items = Newsitem.published.lastthirty
   end
-  
+   
   # GET /articles/new
   def new
     if current_user.nil? 
