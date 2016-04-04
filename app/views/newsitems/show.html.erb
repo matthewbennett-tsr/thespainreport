@@ -90,6 +90,36 @@
 <% end %>
 
 </div> <%# END OF UPDATE TEXT %>
+
+<% @newsitem.stories.each do |story| %> <%# OTHER ARTICLES IN THIS STORY %>
+    <h3><%= story.story %></h3>
+      
+      <% if story.articles.published.reject {|a| a == @article}.present? && story.newsitems.published.present? %>
+        <ul style="list-style-type: none;">
+          <% (story.articles.published.lastfour.reject {|a| a == @article} | story.newsitems.published.lastfour).take(5).sort_by { |obj| obj.created_at }.each do |article| %>
+            <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
+          <% end %>
+        </ul>
+    <% elsif story.articles.published.reject {|a| a == @article}.present? && !story.newsitems.published.present? %>
+      <ul style="list-style-type: none;">
+          <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
+            <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
+          <% end %>
+      </ul>
+    <% elsif !story.articles.published.reject {|a| a == @article}.present? && story.newsitems.published.present? %>
+      <ul style="list-style-type: none;">
+          <% story.newsitems.published.lastfive.each do |article| %>
+            <li><span class="listing-update-slug"><%= link_to article.slug, article %></span></li>
+          <% end %>
+       </ul>
+    <% else %>
+        <p style="font-style:italic;">
+          No related articles or updates for this story yet.
+        </p>
+    <% end %>
+  
+  <% end %>
+
 </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
 
 <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
