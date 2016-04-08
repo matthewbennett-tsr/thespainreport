@@ -96,19 +96,19 @@
       
       <% if story.articles.published.present? && story.newsitems.published.reject {|a| a == @newsitem}.present? %>
         <ul style="list-style-type: none;">
-          <% (story.articles.published.lastfour | story.newsitems.published.lastfour.reject {|a| a == @newsitem}).take(5).sort_by { |obj| obj.created_at }.each do |article| %>
+          <% (story.articles.published.lastfour | story.newsitems.published.lastfour.reject {|a| a == @newsitem}).take(5).sort_by { |obj| obj.created_at }.reverse.each do |article| %>
             <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
           <% end %>
         </ul>
     <% elsif story.articles.published.present? && !story.newsitems.published.reject {|a| a == @newsitem}.present? %>
       <ul style="list-style-type: none;">
-          <% story.articles.published.lastsix.each do |article| %>
+          <% story.articles.published.lastsix.reverse.each do |article| %>
             <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
           <% end %>
       </ul>
     <% elsif !story.articles.published.present? && story.newsitems.published.reject {|a| a == @newsitem}.present? %>
       <ul style="list-style-type: none;">
-          <% story.newsitems.published.lastsix.reject {|a| a == @newsitem}.each do |article| %>
+          <% story.newsitems.published.lastsix.reject {|a| a == @newsitem}.reverse.each do |article| %>
             <li><span class="listing-update-slug"><%= link_to article.slug, article %></span></li>
           <% end %>
        </ul>
