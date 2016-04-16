@@ -22,7 +22,9 @@
 
 <% end %>
 
-<% if @user.stripe_customer_id? && @user.role == 'subscriber' %>
+<% if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE" && @user.role == 'subscriber' %>
+
+<% elsif @user.stripe_customer_id? && @user.role == 'subscriber' %>
 <strong>Customer ID:</strong> <%= @stripe_customer_details['id'] %><br />
 <strong>Customer E-mail:</strong> <%= @stripe_customer_details['description'] %><br />
 <strong>Customer Creation Date:</strong> <%= Time.at(@stripe_customer_details['created']).to_formatted_s(:long) %><br /><br />

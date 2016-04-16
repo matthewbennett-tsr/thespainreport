@@ -76,7 +76,9 @@ class UsersController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
-      if @user.stripe_customer_id?
+      if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
+      
+      elsif @user.stripe_customer_id?
         @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
         @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
       end
