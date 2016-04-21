@@ -20,7 +20,7 @@
 <% end %>
 <div style="margin-top: 5px;">
 <h1 style="font-size: 27px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h1>
-<p style="font-family: Georgia; margin: 3px 0px;"><%= article.lede %></p>
+<p style="font-family: Georgia; margin: 3px 0px;"><strong><%= article.type.name %>:</strong> <%= article.lede %></p>
 <div style="font-size: 11px; margin-bottom: 3px;">
 <span style="color: #999999;"><%= time_ago_in_words(article.updated_at) %> ago</span>
 <% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>

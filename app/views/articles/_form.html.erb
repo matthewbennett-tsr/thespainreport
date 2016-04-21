@@ -47,7 +47,7 @@
       <% end %>
     </div>
     <div style="margin-top: 5px;">
-      <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+      <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
       | 
       <% if action_name == 'new_summary' %>
         <%= f.collection_select :type_id, @types, :id, :name, :selected => 32 %>

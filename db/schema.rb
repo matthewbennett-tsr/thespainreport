@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160403002038) do
+ActiveRecord::Schema.define(version: 20160421151419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20160403002038) do
     t.string   "headline"
     t.string   "lede"
     t.text     "body"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",                   null: false
+    t.datetime "updated_at",                   null: false
     t.integer  "type_id"
     t.string   "urgency"
     t.string   "main"
@@ -31,6 +31,7 @@ ActiveRecord::Schema.define(version: 20160403002038) do
     t.string   "video"
     t.string   "summary"
     t.string   "summary_slug"
+    t.boolean  "topstory",     default: false
   end
 
   create_table "articles_categories", id: false, force: :cascade do |t|

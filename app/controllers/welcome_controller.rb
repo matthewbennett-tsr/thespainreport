@@ -1,7 +1,7 @@
 class WelcomeController < ApplicationController
 
   def index
-    @lasttopstory = Article.bignews.published.lastone
+    @lasttopstory = Article.topstory.published.lastone
     @lasteditorial = Article.editorial.published.lastone
     @lastindepth = Article.in_depth.published.lastone
     @lastpolitics = Article.published.politics.lastfive
