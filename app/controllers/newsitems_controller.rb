@@ -153,15 +153,15 @@ class NewsitemsController < ApplicationController
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
         if @newsitem.save && ["draft", "editing"].include?(@newsitem.status)
-          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save && ["published", "updated"].include?(@newsitem.status)
           twitter
           email
-          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save
-          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
           format.html { render :new }
@@ -183,15 +183,15 @@ class NewsitemsController < ApplicationController
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @newsitem.update(newsitem_params) && ["draft", "editing"].include?(@newsitem.status)
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update(newsitem_params) && ["published", "updated"].include?(@newsitem.status)
           twitter
           email
-          format.html { redirect_to :action => 'admin', notice: 'Newsitem was successfully updated.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update(newsitem_params)
-          format.html { redirect_to :action => 'admin', notice: 'Update was successfully created.' }
+          format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
           format.html { render :edit }

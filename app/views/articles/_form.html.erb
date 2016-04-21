@@ -13,14 +13,20 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 830px;">
-      <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
+    <div style="float:left; text-align:left; width: 775px;">
+      <%= text_field_tag 'short_slug', '', size: 18, maxlength: 15 %>
       <%= text_field_tag 'short_headline', '', size: 65, maxlength: 70 %>
       | T <%= check_box_tag 'tweet' %> | E <%= check_box_tag 'email' %>
       | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
     </div>
-    <div style="float:left; width: 55px; border-left: 1px solid #000; margin-left: 5px; padding-left: 5px; text-align:right;">
-      <%= f.submit %>
+    <div style="float:left; width: 155px; border-left: 1px solid #000; margin-left: 5px; margin-top: 2px; padding-left: 5px; text-align:right;">
+      <div style="float:left;">
+        <%= f.submit %>
+      </div>
+      <div style="float:left;">
+        &nbsp;<%= link_to 'Preview', @article %>
+      </div>
+      <div class="clear"></div>
     </div>
     <div class="clear"></div> 
   </div>
@@ -55,8 +61,6 @@
   
   
   <div class="admin-block">
-    
-    
     <%= f.text_area :summary, :size => '130x4', :maxlength => 450, :style => 'padding:5px;' %>
     <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   </div>
@@ -67,7 +71,7 @@
 <% if action_name == 'new_summary' %>
 
   <% Article.last24.published.each do |article| %>
-**<%= article.try(:summary_slug) %>:** <%= article.try(:summary) %> ([Read full article](<%= article_url(article) %>))
+<%= article.try(:summary) %> ([Read full article](<%= article_url(article) %>))
 
   <% end %>
 

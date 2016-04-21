@@ -13,32 +13,40 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 830px;">
-      <%= text_field_tag 'short_slug', '', size: 20, maxlength: 15 %>
-      <%= text_field_tag 'short_headline', '', size: 70, maxlength: 70 %>
+    <div style="float:left; text-align:left; width: 775px;">
+      <%= text_field_tag 'short_slug', '', size: 18, maxlength: 15 %>
+      <%= text_field_tag 'short_headline', '', size: 65, maxlength: 70 %>
       | T <%= check_box_tag 'tweet' %> | E <%= check_box_tag 'email' %>
       | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
     </div>
-    <div style="float:left; width: 55px; border-left: 1px solid #000; margin-left: 5px; padding-left: 5px; text-align:right;">
-      <%= f.submit %>
+    <div style="float:left; width: 155px; border-left: 1px solid #000; margin-top: 2px; margin-left: 5px; padding-left: 5px; text-align:right;">
+      <div style="float:left;">
+        <%= f.submit %>
+      </div>
+      <div style="float:left;">
+        &nbsp;<%= link_to 'Preview', @newsitem %>
+      </div>
+      <div class="clear"></div>
     </div>
     <div class="clear"></div> 
   </div>
   
+  <div class="admin-block" style="background-color: #ffcccc;">
+  <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
+    <%= f.check_box :remove_main %>
+   | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+   | <%= f.text_field :caption, :size => '62', :style => 'padding:5px;' %>
+  </div>
+  
   <div class="admin-block">
   <div style="float:left; text-align:left;">
-   <%= f.text_field :slug, :class => "edit-headline", :size => "75", :maxlength => 87, :style => 'padding:5px;' %>
+   <%= f.text_field :slug, :class => "edit-headline", :size => "83", :maxlength => 97, :style => 'padding:5px;' %>
    </div>
    <div class="clear"></div>
    </div>
   
   <div class="admin-block">
-    <%= f.text_field :summary_slug, :size => 25, :maxlength => 20, :style => 'padding:5px; margin-bottom: 5px;' %>
-    <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
-    <%= f.check_box :remove_main %>
-   | <%= f.text_field :video, :size => "13", :style => 'padding:5px;' %>
-   | <%= f.text_field :caption, :size => '42', :style => 'padding:5px;' %>
-    <%= f.text_area :summary, :size => '130x2', :maxlength => 250, :style => 'padding:5px;' %>
+    <%= f.text_area :summary, :size => '130x4', :maxlength => 450, :style => 'padding:5px;' %>
     <%= f.hidden_field :imagesource %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   </div>
   
