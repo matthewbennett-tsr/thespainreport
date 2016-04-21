@@ -222,7 +222,11 @@
     <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
     <% elsif current_user.role == 'editor' %>
-      <%= markdown(@article.body) %>
+      <% if @article.summary.present? && !@article.body.present? %>
+        <%= @article.summary %>
+      <% elsif %>
+        <%= markdown(@article.body) %>
+      <% end %>
     <% else %>
     <% end %>
   <% end %>
