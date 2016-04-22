@@ -30,11 +30,20 @@
 <%= render 'tickerstories' %>
 
 <h1>
-<% if @article.type.try(:name) == "LIVE BLOG" %>
-  LIVE BLOG: 
+<% if current_user.nil? || current_user.role != 'editor' %>
+  <% if @article.type.try(:name) == "LIVE BLOG" %>
+    LIVE BLOG: 
+  <% else %>
+  <% end %>
+  <%= @article.headline %>
+<% elsif current_user.role == 'editor' %>
+  <% if @article.type.try(:name) == "LIVE BLOG" %>
+    LIVE BLOG: 
+  <% else %>
+  <% end %>
+  <%= link_to @article.headline, edit_article_path(@article) %>
 <% else %>
 <% end %>
-<%= @article.headline %>
 </h1>
 
 <% if @article.urgency == 'majorbreaking' && @article.updated_at >= 3.hours.ago %>

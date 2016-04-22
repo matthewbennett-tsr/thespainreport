@@ -27,7 +27,14 @@
 
 <%= render 'tickerstories' %>
 
-<h1><%= @newsitem.slug %></h1>
+<h1>
+<% if current_user.nil? || current_user.role != 'editor' %>
+  <%= @newsitem.slug %>
+<% elsif current_user.role == 'editor' %>
+  <%= link_to @newsitem.slug, edit_newsitem_path(@newsitem) %>
+<% else %>
+<% end %>
+</h1>
 
 <% if @newsitem.status == 'updated' %>
   <div class="news-alert-update"><span class="updated-label">ORIGINAL UPDATED</span></div>
