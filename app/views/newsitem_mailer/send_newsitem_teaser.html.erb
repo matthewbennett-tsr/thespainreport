@@ -6,15 +6,20 @@
   <body>
     <table>
       <tr>
-        <td style="font-family: Oswald, Arial; font-size: 16px; border-bottom: 1px solid #AA151B;"><h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @newsitem.slug %></h1></td>
+        <td style="font-family: Oswald, Arial; font-size: 16px; border-bottom: 1px solid #AA151B;">
+          <h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @newsitem.slug %></h1>
+        </td>
       </tr>
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+            <%= @newsitem.item.truncate(200) %>
+          </p>
+          <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <% if @newsitem.article.present? %>
-            <%= link_to 'Read the update here now', article_url(@newsitem.article, anchor: @newsitem.id) %>
+            <%= link_to 'Read the full update here now', article_url(@newsitem.article, anchor: @newsitem.id) %>
           <% else %>
-            <%= link_to 'Read the update here now', newsitem_url(@newsitem) %>
+            <%= link_to 'Read the full update here now', newsitem_url(@newsitem) %>
           <% end %>
           </p>
         </td>
@@ -27,7 +32,7 @@
       <tr>
         <td>
           <p>
-            <span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new">Get full text e-mails with the latest Spain news as soon as we hit 'publish'</a>.
+            <span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new">You get full text e-mails with the latest Spain news and analysis as soon as we hit 'publish'</a>.
           </p>
         </td>
       </tr>

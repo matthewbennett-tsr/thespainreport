@@ -36,6 +36,9 @@
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+            <%= @article.body.truncate(600) %>
+          </p>
+          <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:100%;">
             <%= link_to 'Read the full article here now', article_url(@article) %>
           </p>
         </td>
@@ -48,7 +51,7 @@
       <tr>
         <td>
           <p>
-            <span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new">Get full text e-mails with the latest Spain news as soon as we hit 'publish'</a>.
+            <span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new">You get full text e-mails with the latest Spain news and analysis as soon as we hit 'publish'</a>.
           </p>
         </td>
       </tr>
