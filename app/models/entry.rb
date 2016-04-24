@@ -1,14 +1,22 @@
 class Entry < ActiveRecord::Base
   belongs_to :feed
-
-	validates :atom_id, uniqueness: {scope: :feed_id}
-
-	default_scope {
+  validates :atom_id, uniqueness: {scope: :feed_id}
+  validates :url, uniqueness: :scope {:title}
+	
+  default_scope {
 		order('created_at DESC')
 	}
   
   def self.search(search)
     where("title @@ ?", search)
+  end
+  
+  def self.deduplicate
+    grouped = all.group_by { |entry| entry.url }
+    grouped.values.each do |entry_urls|
+      first_one = entry_urls.shift
+      entry_urls.each { |dup| dup.destroy }
+    end
   end
   
   scope :indexlimit, -> {order('updated_at DESC').limit(250)}
