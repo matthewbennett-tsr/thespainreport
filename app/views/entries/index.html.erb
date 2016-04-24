@@ -2,6 +2,8 @@
 
 <h1>Spain News Reader</h1>
 
+There are <%= @feed_count %> feeds and <%= @entry_count %> entries.
+
 <%= render :partial => 'index', :locals => {:entries => @entries} %>
 
 <br>
