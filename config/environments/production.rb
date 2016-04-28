@@ -51,11 +51,11 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'email-smtp.eu-west-1.amazonaws.com',
-    port: 465,
+    port: 587,
     domain: 'thespainreport.com',
     user_name: ENV["SMTP_USER"],
     password: ENV["SMTP_PASSWORD"],
-    authentication: 'plain',
+    authentication: 'login',
     enable_starttls_auto: true}
 
   # Use the lowest log level to ensure availability of diagnostic information
