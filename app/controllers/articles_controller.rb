@@ -179,12 +179,6 @@ class ArticlesController < ApplicationController
       User.wantsarticles.editors.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
 	  end
-	  User.wantsarticles.subscribers.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-	  User.wantsarticles.readers.each do |user|
-        ArticleMailer.delay.send_article_teaser(@article, user)
-	  end
 	end
   end
 
