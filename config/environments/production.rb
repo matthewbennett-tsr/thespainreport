@@ -50,7 +50,7 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'email-smtp.eu-west-1.amazonaws.com',
+    address: 'https://news.thespainreport.com',
     port: 587,
     domain: 'thespainreport.com',
     user_name: ENV["SMTP_USER"],
