@@ -55,7 +55,7 @@ Rails.application.configure do
     domain: 'thespainreport.com',
     user_name: ENV["SMTP_USER"],
     password: ENV["SMTP_PASSWORD"],
-    authentication: 'login',
+    authentication: 'plain',
     enable_starttls_auto: true}
 
   # Use the lowest log level to ensure availability of diagnostic information
