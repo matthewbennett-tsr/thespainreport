@@ -50,11 +50,11 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: 'smtp.mandrillapp.com',
+    address: 'news.thespainreport.com',
     port: 587,
     domain: 'thespainreport.com',
-    user_name: ENV["MANDRILL_USER"],
-    password: ENV["MANDRILL_API_KEY"],
+    user_name: ENV["SMTP_USER"],
+    password: ENV["SMTP_PASSWORD"],
     authentication: 'plain',
     enable_starttls_auto: true}
 
