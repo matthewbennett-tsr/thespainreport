@@ -81,8 +81,6 @@ class SubscriptionsController < ApplicationController
     UserMailer.delay.registration_confirmation(user)
     UserMailer.delay.password_choose(user)
     UserMailer.delay.new_user_stories(user)
-    UserMailer.delay.new_user_indepth(user)
-    UserMailer.delay.new_user_editorial(user)
   end
   
   # GET /subscriptions

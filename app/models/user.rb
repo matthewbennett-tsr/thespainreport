@@ -23,6 +23,8 @@ class User < ActiveRecord::Base
   scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
   scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}
   scope :readers, -> {where(role: 'reader')}
+  scope :newreaders, -> {readers.thirtydays}
+  scope :offerreaders, -> {readers.where('reader_offer is true')}
   scope :editors, -> {where(role: 'editor')}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
@@ -49,6 +51,7 @@ class User < ActiveRecord::Base
   scope :nineteendays, -> {where('created_at <= ? and created_at >= ?', 432.hours.ago, 456.hours.ago)}
   scope :twentydays, -> {where('created_at <= ? and created_at >= ?', 456.hours.ago, 480.hours.ago)}
   scope :twentyonedays, -> {where('created_at <= ? and created_at >= ?', 480.hours.ago, 504.hours.ago)}
+  scope :thirtydays, -> {where('created_at <= ? and created_at >= ?', 720.hours.ago, 744.hours.ago)}
   
   has_many :comments
   

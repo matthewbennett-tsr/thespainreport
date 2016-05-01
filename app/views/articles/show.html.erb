@@ -192,11 +192,10 @@
 <%# TESTING STUFF STARTS %>
   <% if @article.type.try(:name) == "EDITORIAL" %>
     <% if current_user.nil? && !paywall %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'quick_login' %>
+      <%= markdown(@article.body) %>
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'quick_login' %>
+      <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && !paywall_reader %>
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'editorial_reader' %>
@@ -219,7 +218,7 @@
       <%= markdown(@article.body) %>
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'quick_login' %>
+      <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && !paywall_reader %>
       <%= markdown(@article.body) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
@@ -478,7 +477,10 @@
 <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
 </div>
 
-<%= render 'emailsignup' %>
+<% if current_user.nil? && !paywall %>
+  <%= render 'emailsignup' %>
+<% else %>
+<% end %>
 
 <% if current_user %>
 Now it's your turn <strong><%= current_user.name %></strong>. What do you think?

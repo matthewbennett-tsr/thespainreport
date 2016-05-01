@@ -14,7 +14,7 @@ class UserMailer < ApplicationMailer
   
   def new_user_stories(user)
     @user = user
-    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (3): latest news articles to catch up")
+    mail(:to => "<#{user.email}>", :subject => "Welcome to The Spain Report (3): catch up with these articles")
   end
   
   def new_user_indepth(user)

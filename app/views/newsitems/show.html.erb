@@ -69,8 +69,8 @@
     <% if current_user.nil? && !paywall %>
       <%= markdown(@newsitem.item) %>
     <% elsif current_user.nil? && paywall %>
-      <%= markdown(@newsitem.item.truncate(100)) %>
-      <%= render 'quick_login' %>
+      <%= markdown(@newsitem.item.truncate(250)) %>
+      <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && !paywall_reader %>
       <%= markdown(@newsitem.item) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
@@ -298,7 +298,10 @@
 <strong>First published:</strong> <%= @newsitem.created_at.strftime("%b %d, %Y, %H:%M") %> | <strong>Last updated:</strong> <%= @newsitem.updated_at.strftime("%b %d, %Y, %H:%M") %>
 </div>
 
-<%= render 'emailsignup' %>
+<% if current_user.nil? && !paywall %>
+  <%= render 'emailsignup' %>
+<% else %>
+<% end %>
 
 <% if current_user %>
 Now it's your turn <strong><%= current_user.name unless current_user.name.blank? %></strong>. What do you think?
