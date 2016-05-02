@@ -74,8 +74,7 @@
     <% elsif current_user.role == 'reader' && !paywall_reader %>
       <%= markdown(@newsitem.item) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@newsitem.item.truncate(100)) %>
-      <%= render 'reader_subscribe' %>
+      <%= markdown(@newsitem.item) %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@newsitem.item) %>
       <%= render 'resubscribe' %>

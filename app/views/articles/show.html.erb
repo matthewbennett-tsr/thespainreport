@@ -197,11 +197,9 @@
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && !paywall_reader %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'editorial_reader' %>
+      <%= markdown(@article.body) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'editorial_reader' %>
+      <%= markdown(@article.body) %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'resubscribe' %>
@@ -222,8 +220,7 @@
     <% elsif current_user.role == 'reader' && !paywall_reader %>
       <%= markdown(@article.body) %>
     <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'reader_subscribe' %>
+      <%= markdown(@article.body) %>
     <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
       <%= markdown(@article.body.truncate(600)) %>
       <%= render 'resubscribe' %>

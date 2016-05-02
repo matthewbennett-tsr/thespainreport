@@ -30,9 +30,9 @@ class ApplicationController < ActionController::Base
 
   def paywall
     if controller_name == 'articles' && action_name == 'show'
-      cookies[:visits].to_i > 3
+      cookies[:visits].to_i > 5
     elsif controller_name == 'newsitems' && action_name == 'show'
-      cookies[:visits].to_i > 3
+      cookies[:visits].to_i > 5
     else
     end
   end
