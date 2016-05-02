@@ -22,6 +22,11 @@
     <% end %>
     </div>
     </div>
+    <div class="email-input-float">
+    <% if current_user.role == 'editor' %>
+      <%= f.datetime_field :created_at, :size => '35' %>
+    <% end %>
+    </div>
     <div class="clear"></div>
   </div>
   <div class="field">

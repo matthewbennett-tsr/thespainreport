@@ -6,18 +6,17 @@
       <div style="margin-bottom: 5px; padding: 10px 0px; border-bottom: 1px dotted #999999;">
         <div><strong><%= comment.user.name unless comment.user.nil? %></strong> | 
           <% if comment.user.blank? %>
-            Deleted User
+            Former Reader
           <% else %>
           <% if comment.user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 2px 5px;">
+            <span style="background-color: green; color: white; padding: 2px 2px 2px 5px;">Editor
           <% elsif comment.user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+            <span style="background-color: #B78727; color: white; padding: 2px 2px 2px 5px;">Subscriber
           <% elsif comment.user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+            <span style="background-color: #eeeeee; color: black; padding: 2px 2px 2px 5px;">New Reader
           <% else %>
             <span>
-          <% end %>
-            <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span> | <%= comment.updated_at.to_formatted_s(:short) %> | 
+          <% end %></span>&nbsp;| <%= comment.updated_at.to_formatted_s(:short) %> | 
             
             <% if comment.commentable_type == 'Article' %>
               <%= link_to comment.commentable.headline.truncate(90), comment.commentable %>

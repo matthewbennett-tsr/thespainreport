@@ -66,21 +66,22 @@
 <div class="update-text">
 
 <%# TESTING STUFF STARTS %>
-    <% if current_user.nil? && !paywall %>
+    <% if current_user.nil? && !paywall %> <%# NEW VISITOR, UP TO X ARTICLES %>
       <%= markdown(@newsitem.item) %>
-    <% elsif current_user.nil? && paywall %>
+    <% elsif current_user.nil? && paywall %> <%# NEW VISITOR, SIGN-UP PROMPT AFTER X ARTICLES %>
       <%= markdown(@newsitem.item.truncate(250)) %>
       <%= render 'quick_login_one' %>
-    <% elsif current_user.role == 'reader' && !paywall_reader %>
+    <% elsif current_user.role == 'reader' && current_user.created_at > 30.days.ago %> <%# NEW SUBSCRIBER ON 30-DAY TRIAL %>
       <%= markdown(@newsitem.item) %>
-    <% elsif current_user.role == 'reader' && paywall_reader %>
-      <%= markdown(@newsitem.item) %>
-    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
+    <% elsif current_user.role == 'reader' && current_user.created_at < 30.days.ago %> <%# NEW SUBSCRIBER AFTER 30-DAY TRIAL %>
+      <%= markdown(@newsitem.item.truncate(250)) %>
+      <%= render 'reader_subscribe' %>
+    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %> <%# LAPSED SUBSCRIBER %>
       <%= markdown(@newsitem.item) %>
       <%= render 'resubscribe' %>
-    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
+    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %> <%# SUBSCRIBER %>
       <%= markdown(@newsitem.item) %>
-    <% elsif current_user.role == 'editor' %>
+    <% elsif current_user.role == 'editor' %> <%# STAFF %>
       <%= markdown(@newsitem.item) %>
     <% else %>
     <% end %>
@@ -331,19 +332,20 @@ Now it's your turn <strong><%= current_user.name unless current_user.name.blank?
     <div style="width: 100%;">
       <strong><%= comment.user.name unless comment.user.blank? %></strong> | 
           <% if comment.user.blank? %>
-            Deleted User
+            Former Reader
           <% else %>
             <% if comment.user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 2px 5px;">
+            <span style="background-color: green; color: white; padding: 2px 2px 2px 5px;">Editor
           <% elsif comment.user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+            <span style="background-color: #B78727; color: white; padding: 2px 2px 2px 5px;">Subscriber
           <% elsif comment.user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+            <span style="background-color: #eeeeee; color: black; padding: 2px 2px 2px 5px;">New Reader
           <% else %>
             <span>
           <% end %>
-          <%= comment.user.role.to_s.humanize unless comment.user.blank? %></span>
-        <% end %> | <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
+          </span>
+        <% end %>
+        &nbsp;| <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
     </div>
     <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
       <%= comment.comment %>
