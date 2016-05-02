@@ -45,19 +45,18 @@
 
 <% if @newsitem.main? %>
   <div class="main-image">
-   <%= link_to(@newsitem.main.url) do %>
      <%= image_tag @newsitem.main.url if @newsitem.main? %>
-   <% end %>
-   <div class="main-caption">
-     <%= @newsitem.caption %> <% '<strong>Source:</strong>' unless @newsitem.imagesource.empty? %> <%= @newsitem.imagesource %></div>
+    <div class="main-caption">
+     <%= @newsitem.caption %>
+    </div>
   </div>
 <% elsif @newsitem.video? %>
   <div class="main-image">
-  <div class="video-wrapper">
-    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@newsitem.video}?rel=0&amp;showinfo=0") %> 
-  </div>
+    <div class="video-wrapper">
+      <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@newsitem.video}?rel=0&amp;showinfo=0") %> 
+    </div>
     <div class="main-caption">
-      <%= @newsitem.caption %> <% '<strong>Source:</strong>' unless @newsitem.imagesource.empty? %> <%= @newsitem.imagesource %>
+      <%= @newsitem.caption %>
     </div>
   </div>
 <% else %>

@@ -83,9 +83,7 @@
   
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
-      <%= link_to(@article.main.url) do %>
         <%= image_tag @article.main.url if @article.main? %>
-      <% end %>
     <div class="main-caption">
       <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
     </div>
@@ -115,7 +113,7 @@
     <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
       <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
         <div class="liveblog-updates">
-          <span class="red" style="font-style: italic;"> <%# LIVE-BLOG ENTRY DATE & LINK %>
+          <span style="font-style: italic; font-size: 13px;"> <%# LIVE-BLOG ENTRY DATE & LINK %>
             <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
               <%= time_ago_in_words(newsitem.updated_at).capitalize %> ago: <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %>
             <% end %>
@@ -123,11 +121,9 @@
           <h3><%= newsitem.slug %></h3> <%# LIVE-BLOG SLUG TITLE %>
           <% if newsitem.main? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
             <div class="main-image-liveblog-update">
-              <%= link_to newsitem do %>
                 <%= image_tag newsitem.main.url if newsitem.main? %>
-              <% end %>
               <div class="liveblog-caption">
-                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+                <%= newsitem.caption %>
               </div>
             </div>
           <% elsif newsitem.video? %>
@@ -136,7 +132,7 @@
                 <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
               </div>
               <div class="liveblog-caption">
-                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+                <%= newsitem.caption %>
               </div>
             </div> 
           <% else %>
@@ -168,9 +164,7 @@
   
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
-      <%= link_to(@article.main.url) do %>
         <%= image_tag @article.main.url if @article.main? %>
-      <% end %>
     <div class="main-caption">
       <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
     </div>
