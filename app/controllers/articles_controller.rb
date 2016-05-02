@@ -159,9 +159,11 @@ class ArticlesController < ApplicationController
   def tweetvideo
    'https://www.youtube.com/watch?v=' + @article.video
   end
-
+  
   def emailsummaries
-    if params[:email] == '1'
+    if @article.email_to == 'none'
+    
+    elsif @article.email_to == 'all'
       User.wantssummariesbreaking.editors.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
 	  end
@@ -171,21 +173,59 @@ class ArticlesController < ApplicationController
 	  User.wantssummariesbreaking.readers.each do |user|
         ArticleMailer.delay.send_article_teaser(@article, user)
 	  end
-	end
+    elsif @article.email_to == 'readers'
+      User.wantssummariesbreaking.readers.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+    elsif @article.email_to == 'subscribers'
+      User.subscribers.wantssummariesbreaking.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+	  end
+    else
+    end
   end
   
   def emailarticles
-    if params[:email] == '1'
-      User.wantsarticles.editors.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
+    if @article.email_to == 'none'
+    
+    elsif @article.email_to == 'all'
+      if @article.type.name == 'BLOG'
+        User.all.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
+      else
+        User.wantsarticles.editors.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+        end
+	    User.wantsarticles.subscribers.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
+	    User.wantsarticles.readers.each do |user|
+          ArticleMailer.delay.send_article_teaser(@article, user)
+	    end
+      end
+    elsif @article.email_to == 'readers'
+      if @article.type.name == 'BLOG'
+        User.readers.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
+      else
+        User.wantsarticles.readers.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
 	  end
-	  User.wantsarticles.subscribers.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
+    elsif @article.email_to == 'subscribers'
+      if @article.type.name == 'BLOG'
+        User.subscribers.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
+      else
+        User.subscribers.wantsarticles.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
 	  end
-	  User.wantsarticles.readers.each do |user|
-        ArticleMailer.delay.send_article_teaser(@article, user)
-	  end
-	end
+    else
+    end
   end
 
   def new_summary
@@ -216,7 +256,7 @@ class ArticlesController < ApplicationController
         if @article.save && ["draft", "editing"].include?(@article.status)
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
+        elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           emailsummaries
 		  twitter
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
@@ -227,7 +267,7 @@ class ArticlesController < ApplicationController
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
-          format.html { render :new }
+          format.html { redirect_to edit_article_path(@article) }
           format.json { render json: @article.errors, status: :unprocessable_entity }
         end
       end
@@ -248,7 +288,7 @@ class ArticlesController < ApplicationController
         if @article.update(article_params) && ["draft", "editing"].include?(@article.status)
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY", "BLOG"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
+        elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           emailsummaries
 		  twitter
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully udpated.' }
@@ -295,6 +335,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:body, :caption, :created_at, :headline, :lede, :main, :remove_main, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [])
+      params.require(:article).permit(:body, :caption, :created_at, :email_to, :headline, :lede, :main, :remove_main, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [])
     end
 end

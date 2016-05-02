@@ -128,9 +128,11 @@ class NewsitemsController < ApplicationController
   def tweetvideo
    'https://www.youtube.com/watch?v=' + @newsitem.video
   end
-  
+
   def email
-    if params[:email] == '1'
+    if @newsitem.email_to == 'none'
+    
+    elsif @newsitem.email_to == 'all'
       User.wantsupdates.editors.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	  end
@@ -140,7 +142,16 @@ class NewsitemsController < ApplicationController
 	  User.wantsupdates.readers.each do |user|
         NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
 	  end
-	end
+    elsif @newsitem.email_to == 'readers'
+      User.wantsupdates.readers.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
+    elsif @newsitem.email_to == 'subscribers'
+      User.subscribers.wantsupdates.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
+    else
+    end
   end
 
   # POST /newsitems
@@ -164,7 +175,7 @@ class NewsitemsController < ApplicationController
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
-          format.html { render :new }
+          format.html { redirect_to edit_newsitem_path(@newsitem) }
           format.json { render json: @newsitem.errors, status: :unprocessable_entity }
         end
       end
@@ -194,7 +205,7 @@ class NewsitemsController < ApplicationController
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
-          format.html { render :edit }
+          format.html { redirect_to edit_newsitem_path(@newsitem) }
           format.json { render json: @newsitem.errors, status: :unprocessable_entity }
         end
       end  
@@ -230,6 +241,6 @@ class NewsitemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newsitem_params
-      params.require(:newsitem).permit(:article_id, :caption, :created_at, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
+      params.require(:newsitem).permit(:article_id, :caption, :created_at, :email_to, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
     end
 end

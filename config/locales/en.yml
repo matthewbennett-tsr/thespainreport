@@ -24,8 +24,8 @@ en:
   helpers:
     submit:
       newsitem:
-        create: "Create Update"
-        update: "Save Update"
+        create: "Create"
+        update: "Save"
       article:
-        create: "Create Article"
-        update: "Save Article"
+        create: "Create"
+        update: "Save"

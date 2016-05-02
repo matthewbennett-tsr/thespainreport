@@ -13,18 +13,19 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 775px;">
+    <div style="float:left; text-align:left; width: 755px;">
       <%= text_field_tag 'short_slug', '', size: 18, maxlength: 15 %>
       <%= text_field_tag 'short_headline', '', size: 65, maxlength: 70 %>
-      | T <%= check_box_tag 'tweet' %> | E <%= check_box_tag 'email' %>
-      | <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
-    </div>
-    <div style="float:left; width: 155px; border-left: 1px solid #000; margin-left: 5px; margin-top: 2px; padding-left: 5px; text-align:right;">
+      | T <%= check_box_tag 'tweet' %> 
+      | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], @article.email_to) %>
+         </div>
+    <div style="float:left; width: 175px; border-left: 1px solid #000; margin-left: 5px; margin-top: 2px; padding-left: 5px; text-align:right;">
       <div style="float:left;">
+        <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
         <%= f.submit %>
       </div>
       <div style="float:left;">
-        &nbsp;<%= link_to 'Preview', @article, :target => 'blank' %>
+        &nbsp;<%= link_to 'Go', @article, :target => 'blank' %>
       </div>
       <div class="clear"></div>
     </div>

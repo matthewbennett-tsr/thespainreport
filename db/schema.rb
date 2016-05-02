@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502105755) do
+ActiveRecord::Schema.define(version: 20160502133326) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -32,6 +32,7 @@ ActiveRecord::Schema.define(version: 20160502105755) do
     t.string   "summary"
     t.string   "summary_slug"
     t.boolean  "topstory",     default: false
+    t.string   "email_to"
   end
 
   create_table "articles_categories", id: false, force: :cascade do |t|
@@ -134,6 +135,7 @@ ActiveRecord::Schema.define(version: 20160502105755) do
     t.string   "video"
     t.string   "summary"
     t.string   "summary_slug"
+    t.string   "email_to"
   end
 
   create_table "newsitems_categories", id: false, force: :cascade do |t|
