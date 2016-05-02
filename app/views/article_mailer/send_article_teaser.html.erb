@@ -36,6 +36,23 @@
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+            
+            <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
+              <p style="width: 100%;">
+                <%= link_to(article_url(@article)) do %>
+                  <%= image_tag @article.main.url if @article.main? %>
+                <% end %>
+                <p>
+                  <strong>IMAGE:</strong> <em><%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %></em>
+                </p>
+              </p>
+            <% elsif @article.video? %>
+              <p>
+                <strong>VIDEO:</strong> <%= link_to 'Watch here', article_url(@article) %>. <%= @article.caption unless @article.caption.empty? %>
+              </p>
+            <% else %>
+            <% end %>
+            
             <%= markdown(@article.body.truncate(600)) %>
           </p>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:100%;">

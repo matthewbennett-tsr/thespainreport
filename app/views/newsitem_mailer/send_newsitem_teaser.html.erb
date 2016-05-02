@@ -13,6 +13,23 @@
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+            
+            <% if @newsitem.main? %> <%# MAIN IMAGE OR VIDEO %>
+              <p style="width: 100%;">
+                <%= link_to(newsitem_url(@newsitem)) do %>
+                  <%= image_tag @newsitem.main.url if @newsitem.main? %>
+                <% end %>
+                <p>
+                  <strong>IMAGE:</strong> <em><%= @newsitem.caption %></em>
+                </p>
+              </p>
+            <% elsif @newsitem.video? %>
+              <p>
+                <strong>VIDEO:</strong> <%= link_to 'Watch here', newsitem_url(@newsitem) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+              </p>
+            <% else %>
+            <% end %>
+            
             <%= @newsitem.item.truncate(200) %>
           </p>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
