@@ -7,7 +7,7 @@
     <div class="email-input-float">
     <div style="margin-top: 23px;">
     <% if current_user.role == 'editor' %>
-      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %>
+      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %> | <%= f.check_box :allow_access %>
     <% else %>
       <% if @user.role == 'editor' %>
          <span style="background-color: green; color: white; padding: 2px 5px;">
@@ -21,11 +21,6 @@
       <%= @user.role.to_s.humanize %></span>
     <% end %>
     </div>
-    </div>
-    <div class="email-input-float">
-    <% if current_user.role == 'editor' %>
-      <%= f.datetime_field :created_at, :size => '35' %>
-    <% end %>
     </div>
     <div class="clear"></div>
   </div>
