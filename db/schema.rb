@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160502133326) do
+ActiveRecord::Schema.define(version: 20160502143004) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,8 +20,8 @@ ActiveRecord::Schema.define(version: 20160502133326) do
     t.string   "headline"
     t.string   "lede"
     t.text     "body"
-    t.datetime "created_at",                   null: false
-    t.datetime "updated_at",                   null: false
+    t.datetime "created_at",                     null: false
+    t.datetime "updated_at",                     null: false
     t.integer  "type_id"
     t.string   "urgency"
     t.string   "main"
@@ -31,8 +31,10 @@ ActiveRecord::Schema.define(version: 20160502133326) do
     t.string   "video"
     t.string   "summary"
     t.string   "summary_slug"
-    t.boolean  "topstory",     default: false
+    t.boolean  "topstory",       default: false
     t.string   "email_to"
+    t.string   "short_slug"
+    t.string   "short_headline"
   end
 
   create_table "articles_categories", id: false, force: :cascade do |t|
@@ -123,8 +125,8 @@ ActiveRecord::Schema.define(version: 20160502133326) do
   create_table "newsitems", force: :cascade do |t|
     t.text     "item"
     t.string   "source"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",     null: false
+    t.datetime "updated_at",     null: false
     t.string   "slug"
     t.string   "url"
     t.string   "main"
@@ -136,6 +138,8 @@ ActiveRecord::Schema.define(version: 20160502133326) do
     t.string   "summary"
     t.string   "summary_slug"
     t.string   "email_to"
+    t.string   "short_slug"
+    t.string   "short_headline"
   end
 
   create_table "newsitems_categories", id: false, force: :cascade do |t|

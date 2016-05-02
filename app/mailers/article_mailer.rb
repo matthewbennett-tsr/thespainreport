@@ -15,14 +15,24 @@ class ArticleMailer < ApplicationMailer
   end
   
   def send_article_subject
-    if @article.urgency == 'majorbreaking'
-      "MAJOR BREAKING: #{@article.headline}"
+    if @article.short_slug?
+      @article.short_slug + ": " + send_article_headline
+    elsif @article.urgency == 'majorbreaking'
+      "MAJOR BREAKING: " + send_article_headline
     elsif @article.urgency == 'breaking'
-      "BREAKING: #{@article.headline}"
+      "BREAKING: " + send_article_headline
     elsif @article.urgency == 'latest'
-      "LATEST: #{@article.headline}"	
+      "LATEST: " + send_article_headline
     else
-      "#{@article.type.name}: #{@article.headline}"
+      "#{@article.type.name}: " + send_article_headline
+    end
+  end
+  
+  def send_article_headline
+    if @article.short_headline?
+      @article.short_headline
+    else
+      @article.headline
     end
   end
 

@@ -15,12 +15,22 @@ class NewsitemMailer < ApplicationMailer
   end
   
   def send_newsitem_subject
-    if @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
-      "LIVE BLOG UPDATE: #{@newsitem.slug}"
+    if @newsitem.short_slug?
+      @newsitem.short_slug + ": " + send_newsitem_headline
+    elsif @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
+      "LIVE BLOG UPDATE: " + send_newsitem_headline
     elsif @newsitem.article.present?
-      "ARTICLE UPDATE: #{@newsitem.slug}"
+      "ARTICLE UPDATE: " + send_newsitem_headline
     else
-      "UPDATE: #{@newsitem.slug}"
+      "UPDATE: " + send_newsitem_headline
+    end
+  end
+  
+  def send_newsitem_headline
+    if @newsitem.short_headline?
+      @newsitem.short_headline
+    else
+      @newsitem.slug
     end
   end
   

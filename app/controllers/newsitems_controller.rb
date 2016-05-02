@@ -88,8 +88,8 @@ class NewsitemsController < ApplicationController
   end
 
   def updateslug
-    if params[:short_slug].present?
-      params[:short_slug] + ': '
+    if @newsitem.short_slug?
+      @newsitem.short_slug + ': '
     elsif @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
       'LIVE BLOG: '
     else
@@ -98,8 +98,8 @@ class NewsitemsController < ApplicationController
   end
 
   def updatetext
-    if params[:short_headline].present?
-      params[:short_headline]
+    if @newsitem.short_headline?
+      @newsitem.short_headline
     else
       @newsitem.slug
     end
@@ -241,6 +241,6 @@ class NewsitemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newsitem_params
-      params.require(:newsitem).permit(:article_id, :caption, :created_at, :email_to, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
+      params.require(:newsitem).permit(:article_id, :caption, :created_at, :email_to, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :short_slug, :short_headline, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
     end
 end

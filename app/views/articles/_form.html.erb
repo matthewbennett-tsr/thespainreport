@@ -14,8 +14,8 @@
   
   <div class="admin-block-notify">
     <div style="float:left; text-align:left; width: 755px;">
-      <%= text_field_tag 'short_slug', '', size: 18, maxlength: 15 %>
-      <%= text_field_tag 'short_headline', '', size: 65, maxlength: 70 %>
+      <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
+      <%= f.text_field :short_headline, :size => "65", :maxlength => "70" %>
       | T <%= check_box_tag 'tweet' %> 
       | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], @article.email_to) %>
          </div>
