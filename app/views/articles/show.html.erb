@@ -504,7 +504,7 @@ Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
       <strong> 
         <% if comment.user.blank? %> 
         
-        <% elsif comment.user.name.empty? %>
+        <% elsif comment.user.name.nil? %>
           <%= link_to 'Set your display name here', edit_user_path(current_user) %> 
         <% else %>
           <%= comment.user.name %>
