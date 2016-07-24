@@ -1,8 +1,11 @@
-<% title 'Latest Spain News' %>
+<% title 'Latest Top Stories' %>
 
 <%= render 'tickerstories' %>
 
-<h1>Latest Spain News</h1>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
+
+<h1>Latest Top Stories</h1>
 
 <div class="article-lede">
 Original, independent reporting. We talk to Spanish sources for you and human translate all the relevant quotes and information.
@@ -16,17 +19,29 @@ Original, independent reporting. We talk to Spanish sources for you and human tr
   <div class="clear"></div>
 </div>
 
-<% (Article.published.lastthirty + Newsitem.published.lastthirty).sort_by { |obj| obj.created_at }.reverse.each do |article| %>
+<% @last30.each do |article| %>
   <div style="width:100%; padding-top: 10px;">
     <div class="listing-left">
       <%= article.created_at.to_formatted_s(:short) %>
     </div>
     <div class="listing-right" style="border-bottom: 1px dotted #999999;">
     <div class="listing-update-text">
+      <% if article.urgency == 'majorbreaking' && article.updated_at >= 2.hours.ago %>
+  <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span></span>
+<% elsif article.urgency == 'breaking' && article.updated_at >= 2.hours.ago %>
+  <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span></span>
+<% elsif article.urgency == 'latest' %>
+  <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span></span>
+<% else %>
+<% end %>
       <span class="listing-update-slug"><%= link_to article.headline, article %></span>
-      <p><%= article.lede.truncate(130) %></p>
+      <p><%= article.body.truncate(130) %></p>
     </div>
     </div>
     <div class="clear"></div>
   </div>
 <% end %>
+
+</div>
+</div>
+<div style="clear:both;"></div> 

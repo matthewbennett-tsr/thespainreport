@@ -1,11 +1,14 @@
-<% title 'Latest In-Depth Articles' %>
+<% title 'Features, Interviews & In-Depth Articles' %>
 
 <%= render 'tickerstories' %>
 
-<h1>Latest In-Depth Articles</h1>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
+
+<h1>Features, Interviews & In-Depth Articles</h1>
 
 <div class="article-lede">
-We take you deeper into the biggest stories and trends changing Spain with interviews, chronciles, analysis, features and opinion.
+We take you deeper into the biggest stories and trends changing Spain with interviews, chronicles, features and opinion.
 </div>
 
 <%= render 'emailsignup' %>
@@ -23,7 +26,7 @@ We take you deeper into the biggest stories and trends changing Spain with inter
     </div>
     <div class="listing-right">
     <div class="listing-update-text">
-      <span class="listing-update-slug"><strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
+      <span class="listing-update-slug"><span class="indepth-label-mini"><%= article.type.name unless article.type.nil? %>:</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p>
     </div>
       <div class="meta">
         <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
@@ -34,3 +37,7 @@ We take you deeper into the biggest stories and trends changing Spain with inter
     <div style="clear:both;"></div>   
   </div> 
     <% end %>
+
+</div>
+</div>
+<div style="clear:both;"></div>

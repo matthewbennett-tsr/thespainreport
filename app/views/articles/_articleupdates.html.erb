@@ -1,0 +1,29 @@
+  <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+    <% @article.newsitems.each do |newsitem| %>
+      <div class="article-updates">
+        <p style="margin: 0 auto; font-size: 11px; color: #999999; text-align:right;"><strong>Update</strong>, <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
+        <h3><%= newsitem.slug %></h3>
+        <% if newsitem.main? %>
+          <div class="main-image-article-update">
+            <%= image_tag newsitem.main.url if newsitem.main? %>
+            <div class="main-caption">
+              <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+            </div>
+          </div>
+        <% elsif newsitem.video? %>
+          <div class="main-image-article-update">
+            <div class="video-wrapper">
+              <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              <div class="main-caption">
+                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
+              </div>
+            </div>
+          </div> 
+        <% else %>
+        <% end %>
+        <div class="article-update-text"><%= markdown(newsitem.item.html_safe) %></div>
+        
+        <div class="clear"></div>
+      </div>
+    <% end %>
+  <% end %> <%# END OF ARTICLE UPDATES %> 

@@ -1,8 +1,11 @@
-<% title 'Editorials & Editor\'s Video Blog' %>
+<% title 'Editorials & Analysis' %>
 
 <%= render 'tickerstories' %>
 
-<h1>Editorials & Editor's Video Blog</h1>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
+
+<h1>Editorials & Analysis</h1>
 
 <div class="article-lede">
 After lots of original, independent reporting, our editorials give you lots of context and meaning to explain how it all fits together.
@@ -23,7 +26,7 @@ After lots of original, independent reporting, our editorials give you lots of c
     </div>
     <div class="listing-right">
     <div class="listing-update-text">
-        <span class="listing-update-slug"><span class="editorial">EDITORIAL</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p> 
+        <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span> <%= link_to article.headline, article %></span><p><%= article.lede %></p> 
     </div>
       <div class="meta">
         <%= raw(article.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
@@ -34,3 +37,7 @@ After lots of original, independent reporting, our editorials give you lots of c
     <div style="clear:both;"></div>   
   </div> 
     <% end %>
+
+</div>
+</div>
+<div style="clear:both;"></div> 

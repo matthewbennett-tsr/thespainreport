@@ -52,7 +52,7 @@ class ArticlesController < ApplicationController
   # GET /articles/news
   # GET /articles/news.json
   def news
-    @last30 = Article.news.published.lastthirty
+    @last30 = Article.news.bignews.published.lastthirty
   end
   
   # GET /articles/editorial

@@ -311,11 +311,13 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
   <% if @article.type.try(:name) == "EDITORIAL" %>
     <% if current_user.nil? && !paywall %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && current_user.created_at > 30.days.ago || current_user.role == 'reader' && current_user.allow_access == true %> <%# NEW SUBSCRIBER ON 30-DAY TRIAL %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.role == 'reader' && current_user.created_at < 30.days.ago %> <%# NEW SUBSCRIBER AFTER 30-DAY TRIAL %>
       <%= markdown(@article.body.truncate(1600)) %>
       <%= render 'reader_subscribe' %>
@@ -324,20 +326,25 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
       <%= render 'resubscribe' %>
     <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.role == 'editor' %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% else %>
     <% end %>
   <% elsif ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
     <%= markdown(@article.body) %>
+    <%= render 'articleupdates' %>
   <% else %>
     <% if current_user.nil? && !paywall %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.nil? && paywall %>
       <%= markdown(@article.body.truncate(600)) %>
       <%= render 'quick_login_one' %>
     <% elsif current_user.role == 'reader' && current_user.created_at > 30.days.ago %> <%# NEW SUBSCRIBER ON 30-DAY TRIAL %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.role == 'reader' && current_user.created_at < 30.days.ago %> <%# NEW SUBSCRIBER AFTER 30-DAY TRIAL %>
       <%= markdown(@article.body.truncate(600)) %>
       <%= render 'reader_subscribe' %>
@@ -346,46 +353,20 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
       <%= render 'resubscribe' %>
     <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
       <%= markdown(@article.body) %>
+      <%= render 'articleupdates' %>
     <% elsif current_user.role == 'editor' %>
       <% if @article.summary.present? && !@article.body.present? %>
         <%= @article.summary %>
       <% elsif %>
         <%= markdown(@article.body) %>
+        <%= render 'articleupdates' %>
       <% end %>
     <% else %>
     <% end %>
   <% end %>
 <%# TESTING STUFF ENDS %>
 
-  <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-    <% @article.newsitems.each do |newsitem| %>
-      <div class="article-updates">
-        <p style="margin: 0 auto; font-size: 11px; color: #999999; text-align:right;"><strong>Update</strong>, <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
-        <h3><%= newsitem.slug %></h3>
-        <% if newsitem.main? %>
-          <div class="main-image-article-update">
-            <%= image_tag newsitem.main.url if newsitem.main? %>
-            <div class="main-caption">
-              <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
-            </div>
-          </div>
-        <% elsif newsitem.video? %>
-          <div class="main-image-article-update">
-            <div class="video-wrapper">
-              <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-              <div class="main-caption">
-                <%= newsitem.caption %> <strong>Source:</strong> <%= newsitem.imagesource %>.
-              </div>
-            </div>
-          </div> 
-        <% else %>
-        <% end %>
-        <div class="article-update-text"><%= markdown(newsitem.item.html_safe) %></div>
-        
-        <div class="clear"></div>
-      </div>
-    <% end %>
-  <% end %> <%# END OF ARTICLE UPDATES %> 
+
 
 
   </div> <%# END OF ARTICLE TEXT %>
