@@ -13,9 +13,9 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 755px;">
+    <div style="float:left; text-align:left; width: 725px;">
       <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :short_headline, :size => "65", :maxlength => "70" %>
+      <%= f.text_field :short_headline, :size => "62", :maxlength => "70" %>
       | T <%= check_box_tag 'tweet' %> 
       | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], @article.email_to) %>
          </div>
@@ -33,18 +33,19 @@
   </div>
   
   <div class="admin-block" style="background-color: #ffcccc;">
+  <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
       <%= f.check_box :remove_main %>
       | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
-      | <%= f.text_field :caption, :size => '62', :style => 'padding:5px;' %>
+      | <%= f.text_field :caption, :size => '60', :style => 'padding:5px;' %>
   </div>
   
   <div class="admin-block">
     <div>
       <% if action_name == 'new_summary' %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '83', :style => 'padding:5px;', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '79', :style => 'padding:5px;', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
       <% else %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '83', :style => 'padding:5px;' %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '79', :style => 'padding:5px;' %>
       <% end %>
     </div>
     <div style="margin-top: 5px;">
@@ -55,20 +56,12 @@
       <% else %>
         <%= f.collection_select :type_id, @types, :id, :name %>
       <% end %>
-      | <%= f.text_field :lede, :size => '79', :class => "edit-lede", :style => 'padding:5px;' %>
+      | <%= f.text_field :lede, :size => '73', :class => "edit-lede", :style => 'padding:5px;' %>
     </div>
   </div>
   
-  
-  
-  <div class="admin-block">
-    <%= f.text_area :summary, :size => '130x4', :maxlength => 450, :style => 'padding:5px;' %>
-    <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
-  </div>
-
-  
 <div class="admin-block">
-      <textarea name="article[body]" id="article_body" class="inputtextarea" cols="130" rows="27">
+      <textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 320px;">
 <% if action_name == 'new_summary' %>
 
   <% Article.last24.published.each do |article| %>
