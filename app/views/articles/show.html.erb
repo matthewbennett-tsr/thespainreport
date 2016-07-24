@@ -252,11 +252,13 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
   
   <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
         
-        <div class="sidebar-header-top-new">
-        Other Spain News
-        </div>
-        
-        <% @last6articles.reject {|a| a == @article}.each do |article| %>
+        <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
+      
+      <% @article.stories.each do |story| %>
+      <div style="margin-bottom: 10px;">
+      <div class="sidebar-header-top-new"><%= story.story %></div>
+      <% if story.articles.published.reject {|a| a == @article}.present? %>
+        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
           <div class="content-white-background">
           <%= link_to article do %>
               <% if article.main? %>
@@ -280,6 +282,47 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
           <% end %>
           </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
         <% end %>
+      <% else %>
+        <div class="content-white-background" style="margin-bottom: 15px;">
+          <p style="font-size: 12px;">No other articles about this story yet.</p>
+        </div>
+      <% end %> 
+      </div> 
+      <% end %>
+      
+      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
+    
+    <div class="sidebar-header-top-new">
+        Other Spain News
+    </div>
+    
+    <% @last6articles.reject {|a| a == @article}.each do |article| %>
+          <div class="content-white-background">
+          <%= link_to article do %>
+              <% if article.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag article.main.url if article.main? %>
+                </div>
+              <% elsif article.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
+                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
+                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
+              </span>
+          <% end %>
+          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
+    
+    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
+      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
+  
   </div>
   
   <div class="clear"></div>
