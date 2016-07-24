@@ -458,7 +458,7 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
       <div style="margin-bottom: 10px;">
       <div class="sidebar-header-top-new"><%= story.story %></div>
       <% if story.articles.published.reject {|a| a == @article}.present? %>
-        <% story.articles.published.lastsix.reject {|a| a == @article}.reverse.each do |article| %>
+        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
           <div class="content-white-background">
           <%= link_to article do %>
               <% if article.main? %>
