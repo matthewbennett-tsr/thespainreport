@@ -7,12 +7,12 @@ class WelcomeController < ApplicationController
     @lastpolitics = Article.published.politics.lastfive
     @lasteconomy = Article.published.economy.lastfive
     @lastdiplomacy = Article.published.diplomacy.lastfive
-    @last10 = Article.published.lastten.not_blog
-    @last30items = Newsitem.published.lastthirty
+    @lasttwenty = Article.published.lasttwenty.not_top.not_blog
+    @latestupdates = Newsitem.published.lastten
     @breakingonly = Article.breakingonly.published.latest.ticker
     @latestaudio = Audio.lastone
     @tickerstories = Article.bignews.published.latest.ticker
-    @activestories = Story.active.order('story ASC')
+    @indepth = Article.in_depth.published
   end
 
 end

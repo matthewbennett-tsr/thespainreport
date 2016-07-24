@@ -12,7 +12,7 @@ class ArticlesController < ApplicationController
   def admin
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @articles = Article.all.order( 'articles.created_at DESC' )
       @articleslastfewdays = Article.lastfewdays.order( 'articles.created_at DESC' )
@@ -30,7 +30,7 @@ class ArticlesController < ApplicationController
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end
   end
   
@@ -38,6 +38,9 @@ class ArticlesController < ApplicationController
   # GET /articles/blog.json
   def blog
     @is_blog = Article.is_blog.published.lastthirty.order( 'articles.updated_at DESC' )
+    @latestupdates = Newsitem.published.lastten
+    @lasteditorial = Article.editorial.published.lastone
+    @lastindepth = Article.in_depth.published.lastone
   end
   
   # GET /articles/in-depth
@@ -70,13 +73,14 @@ class ArticlesController < ApplicationController
     @articleupdates = @article.newsitems.published
     @comments = @article.comments
     @last30items = Newsitem.published.lastthirty
+    @last6articles = Article.published.lastsix
   end
    
   # GET /articles/new
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article = Article.new
       @regions = Region.all.order(:region)
@@ -85,7 +89,7 @@ class ArticlesController < ApplicationController
       @types = Type.all.order(:name)
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -93,7 +97,7 @@ class ArticlesController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @regions = Region.all.order(:region)
       @categories = Category.all.order(:category)
@@ -101,7 +105,7 @@ class ArticlesController < ApplicationController
       @types = Type.all.order(:name)
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end  
   end
 
@@ -231,7 +235,7 @@ class ArticlesController < ApplicationController
   def new_summary
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article = Article.new
       @regions = Region.all.order(:region)
@@ -240,7 +244,7 @@ class ArticlesController < ApplicationController
       @types = Type.all.order(:name)
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -249,7 +253,7 @@ class ArticlesController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
@@ -273,7 +277,7 @@ class ArticlesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end  
   end
 
@@ -282,7 +286,7 @@ class ArticlesController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @article.update(article_params) && ["draft", "editing"].include?(@article.status)
@@ -305,7 +309,7 @@ class ArticlesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -314,7 +318,7 @@ class ArticlesController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article.destroy
       respond_to do |format|
@@ -323,7 +327,7 @@ class ArticlesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = message_error_not_allowed
     end
   end
 

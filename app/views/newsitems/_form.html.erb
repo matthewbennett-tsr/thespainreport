@@ -13,9 +13,9 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 755px;">
+    <div style="float:left; text-align:left; width: 725px;">
       <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :short_headline, :size => "65", :maxlength => "70" %>
+      <%= f.text_field :short_headline, :size => "62", :maxlength => "70" %>
       | T <%= check_box_tag 'tweet' %>
       | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], @newsitem.email_to) %>
     </div>
@@ -33,45 +33,27 @@
   </div>
   
   <div class="admin-block" style="background-color: #ffcccc;">
+  <%= f.hidden_field :imagesource %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
     <%= f.check_box :remove_main %>
    | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
-   | <%= f.text_field :caption, :size => '62', :style => 'padding:5px;' %>
+   | <%= f.text_field :caption, :size => '60', :style => 'padding:5px;' %>
   </div>
   
   <div class="admin-block">
   <div style="float:left; text-align:left;">
-   <%= f.text_field :slug, :class => "edit-headline", :size => "83", :maxlength => 97, :style => 'padding:5px;' %>
+   <%= f.text_field :slug, :class => "edit-headline", :size => "53", :maxlength => 97, :style => 'padding:5px;' %>
    </div>
    <div class="clear"></div>
    </div>
-  
-  <div class="admin-block">
-    <%= f.text_area :summary, :size => '130x4', :maxlength => 450, :style => 'padding:5px;' %>
-    <%= f.hidden_field :imagesource %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
-  </div>
-  
-  
-  <div class="admin-block">
-    <%= f.text_area :item, :size => "130x8", :class => "inputtextarea", :maxlength => 1200 %>
-  </div>
-  
-  <div class="admin-block">
-  <strong>S:</strong> 
-    <% if action_name == 'edit' %>
-      <%= f.text_field :source, :size => "21" %>
-    <% elsif action_name == 'new' %>
-      <%= f.text_field :source, :value => params[:breaking_source], :size => "21" %>
-    <% end %>
-   <strong>U:</strong> <%= f.text_field :url, :size => "15" %> <strong>A:</strong> <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
 
+  <div class="admin-block">
+    <%= f.text_area :item, :style => "width:100%; min-height: 220px;", :class => "inputtextarea", :maxlength => 1500 %>
   </div>
   
   <div class="admin-block">
-<div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:newsitem, :story_ids, @stories, :id, :story) %></div>
-<div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:newsitem, :region_ids, @regions, :id, :region) %></div>
-<div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:newsitem, :category_ids, @categories, :id, :category) %></div>
-</div>
+  <strong>Article:</strong> <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
+  </div>
 
 <% if @newsitem.main? %>
     <div class="admin-block">

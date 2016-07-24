@@ -34,19 +34,19 @@ class UsersController < ApplicationController
       @user = User.find(params[:id])
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     end
   end
   
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.new
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     end 
   end
   
@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     user = User.find_by_confirm_token(params[:id])
     if user
       user.email_activate
-      flash[:success] = "Well done! Check your e-mail again to choose your password."
+      flash[:success] = "Well done! Check your e-mail."
       redirect_to root_url
     else
       flash[:error] = "Sorry, that link is not valid."
@@ -73,7 +73,7 @@ class UsersController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"

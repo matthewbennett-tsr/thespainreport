@@ -29,6 +29,9 @@
 
 <%= render 'tickerstories' %>
 
+<div class="content-left-new"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
+
 <h1>
 <% if current_user.nil? || current_user.role != 'editor' %>
   <% if @article.type.try(:name) == "LIVE BLOG" %>
@@ -46,40 +49,54 @@
 <% end %>
 </h1>
 
-<% if @article.urgency == 'majorbreaking' && @article.updated_at >= 3.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">MAJOR BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'breaking' && @article.updated_at >= 3.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'latest' && @article.updated_at >= 12.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label">LATEST NEWS</span></span></div>
-<% elsif @article.type.try(:name) == 'EDITORIAL' %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label">EDITORIAL</span></span></div>
+<% if @article.urgency == 'majorbreaking' && @article.updated_at >= 2.hours.ago %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
+<% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">BREAKING NEWS</span></span></div>
+<% elsif @article.urgency == 'latest' && @article.updated_at >= 24.hours.ago %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></div>
 <% else %>
+<% end %>
+
+<% if @article.type.try(:name) == 'EDITORIAL' %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></div>
+<% end %>
+
+<% if @article.type.try(:name) == 'ANALYSIS' %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label-mini">ANALYSIS</span></span></div>
 <% end %>
 
 <% if @article.type.try(:name) == "LIVE BLOG" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label">LIVE BLOG</span></span></div>
-<% else %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span></span></div>
 <% end %>
 
-<% if @articleupdates.present? && @article.status == "updated" && !@article.type.try(:name) == "LIVE BLOG" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div> <div class="alert-update"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
-<% elsif @articleupdates.present? %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">UPDATES ADDED</span></span></div>
-<% elsif @article.status == "updated" && !@article.type.try(:name) == "LIVE BLOG" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label">ORIGINAL UPDATED</span></span></div>
-<% else %>
+<% if !["NEWS", "SUMMARY", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini">IN-DEPTH</span></span></div>
+<% end %>
+
+<% if @articleupdates.present? %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">UPDATES ADDED</span></span></div>
+<% end %>
+<% if @article.status == "updated" %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">ORIGINAL UPDATED</span></span></div>
 <% end %>
 
 <div class="clear"></div>
 
-<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %></div>
-
-
+<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %>
+  <% if @article.type.try(:name) == "LIVE BLOG" %>
+  
+  <% elsif @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+    <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
+    <% @article.newsitems.each do |newsitem| %>
+        <li style="margin: 0 auto; font-size: 13px; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id), :style => "color: #005BBF; text-decoration: underline;"%></li>
+    <% end %>
+    </ul>
+  <% else %>
+  <% end %>
+</div>
 
 <% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
-  
-  <div class="content-left"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
   
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
@@ -102,22 +119,30 @@
   
   <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
   <div class="article-text">
-      <%= markdown(@article.body) %>
   
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
-    Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts if you want notifications pushed to your device as soon as we publish them.
+    (Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts if you want notifications pushed to your device as soon as we publish them.)
   </p>
   
-  <h2 style="margin-top:30px;">Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
+  <%= markdown(@article.body) %>
+  
+  <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+    <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
+    <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
+        <li style="margin: 0 auto; font-size: 14px; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id), :style => "color: #005BBF; text-decoration: underline;"%></li>
+    <% end %>
+    </ul>
+  <% else %>
+  <% end %>
+  
+  <h2 style="margin-top:15px;">Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
   
     <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
       <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
         <div class="liveblog-updates">
-          <span style="font-style: italic; font-size: 13px;"> <%# LIVE-BLOG ENTRY DATE & LINK %>
-            <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
-              <%= time_ago_in_words(newsitem.updated_at).capitalize %> ago: <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %>
-            <% end %>
-          </span>
+        <div class="content-white-background">
+          <p style="font-size: 11px; color: #999999;"><strong>Update</strong>, <%= newsitem.created_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
+
           <h3><%= newsitem.slug %></h3> <%# LIVE-BLOG SLUG TITLE %>
           <% if newsitem.main? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
             <div class="main-image-liveblog-update">
@@ -140,27 +165,126 @@
           <%= markdown(newsitem.item.html_safe) %> <%# LIVE-BLOG ENTRY TEXT %>
           <div class="clear"></div>
         </div>
+        </div>
       <% end %> <%# END OF LIVE-BLOG ENTRIES %>
     <% else %> <%# IF THERE ARE NO LIVE-BLOG ENTRIES YET… %>
       <p style="font-style:italic;">
         Brand new live blog for breaking story, standby for first update very shortly. Refresh page.
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
+    
+    
   
+    </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
     </div> <%# END OF LIVE-BLOG ARTICLE TEXT & ENTRIES %>
+
+  <div class="content-white-background">
+  <% if current_user.nil? && !paywall %>
+  <%= render 'emailsignup' %>
+<% else %>
+<% end %>
+
+<% if current_user %>
+Hello <strong><%= current_user.name %></strong>. Write a comment…
+
+<%= form_for [@article, Comment.new] do |f| %>
+  <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <%= f.text_area :comment, :style => "width:100%;", :maxlength => 1000, :class => "inputtextarea" %>
+      <br />
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
+    </div>
+    <div class="clear"></div>
+  </div>
+<% end %>
+
+<% else %>
+<% end %>
+
+<% if @comments.present? %>
+<h2 >COMMENTS</h2>
+<% end %>
+
+<div style="margin-top: 20px;">
+<% @comments.each do |comment| %>
+<div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
+    <div style="width: 100%;">
+      <strong> 
+        <% if comment.user.blank? %> 
+        
+        <% elsif comment.user == current_user && comment.user.name.nil? %>
+          <%= link_to 'Set your display name here', edit_user_path(current_user) %> 
+        <% elsif comment.user.name.nil? %>
+          Anonymous
+        <% else %>
+          <%= comment.user.name %>
+        <% end %>
+      </strong>
+       |
+        <% if comment.user.blank? %>
+          Former Reader
+        <% else %>
+          <% if comment.user.role == 'editor' %>
+            <span style="background-color: green; color: white; padding: 2px 2px 2px 5px;">Editor
+          <% elsif comment.user.role == 'subscriber' %>
+            <span style="background-color: #B78727; color: white; padding: 2px 2px 2px 5px;">Subscriber
+          <% elsif comment.user.role == 'reader' %>
+            <span style="background-color: #eeeeee; color: black; padding: 2px 2px 2px 5px;">New Reader
+          <% else %>
+            <span>
+          <% end %>
+          </span>
+        <% end %>
+       &nbsp;| <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
+    </div>
+    <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
+      <%= comment.comment %>
+    </div>
+    <div class="clear"></div>
+</div>
+<% end %>
+<a name="commentcheck"></a>
+</div>
+
+</div>
+
   </div>
   
   <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
         
-        <%= render 'emailsignup_sidebar' %>
-   
+        <div class="sidebar-header-top-new">
+        Other Spain News
+        </div>
+        
+        <% @last6articles.reject {|a| a == @article}.each do |article| %>
+          <div class="content-white-background">
+          <%= link_to article do %>
+              <% if article.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag article.main.url if article.main? %>
+                </div>
+              <% elsif article.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
+                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
+                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
+              </span>
+          <% end %>
+          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
+        <% end %>
   </div>
   
   <div class="clear"></div>
 
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
-
-  <div class="content-left"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
   
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
@@ -234,12 +358,10 @@
 <%# TESTING STUFF ENDS %>
 
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-    <h3>Updates</h3>
     <% @article.newsitems.each do |newsitem| %>
       <div class="article-updates">
-        <%= link_to article_path(@article, anchor: newsitem.id), id: newsitem.id do %>
-          <span class="article-update-slug"><%= newsitem.slug %></span><br />
-        <% end %>
+        <p style="margin: 0 auto; font-size: 11px; color: #999999; text-align:right;"><strong>Update</strong>, <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
+        <h3><%= newsitem.slug %></h3>
         <% if newsitem.main? %>
           <div class="main-image-article-update">
             <%= image_tag newsitem.main.url if newsitem.main? %>
@@ -259,232 +381,36 @@
         <% else %>
         <% end %>
         <div class="article-update-text"><%= markdown(newsitem.item.html_safe) %></div>
-        <span style="font-size: 11px; color: #999999;"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span>
+        
         <div class="clear"></div>
       </div>
     <% end %>
-  <% end %> <%# END OF ARTICLE UPDATES %>
-  
-  <% @article.stories.each do |story| %> <%# OTHER ARTICLES IN THIS STORY %>
-    <h3><%= story.story %></h3>
-      
-      <% if story.articles.published.reject {|a| a == @article}.present? && story.newsitems.published.present? %>
-        <ul style="list-style-type: none;">
-          <% (story.articles.published.lastfour.reject {|a| a == @article} | story.newsitems.published.lastfour).take(5).sort_by { |obj| obj.created_at }.reverse.each do |article| %>
-            <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
-          <% end %>
-        </ul>
-    <% elsif story.articles.published.reject {|a| a == @article}.present? && !story.newsitems.published.present? %>
-      <ul style="list-style-type: none;">
-          <% story.articles.published.lastsix.reject {|a| a == @article}.reverse.each do |article| %>
-            <li><span class="listing-update-slug"><%= link_to article.headline, article %></span></li>
-          <% end %>
-      </ul>
-    <% elsif !story.articles.published.reject {|a| a == @article}.present? && story.newsitems.published.present? %>
-      <ul style="list-style-type: none;">
-          <% story.newsitems.published.lastfive.reverse.each do |article| %>
-            <li><span class="listing-update-slug"><%= link_to article.slug, article %></span></li>
-          <% end %>
-       </ul>
-    <% else %>
-        <p style="font-style:italic;">
-          No related articles or updates for this story yet.
-        </p>
-    <% end %>
-  
-  <% end %>
-  
- 
+  <% end %> <%# END OF ARTICLE UPDATES %> 
+
 
   </div> <%# END OF ARTICLE TEXT %>
-  </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
   
-  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
-    
-    <% if @article.stories.present? %> <%# SUB-TITLE BLOCK: CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
-        <div class="content-right-header">
-        <% @article.stories.each do |story| %>
-          <div class="content-right-header-sub">
-            <%= story.story %>
-          </div>
-        <% end %>
-        </div>
-      <% else %>
-        <div class="content-right-header">
-          <div class="content-right-header-sub">
-            Latest Spain News Updates
-          </div>
-        </div>
-      <% end %>
+  <div class="meta">
+    <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
+  </div>
   
-    <div class="content-right-scroll"> <%# START OF RIGHT-HAND SCROLL BLOCK %>
-      
-      <% @latestaudio.each do |a| %> <%# AUDIO NEWS %>
-        <div class="content-right-update-block">
-          <span style="font-size: 12px; font-weight: bold;">2 Minute Spain News, <%= a.updated_at.to_formatted_s(:short) %></span>
-          <div style="margin-top: 5px; ">
-            <audio controls="controls" preload="none"><source src="<%= a.url %>" ></audio>
-          </div>
-        </div>
-      <% end %>
-      
-      <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
-      
-      <% @article.stories.each do |story| %>
-      
-        <% story.newsitems.published.lasttwenty.order('created_at DESC').each do |newsitem| %> 
-          <% if newsitem.article.present? && newsitem.article.type.try(:name) == "LIVE BLOG" %>
-          <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-            <div class="content-right-update-block">
-              <% if newsitem.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag newsitem.main.url if newsitem.main? %>
-                </div>
-              <% elsif newsitem.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <%= markdown(newsitem.item.truncate(265)) %>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
-            </div>
-          <% end %>
-        <% elsif newsitem.article.present? %>
-          <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-            <div class="content-right-update-block">
-              <% if newsitem.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag newsitem.main.url if newsitem.main? %>
-                </div>
-              <% elsif newsitem.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <%= markdown(newsitem.item.truncate(265)) %>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
-            </div>
-          <% end %>
-        <% else %>
-          <%= link_to newsitem do %>
-            <div class="content-right-update-block">
-              <% if newsitem.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag newsitem.main.url if newsitem.main? %>
-                </div>
-              <% elsif newsitem.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <%= markdown(newsitem.item.truncate(265)) %>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
-            </div>
-          <% end %>
-        <% end %>
-        <% end %>
-      <% end %>
-      
-      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
-        
-    <% @last30items.each do |newsitem| %>
-      <% if newsitem.article.present? && newsitem.article.type.try(:name) == "LIVE BLOG" %>
-        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-          <div class="content-right-update-block">
-            <% if newsitem.main? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <%= image_tag newsitem.main.url if newsitem.main? %>
-              </div>
-            <% elsif newsitem.video? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <div class="video-wrapper">
-                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                </div>
-              </div>
-            <% else %>
-            <% end %>
-            <%= markdown(newsitem.item.truncate(265)) %>
-            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
-          </div>
-        <% end %>
-      <% elsif newsitem.article.present? %>
-        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-          <div class="content-right-update-block">
-            <% if newsitem.main? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <%= image_tag newsitem.main.url if newsitem.main? %>
-              </div>
-            <% elsif newsitem.video? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <div class="video-wrapper">
-                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                </div>
-              </div>
-            <% else %>
-            <% end %>
-            <%= markdown(newsitem.item.truncate(265)) %>
-            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
-          </div>
-        <% end %>
-      <% else %>
-        <%= link_to newsitem do %>
-          <div class="content-right-update-block">
-            <% if newsitem.main? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <%= image_tag newsitem.main.url if newsitem.main? %>
-              </div>
-            <% elsif newsitem.video? %>
-              <div style="width:100%; margin-bottom: 3px;">
-              <div class="video-wrapper">
-                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-              </div>
-              </div>
-            <% else %>
-            <% end %>
-            <%= markdown(newsitem.item.truncate(265)) %>
-            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
-          </div>
-        <% end %>
-      <% end %>
-    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
-        
-      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
-
-    </div> <%# END OF RIGHT-HAND SCROLL BLOCK %>
-  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
+  </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
   
-  <div class="clear"></div>
-
-<% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>
-
-<div class="meta">
-<strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
-</div>
-
-<% if current_user.nil? && !paywall %>
+  <div class="content-white-background">
+  <% if current_user.nil? && !paywall %>
   <%= render 'emailsignup' %>
 <% else %>
 <% end %>
 
 <% if current_user %>
-Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
+Hello <strong><%= current_user.name %></strong>. Write a comment…
 
 <%= form_for [@article, Comment.new] do |f| %>
   <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
     <div style="width: 100%;">
-      <strong>Add your comment:</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
-      <%= f.text_area :comment, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
+      <%= f.text_area :comment, :style => "width:100%;", :maxlength => 1000, :class => "inputtextarea" %>
       <br />
-      <button type="submit" class="blueformbutton">Add Your Comment</button>
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
     </div>
     <div class="clear"></div>
   </div>
@@ -537,3 +463,87 @@ Now it's your turn <strong><%= current_user.name %></strong>. What do you think?
 <% end %>
 <a name="commentcheck"></a>
 </div>
+
+</div>
+  
+  
+  </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
+  
+  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+      
+      <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
+      
+      <% @article.stories.each do |story| %>
+      <div style="margin-bottom: 10px;">
+      <div class="sidebar-header-top-new"><%= story.story %></div>
+      <% if story.articles.published.reject {|a| a == @article}.present? %>
+        <% story.articles.published.lastsix.reject {|a| a == @article}.reverse.each do |article| %>
+          <div class="content-white-background">
+          <%= link_to article do %>
+              <% if article.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag article.main.url if article.main? %>
+                </div>
+              <% elsif article.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
+                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
+                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
+              </span>
+          <% end %>
+          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
+        <% end %>
+      <% else %>
+        <div class="content-white-background" style="margin-bottom: 15px;">
+          <p style="font-size: 12px;">No other articles about this story yet.</p>
+        </div>
+      <% end %> 
+      </div> 
+      <% end %>
+      
+      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
+    
+    <div class="sidebar-header-top-new">
+        Other Spain News
+    </div>
+    
+    <% @last6articles.reject {|a| a == @article}.each do |article| %>
+          <div class="content-white-background">
+          <%= link_to article do %>
+              <% if article.main? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <%= image_tag article.main.url if article.main? %>
+                </div>
+              <% elsif article.video? %>
+                <div style="width:100%; margin-bottom: 3px;">
+                  <div class="video-wrapper">
+                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+                  </div>
+                </div>
+              <% else %>
+              <% end %>
+              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
+                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
+                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
+              </span>
+          <% end %>
+          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
+    
+    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
+      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
+
+  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
+  
+  <div class="clear"></div>
+
+<% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>

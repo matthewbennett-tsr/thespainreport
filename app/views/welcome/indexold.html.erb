@@ -1,0 +1,239 @@
+<%= render 'tickerstories' %>
+
+<div class="content-wrapper">
+<div class="content-left">
+<div class="content-left-top">
+<div style="">
+<div style="width: 100%; padding-top: 0px; padding-bottom: 10px;">
+<% @lasttopstory.each do |article| %>
+<% if article.main? %>
+        <div style="width:100%; margin-bottom: 3px;">
+          <%= link_to(article) do %>
+          <%= image_tag article.main.url if article.main? %>
+          <% end %>
+        </div>
+      <% elsif article.video? %>
+          <div class="video-wrapper">
+          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+          </div>
+    <% else %>
+<% end %>
+<div style="margin-top: 5px;">
+<h1 style="font-size: 27px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h1>
+<p style="font-family: Georgia; margin: 3px 0px;"><strong><%= article.type.name %>:</strong> <%= article.lede %></p>
+<div style="font-size: 11px; margin-bottom: 3px;">
+<span style="color: #999999;"><%= time_ago_in_words(article.updated_at) %> ago</span>
+<% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+  <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span>
+<% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+  <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span>
+<% elsif article.urgency == 'latest' && article.created_at >= 6.hours.ago %>
+  <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>
+<% else %>
+<% end %>
+<% if article.type.name == "LIVE BLOG" && article.created_at >= 12.hours.ago %>
+<span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span> 
+<% else %>
+<% end %>
+</div>
+<% end %>
+</div>
+</div>
+</div>
+
+<div style="margin-top: 5px; border-top: 1px solid #cccccc; padding-top: 15px;">
+<div style="float:left; width: 50%;  border-right: 1px solid #cccccc;  padding: 0px 5px;">
+<% @lasteditorial.each do |article| %>
+<div style="font-size: 11px; margin-bottom: 3px;">
+<%= article.created_at.to_formatted_s(:short) %> <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span>
+</div>
+<h3 style="font-size: 30px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h3>
+<p style="font-family: Georgia; margin: 3px 0px;"><%= article.lede %></p>
+<% end %>
+</div>
+<div style="float:right; width: 50%; padding: 0px 5px 0px 10px;">
+<% @lastindepth.each do |article| %>
+<div style="font-size: 11px; margin-bottom: 3px;">
+<%= article.created_at.to_formatted_s(:short) %> <span class="listing-update-slug"><span class="updated-label-mini">IN-DEPTH</span></span>
+</div>
+<h3 style="font-size: 23px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h3>
+<p style="font-family: Georgia; margin: 3px 0px;"><%= article.lede %></p>
+<% end %>
+</div>
+<div class="clear"></div>
+</div>
+</div>
+
+<div class="index-home">
+  <h3 style="margin: 0px;">Spanish Politics</h3>
+</div>
+<% @lastpolitics.each do |article| %>
+  <div class="listing-article-container">
+  <div style="font-size: 11px; margin-bottom: 3px;">
+<%= article.created_at.to_formatted_s(:short) %>
+<% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span>
+  <% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
+ <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+        <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
+  <% elsif article.type.name == "LIVE BLOG" %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
+    <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
+ <% else %>
+ <% end %>
+</div>
+  <span class="listing-update-slug"><%= link_to article.headline, article %></span><br />
+  <span style="font-family: Georgia;"><%= article.lede %></span>
+  </div>
+<% end %>
+
+<div class="index-home">
+  <h3 style="margin: 0px;">Spanish Economy</h3>
+</div>
+<% @lasteconomy.each do |article| %>
+  <div class="listing-article-container">
+  <div style="font-size: 11px; margin-bottom: 3px;">
+<%= article.created_at.to_formatted_s(:short) %>
+<% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span>
+  <% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
+ <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+        <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
+  <% elsif article.type.name == "LIVE BLOG" %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
+    <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
+ <% else %>
+ <% end %>
+</div>
+  <span class="listing-update-slug"><%= link_to article.headline, article %></span><br />
+  <span style="font-family: Georgia;"><%= article.lede %></span>
+  </div>
+<% end %>
+
+<div class="index-home">
+  <h3 style="margin: 0px;">Spanish Foreign Affairs & Military</h3>
+</div>
+<% @lastdiplomacy.each do |article| %>
+  <div class="listing-article-container">
+  <div style="font-size: 11px; margin-bottom: 3px;">
+<%= article.created_at.to_formatted_s(:short) %>
+<% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span>
+  <% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
+ <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+        <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
+  <% elsif article.type.name == "LIVE BLOG" %>
+        <span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span>  
+    <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span>
+ <% else %>
+ <% end %>
+</div>
+  <span class="listing-update-slug"><%= link_to article.headline, article %></span><br />
+  <span style="font-family: Georgia;"><%= article.lede %></span>
+  </div>
+<% end %>
+
+</div>
+
+<div class="content-right">
+  
+  <div class="content-right-header">
+    <div class="content-right-header-sub">
+      Latest Spain News Updates
+    </div>
+  </div>
+
+<div class="content-right-scroll">
+
+<% @latestaudio.each do |a| %>
+<div class="content-right-update-block">
+  <span style="font-size: 12px; font-weight: bold;">2 Minute Spain News, <%= a.updated_at.to_formatted_s(:short) %></span>
+<div style="margin-top: 5px; ">
+<audio controls="controls" preload="none"><source src="<%= a.url %>" ></audio>
+</div>
+</div>
+<% end %>
+
+    <% @last30items.each do |newsitem| %>
+      <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago <span class="breaking-label-mini">LIVE BLOG</span></span>
+          </div>
+        <% end %>
+      <% elsif newsitem.article.present? %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% else %>
+        <%= link_to newsitem do %>
+          <div class="content-right-update-block">
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+              <div class="video-wrapper">
+                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              </div>
+              </div>
+            <% else %>
+            <% end %>
+            <%= markdown(newsitem.item.truncate(265)) %>
+            <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(newsitem.created_at) %> ago</span>
+          </div>
+        <% end %>
+      <% end %>
+<% end %>
+</div>
+
+<div class="content-right-block">
+<h3>Follow These Spain Stories</h3>
+<% @activestories.each do |story| %>
+<p><%= link_to story.story, story %></p>
+<% end %>
+</div>
+
+</div>
+
+<div class="clear"></div>
+
+<%= render 'emailsignup' %>
+
+</div>
+</div>

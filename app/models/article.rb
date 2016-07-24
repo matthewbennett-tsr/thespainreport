@@ -18,10 +18,11 @@ class Article < ActiveRecord::Base
   
   scope :is_blog, -> {where(:type_id => 26)}
   scope :not_blog, -> {where.not(:type_id => 26)}
+  scope :topstory, -> {where(:topstory => true)}
+  scope :not_top, -> {where(:topstory => false)}
   scope :in_depth, -> {where(:type_id => [3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,25])}
   scope :editorial, -> {where(:type_id => 1)}
   scope :news, -> {where(:type_id => [2,31,32])}
-  scope :topstory, -> {where(:topstory => true)}
   scope :bignews, -> {where(:urgency => ['latest', 'breaking', 'majorbreaking'])}
   scope :breakingonly, -> {where(:urgency => ['breaking', 'majorbreaking'])}
   scope :latest, -> {order('updated_at DESC').where(:updated_at => (Time.now - 24.hours)..Time.now)}
@@ -33,9 +34,10 @@ class Article < ActiveRecord::Base
   scope :lastone, -> {order('updated_at DESC').limit(1)}
   scope :lastfour, -> {order('updated_at DESC').limit(4)}
   scope :lastfive, -> {order('created_at DESC').limit(5)}
-  scope :lastsix, -> {order('updated_at DESC').limit(6)}
+  scope :lastsix, -> {order('created_at DESC').limit(6)}
   scope :lastseven, -> {order('updated_at DESC').limit(7)}
   scope :lastten, -> {order('created_at DESC').limit(10)}
+  scope :lasttwenty, -> {order('created_at DESC').limit(20)}
   scope :lastthirty, -> {order('updated_at DESC').limit(30)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
   scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}

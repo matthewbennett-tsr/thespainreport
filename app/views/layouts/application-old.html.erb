@@ -39,6 +39,24 @@
 <body>
 
 <div class="user-bar">
+
+  <div class="user-bar-flash">
+    <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <span style="background-color: #FEF9E6; padding: 0px 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></span>
+      <% end %>
+    <% elsif current_user.nil? %>
+      <% if current_page?('/') %>
+        Original, independent reporting of the stories changing Spain.
+      <% elsif %>
+        Original, independent reporting of the stories changing Spain.
+      <% end %>
+    <% elsif current_user %>
+
+    <% else %>
+      
+    <% end %>
+  </div>
   
   <div class="user-bar-right-links">
     <% if current_user.nil? %>
@@ -84,120 +102,50 @@
   <div class="clear"></div>
 </div>
 
-<a href="/"><div class="homelink"></div></a>
-<div style="position:fixed; left: 0%; top: 0%; width: 100%; height: 70px; background-color: #fff; z-index: 90;"></div>
-<div style="position:fixed; left: 0%; top: 0%; width: 100%; height: 60px; border-bottom: 3px solid #F1BF00; background-color: #fff; z-index: 100;">
-<div style="max-width: 1260px; position: relative; margin: 0 auto;">
-<div class="user-bar-right-links" style="margin-top: 12px;">
-<% if current_user.nil? %>
-      <div class="user-bar-login-form">
-        <%= form_tag '/login' do %>
-        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
-        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
-        <div class="top-login-input-float"><button type="submit" class="blueformbutton">Log In</button></div>
-        <div class="clear"></div>
-        <% end %>
-      </div>
-    <% else current_user %>
-      <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left-no"><%= link_to "News Reader", entries_path %></div>
-        <div class="user-float-left"><%= link_to "Latest Comments", comments_path %></div>
-        <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
-      </div>
-      <div class="clear"></div>
-    <% end %>
-</div>
-
-<div class="site-title-new">THE <span class="site-title-spain">SPAIN</span> REPORT</div>
-</div>
-
-</div>
-
-<div style="max-width: 1260px; position: relative; margin: 0 auto;">
-<div class="left-hand-fixed-bar" style="z-index: 500;">
-<div class="sidebar-header-top-new">Independent Spain News, In English</div>
-
-<% if flash.present? && current_user.nil? %>
-<div style="background-color: #ffffff; padding: 7px 5px; border: 1px solid #ccc;">
-      <% flash.each do |name, msg| %>
-        <div style="background-color: #FEF9E6; padding: 3px 5px; border: 1px solid #F1BF00;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
-      <% end %>
-</div>
-<% elsif current_user.nil? %>
-<% elsif current_user %>
-<% else %>
-<% end %>
-
-<div style="background-color: #fff; padding: 7px; margin-bottom: 2px; line-height: 150%; border: 1px solid #cccccc;">
-<% if current_user.nil? %>
-<img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
-Don't miss anything important.
-Enjoy independent reporting, in English. 
-Full-text articles in your inbox. 
-No ads, no spam. 
-Free for 30 days.
-<div class="email-sign-up-form-new">
-    <%= form_tag '/new_spain_report_member', :class => '', :id => 'payment-form' do |f| %>
-      <div class="email-input-float">
-        <input type="email" size="22" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
-      </div>
-      <div class="email-input-float email-button">
-        <button type="submit" class="blueformbutton">Join Now</button>
-      </div>
-      <div class="clear"></div>
-    <% end %>
-    </div>
-<% elsif current_user %>
-  <% if flash.present? %>
-      <% flash.each do |name, msg| %>
-        <div style="background-color: #FEF9E6; padding: 3px 5px; border: 1px solid #F1BF00; margin-bottom: 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
-      <% end %>
-  <% end %>
-  <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit Profile", edit_user_path(current_user) %></div>
-  <div style="margin-bottom: 3px;"><strong>E-mail:</strong> <%= current_user.try(:email) %></div>
-  <div style="margin-bottom: 3px;"><strong>Twitter:</strong> <% if current_user.twitter.present? %><a href="https://twitter.com/<%= current_user.twitter %>">@<%= current_user.twitter %></a><% else %><span class="highlight"><%= link_to "Add Twitter username", edit_user_path(current_user) %></span><% end %></div>
-  <div style="">
-      <% if current_user.role == 'editor' %>
-         <span class="editor-label-mini"><%= current_user.role.to_s.humanize.upcase %></span>
-      <% elsif current_user.role == 'subscriber' %>
-         <span class="subscriber-label-mini"><%= current_user.role.to_s.humanize.upcase %></span> · Thanks!
-      <% elsif current_user.role == 'reader' %>
-         <span class="reader-label-mini"><%= current_user.role.to_s.humanize.upcase %></span> <a href="/subscriptions/new"><span class="highlight">Subscribe now</span></a>
-      <% else %>
-         <span>
-      <% end %>
-  </div>
-  
-<% end %>
-</div>
-
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">Catch Up</div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="latest-label">.</span> <a href="http://#">Latest Top Stories</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="editorial-label">.</span> <a href="http://#">Editorials & Analysis</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="indepth-label">.</span> <a href="http://#">Features & Interviews</a></div>
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">Your Spain Stories</div>
-<% @latestactivestories.each do |story| %>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;">
-  <%= link_to story.story, story %>
-  <% if story.created_at >= 24.hours.ago %>
-    <div class="news-alert" style="float:right;"><span class="breaking-label-mini">NEW</span></div>
-  <% else %>
-  <% end %>
-</div>
-<% end %>
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">The Spain Report</div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><a href="/articles/blog">Blog</a> | <a href="/about">About</a> | <a href="/contact">Contact</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><a href="/subscriptions/new">Subscribe</a></div>
-</div>
-
-
 <div class="wrap">
+
+<div class="site-title">
+THE <span class="site-title-spain">SPAIN</span> REPORT</div>
+<div class="site-description">
+<div class="site-description-right">
+<a href="https://twitter.com/thespainreport" class="twitter-follow-button" data-show-count="true">Follow @thespainreport</a>
+</div>
+<div class="site-description-left">Understand Important Spain News, In English</div>
+<div class="clear"></div>
+</div>
+
+<div class="top-nav">
+<div class="top-float-left"><%= link_to "Front Page", root_path %></div>
+<div class="top-nav-below-320">
+<div class="top-float-left"><%= link_to "Spain News", articles_news_path %></div>
+</div>
+<div class="top-float-left"><%= link_to "Editorials", articles_editorial_path %></div>
+<div class="top-float-left-no"><%= link_to "In-Depth", articles_in_depth_path %></div>
+<div class="top-nav-below-420">
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-middle-block">
+<div class="top-float-left"><%= link_to "Politics", '/categories/1-spain-politics-government' %></div>
+<div class="top-float-left"><%= link_to "Economy", '/categories/2-spain-economy-investment' %></div>
+<div class="top-float-left-no"><%= link_to "Spain & The World", '/categories/9-spain-foreign-affairs-military' %></div>
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-right-block">
+<div class="top-float-left" class="980invisible"><%= link_to "About", '/about/' %></div>
+<div class="top-float-left"><%= link_to "Blog", articles_blog_path %></div>
+<div class="top-float-left-no"><%= link_to "Contact", '/contact/' %></div>
+<div class="top-float-left-no">––</div>
+</div>
+<div class="top-nav-below-420">
+<div class="top-float-left-no"><%= link_to "Subscribe", '/subscriptions/new', :"data-no-turbolink" => true %></div>
+</div>
+<div class="clear"></div>
+</div>
 
 <%= yield %>
 
-<div style="width:100%; text-align: center; margin: 10px 0px; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Independent Spain News, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
+<div style="width:100%; text-align: center; margin: 20px 0px; padding: 20px 0px; border-top: 1px dotted #999999;">Copyright © 2015 · The Spain Report Ltd. · Understand Important Spain News, In English</div>
 
-<div class="clear"></div>
 </div>
 
 <!-- Paywall -->

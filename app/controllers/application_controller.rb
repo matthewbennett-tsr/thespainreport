@@ -6,6 +6,15 @@ class ApplicationController < ActionController::Base
   
   before_filter :allow_iframe_requests
   before_filter :set_visitor_cookie
+  before_filter :app_wide
+  
+  def app_wide
+    @latestactivestories = Story.active.latest
+  end
+  
+  def message_error_not_allowed
+    "You're not allowed to do that."
+  end
   
   def set_visitor_cookie
     cookies[:visits] = {

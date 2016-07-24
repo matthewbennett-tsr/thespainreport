@@ -2,13 +2,14 @@
 
 <%= render 'tickerstories' %>
 
+<div class="content-left-new"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
+
 <h1>Blog</h1>
 
 <div class="article-lede">
 Announcements and posts about The Spain Report as a news service, as a company and as a project. Our story.
 </div>
-
-<%= render 'emailsignup' %>
 
 <div class="index-non-home">
   <div class="listing-left">Updated</div>
@@ -35,4 +36,95 @@ Announcements and posts about The Spain Report as a news service, as a company a
     </div>
     <div style="clear:both;"></div>   
   </div> 
-    <% end %>
+<% end %>
+
+</div>
+</div>
+    
+<div class="content-right">
+  
+  <div class="sidebar-header-top-new">Latest Editorial</div>
+  <% @lasteditorial.each do |article| %>
+    <div class="content-white-background">
+      <%= link_to article do %>
+        <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+        <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+        <p style="font-size: 11px; margin-top: 5px; "><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest In-Depth</div>
+  <% @lastindepth.each do |article| %>
+    <div class="content-white-background">
+      <%= link_to article do %>
+        <% if article.main? %>
+          <div style="width:100%; margin-bottom: 3px;">
+              <%= image_tag article.main.url if article.main? %>
+          </div>
+        <% elsif article.video? %>
+          <div class="video-wrapper">
+            <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+          </div>
+        <% else %>
+        <% end %>
+        <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
+        <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
+        <p style="font-size: 11px; margin-top: 5px; "><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="indepth-label-mini">IN-DEPTH</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest Article Updates</div>
+
+    <% @latestupdates.each do |newsitem| %>
+    <div class="content-white-background">
+      <% if newsitem.article.present? %>
+        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <div class="video-wrapper">
+                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+                </div>
+              </div>
+            <% else %>
+            <% end %>
+            <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= newsitem.slug %></span></p>
+            <p style="font-size: 12px;"><%= newsitem.item.truncate(150) %></p>
+            <p style="font-size: 11px; margin-top: 5px; ">
+              <span class="feed-item-date"><%= newsitem.created_at.to_formatted_s(:short) %></span>
+              <% if newsitem.article.type.name == "LIVE BLOG" %>
+                <span class="breaking-label-mini">LIVE BLOG</span>
+              <% end %>
+            </p>
+        <% end %>
+      <% else %>
+        <%= link_to newsitem do %>
+            <% if newsitem.main? %>
+              <div style="width:100%; margin-bottom: 3px;">
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+              </div>
+            <% elsif newsitem.video? %>
+              <div style="width:100%; margin-bottom: 3px;">
+              <div class="video-wrapper">
+                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
+              </div>
+              </div>
+            <% else %>
+            <% end %>
+            <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= newsitem.slug %></span></p>
+            <p style="font-size: 12px;"><%= newsitem.item.truncate(150) %></p>
+            <p style="font-size: 11px; margin-top: 5px; ">
+              <span class="feed-item-date"><%= newsitem.created_at.to_formatted_s(:short) %></span>
+            </p>
+        <% end %>
+      <% end %>
+      </div>
+<% end %>
+
+</div>
+<div class="clear"></div>
