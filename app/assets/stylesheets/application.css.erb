@@ -50,7 +50,7 @@ iframe {margin:0; padding:0;}
 
 /* STRUCTURAL STUFF*/
 body {margin: 0; font-family: Arial; font-size: 14px;}
-.wrap {position: relative; width: 100%; margin-top: 10px; padding-left: 300px; }
+.wrap {position: relative; width: 100%; margin-top: 60px; padding-left: 300px; }
 .left-hand-fixed-bar {position:fixed; margin-left: 10px; margin-top: 13px; width: 285px; height: 690px; background-color: #f1f2f4; padding: 10px;}
 .content-left-new {float:left; width: 65%; margin-top: 13px; padding: 10px; background-color: #f1f2f4; }
 .content-left-new-page {float:left; width: 100%; margin-top: 13px; padding: 10px; background-color: #f1f2f4; }
@@ -63,10 +63,10 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 .user-bar a:hover {color: #F1BF00; background-color: #eeeeee;}
 .user-bar a.subscribe, .user-bar a.subscribe:visited {color: #005BBF; text-decoration:underline;}
 .user-bar a.subscribe:hover {color: #F1BF00; background-color: #eeeeee;}
-.user-float-left {float:left; margin-left: 5px; border-left: 1px solid #000000; padding-left: 5px;}
+.user-float-left {float:left; margin-left: 5px; padding-left: 5px;}
 .user-float-left-no {float:left; margin-left: 5px;}
 .user-bar-flash {float:left; padding-left: 20px; padding-top: 8px; color: green;}
-.user-bar-right-links {float:right; color: #000000; margin-right: 20px;}
+.user-bar-right-links {float:right; color: #000000; margin-right: 10px;}
 .user-bar-login {float: left;}
 .user-bar-right-links-basic-user {float:left; margin-top: 6px;}
 
@@ -145,7 +145,7 @@ body {margin: 0; font-family: Arial; font-size: 14px;}
 
 
 .homelink {position:fixed; left: 0%; top: 0%; width: 315px; height: 60px; background-color: transparent; z-index: 500;}
-.site-title-new {padding: 10px 10px 10px 10px; font-size: 39px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1;}
+.site-title-new {float: left; padding: 10px 10px 10px 10px; font-size: 39px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1;}
 .site-description-new {color: #999999; font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 25px;}
 .email-sign-up-form-new {margin-top: 5px; margin-bottom: 5px;}
 .content-white-background {background-color: #ffffff; padding: 10px; border: 1px solid #ccc; margin-bottom: 5px;}
@@ -382,12 +382,6 @@ video { width: 100% !important; height: auto !important;}
   h1 {font-size: 18px;}
   .main-image-liveblog-update {width: 100%; margin-left: 0px; margin-bottom: 5px; }
   .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
-  .email-sign-up-form {margin-bottom: 10px;}
-  .email-sign-up-image {width: 40%;}
-  .email-sign-up-text {width: 60%;}
-  .email-sign-up-prompt {width: 100%;}
-  .email-sign-up-ssl-image {float:left; width: 20%;}
-  .email-sign-up-quote {float:right; width: 80%; padding-left: 0px; padding-top: 0px;}
 }
 
 @media only screen and (max-width: 680px) {
@@ -395,12 +389,17 @@ video { width: 100% !important; height: auto !important;}
 
 @media only screen and (max-width: 650px) {
   .left-hand-fixed-bar {display:none;}
-  .wrap {padding-left: 10px;}
-  .site-title-new {font-size: 33px;}
+  .wrap {padding-left: 10px; margin-top: 100px;}
+  .user-bar-right-links {width: 100%;}
+  .user-bar-right-links-basic-user {margin-left: 20px; margin-top: 7px;}
+  .user-bar-login-form {margin-left: 20px; width: 90%;}
+  .top-login-input-float {width: 32%;}
+  .input200 {width: 100%;}
+  .input170 {width: 100%;}
 }
 
 @media only screen and (max-width: 610px) {
-  
+ 
 }
 
 @media only screen and (max-width: 580px) {
