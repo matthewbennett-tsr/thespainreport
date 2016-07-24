@@ -49,7 +49,7 @@
     <% else %>
       <span class="listing-update-slug"><span>
     <% end %>
-      <%= article.updated_at.to_formatted_s(:short) %></span></span>
+      <%= article.created_at.to_formatted_s(:short) %></span></span>
     </div>
     </div>
     <div class="listing-right">
@@ -94,7 +94,7 @@
 <% @story.newsitems.published.lastfifty.each do |newsitem| %>
 <div class="listing-update-container">
   <div class="listing-left">
-    <%= newsitem.updated_at.to_formatted_s(:short) %>
+    <%= newsitem.created_at.to_formatted_s(:short) %>
   </div>
   <div class="listing-right">
       <% if newsitem.main? %>
