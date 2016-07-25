@@ -53,7 +53,7 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'latest' && @article.updated_at >= 24.hours.ago %>
+<% elsif @article.urgency == 'latest' && @article.updated_at >= 12.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></div>
 <% else %>
 <% end %>

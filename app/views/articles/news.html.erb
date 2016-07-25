@@ -28,7 +28,7 @@ Original, independent reporting of the latest news from Spain, in English, as so
   <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span></span>
 <% elsif article.urgency == 'breaking' && article.updated_at >= 2.hours.ago %>
   <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span></span>
-<% elsif article.urgency == 'latest' %>
+<% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
   <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span></span>
 <% else %>
 <% end %>

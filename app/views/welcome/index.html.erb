@@ -34,11 +34,11 @@
   
 <div style="margin-top: 5px;">
 <span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span>
-<% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+<% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
   <span class="breaking-label-mini">MAJOR BREAKING</span>
-<% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+<% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
   <span class="breaking-label-mini">BREAKING</span>
-<% elsif article.urgency == 'latest' %>
+<% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
   <span class="latest-label-mini">LATEST</span>
 <% else %>
 <% end %>
@@ -79,11 +79,11 @@
         <p style="font-size: 11px; margin-top: 5px; ">
         <span class="feed-item-date"> <%= article.created_at.to_formatted_s(:short) %></span>
         <span class="listing-update-slug">
-          <% if article.urgency == 'majorbreaking' && article.created_at >= 3.hours.ago %>
+          <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
         <span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING</span>
-  <% elsif article.urgency == 'breaking' && article.created_at >= 3.hours.ago %>
+  <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
         <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> 
- <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+ <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
         <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span>   
    <% else %>
  <% end %>

@@ -36,11 +36,11 @@
   <div class="listing-article-container">
     <div class="listing-left">
     <div class="listing-update-text">
-    <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
+    <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
       <span class="listing-update-slug"><span class="breaking-label-mini">
-    <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
+    <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
       <span class="listing-update-slug"><span class="breaking-label-mini">
-    <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %> 
+    <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %> 
       <span class="listing-update-slug"><span class="latest-label-mini">
     <% elsif article.status == 'updated' %> 
       <span class="listing-update-slug"><span class="updated-label-mini">
@@ -54,11 +54,11 @@
     </div>
     <div class="listing-right">
       <div class="listing-update-text">
-      <% if article.urgency == 'majorbreaking' && article.updated_at >= 3.hours.ago %>
+      <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
         <span class="listing-update-slug"><span class="breaking-label-mini"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span></span>
-      <% elsif article.urgency == 'breaking' && article.updated_at >= 3.hours.ago %>
+      <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
         <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> <%= link_to article.headline, article %></span>
-      <% elsif article.urgency == 'latest' && article.updated_at >= 12.hours.ago %>
+      <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
         <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span> <%= link_to article.headline, article %></span>
       <% elsif article.status == 'updated' %>
         <span class="listing-update-slug"><span class="updated-label-mini">UPDATED</span> <%= link_to article.headline, article %></span>
