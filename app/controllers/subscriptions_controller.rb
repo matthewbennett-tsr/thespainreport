@@ -1,6 +1,6 @@
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: [:show, :edit, :update, :destroy]
-
+  
   def new_subscription
     # Get the credit card details from the form and generate stripeToken
     token = params[:stripeToken]
