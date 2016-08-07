@@ -203,8 +203,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
-    turbolinks (2.5.3)
-      coffee-rails
     twitter (5.15.0)
       addressable (~> 2.3)
       buftok (~> 0.2.0)
@@ -261,7 +259,6 @@ DEPENDENCIES
   sqlite3
   stripe (~> 1.25.0)!
   superfeedr_engine
-  turbolinks
   twitter
   twitter-bootstrap-rails
   uglifier (>= 1.3.0)
