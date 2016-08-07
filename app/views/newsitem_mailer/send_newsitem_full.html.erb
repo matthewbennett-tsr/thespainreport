@@ -29,9 +29,9 @@
             <%= markdown(@newsitem.item) %>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <% if @newsitem.article.present? %>
-            <%= link_to 'Read online & leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id) %>
+            <%= link_to 'What do you think? Leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id) %>
           <% else %>
-            <%= link_to 'Read online & leave your comment here', newsitem_url(@newsitem) %>
+            <%= link_to 'What do you think? Leave your comment here', newsitem_url(@newsitem) %>
           <% end %>
           </p>
         </td>

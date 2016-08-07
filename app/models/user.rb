@@ -2,8 +2,8 @@ class User < ActiveRecord::Base
   has_secure_password
   validates :email, :uniqueness => {:case_sensitive => false}
   validates_format_of :email, :with => /@/, message: ": are you sure that's your e-mail address?"
-  validates :password, :on => :create, length: {minimum: 15, message: ": needs to be at least 15 characters long"}
-  validates :password, :on => :update, length: {minimum: 15, message: ": needs to be at least 15 characters long"}, allow_blank: true
+  validates :password, :on => :create, length: {minimum: 11, message: ": needs to be at least 11 characters long"}
+  validates :password, :on => :update, length: {minimum: 11, message: ": needs to be at least 11 characters long"}, allow_blank: true
   validates :name, :on => :update, :uniqueness => {:case_sensitive => false}, length: {maximum: 20}, allow_blank: true
   validate :password_complexity
   validates :password_confirmation, :presence => true, :on => :create
@@ -23,7 +23,8 @@ class User < ActiveRecord::Base
   scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
   scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}
   scope :readers, -> {where(role: 'reader')}
-  scope :newreaders, -> {readers.thirtydays}
+  scope :trialreaders, -> {readers.trial}
+  scope :aftertrialreaders, -> {readers.aftertrial}
   scope :offerreaders, -> {readers.where('reader_offer is true')}
   scope :editors, -> {where(role: 'editor')}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
@@ -52,6 +53,8 @@ class User < ActiveRecord::Base
   scope :twentydays, -> {where('created_at <= ? and created_at >= ?', 456.hours.ago, 480.hours.ago)}
   scope :twentyonedays, -> {where('created_at <= ? and created_at >= ?', 480.hours.ago, 504.hours.ago)}
   scope :thirtydays, -> {where('created_at <= ? and created_at >= ?', 720.hours.ago, 744.hours.ago)}
+  scope :trial, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 744.hours.ago)}
+  scope :aftertrial, -> {where('created_at <= ?', 744.hours.ago)}
   
   has_many :comments
   

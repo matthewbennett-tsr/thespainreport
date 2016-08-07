@@ -139,7 +139,10 @@ class NewsitemsController < ApplicationController
       User.wantsupdates.subscribers.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	  end
-	  User.wantsupdates.readers.each do |user|
+	  User.wantsupdates.trialreaders.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
+	  User.wantsupdates.aftertrialreaders.each do |user|
         NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
 	  end
     elsif @newsitem.email_to == 'readers'

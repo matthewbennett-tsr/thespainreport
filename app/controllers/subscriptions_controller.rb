@@ -19,6 +19,7 @@ class SubscriptionsController < ApplicationController
         user.stripe_customer_id = customer.id
         user.role = 'subscriber'
         user.save!
+        redirect_to :back
       else
         new_spain_report_member
         user = User.find_by_email(params[:email])
@@ -26,10 +27,7 @@ class SubscriptionsController < ApplicationController
         user.role = 'subscriber'
         user.save!  
       end
-      
-      redirect_to '/subscriptions/new'
       flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
-      
       UserMailer.delay.thank_you_for_subscribing(user)
       
     rescue Stripe::CardError => e
@@ -81,6 +79,10 @@ class SubscriptionsController < ApplicationController
     UserMailer.delay.registration_confirmation(user)
     UserMailer.delay.password_choose(user)
     UserMailer.delay.new_user_stories(user)
+    
+    # Redirect to 
+    redirect_to :back
+    flash[:success] = "Welcome aboard! Check your e-mail."
   end
   
   # GET /subscriptions

@@ -26,6 +26,7 @@ Original, independent reporting, editorial insight and in-depth features take yo
     <% elsif current_user.stripe_customer_id? %>
       <div id="flash_success_div">You are already a valued subscriber and your subscription is up-to-date.</div>
     <% else %>
+      <%= render 'subscriptionform' %>
     <% end %>
   </div>
 

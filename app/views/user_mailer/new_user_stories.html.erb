@@ -20,27 +20,20 @@
               <li><%= link_to article.headline, article %></il>
             <% end %>
           </ul>
-          <p><strong>In-Depth</strong></p>  
+          <p><strong>Features & Interviews</strong></p>  
           <ul>
             <% Article.in_depth.published.lastfive.each do |article| %>
               <li><%= link_to article.headline, article %></il>
             <% end %>
           </ul>
-          <p><strong>News Articles</strong></p>  
+          <p><strong>Latest News</strong></p>  
           <ul>
             <% Article.news.published.lastfive.each do |article| %>
               <li><%= link_to article.headline, article %></il>
             <% end %>
           </ul>
-          <p><strong>News Updates</strong></p>  
-          <p>News updates are a more concise article format we use for things which merit your attention but do not deserve a full article, like announcements, press conference quotes, and data points. We also use them as the componenet parts of live blogs and for updating full articles sometimes, so you might also see them at the end of other articles.</p>          
-          <ul>
-            <% Newsitem.published.lastfive.each do |newsitem| %>
-              <li><%= link_to newsitem.slug, newsitem %></il>
-            <% end %>
-          </ul>
           <p>Go and read as much as you want and thoroughly enjoy your free 30 days!</p>
-          <p>Very kindest regards,</p>
+          <p>Very kindest regards from Spain,</p>
           <p>Matthew Bennett<br />Editor</p>
           <p>(<strong>P.S.</strong> If you have <em>any problems at all</em> with the site or access, just e-mail us and we'll help you fix them right away.)</p>
         </td>

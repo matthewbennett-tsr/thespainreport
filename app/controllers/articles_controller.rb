@@ -174,8 +174,11 @@ class ArticlesController < ApplicationController
 	  User.wantssummariesbreaking.subscribers.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
 	  end
-	  User.wantssummariesbreaking.readers.each do |user|
-        ArticleMailer.delay.send_article_teaser(@article, user)
+	  User.wantssummariesbreaking.trialreaders.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	  end
+	  User.wantssummariesbreaking.aftertrialreaders.each do |user|
+          ArticleMailer.delay.send_article_teaser(@article, user)
 	  end
     elsif @article.email_to == 'readers'
       User.wantssummariesbreaking.readers.each do |user|
@@ -204,7 +207,10 @@ class ArticlesController < ApplicationController
 	    User.wantsarticles.subscribers.each do |user|
           ArticleMailer.delay.send_article_full(@article, user)
 	    end
-	    User.wantsarticles.readers.each do |user|
+	    User.wantsarticles.trialreaders.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+	    end
+	    User.wantsarticles.aftertrialreaders.each do |user|
           ArticleMailer.delay.send_article_teaser(@article, user)
 	    end
       end

@@ -62,7 +62,7 @@ class UsersController < ApplicationController
     user = User.find_by_confirm_token(params[:id])
     if user
       user.email_activate
-      flash[:success] = "Well done! Check your e-mail."
+      flash[:success] = "Thank you very much. Enjoy TSR!"
       redirect_to root_url
     else
       flash[:error] = "Sorry, that link is not valid."
