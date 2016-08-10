@@ -62,13 +62,11 @@
       <div class="user-bar-right-links-basic-user">
         <div class="user-float-left"><%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Summary", '/articles/new_summary' %> | <%= link_to "Story", new_story_path %></div>
         <div class="user-float-left">—</div>
-        <div class="user-float-left"><%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %></div>
+        <div class="user-float-left"><%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %> | <%= link_to "News", entries_path %></div>
         <div class="user-float-left">—</div>
-        <div class="user-float-left"><%= link_to "Members", users_path %> | <%= link_to "Messages", salesemails_path %></div>
+        <div class="user-float-left"><%= link_to "Members", users_path %> | <%= link_to "Comments", comments_path %> | <%= link_to "Messages", salesemails_path %></div>
         <div class="user-float-left">—</div>
-        <div class="user-float-left-no"><%= link_to "News Reader", entries_path %></div>
-        <div class="user-float-left"><%= link_to "Comments", comments_path %></div>
-        <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
+        <div class="user-float-left-no"><%= link_to "Log Out", '/logout' %></div>
       </div>
       <div class="clear"></div>
     <% elsif current_user %>
