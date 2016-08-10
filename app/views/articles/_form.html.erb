@@ -65,7 +65,7 @@
 <% if action_name == 'new_summary' %>
 <% Article.last24.published.each do |article| %>
 
-### XX. <%= article.try(:headline) %>
+### X. <%= article.try(:headline) %>
 <% if article.main? %>
 [![alt](<%= article.try(:main) %>)](<%= article_url(article) %>)
 <% elsif article.video? %>
@@ -80,15 +80,20 @@
 <% end %>
 <% end %>
 
-**XXXX:** XX
+### X.
+Xxxxx
 
-**XXXX:** XX
+### X.
+Xxxxx
 
-**XXXX:** XX
+### X.
+Xxxxx
 
-**XXXX:** XX
+### X.
+Xxxxx
 
-**XXXX:** XX
+### X.
+Xxxxx
 
 <% elsif action_name == 'new' %>
 REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards
