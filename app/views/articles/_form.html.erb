@@ -61,25 +61,34 @@
   </div>
   
 <div class="admin-block">
-      <textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 320px;">
+<textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 320px;">
 <% if action_name == 'new_summary' %>
+<% Article.last24.published.each do |article| %>
 
-  <% Article.last24.published.each do |article| %>
-<%= article.try(:summary) %> ([Read full article](<%= article_url(article) %>))
+### XX. <%= article.try(:headline) %>
+<% if article.main? %>
+[![alt](<%= article.try(:main) %>)](<%= article_url(article) %>)
+<% elsif article.video? %>
+**VIDEO:** [<%= article.try(:caption) %>](<%= article_url(article) %>) 
+<% else %>
+<% end %>
+<%= article.try(:body).truncate(300) %> ([Read full story](<%= article_url(article) %>))
+<% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+<% article.newsitems.each do |update| %>
+- [<%= update.slug %>](<%= article_url(update.article, anchor: update.id) %>)
+<% end %>
+<% end %>
+<% end %>
 
-  <% end %>
+**XXXX:** XX
 
-  <% Newsitem.last24.published.each do |newsitem| %>
-**<%= newsitem.try(:summary_slug) %>:** <%= newsitem.try(:summary) %> ([Read full update](
-    <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
-<%= article_url(newsitem.article, anchor: newsitem.id) %>      
-    <% elsif newsitem.article.present? %>
-<%= article_url(newsitem.article, anchor: newsitem.id) %>
-    <% else %>
-<%= newsitem_url(newsitem) %>
-    <% end %>
-))
-  <% end %>
+**XXXX:** XX
+
+**XXXX:** XX
+
+**XXXX:** XX
+
+**XXXX:** XX
 
 <% elsif action_name == 'new' %>
 REPORTING: events/facts/data + description + states + smell/taste/touch/sound/sights + intensity + original + no waaaay + locations + timings + resources + Spaniards

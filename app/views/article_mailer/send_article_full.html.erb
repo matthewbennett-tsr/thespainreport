@@ -35,7 +35,6 @@
       </tr>
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
-        
         <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
           <p style="width: 100%;">
             <%= link_to(article_url(@article)) do %>
@@ -51,7 +50,6 @@
           </p>
         <% else %>
         <% end %>
-        
         <%= markdown(@article.body) %>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
             <%= link_to 'What do you think? Leave your comment here', article_url(@article) %>
