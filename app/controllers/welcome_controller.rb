@@ -2,13 +2,9 @@ class WelcomeController < ApplicationController
 
   def index
     @lasttopstory = Article.topstory.published.lastone
-    @lasttwenty = Article.published.lasttwenty.not_top.not_blog
+    @lasttwenty = Article.published.lasttwenty.not_latest_top_story.not_latest_editorial.not_blog
     @lasteditorial = Article.editorial.published.lastone
     @lastindepth = Article.in_depth.published.lastone
-    @lastpolitics = Article.published.politics.lastfive
-    @lasteconomy = Article.published.economy.lastfive
-    @lastdiplomacy = Article.published.diplomacy.lastfive
-    
     @latestupdates = Newsitem.published.lastten
     @breakingonly = Article.breakingonly.published.latest.ticker
     @latestaudio = Audio.lastone

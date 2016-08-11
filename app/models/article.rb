@@ -20,6 +20,8 @@ class Article < ActiveRecord::Base
   scope :not_blog, -> {where.not(:type_id => 26)}
   scope :topstory, -> {where(:topstory => true)}
   scope :not_top, -> {where(:topstory => false)}
+  scope :not_latest_editorial, -> { where.not(id: editorial.lastone) }
+  scope :not_latest_top_story, -> { where.not(id: topstory.lastone) }
   scope :in_depth, -> {where(:type_id => [3,4,5,6,7,8,9,10,11,13,14,15,16,17,18,25])}
   scope :editorial, -> {where(:type_id => 1)}
   scope :news, -> {where(:type_id => [2,31,32])}
