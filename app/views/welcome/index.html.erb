@@ -75,7 +75,13 @@
         <% else %>
         <% end %>
         <p style="margin: 7px 0; font-weight:bold; font-family: Oswald; font-size: 15px;"><%= article.headline %></p>
-        <p style="font-size: 14px; font-family: Georgia;"><strong><%= article.type.name %>:</strong> <%= article.body.truncate(150) %></p>
+        <p style="font-size: 14px; font-family: Georgia;"><strong><%= article.type.name %>:</strong>
+        <% if ["SUMMARY", "LIVE BLOG"].include?(article.type.try(:name)) %>
+          <%= article.lede %>
+        <% else %>
+          <%= article.body.truncate(150) %>
+        <% end %>
+        </p>
         <p style="font-size: 11px; margin-top: 5px; ">
         <span class="feed-item-date"> <%= article.created_at.to_formatted_s(:short) %></span>
         <span class="listing-update-slug">
