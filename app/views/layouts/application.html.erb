@@ -151,7 +151,7 @@ Free for 30 days.
 <% @last_active_stories.each do |story| %>
 <div style="background-color: #fff; padding: 6px; margin-bottom: 2px;">
   <%= link_to story.story, story %>
-  <% if story.last_active >= 2.hours.ago %>
+  <% if story.try(:last_active) >= 2.hours.ago %>
     <div class="news-alert" style="float:right;"><span class="breaking-label-mini">NEW</span></div>
   <% else %>
   <% end %>
