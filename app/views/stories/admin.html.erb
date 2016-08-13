@@ -37,8 +37,8 @@
         <span class="latest">LATEST</span>
       <% else %>
       <% end %>
-         <strong><%= link_to story.story, story unless story.story.nil? %></strong><br /><%= story.description unless story.description.nil? %>
-
+         <strong><%= link_to story.story, story unless story.story.nil? %></strong> <%= story.try(:last_active) %><br /><%= story.description unless story.description.nil? %>
+         
     </div>
     <div style="clear:both;"></div>   
   </div> 

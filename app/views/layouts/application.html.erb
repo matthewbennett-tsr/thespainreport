@@ -148,10 +148,10 @@ Free for 30 days.
 <div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="editorial-label">.</span> <a href="/articles/editorial">Editorials & Analysis</a></div>
 <div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="indepth-label">.</span> <a href="/articles/in-depth">Features & Interviews</a></div>
 <div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">Your Spain Stories</div>
-<% @latestactivestories.each do |story| %>
+<% @last_active_stories.each do |story| %>
 <div style="background-color: #fff; padding: 6px; margin-bottom: 2px;">
   <%= link_to story.story, story %>
-  <% if story.created_at >= 24.hours.ago %>
+  <% if story.last_active >= 2.hours.ago %>
     <div class="news-alert" style="float:right;"><span class="breaking-label-mini">NEW</span></div>
   <% else %>
   <% end %>

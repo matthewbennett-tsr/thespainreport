@@ -1,6 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /articles
   # GET /articles.json
   def index
@@ -253,6 +253,13 @@ class ArticlesController < ApplicationController
       flash[:success] = message_error_not_allowed
     end
   end
+  
+  def story_last_active
+    @article.stories.each do |story|
+      story.last_active = Time.now
+      story.save
+    end
+  end
 
   # POST /articles
   # POST /articles.json
@@ -268,11 +275,13 @@ class ArticlesController < ApplicationController
           format.json { render :show, status: :created, location: @article }
         elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           twitter
+          story_last_active
           emailsummaries
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.save && ["published", "updated"].include?(@article.status)
           twitter
+          story_last_active
           emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
@@ -300,11 +309,13 @@ class ArticlesController < ApplicationController
           format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           twitter
+          story_last_active
           emailsummaries
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully udpated.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
           twitter
+          story_last_active
           emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }

@@ -7,7 +7,7 @@ class Story < ActiveRecord::Base
   end
   
   scope :bignews, -> {where(:urgency => ['latest', 'breaking', 'majorbreaking'])}
-  scope :latest, -> {order('created_at DESC').limit(5)}
+  scope :latest, -> {order('last_active DESC NULLS LAST, story ASC').limit(5)}
   scope :ticker, -> {limit(1)}
   scope :active, -> {where(:status => ['active'])}
 end

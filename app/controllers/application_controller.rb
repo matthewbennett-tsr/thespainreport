@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
   before_filter :app_wide
   
   def app_wide
-    @latestactivestories = Story.active.latest
+    @last_active_stories = Story.latest
   end
   
   def message_error_not_allowed

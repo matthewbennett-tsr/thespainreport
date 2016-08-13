@@ -1,6 +1,6 @@
 class StoriesController < ApplicationController
   before_action :set_story, only: [:show, :edit, :update, :destroy]
-
+  
   # GET /stories
   # GET /stories.json
   def index
@@ -124,6 +124,6 @@ class StoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def story_params
-      params.require(:story).permit(:description, :status, :story, :urgency, :keywords)
+      params.require(:story).permit(:description, :last_active, :status, :story, :urgency, :keywords)
     end
 end
