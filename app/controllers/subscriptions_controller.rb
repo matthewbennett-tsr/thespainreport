@@ -12,6 +12,7 @@ class SubscriptionsController < ApplicationController
         :source => token,
         :description => email_address,
         :plan => params[:plan],
+        :coupon => "sixmonths10percent"
         )
     
       # Add new Stripe customer i) to existing reader or ii) as a new Spain Report member and then link the two
