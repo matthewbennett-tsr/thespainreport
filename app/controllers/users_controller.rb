@@ -77,6 +77,7 @@ class UsersController < ApplicationController
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
+      elsif @user.stripe_customer_id? && @user.role == "reader"
       elsif @user.stripe_customer_id?
         @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
         @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
@@ -129,7 +130,8 @@ class UsersController < ApplicationController
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
-      elsif @user.stripe_customer_id?
+      elsif @user.stripe_customer_id? && @user.role == "reader"
+      elsif @user.stripe_customer_id? && @user.role == "subscriber"
         @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
         @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
       else

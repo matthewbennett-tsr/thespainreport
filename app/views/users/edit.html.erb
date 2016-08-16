@@ -27,9 +27,11 @@
 
 <% if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE" && @user.role == 'subscriber' %>
 
+<% elsif @user.stripe_customer_id? && @user.role == 'reader' %>
+
 <% elsif @user.stripe_customer_id? && @user.role == 'subscriber' %>
-<strong>Customer ID:</strong> <%= @stripe_customer_details['id'] %><br />
-<strong>Customer E-mail:</strong> <%= @stripe_customer_details['description'] %><br />
+<strong>Customer ID:</strong> <%= @stripe_customer_details['id'] unless @stripe_customer_details['id'].nil? %><br />
+<strong>Customer E-mail:</strong> <%= @stripe_customer_details['description'] unless @stripe_customer_details['description'].nil?  %><br />
 <strong>Customer Creation Date:</strong> <%= Time.at(@stripe_customer_details['created']).to_formatted_s(:long) %><br /><br />
 
 <strong>Credit Card:</strong> <%= @stripe_customer_details.sources.data[0].brand %><br />
