@@ -32,36 +32,18 @@ $(document).ready(function(){
 </script>
 
 <div style="margin: 10px auto;">
-<p><strong>WORLD:</strong> <%= link_to "All World Latest", entries_world_all_path %> | <%= link_to "World Home Pages", entries_world_home_path %> | <%= link_to "World Foreign Affairs", entries_world_foreign_affairs_path %> | <%= link_to "World Politics", entries_world_politics_path %> | <%= link_to "World Economy", entries_world_economy_path %> | <%= link_to "Media & Journalism", entries_world_media_path %></p>
-<p><strong>SPAIN:</strong> <%= link_to "All Spain Latest", entries_spain_all_path %> | <%= link_to "Spain in English", entries_spain_english_path %> | <%= link_to "Spain Home Pages", entries_spain_home_path %> | <%= link_to "Spain Opinion", entries_spain_opinion_path %> | <%= link_to "Spain International", entries_spain_international_path %> | <%= link_to "Spain National", entries_spain_national_path %> | <%= link_to "Spain Economy", entries_spain_economy_path %> | <%= link_to "Spain Other", entries_spain_other_path %></p>
-<p><strong>DIG DEEPER:</strong> <a href="http://www.thespainreport.com/entries?utf8=%E2%9C%93&any=1&search=españa+español+española+españoles+españolas+spain+spaniard+spanish">Spain & Spaniards</a> | <a href="http://www.thespainreport.com/entries?utf8=%E2%9C%93&any=1&search=0+00+000+cien+ciento+cientos+cientas+mil+millón+millones+billón+billones">Big Numbers</a> | <a href="#" class="stories-link">By Story</a> | <a href="#" class="topics-link">By Topic</a> | <a href="#" class="regions-link">By Region</a> | <a href="#" class="media-link">By Media Outlet</a></p>
-
-<p class="medias" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
-<%= link_to "5 Días", entries_cincodias_path(anchor: "?togglemedias=open") %> | <%= link_to "ABC", entries_abc_path(anchor: "?togglemedias=open") %> | <%= link_to "Antena 3", entries_antenatres_path(anchor: "?togglemedias=open") %> | <%= link_to "COPE", entries_cope_path(anchor: "?togglemedias=open") %> | <%= link_to "EFE", entries_efe_path(anchor: "?togglemedias=open") %> | <%= link_to "El Confidencial", entries_elconfidencial_path(anchor: "?togglemedias=open") %> |  <%= link_to "ECD", entries_elconfidencialdigital_path(anchor: "?togglemedias=open") %> | <%= link_to "El Diario", entries_eldiario_path(anchor: "?togglemedias=open") %> | <%= link_to "El Economista", entries_eleconomista_path(anchor: "?togglemedias=open") %> | <%= link_to "El Español", entries_elespanol_path(anchor: "?togglemedias=open") %> | <%= link_to "El Mundo", entries_elmundo_path(anchor: "?togglemedias=open") %> | <%= link_to "El País", entries_elpais_path(anchor: "?togglemedias=open") %> | <%= link_to "El Periódico", entries_elperiodico_path(anchor: "?togglemedias=open") %> | <%= link_to "Europa Press", entries_europapress_path(anchor: "?togglemedias=open") %> | <%= link_to "Expansión", entries_expansion_path(anchor: "?togglemedias=open") %> | <%= link_to "InfoLibre", entries_infolibre_path(anchor: "?togglemedias=open") %> | <%= link_to "La Sexta", entries_lasexta_path(anchor: "?togglemedias=open") %> | <%= link_to "La Razón", entries_larazon_path(anchor: "?togglemedias=open") %> | <%= link_to "La Vanguardia", entries_lavanguardia_path(anchor: "?togglemedias=open") %> | <%= link_to "Libertad Digital", entries_libertaddigital_path(anchor: "?togglemedias=open") %> | <%= link_to "Onda Cero", entries_ondacero_path(anchor: "?togglemedias=open") %> | <%= link_to "Público", entries_publico_path(anchor: "?togglemedias=open") %> | <%= link_to "SER", entries_ser_path(anchor: "?togglemedias=open") %> | <%= link_to "Tele 5", entries_telecinco_path(anchor: "?togglemedias=open") %> | <%= link_to "TVE", entries_tve_path(anchor: "?togglemedias=open") %> | <%= link_to "Vozpópuli", entries_vozpopuli_path(anchor: "?togglemedias=open") %>
+<p>
+<%= link_to "Spain Latest", entries_spain_all_path %> |
+<%= link_to "Spain English", entries_spain_english_path %> |
+<a href="http://www.thespainreport.com/entries?utf8=%E2%9C%93&any=1&search=españa+español+española+españoles+españolas+spain+spaniard+spanish">Spain & Spaniards</a> |
+<a href="http://www.thespainreport.com/entries?utf8=%E2%9C%93&any=1&search=0+00+000+cien+ciento+cientos+cientas+mil+millón+millones+billón+billones">Big Numbers</a>
 </p>
-
-<p class="stories" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
-<% @stories.each do |story| %>
-     <a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&togglestories=open&search=<%= story.keywords %>">
-     <%= story.story %>
-     </a> · 
-  <% end %>
-</p>
-
-<p class="topics" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
+<p>
 <% @categories.all.each do |category| %>
-     <a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&toggletopics=open&search=<%= category.keywords %>">
-     <%= category.category %>
-     </a> · 
-  <% end %>
-</p>
-
-<p class="regions" style="display:none; border:1px solid #000; padding: 5px; margin-top: 5px;">
-<% @regions.all.each do |region| %>
-     <a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&toggleregions=open&search=<%= region.keywords %>">
-     <%= region.region %>
-     </a> · 
-  <% end %>
+<a href="<%= entries_path %>?utf8=%E2%9C%93&any=1&toggletopics=open&search=<%= category.keywords %>">
+<%= category.category %>
+</a> | 
+<% end %>
 </p>
 </div>
   
