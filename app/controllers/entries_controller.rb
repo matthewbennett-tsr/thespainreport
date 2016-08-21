@@ -27,8 +27,9 @@ class EntriesController < ApplicationController
     entry_count
     feed_count
     if params[:search] && params[:all] == '1'
-      @entries = Entry.lastfewdays.search(params[:search]).order("created_at DESC")
-      @entries = Entry.lastsevendays.search(params[:search]).order("created_at DESC")
+      terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
+      query = terms.map { |term| "title @@ '%#{term}%'" }.join(" AND ")
+      @entries = Entry.lastfewdays.where(query).order("created_at DESC")
       feedsearches
     elsif params[:search] && params[:any] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
