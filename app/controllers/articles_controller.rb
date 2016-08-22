@@ -195,6 +195,11 @@ class ArticlesController < ApplicationController
   def emailarticles
     if @article.email_to == 'none'
     
+    
+    elsif @article.email_to == 'test'
+        User.wantsarticles.editors.each do |user|
+          ArticleMailer.delay.send_article_full(@article, user)
+        end
     elsif @article.email_to == 'all'
       if @article.type.name == 'BLOG'
         User.all.each do |user|
