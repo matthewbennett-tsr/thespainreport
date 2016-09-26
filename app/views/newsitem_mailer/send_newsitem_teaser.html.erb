@@ -6,8 +6,11 @@
   <body>
     <table>
       <tr>
-        <td style="font-family: Oswald, Arial; font-size: 16px; border-bottom: 1px solid #AA151B;">
-          <h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @newsitem.slug %></h1>
+        <td style="font-family: Oswald, Arial; font-size: 16px;"><h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @newsitem.slug %></h1></td>
+      </tr>
+      <tr>
+        <td style="font-family: Georgia, Times New Roman; font-size: 15px; font-style: italic; border-top: 1px dotted #999999; border-bottom: 1px dotted #999999;">
+          <strong><%= @newsitem.created_at.strftime("%b %d %Y") %></strong>
         </td>
       </tr>
       <tr>
@@ -16,8 +19,14 @@
             
             <% if @newsitem.main? %> <%# MAIN IMAGE OR VIDEO %>
               <p style="width: 100%;">
-                <%= link_to(newsitem_url(@newsitem)) do %>
-                  <%= image_tag @newsitem.main.url if @newsitem.main? %>
+                <% if @newsitem.article.present? %>
+                  <%= link_to(article_url(@newsitem.article, anchor: @newsitem.id)) do %>
+                    <%= image_tag @newsitem.main.url if @newsitem.main? %>
+                  <% end %>
+                <% else %>
+                  <%= link_to(newsitem_url(@newsitem)) do %>
+                    <%= image_tag @newsitem.main.url if @newsitem.main? %>
+                  <% end %>
                 <% end %>
                 <p>
                   <strong>IMAGE:</strong> <em><%= @newsitem.caption %></em>
@@ -25,7 +34,12 @@
               </p>
             <% elsif @newsitem.video? %>
               <p>
-                <strong>VIDEO:</strong> <%= link_to 'Watch here', newsitem_url(@newsitem) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+                <strong>VIDEO:</strong>
+                <% if @newsitem.article.present? %>
+                  <%= link_to 'Watch here', article_url(@newsitem.article, anchor: @newsitem.id) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+                <% else %>
+                  <%= link_to 'Watch here', newsitem_url(@newsitem) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+                <% end %>
               </p>
             <% else %>
             <% end %>

@@ -70,8 +70,12 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span></span></div>
 <% end %>
 
-<% if !["NEWS", "SUMMARY", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini">IN-DEPTH</span></span></div>
+<% if @article.type.try(:name) == "DAILY BRIEFING" %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">DAILY BRIEFING</span></span></div>
+<% end %>
+
+<% if !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini"><%= @article.type.try(:name) %></span></span></div>
 <% end %>
 
 <% if @articleupdates.present? %>
@@ -84,7 +88,7 @@
 <div class="clear"></div>
 
 <div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %>
-  <% if @article.type.try(:name) == "LIVE BLOG" %>
+  <% if ["IMAGES", "LIVE BLOG", "DAILY BRIEFING"].include?(@article.type.try(:name)) %>
   
   <% elsif @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
@@ -409,8 +413,14 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
   <% end %>
 <%# TESTING STUFF ENDS %>
 
-
-
+<% if ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 2 %>
+  <p>…</p>
+  <p>(<em>This news day is just beginning! Come back to this page for more updates on the day's events in Spain as they unfold. Who knows what will happen next…</em>)</p>
+<% elsif ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 10 %>
+  <p>…</p>
+  <p>(<em>It's only <%= Time.now.strftime("%I:%M %P") %> in Spain! News is still happening, come back to this page for more stories and context throughout the day.</em>)</p>
+<% else %>
+<% end %>
 
   </div> <%# END OF ARTICLE TEXT %>
   

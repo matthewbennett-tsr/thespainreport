@@ -18,11 +18,13 @@ class NewsitemMailer < ApplicationMailer
     if @newsitem.short_slug?
       @newsitem.short_slug + ": " + send_newsitem_headline
     elsif @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
-      "LIVE BLOG UPDATE: " + send_newsitem_headline
+      "LIVE BLOG: " + send_newsitem_headline
+    elsif @newsitem.article.present? && @newsitem.article.type.name == "DAILY BRIEFING"
+      "NEWS: " + send_newsitem_headline
     elsif @newsitem.article.present?
-      "ARTICLE UPDATE: " + send_newsitem_headline
-    else
       "UPDATE: " + send_newsitem_headline
+    else
+      "NEWS: " + send_newsitem_headline
     end
   end
   

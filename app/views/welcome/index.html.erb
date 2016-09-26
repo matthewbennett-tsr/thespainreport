@@ -76,7 +76,7 @@
         <% end %>
         <p style="margin: 7px 0; font-weight:bold; font-family: Oswald; font-size: 15px;"><%= article.headline %></p>
         <p style="font-size: 14px; font-family: Georgia;"><strong><%= article.type.name %>:</strong>
-        <% if ["SUMMARY", "LIVE BLOG"].include?(article.type.try(:name)) %>
+        <% if ["DAILY BRIEFING", "LIVE BLOG"].include?(article.type.try(:name)) %>
           <%= article.lede %>
         <% else %>
           <%= article.body.truncate(150) %>
@@ -102,7 +102,10 @@
     <% if article.type.name == 'ANALYSIS' %>
         <span class="listing-update-slug"><span class="editorial-label-mini">ANALYSIS</span>
     <% end %>
-    <% if !["NEWS", "SUMMARY", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
+    <% if article.type.name == 'DAILY BRIEFING' %>
+        <span class="listing-update-slug"><span class="latest-label-mini">DAILY BRIEFING</span>
+    <% end %>
+    <% if !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
         <span class="listing-update-slug"><span class="indepth-label-mini">IN-DEPTH</span>
     <% end %>
         </span>

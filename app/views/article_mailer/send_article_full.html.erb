@@ -51,6 +51,33 @@
         <% else %>
         <% end %>
         <%= markdown(@article.body) %>
+        
+        <% if @article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+          <% @article.newsitems.each do |newsitem| %>
+            <div style="width: 100%;">
+              <h3 style="font-family: Oswald, Arial; font-size: 16px;"><%= newsitem.slug %></h3>
+              <% if newsitem.main? %>
+                <%= image_tag newsitem.main.url if newsitem.main? %>
+                <p>
+                <strong>IMAGE:</strong> <em><%= newsitem.caption %></em>
+                </p>
+              <% elsif newsitem.video? %>
+                <p>
+                <strong>VIDEO:</strong> 
+                <% if newsitem.article.present? %>
+                  <%= link_to 'Watch here', article_url(newsitem.article, anchor: newsitem.id) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
+                <% else %>
+                  <%= link_to 'Watch here', newsitem_url(newsitem) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
+                <% end %>
+                </p>
+              <% else %>
+              <% end %>
+              <div class="article-update-text"><%= markdown(newsitem.item.html_safe) %></div>
+              <div class="clear"></div>
+              </div>
+          <% end %>
+        <% end %> <%# END OF ARTICLE UPDATES %> 
+  
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
             <%= link_to 'What do you think? Leave your comment here', article_url(@article) %>
           </p>
