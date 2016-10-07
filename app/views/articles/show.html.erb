@@ -416,7 +416,7 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
 <% if ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 2 %>
   <p>…</p>
   <p>(<em>This news day is just beginning! Come back to this page for more updates on the day's events in Spain as they unfold. Who knows what will happen next…</em>)</p>
-<% elsif ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 10 %>
+<% elsif ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 5 %>
   <p>…</p>
   <p>(<em>It's only <%= Time.now.strftime("%I:%M %P") %> in Spain! News is still happening, come back to this page for more stories and context throughout the day.</em>)</p>
 <% else %>
