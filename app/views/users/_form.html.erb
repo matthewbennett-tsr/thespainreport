@@ -7,7 +7,7 @@
     <div class="email-input-float">
     <div style="margin-top: 23px;">
     <% if current_user.role == 'editor' %>
-      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %> | <%= f.check_box :allow_access %>
+      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %> | <%= f.check_box :allow_access %> | <%= f.check_box :is_author %>
     <% else %>
       <% if @user.role == 'editor' %>
          <span style="background-color: green; color: white; padding: 2px 5px;">
