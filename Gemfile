@@ -60,6 +60,9 @@ gem 'superfeedr_engine'
 # Stripe bug test install of bootstrap
 gem "twitter-bootstrap-rails"
 
+# React
+gem 'react-rails'
+
 # Use Unicorn as the app server
 # gem 'unicorn'
 

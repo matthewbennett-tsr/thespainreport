@@ -1,7 +1,7 @@
 <%= form_tag '/new_subscription', :class => '', :id => 'payment-form' do %>
 
   <div class="subscription-form-container">
-  
+
     <% if flash.present? %>
       <% flash.each do |name, msg| %>
         <%= content_tag :div, id: "flash_#{name}_div" do -%>
@@ -15,7 +15,7 @@
         Choose Your Deal:
       </div>
       <div class="subscription-right-form-element">
-        <select name="plan" class="input200">
+        <select name="plan" id="plan" class="input200" onchange="calculateTotal()">
           <optgroup label="Yearly Payments">
             <option value="5599year">EDITORIAL: £55.99/year</option>
             <option value="4999year">IN-DEPTH: £49.99/year</option>
@@ -29,6 +29,60 @@
         </select>
       </div>
       <div class="clear"></div>
+    </div>
+    
+
+<div class="subscription-form-section-middle">
+    <div class="subscription-left-label-select">
+        Which country are you in?
+    </div>
+    <div class="subscription-right-form-element">
+      <select id="country_vat" name="country_vat" onchange="calculateTotal()">
+        <option disabled="disabled" selected="selected">----</option>
+        <option value='noteu'>Not European Union</option>
+        <option disabled="disabled">----</option>
+        <option value='unitedkingdom'>United Kingdom</option>
+        <option value='spain'>Spain</option>
+        <option disabled="disabled">----</option>
+        <option value='austria'>Austria</option>
+        <option value='belgium'>Belgium</option>
+        <option value='bulgaria'>Bulgaria</option>
+        <option value='croatia'>Croatia</option>
+        <option value='cyprus'>Cyprus</option>
+        <option value='czechrepublic'>Czech Republic</option>
+        <option value='denmark'>Denmark</option>
+        <option value='estonia'>Estonia</option>
+        <option value='finland'>Finland</option>
+        <option value='france'>France</option>
+        <option value='germany'>Germany</option>
+        <option value='greece'>Greece</option>
+        <option value='hungary'>Hungary</option>
+        <option value='ireland'>Ireland</option>
+        <option value='italy'>Italy</option>
+        <option value='latvia'>Lativa</option>
+        <option value='lithuania'>Lithuania</option>
+        <option value='luxembourg'>Luxembourg</option>
+        <option value='malta'>Malta</option>
+        <option value='netherlands'>Netherlands</option>
+        <option value='poland'>Poland</option>
+        <option value='portugal'>Portugal</option>
+        <option value='romania'>Romania</option>
+        <option value='slovakrepublic'>Slovak Republic</option>
+        <option value='slovenia'>Slovenia</option>
+        <option value='sweden'>Sweden</option>
+      </select>
+    </div>
+    <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle">
+    <div class="subscription-left-label-select">
+        Total:
+    </div>
+    <div class="subscription-right-form-element">
+    <span id="p"></span><span id="r"></span><span id="t"></span>
+    </div>
+    <div class="clear"></div>
     </div>
     
     <div class="subscription-form-section-middle">
@@ -118,4 +172,123 @@
       <div class="clear"></div>
     </div>
     
+    <input type="hidden" name="ts" id="ts" value="">
+    
 <% end %>
+
+<script>
+// Array of values for plans
+ var plan_prices= new Array();
+ plan_prices["zero"]=0;
+ plan_prices["5599year"]=55.99;
+ plan_prices["4999year"]=49.99;
+ plan_prices["3599year"]=35.99;
+ plan_prices["1299month"]=12.99;
+ plan_prices["999month"]=9.99;
+ plan_prices["599month"]=5.99;
+
+// Array of values for tax rates
+ var tax_rates= new Array();
+ tax_rates["noteu"]=0;
+ tax_rates["unitedkingdom"]=0;
+ tax_rates["spain"]=21;
+ tax_rates["austria"]=20;
+ tax_rates["belgium"]=21;
+ tax_rates["bulgaria"]=20;
+ tax_rates["croatia"]=25;
+ tax_rates["cyprus"]=19;
+ tax_rates["czechrepublic"]=21;
+ tax_rates["denmark"]=25;
+ tax_rates["estonia"]=20;
+ tax_rates["finland"]=24;
+ tax_rates["france"]=20;
+ tax_rates["germany"]=19;
+ tax_rates["greece"]=24;
+ tax_rates["hungary"]=27;
+ tax_rates["ireland"]=23;
+ tax_rates["italy"]=22;
+ tax_rates["latvia"]=21;
+ tax_rates["lithuania"]=21;
+ tax_rates["luxembourg"]=17;
+ tax_rates["malta"]=18;
+ tax_rates["netherlands"]=21;
+ tax_rates["poland"]=23;
+ tax_rates["portugal"]=23;
+ tax_rates["romania"]=20;
+ tax_rates["slovakrepublic"]=20;
+ tax_rates["slovenia"]=22;
+ tax_rates["sweden"]=25;
+ 
+// Two drop downs, one for plan, one for tax rate
+function PlanPrice()
+{
+    var planprice=0;
+    var theForm = document.forms["payment-form"];
+    var selectedprice = theForm.elements["plan"];
+    planprice = plan_prices[selectedprice.value];
+    return planprice;
+}
+
+function TaxPrice()
+{
+    var taxprice=0;
+    var theForm = document.forms["payment-form"];
+    var selectedrate = theForm.elements["country_vat"];
+    taxprice = tax_rates[selectedrate.value];
+    return taxprice;
+}
+
+// Calculate total 
+function calculateTotal()
+{
+
+  // Do the maths
+    var TaxRate = TaxPrice() / 100;
+    var TotalTax = (TaxRate * PlanPrice())
+    var TotalPrice = PlanPrice() + TotalTax;
+    
+    // Check for not a number
+    if(isNaN(TotalPrice)) {
+        TotalPrice = 0
+    }
+    
+    if(isNaN(TotalTax)) {
+        TotalTax = 0
+    }
+    
+    if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
+    
+    //display the price
+    var divobj = document.getElementById('p');
+    divobj.innerHTML = "£" + PlanPrice();
+    
+    //display the tax amount ££ and rate %% to subscriber
+    var divobj = document.getElementById('r');
+    divobj.innerHTML = " + £" + TotalTax.toFixed(2) + " (" + TaxPrice() + "% VAT)";
+    
+    //put the tax rate %% into Stripe for payment processing
+    var divobj = document.getElementById('ts');
+    divobj.value = TaxPrice();
+    
+    //display the total
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = " = £" + TotalPrice.toFixed(2);
+
+    } else {
+    
+    //display the price
+    var divobj = document.getElementById('p');
+    divobj.innerHTML = "£" + PlanPrice();
+    
+    //display a default tax amount
+    var divobj = document.getElementById('r');
+    divobj.innerHTML = " + <span style=\"color:red;\">Choose a country</span>";
+    
+    //display the plan price without tax defined
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = " = £" + PlanPrice();
+
+    } 
+
+}
+</script>

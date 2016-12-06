@@ -5,13 +5,15 @@ class SubscriptionsController < ApplicationController
     # Get the credit card details from the form and generate stripeToken
     token = params[:stripeToken]
     email_address = params[:email]
+    tax_percent = params[:ts]
     
     begin
       # Create a new Stripe customer and add them to a subscription plan
       customer = Stripe::Customer.create(
         :source => token,
         :description => email_address,
-        :plan => params[:plan]
+        :plan => params[:plan],
+        :tax_percent => tax_percent
         )
     
       # Add new Stripe customer i) to existing reader or ii) as a new Spain Report member and then link the two
