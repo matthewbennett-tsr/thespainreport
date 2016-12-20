@@ -6,6 +6,7 @@ class SubscriptionsController < ApplicationController
     token = params[:stripeToken]
     email_address = params[:email]
     tax_percent = params[:ts]
+    how_many = params[:quantity]
     
     begin
       # Create a new Stripe customer and add them to a subscription plan
@@ -13,7 +14,8 @@ class SubscriptionsController < ApplicationController
         :source => token,
         :description => email_address,
         :plan => params[:plan],
-        :tax_percent => tax_percent
+        :tax_percent => tax_percent,
+        :quantity => how_many
         )
     
       # Add new Stripe customer i) to existing reader or ii) as a new Spain Report member and then link the two
