@@ -4,29 +4,66 @@ class InvoicesController < ApplicationController
   # GET /invoices
   # GET /invoices.json
   def index
-    @invoices = Invoice.all
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      @invoices = Invoice.all
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # GET /invoices/1
   # GET /invoices/1.json
   def show
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # GET /invoices/new
   def new
-    @invoice = Invoice.new
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      @invoice = Invoice.new
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # GET /invoices/1/edit
   def edit
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # POST /invoices
   # POST /invoices.json
   def create
-    @invoice = Invoice.new(invoice_params)
-
-    respond_to do |format|
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      @invoice = Invoice.new(invoice_params)
+      respond_to do |format|
       if @invoice.save
         format.html { redirect_to @invoice, notice: 'Invoice was successfully created.' }
         format.json { render :show, status: :created, location: @invoice }
@@ -34,13 +71,21 @@ class InvoicesController < ApplicationController
         format.html { render :new }
         format.json { render json: @invoice.errors, status: :unprocessable_entity }
       end
-    end
+      end
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end  
   end
 
   # PATCH/PUT /invoices/1
   # PATCH/PUT /invoices/1.json
   def update
-    respond_to do |format|
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      respond_to do |format|
       if @invoice.update(invoice_params)
         format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
         format.json { render :show, status: :ok, location: @invoice }
@@ -48,16 +93,28 @@ class InvoicesController < ApplicationController
         format.html { render :edit }
         format.json { render json: @invoice.errors, status: :unprocessable_entity }
       end
+      end
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
     end
   end
 
   # DELETE /invoices/1
   # DELETE /invoices/1.json
   def destroy
-    @invoice.destroy
-    respond_to do |format|
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      @invoice.destroy
+      respond_to do |format|
       format.html { redirect_to invoices_url, notice: 'Invoice was successfully destroyed.' }
       format.json { head :no_content }
+      end
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
     end
   end
 

@@ -152,11 +152,29 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions
   # GET /subscriptions.json
   def index
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # GET /subscriptions/1
   # GET /subscriptions/1.json
   def show
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # GET /subscriptions/new
@@ -166,6 +184,15 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/1/edit
   def edit
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # POST /subscriptions
@@ -177,6 +204,15 @@ class SubscriptionsController < ApplicationController
   # PATCH/PUT /subscriptions/1
   # PATCH/PUT /subscriptions/1.json
   def update
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    elsif current_user.role == 'editor'
+      
+    else
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    end
   end
 
   # DELETE /subscriptions/1
