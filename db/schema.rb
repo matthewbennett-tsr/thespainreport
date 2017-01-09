@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161106205513) do
+ActiveRecord::Schema.define(version: 20170108231124) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -120,6 +120,25 @@ ActiveRecord::Schema.define(version: 20161106205513) do
     t.datetime "updated_at", null: false
     t.string   "category"
     t.string   "slug"
+  end
+
+  create_table "invoices", force: :cascade do |t|
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+    t.string   "stripe_invoice_id"
+    t.integer  "user_id"
+    t.integer  "subscription_id"
+    t.datetime "stripe_invoice_date"
+    t.string   "stripe_invoice_item"
+    t.integer  "stripe_invoice_quantity"
+    t.integer  "stripe_invoice_price"
+    t.integer  "stripe_invoice_subtotal"
+    t.decimal  "stripe_invoice_tax_percent"
+    t.integer  "stripe_invoice_tax_amount"
+    t.integer  "stripe_invoice_total"
+    t.string   "stripe_invoice_ip_country_code"
+    t.string   "stripe_invoice_ip_country_code_2"
+    t.string   "stripe_invoice_credit_card_country"
   end
 
   create_table "newsitems", force: :cascade do |t|
@@ -238,8 +257,32 @@ ActiveRecord::Schema.define(version: 20161106205513) do
   end
 
   create_table "subscriptions", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                                    null: false
+    t.datetime "updated_at",                                    null: false
+    t.string   "stripe_customer_id"
+    t.string   "stripe_subscription_id"
+    t.string   "stripe_subscription_credit_card_country"
+    t.integer  "user_id"
+    t.string   "stripe_subscription_ip"
+    t.string   "stripe_subscription_ip_country"
+    t.string   "stripe_subscription_email"
+    t.string   "stripe_subscription_plan"
+    t.integer  "stripe_subscription_amount"
+    t.integer  "stripe_subscription_quantity"
+    t.decimal  "stripe_subscription_tax_percent"
+    t.datetime "stripe_subscription_trial_end"
+    t.datetime "stripe_subscription_current_period_start_date"
+    t.datetime "stripe_subscription_current_period_end_date"
+    t.string   "stripe_subscription_interval"
+    t.string   "stripe_subscription_ip_country_name"
+  end
+
+  create_table "taxes", force: :cascade do |t|
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "tax_country_name"
+    t.string   "tax_country_code"
+    t.decimal  "tax_country_percent"
   end
 
   create_table "types", force: :cascade do |t|
@@ -249,14 +292,14 @@ ActiveRecord::Schema.define(version: 20161106205513) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                  default: "",    null: false
-    t.datetime "created_at",                             null: false
-    t.datetime "updated_at",                             null: false
+    t.string   "email",                    default: "",    null: false
+    t.datetime "created_at",                               null: false
+    t.datetime "updated_at",                               null: false
     t.string   "name"
     t.string   "twitter"
     t.string   "avatar"
     t.text     "bio"
-    t.boolean  "email_confirmed",        default: false
+    t.boolean  "email_confirmed",          default: false
     t.string   "confirm_token"
     t.string   "password_digest"
     t.string   "role"
@@ -267,8 +310,15 @@ ActiveRecord::Schema.define(version: 20161106205513) do
     t.string   "sign_up_url"
     t.string   "emailpref"
     t.string   "stripe_customer_id"
-    t.boolean  "allow_access",           default: false
-    t.boolean  "is_author",              default: false
+    t.boolean  "allow_access",             default: false
+    t.boolean  "is_author",                default: false
+    t.datetime "becomes_customer_date"
+    t.string   "credit_card_id"
+    t.string   "credit_card_brand"
+    t.string   "credit_card_country"
+    t.string   "credit_card_last4"
+    t.integer  "credit_card_expiry_month"
+    t.integer  "credit_card_expiry_year"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

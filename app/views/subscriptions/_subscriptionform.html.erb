@@ -33,53 +33,33 @@
     
    <div class="subscription-form-section-middle">
       <div class="subscription-left-label-input">
-        How Many Do You Want?
+        How Many Do You Want? *
       </div>
-      <div class="subscription-right-form-element">
+      <div class="subscription-right-form-element">      
         <input type="number" name="quantity" id="quantity" class="input50" value="1" min="1" max="100" onchange="calculateTotal()">
+         
       </div>
       <div class="clear"></div>
     </div>
-
-<div class="subscription-form-section-middle">
+    
+    <div class="subscription-form-section-middle" style="color:green;">
     <div class="subscription-left-label-select">
-        Which country are you in?
+        Subtotal:
     </div>
     <div class="subscription-right-form-element">
-      <select id="country_vat" name="country_vat" onchange="calculateTotal()">
-        <option disabled="disabled" selected="selected">----</option>
-        <option value='noteu'>Not European Union</option>
-        <option disabled="disabled">----</option>
-        <option value='unitedkingdom'>United Kingdom</option>
-        <option value='spain'>Spain</option>
-        <option disabled="disabled">----</option>
-        <option value='austria'>Austria</option>
-        <option value='belgium'>Belgium</option>
-        <option value='bulgaria'>Bulgaria</option>
-        <option value='croatia'>Croatia</option>
-        <option value='cyprus'>Cyprus</option>
-        <option value='czechrepublic'>Czech Republic</option>
-        <option value='denmark'>Denmark</option>
-        <option value='estonia'>Estonia</option>
-        <option value='finland'>Finland</option>
-        <option value='france'>France</option>
-        <option value='germany'>Germany</option>
-        <option value='greece'>Greece</option>
-        <option value='hungary'>Hungary</option>
-        <option value='ireland'>Ireland</option>
-        <option value='italy'>Italy</option>
-        <option value='latvia'>Lativa</option>
-        <option value='lithuania'>Lithuania</option>
-        <option value='luxembourg'>Luxembourg</option>
-        <option value='malta'>Malta</option>
-        <option value='netherlands'>Netherlands</option>
-        <option value='poland'>Poland</option>
-        <option value='portugal'>Portugal</option>
-        <option value='romania'>Romania</option>
-        <option value='slovakrepublic'>Slovak Republic</option>
-        <option value='slovenia'>Slovenia</option>
-        <option value='sweden'>Sweden</option>
-      </select>
+    <span id="p"></span>
+    </div>
+    <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle" style="color:green;">
+    <div class="subscription-left-label-select">
+        VAT:
+    </div>
+    <div class="subscription-right-form-element">
+    <span id="r"></span>
+    <img src="" name="tax_flag" id="tax_flag" />
+    <span name="country_name" id="country_name"></span>
     </div>
     <div class="clear"></div>
     </div>
@@ -89,7 +69,7 @@
         Total:
     </div>
     <div class="subscription-right-form-element">
-    <span id="p"></span><span id="r"></span><span id="t"></span>
+    <span id="t"></span>
     </div>
     <div class="clear"></div>
     </div>
@@ -179,13 +159,43 @@
     </div>
     
       <div class="clear"></div>
+    
+    <div class="subscription-form-section-bottom">  
+    <span style="font-size: 12px; font-style: italic;">* For group subscriptions, send us a list of extra e-mail addresses to <a mailto="subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> after placing your order. We will add them all.</span>
+    </div>
     </div>
     
     <input type="hidden" name="ts" id="ts" value="">
+    <input type="hidden" name="ip_address" id="ip_address" value="">
+    <input type="hidden" name="ip_country_code" id="ip_country_code" value="">
+    <input type="hidden" name="ip_country_name" id="ip_country_name" value="">
     
 <% end %>
 
 <script>
+var country_tax;
+// MaxMind IP VAT stuff
+  var onSuccess = function(x){
+    var ip = x.traits.ip_address;
+    document.getElementById('ip_address').value = ip;
+    
+    var country_code = x.country.iso_code;
+    document.getElementById('ip_country_code').value = country_code;
+
+    var country_name = x.country.names.en;
+    document.getElementById('ip_country_name').value = country_name;
+  
+  };
+  
+  var onError = function(error){
+    alert(
+      "Error:\n\n"
+      + JSON.stringify(error, undefined, 4)
+    );
+  };
+
+  geoip2.insights(onSuccess, onError);
+
 // Array of values for plans
  var plan_prices= new Array();
  plan_prices["zero"]=0;
@@ -197,7 +207,7 @@
  plan_prices["599month"]=5.99;
 
 // Array of values for tax rates
- var tax_rates= new Array();
+ var tax_rates= {};
  tax_rates["noteu"]=0;
  tax_rates["unitedkingdom"]=0;
  tax_rates["spain"]=21;
@@ -227,6 +237,50 @@
  tax_rates["slovakrepublic"]=20;
  tax_rates["slovenia"]=22;
  tax_rates["sweden"]=25;
+
+// Values for country flag names
+ var tax_country_names = {};
+ <% @taxes.each do |tax| %>
+   tax_country_names["<%= tax.tax_country_code %>"]='<%= tax.tax_country_name %>';
+ <% end %>
+
+// Values for country tax rates
+  var tax_country_rates = {};
+    <% @taxes.each do |tax| %>
+      tax_country_rates["<%= tax.tax_country_code %>"]=<%= tax.tax_country_percent %>;
+    <% end %>
+ 
+ // Values for country flag images
+ var country_flags= {};
+ country_flags["UN"]='<%= asset_path('UN.jpg') %>';
+ country_flags["AT"]='<%= asset_path('AT.jpg') %>';
+ country_flags["BE"]='<%= asset_path('BE.jpg') %>';
+ country_flags["BG"]='<%= asset_path('BG.jpg') %>';
+ country_flags["CY"]='<%= asset_path('CY.jpg') %>';
+ country_flags["CZ"]='<%= asset_path('CZ.jpg') %>';
+ country_flags["DE"]='<%= asset_path('DE.jpg') %>';
+ country_flags["DK"]='<%= asset_path('DK.jpg') %>';
+ country_flags["EE"]='<%= asset_path('EE.jpg') %>';
+ country_flags["ES"]='<%= asset_path('ES.jpg') %>';
+ country_flags["FI"]='<%= asset_path('FI.jpg') %>';
+ country_flags["FR"]='<%= asset_path('FR.jpg') %>';
+ country_flags["GB"]='<%= asset_path('GB.jpg') %>';
+ country_flags["GR"]='<%= asset_path('GR.jpg') %>';
+ country_flags["HR"]='<%= asset_path('HR.jpg') %>';
+ country_flags["HU"]='<%= asset_path('HU.jpg') %>';
+ country_flags["IE"]='<%= asset_path('IE.jpg') %>';
+ country_flags["IT"]='<%= asset_path('IT.jpg') %>';
+ country_flags["LT"]='<%= asset_path('LT.jpg') %>';
+ country_flags["LU"]='<%= asset_path('LU.jpg') %>';
+ country_flags["LV"]='<%= asset_path('LV.jpg') %>';
+ country_flags["MT"]='<%= asset_path('MT.jpg') %>';
+ country_flags["NL"]='<%= asset_path('NL.jpg') %>';
+ country_flags["PL"]='<%= asset_path('PL.jpg') %>';
+ country_flags["PT"]='<%= asset_path('PT.jpg') %>';
+ country_flags["RO"]='<%= asset_path('RO.jpg') %>';
+ country_flags["SE"]='<%= asset_path('SE.jpg') %>';
+ country_flags["SI"]='<%= asset_path('SI.jpg') %>';
+ country_flags["SK"]='<%= asset_path('SK.jpg') %>';
  
 // Two drop downs, one for plan, one for tax rate
 function PlanPrice()
@@ -247,13 +301,29 @@ function HowMany()
   return howmany;
 }
 
-function TaxPrice()
+function TaxPrice() 
+{ 
+  var taxprice = 0;
+  var country_tax = document.getElementById("ip_country_code").value;
+  
+  if(tax_country_rates.hasOwnProperty(country_tax)) {
+    document.getElementById('tax_flag').src = country_flags[country_tax];
+    document.getElementById('country_name').innerHTML = tax_country_names[country_tax];
+    var taxprice = tax_country_rates[country_tax];
+    return taxprice.toFixed(1);
+  } else { 
+    document.getElementById('tax_flag').src = country_flags["UN"];
+    document.getElementById('country_name').innerHTML = "Non-EU country";
+    var taxprice = 0;
+    return taxprice.toFixed(1);
+  }
+
+}
+
+function TaxPriceXX()
 {
-    var taxprice=0;
-    var theForm = document.forms["payment-form"];
-    var selectedrate = theForm.elements["country_vat"];
-    taxprice = tax_rates[selectedrate.value];
-    return taxprice;
+  var taxprice = $('select#country_vat :selected').val();
+  return taxprice;
 }
 
 // Calculate total 
@@ -283,7 +353,7 @@ function calculateTotal()
     
     //display the tax amount ££ and rate %% to subscriber
     var divobj = document.getElementById('r');
-    divobj.innerHTML = " + £" + TotalTax.toFixed(2) + " (" + TaxPrice() + "% VAT)";
+    divobj.innerHTML = "£" + TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
     
     //put the tax rate %% into Stripe for payment processing
     var divobj = document.getElementById('ts');
@@ -291,7 +361,7 @@ function calculateTotal()
     
     //display the total
     var divobj = document.getElementById('t');
-    divobj.innerHTML = " = £" + TotalPrice.toFixed(2);
+    divobj.innerHTML = "£" + TotalPrice.toFixed(2);
 
     } else {
     
@@ -308,6 +378,5 @@ function calculateTotal()
     divobj.innerHTML = " = £" + TotalBase.toFixed(2);
 
     } 
-
-}
+};
 </script>

@@ -13,7 +13,7 @@
 
 <hr />
 
-<h3>My Subscription</h3>
+<h3>My Payment Details</h3>
 
 <% if current_user.role == 'editor' %>
   <%= form_for(@user) do |f| %>
@@ -30,48 +30,92 @@
 <% elsif @user.stripe_customer_id? && @user.role == 'reader' %>
 
 <% elsif @user.stripe_customer_id? && @user.role == 'subscriber' %>
-<strong>Customer ID:</strong> <%= @stripe_customer_details['id'] unless @stripe_customer_details['id'].nil? %><br />
-<strong>Customer E-mail:</strong> <%= @stripe_customer_details['description'] unless @stripe_customer_details['description'].nil?  %><br />
-<strong>Customer Creation Date:</strong> <%= Time.at(@stripe_customer_details['created']).to_formatted_s(:long) %><br /><br />
+<p>Your <strong>customer ID</strong> is <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %> and you first became a customer on <%= @user.becomes_customer_date.to_formatted_s(:long) unless @user.becomes_customer_date.nil? %></p>
 
-<strong>Credit Card:</strong> <%= @stripe_customer_details.sources.data[0].brand %><br />
-<strong>Card Country:</strong> <%= @stripe_customer_details.sources.data[0].country %><br />
-<strong>Ending In:</strong> **** **** **** <%= @stripe_customer_details.sources.data[0].last4 %><br />
-<strong>Expiry Month:</strong> <%= @stripe_customer_details.sources.data[0].exp_month %>/<%= @stripe_customer_details.sources.data[0].exp_year %><br /><br />
-
-<strong>Subscription Plan:</strong> <%= @stripe_customer_details.subscriptions.data[0].plan.name %><br />
-<strong>Subscription ID:</strong> <%= @stripe_customer_details.subscriptions.data[0].id %><br />
-<strong>Subscription Start Date:</strong> <%= Time.at(@stripe_customer_details.subscriptions.data[0].current_period_start).to_formatted_s(:long) %><br />
-<strong>Subscription Renewal Date:</strong> <%= Time.at(@stripe_customer_details.subscriptions.data[0].current_period_end).to_formatted_s(:long) %><br /><br />
-
-<div><strong>My Payments</strong>
+<div>
+<h3>My Credit Card</h3>
   <table class="invoice-table">
   <tr>
-    <th>Date</th>
-    <th>Payment ID</th>
-    <th>Item</th>
-    <th class="right">Qty</th>
-    <th class="right">Price</th>
+    <th>Card</th>
+    <th>Card Country</th>
+    <th class="right">Last 4 Digits</th>
+    <th class="right">Expiry</th>
+  </tr>
+  <tr>
+    <td><%= @user.credit_card_brand %></td>
+    <td><%= @user.credit_card_country %></td>
+    <td>**** **** **** <%= @user.credit_card_last4 %></td>
+    <td><%= @user.credit_card_expiry_month.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year %></td>
+  </tr>
+</table>
+</div>
+
+<div>
+<h3>My Subscription(s)</h3>
+  <table class="invoice-table">
+  <tr>
+    <th>Subscription ID</th>
+    <th>Start</th>
+    <th>Renewal</th>
+    <th>Description</th>
+    <th>Purchase IP</th>
+    <th>Purchase Country</th>
     <th class="right">VAT %</th>
-    <th class="right">VAT</th>
-    <th class="right">Total</th>
   </tr>
 
-  <% @stripe_invoices.each do |invoice| %>
+  <% @user.subscriptions.each do |sub| %>
     <tr>
-    <td><%= Time.at(invoice.date).strftime("%d/%m/%Y") %></td>
-    <td><%= invoice.id %></td>
-    <td><%= invoice.lines.data[0].type.capitalize %> (<%= invoice.lines.data[0].plan.name %>)</td>
-    <td class="right"><%= invoice.lines.data[0].quantity %></td>
-    <td class="right">£<%= invoice.lines.data[0].plan.amount/100 %></td>
-    <td class="right"><%= invoice.tax_percent %>%</td>
-    <td class="right">£<%= invoice.tax %></td>
-    <td class="right">£<%= invoice.total/100 %></td>
+      <td><%= sub.stripe_subscription_id %></td>
+      <td><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%Y") %></td>
+      <td><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%Y") %></td>
+      <td><%= sub.stripe_subscription_quantity %> x £<%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> per <em><%= sub.stripe_subscription_interval %></em></td>
+      <td class="right"><%= sub.stripe_subscription_ip %></td>
+      <td><%= sub.stripe_subscription_ip_country %>, <%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %></td>
+      <td class="right"><%= sub.stripe_subscription_tax_percent %>%</td>
     </tr>
   <% end %>
   
-  </table>
+</table>
 </div>
+
+<div>
+<h3>My Payment Receipts</h3>
+  <table class="invoice-table">
+  <tr>
+    <th>Date</th>
+    <th>Receipt ID</th>
+    <th>Item</th>
+    <th class="right">Qty</th>
+    <th class="right">Price</th>
+    <th class="right">Subtotal</th>
+    <th class="right">CC</th>
+    <th class="right">IP</th>
+    <th class="right">VAT %</th>
+    <th class="right">VAT</th>
+    <th class="right">Total</th>
+    <th class="right">Print</th>
+  </tr>
+
+  <% @user.invoices.each do |inv| %>
+    <tr>
+      <td><%= Time.at(inv.stripe_invoice_date).strftime("%d/%m/%Y") %></td>
+      <td><%= inv.stripe_invoice_id %></td>
+      <td><%= inv.stripe_invoice_item %></td>
+      <td class="right"><%= inv.stripe_invoice_quantity %></td>
+      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %></td>
+      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_subtotal/100.round(2))) %></td>
+      <td class="right"><%= inv.stripe_invoice_credit_card_country %></td>
+      <td class="right"><%= inv.stripe_invoice_ip_country_code %></td>
+      <td class="right"><%= inv.stripe_invoice_tax_percent %>%</td>
+      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_tax_amount/100.round(2))) %></td>
+      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_total/100.round(2))) %></td>
+      <td class="right">…</td>
+    </tr>
+  <% end %>
+  
+</table>
+</div>
+
 <% else %>
 Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-no-turbolink" => true %>.
 <% end %>

@@ -57,6 +57,8 @@ class User < ActiveRecord::Base
   scope :aftertrial, -> {where('created_at <= ?', 744.hours.ago)}
   
   has_many :comments
+  has_many :subscriptions
+  has_many :invoices
   
   def password_complexity
     if password.present? and not password.match(/^(?=.*[A-Z])./) and not password.match(/^(?=.*[\s])./)

@@ -34,7 +34,12 @@
     <%= yield(:articlepaywall) %>
   <% end %>
   
+  <% if controller_name == 'subscriptions' && action_name == 'new' %>
+  <script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
+  <% end %>
+  
   <meta property="fb:pages" content="290717157739482" />
+  
 </head>
 <% if controller_name == 'subscriptions' && action_name == 'new' %>
   <body onload="calculateTotal()">
@@ -125,7 +130,7 @@ Free for 30 days.
 <% elsif current_user %>
   <% if flash.present? %>
       <% flash.each do |name, msg| %>
-        <div style="background-color: #FEF9E6; padding: 3px 5px; border: 1px solid #F1BF00; margin-bottom: 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
+        <div style="background-color: #fff; padding: 3px 5px; border: 1px solid #F1BF00; margin-bottom: 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
       <% end %>
   <% end %>
   <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit Profile", edit_user_path(current_user) %></div>
