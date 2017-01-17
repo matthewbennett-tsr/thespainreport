@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'
   post 'new_spain_report_member' => 'subscriptions#new_spain_report_member'
+  post 'update_credit_card' => 'subscriptions#update_credit_card'
+  post 'cancel_subscription' => 'subscriptions#cancel_subscription'
   resources :subscriptions
   resources :provinces
   resources :quotes

@@ -49,7 +49,7 @@ gem 'delayed_job_active_record'
 gem 'redcarpet'
 
 #Stripe
-gem 'stripe', '~> 1.25.0', :source => 'https://code.stripe.com/'
+gem 'stripe', :source => 'https://code.stripe.com/'
 
 # Twitter
 gem 'twitter'

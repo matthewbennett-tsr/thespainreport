@@ -47,8 +47,8 @@
   <body>
 <% end %>
 
-<div style="position:fixed; left: 0%; top: 0%; width: 100%; height: 70px; background-color: #fff; z-index: 90;"></div>
-<div style="position:fixed; left: 0%; top: 0%; width: 100%; height: 60px; border-bottom: 3px solid #F1BF00; background-color: #fff; z-index: 100;">
+<div id="top-bar-wrap"></div>
+<div id="top-bar-layer">
 <div style="max-width: 1260px; position: relative; margin: 0 auto;">
 <a href="/"><div class="homelink"></div></a>
 <div class="site-title-new">THE <span class="site-title-spain">SPAIN</span> REPORT</div>
@@ -93,30 +93,23 @@
 </div>
 </div>
 
-<div style="max-width: 1260px; position: relative; margin: 0 auto;">
-<div class="left-hand-fixed-bar" style="z-index: 500;">
-<div class="sidebar-header-top-new">Independent Spain News, In English</div>
-
-<% if flash.present? && current_user.nil? %>
-<div style="background-color: #ffffff; padding: 7px 5px; border: 1px solid #ccc;">
-      <% flash.each do |name, msg| %>
-        <div style="background-color: #FEF9E6; padding: 3px 5px; border: 1px solid #F1BF00;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
-      <% end %>
-</div>
-<% elsif current_user.nil? %>
-<% elsif current_user %>
+<% if controller_name == 'subscriptions' && action_name == 'new' %>
+<div class="wrap-subscription">
 <% else %>
-<% end %>
+<div style="max-width: 1260px; position: relative; margin: 0 auto;">
 
-<div style="background-color: #fff; padding: 7px; margin-bottom: 2px; line-height: 150%; border: 1px solid #cccccc;">
+<div class="left-hand-fixed-bar" style="z-index: 500;">
+<div class="sidebar-header-top-new">Independent Spain News, in English</div>
+
+<div id="email-sign-up-box">
 <% if current_user.nil? %>
-<img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
-Don't miss anything important.
-Enjoy independent reporting, in English. 
-Full-text articles in your inbox. 
-No ads, no spam. 
-Free for 30 days.
-<div class="email-sign-up-form-new">
+  <img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
+  Don't miss anything.
+  Understand better how Spain is changing, in English. 
+  Full-text articles in your inbox. 
+  No ads, no spam. 
+  Free for 30 days.
+  <div class="email-sign-up-form-new">
     <%= form_tag '/new_spain_report_member', :class => '', :id => 'email-sign-up' do |f| %>
       <div class="email-input-float">
         <input type="email" size="22" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
@@ -126,13 +119,9 @@ Free for 30 days.
       </div>
       <div class="clear"></div>
     <% end %>
-    </div>
+  </div>
 <% elsif current_user %>
-  <% if flash.present? %>
-      <% flash.each do |name, msg| %>
-        <div style="background-color: #fff; padding: 3px 5px; border: 1px solid #F1BF00; margin-bottom: 7px;"><%= content_tag :span, msg.html_safe, id: "flash_#{name}" %></div>
-      <% end %>
-  <% end %>
+  <div class="signed-in-details">
   <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit Profile", edit_user_path(current_user) %></div>
   <div style="margin-bottom: 3px;"><strong>E-mail:</strong> <%= current_user.try(:email) %></div>
   <div style="margin-bottom: 3px;"><strong>Twitter:</strong> <% if current_user.twitter.present? %><a href="https://twitter.com/<%= current_user.twitter %>">@<%= current_user.twitter %></a><% else %><span class="highlight"><%= link_to "Add Twitter username", edit_user_path(current_user) %></span><% end %></div>
@@ -147,37 +136,66 @@ Free for 30 days.
          <span>
       <% end %>
   </div>
-  
+  </div>
 <% end %>
 </div>
 
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">Catch Up</div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="latest-label">.</span> <a href="/articles/news">Latest Spain News</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="editorial-label">.</span> <a href="/articles/editorial">Editorials & Analysis</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><span class="indepth-label">.</span> <a href="/articles/in-depth">Features & Interviews</a></div>
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">Latest Spain Stories</div>
-<% @last_active_stories.each do |story| %>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;">
-  <%= link_to story.story, story %>
-  <% if story.last_active.nil? %>
-  
-  <% elsif story.last_active >= 2.hours.ago %>
-    <div class="news-alert" style="float:right;"><span class="breaking-label-mini">NEW</span></div>
-  <% else %>
+  <% @lasteditorial.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></p>
+      <% end %>
+    </div>
   <% end %>
-</div>
-<% end %>
-<div style="margin-top: 15px; font-size: 17px; font-weight: bold; font-family: Oswald, Arial; margin-bottom: 7px;">The Spain Report</div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><a href="/articles/blog">Blog</a> | <a href="/about">About</a> | <a href="/contact">Contact</a></div>
-<div style="background-color: #fff; padding: 6px; margin-bottom: 2px;"><a href="/subscriptions/new">Subscribe</a></div>
+  
+  <% @lastdailybriefing.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">DAILY BRIEFING</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% @lasttopstory.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">FULL STORY</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% @lastindepth.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">IN-DEPTH</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+
+
 </div>
 
+<% if controller_name == 'articles' && action_name == 'show' %>
+<div class="right-hand-fixed-bar" style="z-index: 5000;">
+    <%= yield(:right_side_bar) %>
+</div>
+<% else %>
+<% end %>
 
 <div class="wrap">
+<% end %>
 
 <%= yield %>
 
-<div style="width:100%; text-align: center; margin: 10px 0px; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Independent Spain News, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
+<div style="width:65%; text-align: center; margin: 10px 0px; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Independent Spain News, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
 
 <div class="clear"></div>
 </div>

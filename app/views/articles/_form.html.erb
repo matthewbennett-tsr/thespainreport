@@ -13,9 +13,9 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 725px;">
-      <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :short_headline, :size => "62", :maxlength => "70" %>
+    <div style="float:left; text-align:left; width: 740px;">
+      <%= f.text_field :notification_slug, :size => "18", :maxlength => "15" %>
+      <%= f.text_field :notification_message, :size => "62", :maxlength => "70" %>
       | T <%= check_box_tag 'tweet' %> 
       | <%= f.select :email_to, options_for_select([["None", "none"], ["Test", "test"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
          </div>
@@ -32,7 +32,7 @@
     <div class="clear"></div> 
   </div>
   
-  <div class="admin-block" style="background-color: #ffcccc;">
+  <div class="admin-block-images">
   <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
       <%= f.check_box :remove_main %>
@@ -41,22 +41,17 @@
   </div>
   
   <div class="admin-block">
-    <div>
-      <% if action_name == 'new_summary' %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '79', :style => 'padding:5px;', :value => 'Daily Spain Briefing: ' + Date.today.strftime("%A, %B %-d, %Y") %>
-      <% else %>
-        <%= f.text_field :headline, :class => "edit-headline", :size => '79', :style => 'padding:5px;' %>
-      <% end %>
+    <div style="margin-top: 5px;">
+      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '29', :style => 'padding:5px;' %>
+       <%= f.text_field :short_lede, :size => '75', :class => "edit-short-lede", :style => 'padding:5px;' %>
+       <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+      | <%= f.collection_select :type_id, @types, :id, :name %>
     </div>
     <div style="margin-top: 5px;">
-      <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
-      | 
-      <% if action_name == 'new_summary' %>
-        <%= f.collection_select :type_id, @types, :id, :name, :selected => 32 %>
-      <% else %>
-        <%= f.collection_select :type_id, @types, :id, :name %>
-      <% end %>
-      | <%= f.text_field :lede, :size => '73', :class => "edit-lede", :style => 'padding:5px;' %>
+        <%= f.text_field :headline, :class => "edit-headline", :size => '79', :style => 'padding:5px;' %>
+    </div>
+    <div style="margin-top: 5px;">
+      <%= f.text_field :lede, :size => '97', :class => "edit-lede", :style => 'padding:5px;' %>
     </div>
   </div>
   

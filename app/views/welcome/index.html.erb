@@ -1,10 +1,11 @@
 <%= render 'tickerstories' %>
 
 <div class="content-wrapper">
+<div class="content-left-main">
 <div class="content-left-new">
 <div class="content-left-top">
 <div style="">
-<div class="listing-article-container-new">
+<div class="home-page-top-story">
 <% @lasttopstory.each do |article| %>
 <% if article.main? %>
         <div style="width:100%; margin-bottom: 3px;">
@@ -20,13 +21,13 @@
 <% end %>
 <div style="margin-top: 5px;">
 <h1 style="font-size: 26px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h1>
-<div style="font-family: Georgia; margin-top: 7px; padding-bottom: 3px; margin-bottom: 7px;"><strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %><a href="http://#">(Read full story)</a>.</div>
+<div style="font-family: Georgia; margin-top: 7px; padding-bottom: 3px; margin-bottom: 7px;"><strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).</div>
 
 <% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 0px; margin-bottom: 10px; margin-left: 30px; margin-right: 0;">
     <% article.newsitems.each do |newsitem| %>
-        <li style="margin: 0 auto; font-size: 13px; text-align:left; font-style: normal;">
-        <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), :style => "color: #005BBF; text-decoration: underline;"%>
+        <li style="margin: 0 auto; text-align:left; font-style: normal;">
+        <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
         </li>
     <% end %>
     </ul>
@@ -74,12 +75,12 @@
           </div>
         <% else %>
         <% end %>
-        <p style="margin: 7px 0; font-weight:bold; font-family: Oswald; font-size: 15px;"><%= article.headline %></p>
+        <p style="margin: 7px 0; font-weight:bold; font-family: Oswald; font-size: 16px;"><%= article.headline %></p>
         <p style="font-size: 14px; font-family: Georgia;"><strong><%= article.type.name %>:</strong>
         <% if ["DAILY BRIEFING", "LIVE BLOG"].include?(article.type.try(:name)) %>
           <%= article.lede %>
         <% else %>
-          <%= article.body.truncate(150) %>
+          <%= article.lede %>
         <% end %>
         </p>
         <p style="font-size: 11px; margin-top: 5px; ">
@@ -117,38 +118,6 @@
 </div>
 
 <div class="content-right">
-  
-  <div class="sidebar-header-top-new">Latest Editorial</div>
-  <% @lasteditorial.each do |article| %>
-    <div class="content-white-background">
-      <%= link_to article do %>
-        <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-        <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-        <p style="font-size: 11px; margin-top: 5px; "><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></p>
-      <% end %>
-    </div>
-  <% end %>
-  
-  <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest In-Depth</div>
-  <% @lastindepth.each do |article| %>
-    <div class="content-white-background">
-      <%= link_to article do %>
-        <% if article.main? %>
-          <div style="width:100%; margin-bottom: 3px;">
-              <%= image_tag article.main.url if article.main? %>
-          </div>
-        <% elsif article.video? %>
-          <div class="video-wrapper">
-            <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-          </div>
-        <% else %>
-        <% end %>
-        <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-        <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-        <p style="font-size: 11px; margin-top: 5px; "><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="indepth-label-mini">IN-DEPTH</span></span></p>
-      <% end %>
-    </div>
-  <% end %>
   
   <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest Article Updates</div>
 

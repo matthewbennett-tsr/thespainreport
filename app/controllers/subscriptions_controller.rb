@@ -70,6 +70,7 @@ class SubscriptionsController < ApplicationController
         subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
         subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
         subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
+        subscription.is_active = true
         subscription.save!
         stripeinvs = Stripe::Invoice.all(:customer => user.stripe_customer_id)
         stripeinvs.each do |stripeinv|
@@ -147,6 +148,76 @@ class SubscriptionsController < ApplicationController
     # Redirect to 
     redirect_to :back
     flash[:success] = "Welcome aboard! Check your e-mail."
+  end
+  
+  def update_credit_card
+    token = params[:stripeToken]
+    customer_id = params[:customer_id]
+    old_card = params[:old_card]
+    
+    begin
+    stripe_customer = Stripe::Customer.retrieve(customer_id)
+    stripe_customer.sources.create(source: token)
+    if stripe_customer.sources.retrieve(old_card)
+      stripe_customer.sources.retrieve(old_card).delete()
+    end
+    stripe_customer = Stripe::Customer.retrieve(customer_id)
+    user = User.find(params[:user_id])
+    user.credit_card_id = stripe_customer.sources.data[0].id
+    user.credit_card_brand = stripe_customer.sources.data[0].brand
+    user.credit_card_country = stripe_customer.sources.data[0].country
+    user.credit_card_last4 = stripe_customer.sources.data[0].last4
+    user.credit_card_expiry_month = stripe_customer.sources.data[0].exp_month
+    user.credit_card_expiry_year = stripe_customer.sources.data[0].exp_year
+    user.save!
+    redirect_to :back
+    flash[:success] = "Well done! New credit card saved."
+    
+    rescue Stripe::CardError => e
+      # Since it's a decline, Stripe::CardError will be caught
+      body = e.json_body
+      err  = body[:error]
+      
+      puts "Status is: #{e.http_status}"
+      puts "Type is: #{err[:type]}"
+      puts "Code is: #{err[:code]}"
+      # param is '' in this case
+      puts "Param is: #{err[:param]}"
+      puts "Message is: #{err[:message]}"
+      flash[:error] = "#{err[:message]}"
+      redirect_to :back
+    rescue Stripe::InvalidRequestError => e
+      flash[:error] = "Invalid request to payment processor. Please try again."
+      redirect_to :back
+    rescue Stripe::AuthenticationError => e
+      flash[:error] = "Could not connect to payment processor. Please try again."
+      redirect_to :back
+    rescue Stripe::APIConnectionError => e
+      flash[:error] = "Could not connect to payment processor. Please try again."
+      redirect_to :back
+    rescue Stripe::StripeError => e
+      flash[:error] = "General payment processor problem. Please try again."
+      redirect_to :back
+    rescue => e
+      flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
+      redirect_to :back
+    end
+    
+  end
+  
+  def cancel_subscription
+    if current_user.nil? 
+      redirect_to root_url
+      flash[:success] = message_error_not_allowed
+    else
+      tsr_subscription = Subscription.find(params[:tsr_subscription_id])
+      subscription_id = params[:cancel_subscription_id]
+      subscription = Stripe::Subscription.retrieve(subscription_id)
+      subscription.delete
+      tsr_subscription.is_active = false
+      tsr_subscription.save!
+      redirect_to :back
+    end
   end
   
   # GET /subscriptions
@@ -243,7 +314,8 @@ class SubscriptionsController < ApplicationController
         :stripe_subscription_tax_percent,
         :stripe_subscription_trial_end,
         :stripe_subscription_current_period_start_date,
-        :stripe_subscription_current_period_end_date
+        :stripe_subscription_current_period_end_date,
+        :is_active
         )
     end
 end

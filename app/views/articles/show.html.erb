@@ -91,9 +91,9 @@
   <% if ["IMAGES", "LIVE BLOG", "DAILY BRIEFING"].include?(@article.type.try(:name)) %>
   
   <% elsif @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-    <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
+    <ul style="margin-top: 5px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
     <% @article.newsitems.each do |newsitem| %>
-        <li style="margin: 0 auto; font-size: 13px; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id), :style => "color: #005BBF; text-decoration: underline;"%></li>
+        <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
     <% end %>
     </ul>
   <% else %>
@@ -125,7 +125,7 @@
   <div class="article-text">
   
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
-    (Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts if you want notifications pushed to your device as soon as we publish them.)
+    (Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts to get updates pushed to your device as soon as we publish them.)
   </p>
   
   <%= markdown(@article.body) %>
@@ -133,7 +133,7 @@
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
     <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
-        <li style="margin: 0 auto; font-size: 14px; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id), :style => "color: #005BBF; text-decoration: underline;"%></li>
+        <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
     <% end %>
     </ul>
   <% else %>
@@ -144,8 +144,7 @@
     <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
       <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
         <div class="liveblog-updates">
-        <div class="content-white-background">
-          <p style="font-size: 11px; color: #999999;"><strong>Update</strong>, <%= newsitem.created_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
+          <p><span class="liveblog-updates-date"><%= newsitem.created_at.strftime("%l:%M %P, %b %d %Y") %></span> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
 
           <h3><%= newsitem.slug %></h3> <%# LIVE-BLOG SLUG TITLE %>
           <% if newsitem.main? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
@@ -169,7 +168,6 @@
           <%= markdown(newsitem.item.html_safe) %> <%# LIVE-BLOG ENTRY TEXT %>
           <div class="clear"></div>
         </div>
-        </div>
       <% end %> <%# END OF LIVE-BLOG ENTRIES %>
     <% else %> <%# IF THERE ARE NO LIVE-BLOG ENTRIES YET… %>
       <p style="font-style:italic;">
@@ -185,23 +183,6 @@
   <div class="content-white-background">
   <% if current_user.nil? && !paywall %>
   <%= render 'emailsignup' %>
-<% else %>
-<% end %>
-
-<% if current_user %>
-Hello <strong><%= current_user.name %></strong>. Write a comment…
-
-<%= form_for [@article, Comment.new] do |f| %>
-  <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
-    <div style="width: 100%;">
-      <%= f.text_area :comment, :style => "width:100%;", :maxlength => 1000, :class => "inputtextarea" %>
-      <br />
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-    </div>
-    <div class="clear"></div>
-  </div>
-<% end %>
-
 <% else %>
 <% end %>
 
@@ -254,80 +235,59 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
 
   </div>
   
-  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
-        
-        <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
-      
-      <% @article.stories.each do |story| %>
-      <div style="margin-bottom: 10px;">
-      <div class="sidebar-header-top-new"><%= story.story %></div>
-      <% if story.articles.published.reject {|a| a == @article}.present? %>
-        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
-          <div class="content-white-background">
-          <%= link_to article do %>
-              <% if article.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag article.main.url if article.main? %>
-                </div>
-              <% elsif article.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
-                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
-                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
-              </span>
-          <% end %>
-          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
-        <% end %>
-      <% else %>
-        <div class="content-white-background" style="margin-bottom: 15px;">
-          <p style="font-size: 12px;">No other articles about this story yet.</p>
-        </div>
-      <% end %> 
-      </div> 
-      <% end %>
-      
-      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
+<% content_for :right_side_bar do %>
+    <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+    <p class="toplinks">
+     <a href="/subscriptions/new" title="Subscribe Now">Subscribe</a> | 
+     <a href="/articles/blog/" title="Subscribe Now">Blog</a> | 
+     <a href="/about/" title="Subscribe Now">About</a> | 
+     <a href="/contact/" title="Subscribe Now">Contact</a>
+     </p>
     
-    <div class="sidebar-header-top-new">
-        Other Spain News
-    </div>
-    
-    <% @last6articles.reject {|a| a == @article}.each do |article| %>
-          <div class="content-white-background">
-          <%= link_to article do %>
-              <% if article.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag article.main.url if article.main? %>
-                </div>
-              <% elsif article.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
-                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
-                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
-              </span>
-          <% end %>
-          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
-    
+    <h3>Latest</h3>
+    <ul>
+    <% @last6articles.reject {|a| a == @article}.each do |article| %> 
+          <li>
+          <%= article.created_at.strftime("%d/%m, %H:%M") %>: 
+          <%= link_to article.short_headline, article %>
+          </li>
     <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
-      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
-  
-  </div>
+    </ul>
+    
+    
+    <h3 style="margin-top: 20px;">Comments & Chat</h3>
+    <% if current_user %>
+      <p>What do you think, <strong><%= current_user.name %></strong>?</p>
+      <%= form_for [@article, Comment.new] do |f| %>
+      <div style="margin-top: 10px; padding-bottom: 10px;">
+      <div style="width: 100%;">
+      <%= f.text_area :comment, :style => "width:100%; min-height: 280px;", :maxlength => 1000, :class => "inputtextarea" %>
+      <br />
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
+      </div>
+      <div class="clear"></div>
+      </div>
+      <% end %>
+    <% else %>
+      <p>Please log in—or join if it's your first visit—to comment or chat.</p>
+      
+      <div style="margin-top: 10px; padding-bottom: 10px;">
+      <div style="width: 100%;">
+      <%= text_area_tag 'body', nil, style: "width:100%; min-height: 280px;", maxlength: 1000, class: "inputtextarea" %>
+      <br />
+      <% if current_user %>
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
+      <% else %>
+      <button type="submit" class="blueformbutton" style="float: right;" disabled>Add Your Comment</button>
+      <% end %>
+      </div>
+      <div class="clear"></div>
+      </div>
+      
+    <% end %>
+
+  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
+  <% end %>
   
   <div class="clear"></div>
 
@@ -436,25 +396,10 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
 <% else %>
 <% end %>
 
-<% if current_user %>
-Hello <strong><%= current_user.name %></strong>. Write a comment…
 
-<%= form_for [@article, Comment.new] do |f| %>
-  <div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
-    <div style="width: 100%;">
-      <%= f.text_area :comment, :style => "width:100%;", :maxlength => 1000, :class => "inputtextarea" %>
-      <br />
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-    </div>
-    <div class="clear"></div>
-  </div>
-<% end %>
-
-<% else %>
-<% end %>
 
 <% if @comments.present? %>
-<h2 >COMMENTS</h2>
+<h2>Reader Comments</h2>
 <% end %>
 
 <div style="margin-top: 20px;">
@@ -503,80 +448,59 @@ Hello <strong><%= current_user.name %></strong>. Write a comment…
   
   </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
   
-  <div class="content-right"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
-      
-      <% if @article.stories.present? %> <%# CHECK IF THERE ARE ANY STORY RELATED UPDATES %>
-      
-      <% @article.stories.each do |story| %>
-      <div style="margin-bottom: 10px;">
-      <div class="sidebar-header-top-new"><%= story.story %></div>
-      <% if story.articles.published.reject {|a| a == @article}.present? %>
-        <% story.articles.published.lastsix.reject {|a| a == @article}.each do |article| %>
-          <div class="content-white-background">
-          <%= link_to article do %>
-              <% if article.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag article.main.url if article.main? %>
-                </div>
-              <% elsif article.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
-                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
-                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
-              </span>
-          <% end %>
-          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
-        <% end %>
-      <% else %>
-        <div class="content-white-background" style="margin-bottom: 15px;">
-          <p style="font-size: 12px;">No other articles about this story yet.</p>
-        </div>
-      <% end %> 
-      </div> 
-      <% end %>
-      
-      <% else %> <%# IF THERE ARE NO STORY RELATED UPDATES, PUBLISH GENERAL LATEST UPDATES %>
+  <% content_for :right_side_bar do %>
+    <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
+    <p class="toplinks">
+     <a href="/subscriptions/new" title="Subscribe Now">Subscribe</a> | 
+     <a href="/articles/blog/" title="Subscribe Now">Blog</a> | 
+     <a href="/about/" title="Subscribe Now">About</a> | 
+     <a href="/contact/" title="Subscribe Now">Contact</a>
+     </p>
     
-    <div class="sidebar-header-top-new">
-        Other Spain News
-    </div>
-    
-    <% @last6articles.reject {|a| a == @article}.each do |article| %>
-          <div class="content-white-background">
-          <%= link_to article do %>
-              <% if article.main? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <%= image_tag article.main.url if article.main? %>
-                </div>
-              <% elsif article.video? %>
-                <div style="width:100%; margin-bottom: 3px;">
-                  <div class="video-wrapper">
-                    <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-                  </div>
-                </div>
-              <% else %>
-              <% end %>
-              <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= article.headline %></span></p>
-              <p style="font-size: 12px;"><%= article.body.truncate(150) %></p>
-              <span style="font-size: 11px; color: #999999;"><%= time_ago_in_words(article.created_at) %> ago 
-                <% if article.type.name == "LIVE BLOG" %><span class="breaking-label-mini">LIVE BLOG</span><% end %>
-                <% if article.type.name == "EDITORIAL" %><span class="editorial-label-mini">EDITORIAL</span><% end %>
-              </span>
-          <% end %>
-          </div> <%# END OF RIGHT-HAND CONTENT WHITE BACKGROUND %>
-    
+    <h3>Latest</h3>
+    <ul>
+    <% @last6articles.reject {|a| a == @article}.each do |article| %> 
+          <li>
+          <%= article.created_at.strftime("%d/%m, %H:%M") %>: 
+          <%= link_to article.short_headline, article %>
+          </li>
     <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
-      <% end %> <%# END OF TYPE OF UPDATES FOR SCROLL LOGIC %>
+    </ul>
+    
+    
+    <h3 style="margin-top: 20px;">Comments & Chat</h3>
+    <% if current_user %>
+      <p>What do you think, <strong><%= current_user.name %></strong>?</p>
+      <%= form_for [@article, Comment.new] do |f| %>
+      <div style="margin-top: 10px; padding-bottom: 10px;">
+      <div style="width: 100%;">
+      <%= f.text_area :comment, :style => "width:100%; min-height: 280px;", :maxlength => 1000, :class => "inputtextarea" %>
+      <br />
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
+      </div>
+      <div class="clear"></div>
+      </div>
+      <% end %>
+    <% else %>
+      <p>Please log in—or join if it's your first visit—to comment or chat.</p>
+      
+      <div style="margin-top: 10px; padding-bottom: 10px;">
+      <div style="width: 100%;">
+      <%= text_area_tag 'body', nil, style: "width:100%; min-height: 280px;", maxlength: 1000, class: "inputtextarea" %>
+      <br />
+      <% if current_user %>
+      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
+      <% else %>
+      <button type="submit" class="blueformbutton" style="float: right;" disabled>Add Your Comment</button>
+      <% end %>
+      </div>
+      <div class="clear"></div>
+      </div>
+      
+    <% end %>
 
   </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
+  <% end %>
   
   <div class="clear"></div>
 

@@ -1,56 +1,14 @@
 <% if current_user.nil? %>
 
-  <div class="email-sign-up">
-    
-    <div class="email-sign-up-image">
-      <%= image_tag "tsr-multiple-green-300.jpg" %>
-    </div>
-    
-    <div class="email-sign-up-text">
-    <span class="email-sign-up-title">Join <span style="border-bottom: 2px solid #F1BF00;">THE <span class="red">SPAIN</span> REPORT</span> To Understand More</span>
-    <p style="margin-top: 7px; margin-bottom: 7px; line-height: 140%;">
-      <%= render 'emailsignup_text' %>
-    </p>
-    
-    <div class="email-sign-up-form">
-    <%= form_tag '/new_spain_report_member', :class => '', :id => 'email-sign-up' do |f| %>
-      <div class="email-sign-up-prompt">
-        <span style="font-family: Oswald; font-size: 15px;">Enter Your E-mail:</span>
-      </div>
-      <div class="email-input-float">
-        <input type="email" size="40" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
-      </div>
-      <div class="email-input-float email-button">
-        <button type="submit" class="blueformbutton">Join Now</button>
-      </div>
-      <div class="clear"></div>
-      <%= hidden_field_tag 'sign_up_url', request.original_url %>
-      <% if controller_name == 'articles' && action_name == 'show' %>
-        <%= hidden_field_tag 'sign_up_stories', @article.stories.try(:ids) %>
-      <% elsif controller_name == 'newsitems' && action_name == 'show' %>
-        <%= hidden_field_tag 'sign_up_stories', @newsitem.stories.try(:ids) %>
-      <% else %>
-      <% end %> 
-        
-    <% end %>
-    </div>
-    
-    <div style="width:100%;">
-      <div class="email-sign-up-ssl-image">
-        <%= image_tag 'thespainreport-evssl-green.jpg', :height => '50px' %>
-      </div>
-      <div class="email-sign-up-quote">
-       “Your reporting and comment are excellent – please keep up the good work!"
-       <br />—John, Catalonia
-      </div>
-      <div class="clear"></div>
-    </div>
+<div class="modal-content">
+      <div class="modal-body">
 
+        <%= render 'emailsignup_one' %>
+        
+        </div>
+      <div class="modal-footer">
+        <span style="font-family: Oswald; font-weight:bold; border-bottom: 2px solid #AA151B;">THE <span class="red">SPAIN</span> REPORT</span>
+      </div>
     </div>
-    <div class="clear"></div>
-    
-    
-    
-  </div>
 
 <% end %>

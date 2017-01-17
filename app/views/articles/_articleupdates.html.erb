@@ -1,7 +1,7 @@
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <% @article.newsitems.each do |newsitem| %>
       <div class="article-updates">
-        <p style="margin: 0 auto; font-size: 11px; color: #999999; text-align:right;"><strong>Published:</strong> <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
+        <p style="margin: 0 auto; font-size: 11px; color: #fff; text-align:right;"><strong>Published:</strong> <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
         <h3><%= newsitem.slug %></h3>
         <% if newsitem.main? %>
           <div class="main-image-article-update">

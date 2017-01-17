@@ -46,8 +46,99 @@
     <td><%= @user.credit_card_country %></td>
     <td>**** **** **** <%= @user.credit_card_last4 %></td>
     <td><%= @user.credit_card_expiry_month.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year %></td>
+    <td><a onclick="myFunction()">Change to new card</a></td>
   </tr>
 </table>
+
+<div id="update-credit-card" style="display:none; width: 55%;">
+<%= form_tag '/update_credit_card', :class => '', :id => 'update-form' do %>
+<div class="subscription-form-section-middle" style="background-image: url(<%= asset_path 'thespainreport-evssl-white.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+    
+    <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, id: "flash_#{name}_div" do -%>
+          <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+        <% end -%>
+      <% end %>
+    <% end %>
+      
+    <div> 
+      <div class="subscription-left-label-input">
+        New Credit Card Number:
+      </div>  
+      <div class="subscription-right-form-element form-group">
+          <input type="tel" autocomplete="cc-number" id="cc-number" class="inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" onclick="calculateTotal()" />      
+      </div>
+      <div class="clear"></div>
+    </div>
+       
+    <div style="margin-top: 5px;">
+      <div class="subscription-left-label-select">
+        Card Expiry Date:    
+      </div>
+        
+      <div class="subscription-right-form-element">
+        <select data-stripe="exp-month" class="ccjs-month">
+          <option selected disabled>Month</option>
+          <option value="01">01</option>
+          <option value="02">02</option>
+          <option value="03">03</option>
+          <option value="04">04</option>
+          <option value="05">05</option>
+          <option value="06">06</option>
+          <option value="07">07</option>
+          <option value="08">08</option>
+          <option value="09">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+          
+        <select data-stripe="exp-year" class="ccjs-year">
+          <option selected disabled>Year</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+        </select>
+      </div>
+      <div class="clear"></div>
+    </div>
+          
+    <div style="margin-top: 5px;">  
+      <div class="subscription-left-label-input">
+        Card CVC/Security Code:
+      </div>
+      <div class="subscription-right-form-element">
+        <input type="text" id="cc-cvc" class="inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+  </div>
+    
+    <div class="subscription-form-section-bottom">  
+      <div class="subscription-left-label-input">
+        
+      </div>
+      <div class="subscription-right-form-element">
+        <button type="submit" class="blueformbutton" style="z-index: 1000;">Save New Card</button>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+      <div class="clear"></div>
+      
+      <input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
+      <input type="hidden" name="old_card" id="old_card" value="<%= @user.credit_card_id %>">
+      <input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+<% end %>
+</div>
 </div>
 
 <div>
@@ -72,6 +163,17 @@
       <td class="right"><%= sub.stripe_subscription_ip %></td>
       <td><%= sub.stripe_subscription_ip_country %>, <%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %></td>
       <td class="right"><%= sub.stripe_subscription_tax_percent %>%</td>
+      <td class="right">
+        <% if sub.is_active %>
+          <%= form_tag '/cancel_subscription', :class => '', :id => 'cancel_subscription', :name => 'cancel_subscription' do %>
+            <input type="hidden" name="cancel_subscription_id" id="cancel_subscription_id" value="<%= sub.stripe_subscription_id %>">
+            <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+            <button type="submit" class="linkbutton">Cancel</button>
+          <% end %>
+        <% else %>
+        Inactive
+        <% end %>
+      </td>
     </tr>
   <% end %>
   
@@ -122,3 +224,70 @@ Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-
 
 </div>
 </div>
+
+<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
+<%= javascript_include_tag "jquery.payment.js" %>
+
+<script>
+function myFunction() {
+    var x = document.getElementById('update-credit-card');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+</script>
+
+<script>
+    jQuery(function($) {
+      $('[data-numeric]').payment('restrictNumeric');
+      $('.cc-number').payment('formatCardNumber');
+      $('.cc-exp').payment('formatCardExpiry');
+      $('.cc-cvc').payment('formatCardCVC');
+
+      $.fn.toggleInputError = function(erred) {
+        this.parent('.form-group').toggleClass('has-error', erred);
+        return this;
+      };
+
+      $('update-form').submit(function(e) {
+        e.preventDefault();
+
+        var cardType = $.payment.cardType($('.cc-number').val());
+        $('.cc-number').toggleInputError(!$.payment.validateCardNumber($('.cc-number').val()));
+        $('.cc-exp').toggleInputError(!$.payment.validateCardExpiry($('.cc-exp').payment('cardExpiryVal')));
+        $('.cc-cvc').toggleInputError(!$.payment.validateCardCVC($('.cc-cvc').val(), cardType));
+        $('.cc-brand').text(cardType);
+
+        $('.validation').removeClass('text-danger text-success');
+        $('.validation').addClass($('.has-error').length ? 'text-danger' : 'text-success');
+      });
+
+    });
+</script>
+
+<script type="text/javascript">
+$(function(){
+  Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
+});
+
+$('#update-form').submit(function(event) {
+  var form = $(this);
+  form.find('button').prop('disabled', true);
+  Stripe.createToken(form, stripeResponseHandler);
+  return false;
+});
+
+function stripeResponseHandler(status, response) {
+  var form = $('#update-form');
+  if (response.error) {
+    form.find('.payment-errors').text(response.error.message);
+    form.find('button').prop('disabled', false);
+  } else {
+    var token = response.id;
+    form.append($('<input type="hidden" name="stripeToken">').val(token));
+    form.get(0).submit();
+  }
+}
+</script>

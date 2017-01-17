@@ -10,6 +10,10 @@ class ApplicationController < ActionController::Base
   
   def app_wide
     @last_active_stories = Story.latest
+    @lasteditorial = Article.editorial.published.lastone
+    @lastdailybriefing = Article.dailybriefing.published.lastone
+    @lasttopstory = Article.topstory.published.lastone
+    @lastindepth = Article.in_depth.published.lastone
   end
   
   def message_error_not_allowed

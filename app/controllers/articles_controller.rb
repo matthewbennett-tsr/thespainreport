@@ -110,8 +110,8 @@ class ArticlesController < ApplicationController
   end
 
   def articleurgency
-    if @article.short_slug?
-      @article.short_slug + ': '
+    if @article.notification_slug?
+      @article.notification_slug + ': '
     elsif @article.urgency == 'majorbreaking'
       "MAJOR BREAKING: "
     elsif @article.urgency == 'breaking'
@@ -141,8 +141,8 @@ class ArticlesController < ApplicationController
   end
   
   def updatetext
-    if @article.short_headline?
-      @article.short_headline
+    if @article.notification_message?
+      @article.notification_message
     else
       @article.headline
     end
@@ -361,6 +361,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:body, :caption, :created_at, :email_to, :headline, :lede, :main, :remove_main, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [])
+      params.require(:article).permit(:body, :caption, :created_at, :email_to, :headline, :lede, :main, :notification_slug, :notification_message, :remove_main, :short_lede, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [])
     end
 end
