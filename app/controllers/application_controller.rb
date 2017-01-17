@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     @last_active_stories = Story.latest
     @lasteditorial = Article.editorial.published.lastone
     @lastdailybriefing = Article.dailybriefing.published.lastone
-    @lasttopstory = Article.topstory.published.lastone
+    @lastfullstory = Article.fullstory.published.lastone
     @lastindepth = Article.in_depth.published.lastone
   end
   
