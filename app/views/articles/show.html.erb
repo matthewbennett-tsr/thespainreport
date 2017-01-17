@@ -49,6 +49,7 @@
 <% end %>
 </h1>
 
+<div class="news-alert-wrap">
 <% if @article.urgency == 'majorbreaking' && @article.updated_at >= 2.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
@@ -86,6 +87,7 @@
 <% end %>
 
 <div class="clear"></div>
+</div>
 
 <div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %>
   <% if ["IMAGES", "LIVE BLOG", "DAILY BRIEFING"].include?(@article.type.try(:name)) %>
@@ -186,9 +188,8 @@
 <% else %>
 <% end %>
 
-<% if @comments.present? %>
+<div class="comments-wrap">
 <h2 >COMMENTS</h2>
-<% end %>
 
 <div style="margin-top: 20px;">
 <% @comments.each do |comment| %>
@@ -233,6 +234,8 @@
 
 </div>
 
+
+  </div>
   </div>
   
 <% content_for :right_side_bar do %>
@@ -397,7 +400,7 @@
 <% end %>
 
 
-
+<div class="comments-wrap">
 <% if @comments.present? %>
 <h2>Reader Comments</h2>
 <% end %>
@@ -443,6 +446,7 @@
 <a name="commentcheck"></a>
 </div>
 
+</div>
 </div>
   
   

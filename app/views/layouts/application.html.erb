@@ -104,11 +104,10 @@
 <div id="email-sign-up-box">
 <% if current_user.nil? %>
   <img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
-  Don't miss anything.
-  Understand better how Spain is changing, in English. 
-  Full-text articles in your inbox. 
-  No ads, no spam. 
-  Free for 30 days.
+  Don't miss important stories.
+  Understand how the country is changing, in English. 
+  Full-text articles by e-mail. 
+  No ads, no spam.
   <div class="email-sign-up-form-new">
     <%= form_tag '/new_spain_report_member', :class => '', :id => 'email-sign-up' do |f| %>
       <div class="email-input-float">
