@@ -210,11 +210,11 @@
           Former Reader
         <% else %>
           <% if comment.user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 2px 2px 2px 5px;">Editor
+            <span class="editor-label-mini">Editor
           <% elsif comment.user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 2px 2px 2px 5px;">Subscriber
+            <span class="subscriber-label-mini">Subscriber
           <% elsif comment.user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 2px 2px 2px 5px;">New Reader
+            <span class="reader-label-mini">New Reader
           <% else %>
             <span>
           <% end %>
@@ -422,11 +422,11 @@
           Former Reader
         <% else %>
           <% if comment.user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 2px 2px 2px 5px;">Editor
+            <span class="editor-label-mini">Editor
           <% elsif comment.user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 2px 2px 2px 5px;">Subscriber
+            <span class="subscriber-label-mini">Subscriber
           <% elsif comment.user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 2px 2px 2px 5px;">New Reader
+            <span class="reader-label-mini">New Reader
           <% else %>
             <span>
           <% end %>
