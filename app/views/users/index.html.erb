@@ -41,11 +41,11 @@
         <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 1px 5px;">
+            <span class="editor-label-mini">
           <% elsif user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 1px 5px;">
+            <span class="subscriber-label-mini">
           <% elsif user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 1px 5px;">
+            <span class="reader-label-mini">
           <% else %>
             <span>
           <% end %>
@@ -101,11 +101,11 @@
         <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 1px 5px;">
+            <span class="editor-label-mini">
           <% elsif user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 1px 5px;">
+            <span class="subscriber-label-mini">
           <% elsif user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 1px 5px;">
+            <span class="reader-label-mini">
           <% else %>
             <span>
           <% end %>
@@ -163,11 +163,11 @@
         <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
-            <span style="background-color: green; color: white; padding: 1px 5px;">
+            <span class="editor-label-mini">
           <% elsif user.role == 'subscriber' %>
-            <span style="background-color: #B78727; color: white; padding: 1px 5px;">
+            <span class="subscriber-label-mini">
           <% elsif user.role == 'reader' %>
-            <span style="background-color: #eeeeee; color: black; padding: 1px 5px;">
+            <span class="reader-label-mini">
           <% else %>
             <span>
           <% end %>

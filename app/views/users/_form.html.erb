@@ -10,11 +10,11 @@
       <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %> | <%= f.check_box :allow_access %> | <%= f.check_box :is_author %>
     <% else %>
       <% if @user.role == 'editor' %>
-         <span style="background-color: green; color: white; padding: 2px 5px;">
+         <span class="editor-label-mini">
       <% elsif @user.role == 'subscriber' %>
-         <span style="background-color: #B78727; color: white; padding: 2px 5px;">
+         <span class="subscriber-label-mini">
       <% elsif @user.role == 'reader' %>
-         <span style="background-color: #eeeeee; color: black; padding: 2px 5px;">
+         <span class="reader-label-mini">
       <% else %>
          <span>
       <% end %>
