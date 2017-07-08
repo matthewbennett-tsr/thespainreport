@@ -132,6 +132,10 @@ class NewsitemsController < ApplicationController
   def email
     if @newsitem.email_to == 'none'
     
+    elsif @newsitem.email_to == 'allfree'
+      User.wantsupdates.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	  end
     elsif @newsitem.email_to == 'all'
       User.wantsupdates.editors.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)

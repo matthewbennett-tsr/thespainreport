@@ -167,6 +167,10 @@ class ArticlesController < ApplicationController
   def emailsummaries
     if @article.email_to == 'none'
     
+    elsif @article.email_to == 'allfree'
+      User.wantssummariesbreaking.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+      end
     elsif @article.email_to == 'all'
       User.wantssummariesbreaking.editors.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
@@ -197,9 +201,13 @@ class ArticlesController < ApplicationController
     
     
     elsif @article.email_to == 'test'
-        User.wantsarticles.editors.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-        end
+      User.wantsarticles.editors.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+      end
+    elsif @article.email_to == 'allfree'
+      User.wantsarticles.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
+      end
     elsif @article.email_to == 'all'
       if @article.type.name == 'BLOG'
         User.all.each do |user|

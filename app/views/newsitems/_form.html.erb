@@ -13,11 +13,11 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 725px;">
+    <div style="float:left; text-align:left; width: 740px;">
       <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
       <%= f.text_field :short_headline, :size => "62", :maxlength => "70" %>
       | T <%= check_box_tag 'tweet' %>
-      | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
+      | <%= f.select :email_to, options_for_select([["None", "none"], ["All - Free", "allfree"], ["All", "all"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
     </div>
     <div style="float:left; width: 175px; border-left: 1px solid #000; margin-top: 2px; margin-left: 5px; padding-left: 5px; text-align:right;">
       <div style="float:left;">
