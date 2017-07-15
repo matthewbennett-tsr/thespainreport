@@ -391,6 +391,26 @@
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
   
+  <% if @article.stories.present? %>
+    <h2>Follow These Stories</h2>
+    <% @article.stories.each do |s| %>
+    
+    <% if s.parent %>
+     <ul class="follow-stories">
+       <li><%= link_to s.parent.story, s.parent %></li>
+       <ul class="follow-stories-children">
+         <li>- <%= link_to s.story, s %></li>
+       </ul>
+     </ul>
+     <% else %>
+       <ul class="follow-stories">
+         <li>- <%= link_to s.story, s %></li>
+       </ul>
+     <% end %>
+     
+    <% end %>
+  <% end %>
+  
   <% if current_user.nil? %>
    <div class="meta" style="padding: 10px;">
      Buy our independent reporting and analysis today. Understand Spain better. <a href="/subscriptions/new" title="Subscribe Now" class="miniformbutton">SUBSCRIBE NOW</a>

@@ -7,6 +7,19 @@
 
 <h1><%= @story.story %>: Latest News & Analysis</h1>
 
+<p class="related-stories"><strong>Related stories:</strong>
+<% if @story.parent_id %>
+    <%= link_to @story.parent.story, @story.parent %> / 
+<% else %>
+<% end %>
+
+<% if @story.children %>
+<% @story.children.each do |s| %>
+    <%= link_to s.story, s %><%= ", " unless s == @story.children.last %> 
+   <% end %>
+<% end %>
+</p>
+
 <% if @story.created_at >= 24.hours.ago %>
   <div class="news-alert"><span class="breaking-label-mini">NEW STORY</span></div>
 <% else %>

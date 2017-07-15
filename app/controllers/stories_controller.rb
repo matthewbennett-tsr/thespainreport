@@ -34,6 +34,7 @@ class StoriesController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @story = Story.new
+      @stories = Story.all.order( 'stories.story ASC' )
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
@@ -46,7 +47,7 @@ class StoriesController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
-      
+      @stories = Story.all.order( 'stories.story ASC' )
     else
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
@@ -124,6 +125,6 @@ class StoriesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def story_params
-      params.require(:story).permit(:description, :last_active, :status, :story, :urgency, :keywords)
+      params.require(:story).permit(:description, :last_active, :status, :story, :urgency, :keywords, :parent_id)
     end
 end
