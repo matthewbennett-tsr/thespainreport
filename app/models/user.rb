@@ -59,6 +59,7 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :subscriptions
   has_many :invoices
+  has_and_belongs_to_many :stories
   
   def password_complexity
     if password.present? and not password.match(/^(?=.*[A-Z])./) and not password.match(/^(?=.*[\s])./)

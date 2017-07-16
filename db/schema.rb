@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711184807) do
+ActiveRecord::Schema.define(version: 20170716161832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -257,6 +257,11 @@ ActiveRecord::Schema.define(version: 20170711184807) do
     t.string   "keywords"
     t.datetime "last_active"
     t.integer  "parent_id"
+  end
+
+  create_table "stories_users", id: false, force: :cascade do |t|
+    t.integer "story_id", null: false
+    t.integer "user_id",  null: false
   end
 
   create_table "subscriptions", force: :cascade do |t|

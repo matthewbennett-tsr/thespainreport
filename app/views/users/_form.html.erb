@@ -1,4 +1,4 @@
-<%= form_for(@user) do |f| %>
+<%= form_for @user, :html => {:multipart => true} do |f| %>
 
   <div class="field">
     <div class="email-input-float"><strong>Display Name</strong> <em>(max. 20 chars)</em><br/><%= f.text_field :name, :maxlength => 20, :class => "input200" %></div>
@@ -24,10 +24,13 @@
     </div>
     <div class="clear"></div>
   </div>
+  
+  <% if false %>
   <div class="field">
     <strong>Bio. Tell us a bit about yourself</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
       <%= f.text_area :bio, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
   </div>
+  <% end %>
   
   <div style="margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #000000; border-bottom: 1px dotted #000000;">
   <p style="margin-bottom: 10px;">If you want to change your password, enter the new one here twice:</p>
@@ -74,6 +77,34 @@
   <%= f.select :emailpref, options_for_select([["Everything: All Articles & Updates", "articlesupdates"], ["Just Articles, No Updates", "justarticles"], ["Just Summaries & Breaking News", "justsummariesbreaking"], ["I Don't Want Any E-mail", "nothing"]], @user.emailpref) %>
   </p>
   </div>
+  
+  <h3>My Stories</h3>
+  <p>Check the Spain stories that your are most interested in.</p>
+  
+  <% @stories.group_by(&:parent).each do |parent, children| %>
+  
+  <ul class="follow-stories">
+    <li>
+      <label>
+      <%= check_box_tag 'user[story_ids][]', parent.id, @user.stories.include?(parent) unless parent.nil? %>
+      <%= parent.story unless parent.nil? %>
+      </label>
+    </li>
+    <ul class="follow-stories-children">
+      <% for s in children %>
+        <li>
+          <label>
+          <%= check_box_tag 'user[story_ids][]', s.id, @user.stories.include?(s) %>
+          <%= s.story %>
+          </label>
+        </li>
+      <% end %>
+    </ul>
+  </ul>
+  
+  <% end %>  
+  <%= hidden_field_tag "user[story_ids][]", nil%>
+
   
   <div class="actions">
     <button type="submit" class="blueformbutton">Save Changes</button>

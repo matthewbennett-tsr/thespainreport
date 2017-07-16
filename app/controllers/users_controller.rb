@@ -32,6 +32,7 @@ class UsersController < ApplicationController
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
+      @stories = Story.all.order(:story)
     else
       redirect_to root_url
       flash[:success] = "You're not allowed to do that."
@@ -44,6 +45,7 @@ class UsersController < ApplicationController
       flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.new
+      @stories = Story.all.order(:story)
     else
       redirect_to root_url
       flash[:success] = "You're not allowed to do that."
@@ -81,6 +83,7 @@ class UsersController < ApplicationController
       elsif @user.stripe_customer_id?
       else
       end
+      @stories = Story.all.order(:story)
     else
       @user = current_user
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
@@ -126,6 +129,7 @@ class UsersController < ApplicationController
       redirect_to root_url
       flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
+      @stories = Story.all.order(:story)
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
       elsif @user.stripe_customer_id? && @user.role == "reader"
@@ -192,7 +196,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:allow_access, :becomes_customer_date, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :is_author, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id)
+      params.require(:user).permit(:allow_access, :becomes_customer_date, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :is_author, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id, :story_ids => [])
     end
 
 end

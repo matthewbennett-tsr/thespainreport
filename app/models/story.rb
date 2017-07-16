@@ -4,6 +4,7 @@ class Story < ActiveRecord::Base
   
   has_and_belongs_to_many :newsitems
   has_and_belongs_to_many :articles
+  has_and_belongs_to_many :users
   
   def to_param
   "#{id}-#{created_at.strftime("%y%m%d%H%M%S")}-#{story.parameterize}"
