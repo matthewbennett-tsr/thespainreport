@@ -2,7 +2,7 @@
 <div class="content-white-background">
 
 <% if User.find(params[:id]) == current_user %>
-<h1>Edit My Account</h1>
+<h1>Edit MyTSR</h1>
 <% elsif @user.name.present? %>
 <h1>Editing <%= @user.name %></h1>
 <% else %>

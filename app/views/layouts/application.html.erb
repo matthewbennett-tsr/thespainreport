@@ -121,7 +121,7 @@
   </div>
 <% elsif current_user %>
   <div class="signed-in-details">
-  <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit Profile", edit_user_path(current_user) %></div>
+  <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit MyTSR", edit_user_path(current_user) %></div>
   <div style="margin-bottom: 3px;"><strong>E-mail:</strong> <%= current_user.try(:email) %></div>
   <div style="margin-bottom: 3px;"><strong>Twitter:</strong> <% if current_user.twitter.present? %><a href="https://twitter.com/<%= current_user.twitter %>">@<%= current_user.twitter %></a><% else %><span class="highlight"><%= link_to "Add Twitter username", edit_user_path(current_user) %></span><% end %></div>
   <div style="">
