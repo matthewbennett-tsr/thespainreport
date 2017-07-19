@@ -393,22 +393,28 @@
   
   <% if @article.stories.present? %>
     <h2>Follow These Stories</h2>
-    <% @article.stories.each do |s| %>
     
-    <% if s.parent %>
-     <ul class="follow-stories">
-       <li><%= link_to s.parent.story, s.parent %></li>
-       <ul class="follow-stories-children">
-         <li>- <%= link_to s.story, s %></li>
-       </ul>
-     </ul>
-     <% else %>
-       <ul class="follow-stories">
-         <li>- <%= link_to s.story, s %></li>
-       </ul>
-     <% end %>
-     
-    <% end %>
+   <% @article.stories.group_by(&:parent).each do |parent, children| %>
+  
+  <ul class="follow-stories">
+    <li>
+      <label>
+      <%= link_to parent.story, parent unless parent.nil? %>
+      </label>
+    </li>
+    <ul class="follow-stories-children">
+      <% for s in children %>
+        <li>
+          <label>
+          <%= link_to s.story, s %>
+          </label>
+        </li>
+      <% end %>
+    </ul>
+  </ul>
+  
+  <% end %> 
+  
   <% end %>
   
   <% if current_user.nil? %>
