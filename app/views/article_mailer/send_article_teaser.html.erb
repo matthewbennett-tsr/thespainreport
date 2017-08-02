@@ -48,7 +48,7 @@
               </p>
             <% elsif @article.video? %>
               <p>
-                <strong>VIDEO:</strong> <%= link_to 'Watch here', article_url(@article) %>. <%= @article.caption unless @article.caption.empty? %>
+                <strong>VIDEO:</strong> <%= link_to 'Watch here', article_url(@article), {:style=>'color:#AA151B;'} %>. <%= @article.caption unless @article.caption.empty? %>
               </p>
             <% else %>
             <% end %>
@@ -68,7 +68,7 @@
             
           </p>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:100%;">
-            <%= link_to 'Read the full article here now', article_url(@article) %>
+            <%= link_to 'Read the full article here now', article_url(@article), {:style=>'color:#AA151B;'} %>
           </p>
         </td>
       </tr>
@@ -80,7 +80,7 @@
       <tr>
         <td>
           <p>
-            <span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new">You get full text e-mails with the latest Spain news and analysis as soon as we hit 'publish'</a>.
+            <span style="font-family: Oswald, Arial; background-color: #AA151B; color: #F1BF00;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">You get full text e-mails with the latest Spain news and analysis as soon as we hit 'publish'</a>.
           </p>
         </td>
       </tr>
@@ -88,12 +88,12 @@
         <td style="border-top: 1px solid #cccccc; font-family: Georgia, Times New Roman;">
           <p><strong>E-MAIL ADMIN:</strong> Thank you for reading and subscribing to The Spain Report.
             <ul>
-              <li>To manage your e-mail preferences, log in to <%= link_to "My Account", edit_user_url(@user) %>;</li>
+              <li>To manage your e-mail preferences, log in to <%= link_to "My Account", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
               <li>You can choose: "Everything: Articles & Updates", "Just Articles" or "I Don't Want Any E-mail";</li>
               <li>You may update your e-mail preferences as often as you like;</li>
             </ul>
           </p>
-          <p>If you ever want to delete your account completely, please e-mail: subscriptions@thespainreport.com;</p>
+          <p>If you ever want to delete your account completely, please e-mail: <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %>;</p>
         </td>
       </tr>
       <tr>
@@ -105,9 +105,9 @@
             EC1V 4PW<br />
             United Kingdom<br /><br />
             (0044) (0)2076085570<br />
-            https://www.thespainreport.com<br /><br />
-            Understand Important Spain News, In English<br /><br />
-            Copyright © 2015 The Spain Report Ltd, All rights reserved.
+            <%= link_to "The Spain Report", "https://www.thespainreport.com", {:style=>'color:#AA151B;'} %><br /><br />
+            Understand Spain, In English<br /><br />
+            Copyright © 2017 The Spain Report Ltd, All rights reserved.
           </p>
         </td>
       </tr>

@@ -34,9 +34,9 @@
               <p>
                 <strong>VIDEO:</strong> 
                 <% if @newsitem.article.present? %>
-                  <%= link_to 'Watch here', article_url(@newsitem.article, anchor: @newsitem.id) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+                  <%= link_to 'Watch here', article_url(@newsitem.article, anchor: @newsitem.id), {:style=>'color:#AA151B;'} %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
                 <% else %>
-                  <%= link_to 'Watch here', newsitem_url(@newsitem) %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+                  <%= link_to 'Watch here', newsitem_url(@newsitem), {:style=>'color:#AA151B;'} %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
                 <% end %>
               </p>
             <% else %>
@@ -45,9 +45,9 @@
             <%= markdown(@newsitem.item) %>
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
           <% if @newsitem.article.present? %>
-            <%= link_to 'What do you think? Leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id) %>
+            <%= link_to 'What do you think? Leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id), {:style=>'color:#AA151B;'} %>
           <% else %>
-            <%= link_to 'What do you think? Leave your comment here', newsitem_url(@newsitem) %>
+            <%= link_to 'What do you think? Leave your comment here', newsitem_url(@newsitem), {:style=>'color:#AA151B;'} %>
           <% end %>
           </p>
         </td>
@@ -61,12 +61,12 @@
         <td style="border-top: 1px solid #cccccc; font-family: Georgia, Times New Roman;">
           <p><strong>E-MAIL ADMIN:</strong> Thank you for reading and subscribing to The Spain Report.
             <ul>
-              <li>To manage your e-mail preferences, log in to <%= link_to "My Account", edit_user_url(@user) %>;</li>
+              <li>To manage your e-mail preferences, log in to <%= link_to "My Account", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
               <li>You can choose: "Everything: Articles & Updates", "Just Articles" or "I Don't Want Any E-mail";</li>
               <li>You may update your e-mail preferences as often as you like;</li>
             </ul>
           </p>
-          <p>If you ever want to delete your account completely, please e-mail: subscriptions@thespainreport.com;</p>
+          <p>If you ever want to delete your account completely, please e-mail: <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %>;</p>
         </td>
       </tr>
       <tr>
@@ -78,9 +78,9 @@
             EC1V 4PW<br />
             United Kingdom<br /><br />
             (0044) (0)2076085570<br />
-            https://www.thespainreport.com<br /><br />
-            Understand Important Spain News, In English<br /><br />
-            Copyright © 2015 The Spain Report Ltd, All rights reserved.
+            <%= link_to "The Spain Report", "https://www.thespainreport.com", {:style=>'color:#AA151B;'} %><br /><br />
+            Understand Spain, In English<br /><br />
+            Copyright © 2017 The Spain Report Ltd, All rights reserved.
           </p>
         </td>
       </tr>
