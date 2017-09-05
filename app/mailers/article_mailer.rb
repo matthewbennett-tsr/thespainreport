@@ -21,8 +21,10 @@ class ArticleMailer < ApplicationMailer
       "MAJOR BREAKING: " + send_article_headline
     elsif @article.urgency == 'breaking'
       "BREAKING: " + send_article_headline
-    elsif @article.urgency == 'latest'
-      "LATEST: " + send_article_headline
+    elsif @article.urgency == 'morning' && @article.type.try(:name) == 'NEWS'
+      "MORNING LEAD: " + send_article_headline
+    elsif @article.urgency == 'evening' && @article.type.try(:name) == 'RECAP'
+      "EVENING RECAP: " + send_article_headline
     else
       "#{@article.type.name}: " + send_article_headline
     end
