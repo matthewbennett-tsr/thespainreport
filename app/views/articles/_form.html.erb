@@ -44,7 +44,7 @@
     <div style="margin-top: 5px;">
       <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '29', :style => 'padding:5px;' %>
        <%= f.text_field :short_lede, :size => '75', :class => "edit-short-lede", :style => 'padding:5px;' %>
-       <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+       <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Morning", "morning"], ["Evening", "evening"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
       | <%= f.collection_select :type_id, @types, :id, :name %>
     </div>
     <div style="margin-top: 5px;">

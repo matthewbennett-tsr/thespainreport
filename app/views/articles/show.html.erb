@@ -54,8 +54,10 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'latest' && @article.updated_at >= 12.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></div>
+<% elsif @article.urgency == 'morning' && @article.type.try(:name) == 'NEWS' %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></div>
+<% elsif @article.urgency == 'evening' && @article.type.try(:name) == 'RECAP' %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">EVENING RECAP</span></span></div>
 <% else %>
 <% end %>
 
@@ -71,11 +73,7 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span></span></div>
 <% end %>
 
-<% if @article.type.try(:name) == "DAILY BRIEFING" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">DAILY BRIEFING</span></span></div>
-<% end %>
-
-<% if !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
+<% if !["NEWS", "RECAP", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
   <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini"><%= @article.type.try(:name) %></span></span></div>
 <% end %>
 
