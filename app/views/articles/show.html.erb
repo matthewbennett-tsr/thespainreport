@@ -65,15 +65,11 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></div>
 <% end %>
 
-<% if @article.type.try(:name) == 'ANALYSIS' %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label-mini">ANALYSIS</span></span></div>
-<% end %>
-
 <% if @article.type.try(:name) == "LIVE BLOG" %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span></span></div>
 <% end %>
 
-<% if !["NEWS", "RECAP", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
+<% if !["NEWS", "RECAP", "EDITORIAL", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
   <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini"><%= @article.type.try(:name) %></span></span></div>
 <% end %>
 

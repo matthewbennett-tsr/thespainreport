@@ -141,6 +141,26 @@
 <% end %>
 </div>
 
+  <% @lastmorning.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+  
+  <% @lastevening.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">EVENING RECAP</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
+ 
   <% @lasteditorial.each do |article| %>
     <div class="side-block">
       <%= link_to article do %>
@@ -151,32 +171,12 @@
     </div>
   <% end %>
   
-  <% @lastdailybriefing.each do |article| %>
-    <div class="side-block">
-      <%= link_to article do %>
-        <h3><%= article.short_headline %></h3>
-        <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">DAILY BRIEFING</span></span></p>
-      <% end %>
-    </div>
-  <% end %>
-  
-  <% @lastfullstory.each do |article| %>
-    <div class="side-block">
-      <%= link_to article do %>
-        <h3><%= article.short_headline %></h3>
-        <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">FULL STORY</span></span></p>
-      <% end %>
-    </div>
-  <% end %>
-  
   <% @lastindepth.each do |article| %>
     <div class="side-block">
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">IN-DEPTH</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">DEEP SPAIN</span></span></p>
       <% end %>
     </div>
   <% end %>

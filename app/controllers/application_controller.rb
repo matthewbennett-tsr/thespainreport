@@ -11,8 +11,8 @@ class ApplicationController < ActionController::Base
   def app_wide
     @last_active_stories = Story.latest
     @lasteditorial = Article.editorial.published.lastone
-    @lastdailybriefing = Article.dailybriefing.published.lastone
-    @lastfullstory = Article.fullstory.published.lastone
+    @lastmorning = Article.morning.published.lastone
+    @lastevening = Article.evening.published.lastone
     @lastindepth = Article.in_depth.published.lastone
   end
   
