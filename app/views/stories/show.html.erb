@@ -45,7 +45,7 @@
   </div>
 <% end %>
 
-<% @story.articles.published.each do |article| %>
+<% @story.articles.published.order( 'articles.created_at DESC' ).each do |article| %>
   <div class="listing-article-container">
     <div class="listing-left">
     <div class="listing-update-text">
@@ -62,7 +62,7 @@
     <% else %>
       <span class="listing-update-slug"><span>
     <% end %>
-      <%= article.created_at.to_formatted_s(:short) %></span></span>
+      <%= article.created_at.strftime("%b %d, %Y") %></span></span>
     </div>
     </div>
     <div class="listing-right">
