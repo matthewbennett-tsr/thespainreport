@@ -20,13 +20,13 @@
     <% else %>
 <% end %>
 <div style="margin-top: 5px;">
-<h1 style="font-size: 26px; line-height: 120%; margin:0px;"><%= link_to article.headline, article %></h1>
+<h1 class="headline"><%= link_to article.headline, article %></h1>
 <div style="font-family: Georgia; margin-top: 7px; padding-bottom: 3px; margin-bottom: 7px;"><strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).</div>
 
 <% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 0px; margin-bottom: 10px; margin-left: 30px; margin-right: 0;">
     <% article.newsitems.each do |newsitem| %>
-        <li style="margin: 0 auto; text-align:left; font-style: normal; font-family: Oswald;">
+        <li style="margin: 0 auto; text-align:left; font-style: normal; font-family: Oswald; font-size: 16px;">
         <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
         </li>
     <% end %>
@@ -64,7 +64,7 @@
 <% @lasttwenty.each do |article| %>
 
 <div class="content-white-background" style="margin-bottom: 10px;">
-      <%= link_to article do %>
+      
         <% if article.main? %>
           <div style="width:100%; margin-bottom: 3px;">
               <%= image_tag article.main.url if article.main? %>
@@ -75,7 +75,7 @@
           </div>
         <% else %>
         <% end %>
-        <p style="font-size: 26px; line-height: 120%; margin:0px; font-weight:bold; font-family: Oswald;"><%= link_to article.headline, article %></p>
+        <p class="headline"><%= link_to article.headline, article %></p>
         <div style="font-family: Georgia; margin-top: 7px; padding-bottom: 3px; margin-bottom: 7px;"><strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).</div>
         <p style="font-size: 11px; margin-top: 5px; ">
         <span class="feed-item-date"> <%= article.created_at.to_formatted_s(:short) %></span>
@@ -108,14 +108,14 @@
         <% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 0px; margin-bottom: 10px; margin-left: 30px; margin-right: 0;">
     <% article.newsitems.each do |newsitem| %>
-        <li style="margin: 0 auto; text-align:left; font-style: normal; font-family: Oswald;">
+        <li style="margin: 0 auto; text-align:left; font-style: normal; font-family: Oswald; font-size:16px;">
         <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
         </li>
     <% end %>
     </ul>
   <% end %>
         </p>
-      <% end %>
+      
     </div>
 <% end %>
 

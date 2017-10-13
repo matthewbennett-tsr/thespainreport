@@ -32,7 +32,7 @@
 <div class="content-left-new"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
 <div class="content-white-background">
 
-<h1>
+<h1 class="headline">
 <% if current_user.nil? || current_user.role != 'editor' %>
   <% if @article.type.try(:name) == "LIVE BLOG" %>
     LIVE BLOG: 
