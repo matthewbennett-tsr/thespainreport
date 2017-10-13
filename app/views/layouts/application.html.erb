@@ -107,7 +107,7 @@
 <div id="email-sign-up-box">
 <% if current_user.nil? %>
   <img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
-  Original, indpendent reporting, in English, about how Spain is changing.
+  Original, independent reporting in English about how Spain is changing.
   Full-text articles by e-mail. Free for 30 days.
   No ads, no spam. Don't miss any important stories.
   <div class="email-sign-up-form-new">
@@ -196,7 +196,6 @@
 
 <%= yield %>
 
-<div style="text-align: center; margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Understand Spain, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
 
 <div class="clear"></div>
 </div>

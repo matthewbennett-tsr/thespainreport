@@ -92,6 +92,7 @@ class UsersController < ApplicationController
         @stripe_invoices = Stripe::Invoice.all(:customer => @user.stripe_customer_id)
       else
       end
+      @stories = Story.all.order(:story)
     end
   end
 

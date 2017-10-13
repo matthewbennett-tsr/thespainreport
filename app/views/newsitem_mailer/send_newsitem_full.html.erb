@@ -15,6 +15,8 @@
       </tr>
       <tr>
         <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+        <p style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
+        
             <% if @newsitem.main? %> <%# MAIN IMAGE OR VIDEO %>
               <p style="width: 100%;">
                 <% if @newsitem.article.present? %>
@@ -43,13 +45,16 @@
             <% end %>
             
             <%= markdown(@newsitem.item) %>
-          <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+            
+          <p style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
           <% if @newsitem.article.present? %>
             <%= link_to 'What do you think? Leave your comment here', article_url(@newsitem.article, anchor: @newsitem.id), {:style=>'color:#AA151B;'} %>
           <% else %>
             <%= link_to 'What do you think? Leave your comment here', newsitem_url(@newsitem), {:style=>'color:#AA151B;'} %>
           <% end %>
           </p>
+          
+        </p>  
         </td>
       </tr>
       <tr>

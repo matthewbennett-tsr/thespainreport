@@ -6,7 +6,7 @@
   <body>
     <table>
       <tr>
-        <td style="font-family: Oswald, Arial; font-size: 16px;"><h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @article.headline %></h1></td>
+        <td style="font-family: Oswald, Arial; font-size: 17px;"><h1 style="font-family: Oswald, Arial; font-size: 17px;"><%= @article.headline %></h1></td>
       </tr>
       <tr>
         <td>
@@ -29,12 +29,14 @@
         </td>
       </tr>
       <tr>
-        <td style="font-family: Georgia, Times New Roman; font-size: 15px; font-style: italic; border-top: 1px dotted #999999; border-bottom: 1px dotted #999999;">
+        <td style="font-family: Georgia, Times New Roman; font-size: 17px; font-style: italic; border-top: 1px dotted #999999; border-bottom: 1px dotted #999999;">
           <strong><%= @article.created_at.strftime("%b %d %Y") %>—</strong><%= @article.lede %>
         </td>
       </tr>
       <tr>
-        <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+        <td style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
+        <p style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
+        
         <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
           <p style="width: 100%;">
             <%= link_to(article_url(@article)) do %>
@@ -50,12 +52,13 @@
           </p>
         <% else %>
         <% end %>
+        
         <%= markdown(@article.body) %>
         
         <% if @article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
           <% @article.newsitems.each do |newsitem| %>
             <div style="width: 100%;">
-              <h3 style="font-family: Oswald, Arial; font-size: 16px;"><%= newsitem.slug %></h3>
+              <h3 style="font-family: Oswald, Arial; font-size: 17px;"><%= newsitem.slug %></h3>
               <% if newsitem.main? %>
                 <%= image_tag newsitem.main.url if newsitem.main? %>
                 <p>
@@ -81,6 +84,8 @@
           <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
             <%= link_to 'What do you think? Leave your comment here', article_url(@article), {:style=>'color:#AA151B;'} %>
           </p>
+        
+        </p>
         </td>
       </tr>
       <tr>

@@ -6,7 +6,7 @@
   <body>
     <table>
       <tr>
-        <td style="font-family: Oswald, Arial; font-size: 16px;"><h1 style="font-family: Oswald, Arial; font-size: 16px;"><%= @article.headline %></h1></td>
+        <td style="font-family: Oswald, Arial; font-size: 17px;"><h1 style="font-family: Oswald, Arial; font-size: 17px;"><%= @article.headline %></h1></td>
       </tr>
       <tr>
         <td>
@@ -29,13 +29,13 @@
         </td>
       </tr>
       <tr>
-        <td style="font-family: Georgia, Times New Roman; font-size: 15px; font-style: italic; border-top: 1px dotted #999999; border-bottom: 1px dotted #999999;">
+        <td style="font-family: Georgia, Times New Roman; font-size: 17px; font-style: italic; border-top: 1px dotted #999999; border-bottom: 1px dotted #999999;">
           <strong><%= @article.created_at.strftime("%b %d %Y") %>—</strong><%= @article.lede %>
         </td>
       </tr>
       <tr>
-        <td style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
-          <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:130%;">
+        <td style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
+          <p style="font-family: Georgia, Times New Roman; font-size: 17px; line-height:130%;">
             
             <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
               <p style="width: 100%;">
@@ -53,11 +53,11 @@
             <% else %>
             <% end %>
             
-            <%= markdown(@article.body.truncate(600)) %>
+            <%= markdown(@article.body.truncate(400)) %>
             
             <% if @article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
             <p>
-            In today's Daily Briefing…
+            Updates in this article:
             </p>
             <ul>
             <% @article.newsitems.each do |newsitem| %>
@@ -66,24 +66,14 @@
             </ul>
             <% end %> <%# END OF ARTICLE UPDATES %>
             
+            <p style="font-style:italic;">
+            (Thank you very much for enjoying your full free trial. <a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please subscribe now</a> to read the complete article and to keep getting them all by e-mail as soon as we hit 'publish'. Your subscription means we can help you to understand Spain better in English, and keeps us 100% independent.)
           </p>
-          <p style="font-family: Georgia, Times New Roman; font-size: 15px; line-height:100%;">
-            <%= link_to 'Read the full article here now', article_url(@article), {:style=>'color:#AA151B;'} %>
-          </p>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <em><strong>Published on:</strong> <%= @article.created_at.strftime("%b %d, %Y, %H:%M") %></em>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <p>
-            <span style="font-family: Oswald, Arial; background-color: #AA151B; color: #F1BF00;">&nbsp;&nbsp;SUBSCRIBE NOW&nbsp;&nbsp;</span> <a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">You get full text e-mails with the latest Spain news and analysis as soon as we hit 'publish'</a>.
+            
           </p>
         </td>
       </tr>
+
       <tr>
         <td style="border-top: 1px solid #cccccc; font-family: Georgia, Times New Roman;">
           <p><strong>E-MAIL ADMIN:</strong> Thank you for reading and subscribing to The Spain Report.
