@@ -2,6 +2,7 @@ class Article < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :regions
   has_and_belongs_to_many :stories
+  has_and_belongs_to_many :users
   belongs_to :type
   has_many :newsitems
   has_many :comments, as: :commentable, dependent: :destroy
@@ -45,7 +46,13 @@ class Article < ActiveRecord::Base
   scope :lasttwenty, -> {order('created_at DESC').limit(20)}
   scope :lastthirty, -> {order('created_at DESC').limit(30)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
+  scope :last2, -> {where(:created_at => 2.hours.ago..DateTime.now.in_time_zone)}
+  scope :last3, -> {where(:created_at => 3.hours.ago..DateTime.now.in_time_zone)}
+  scope :last6, -> {where(:created_at => 6.hours.ago..DateTime.now.in_time_zone)}
+  scope :last12, -> {where(:created_at => 12.hours.ago..DateTime.now.in_time_zone)}
   scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
+  scope :last84, -> {where(:created_at => 84.hours.ago..DateTime.now.in_time_zone)}
+  scope :last168, -> {where(:created_at => 168.hours.ago..DateTime.now.in_time_zone)}
   scope :next24, -> {where('created_at <= ? and created_at >= now()', 24.hours.from_now).limit(20)}
   scope :following5days, -> {where('created_at <= ? and created_at >= ?', 6.days.from_now, 1.days.from_now).limit(20)}
   scope :following614days, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 6.days.from_now).limit(20)}

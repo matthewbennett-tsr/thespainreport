@@ -1,0 +1,10 @@
+<%= markdown(@article.body.truncate(200)) %>
+  
+<% if @article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+Updates in this article:
+
+<% @article.newsitems.each do |newsitem| %>
+** <%= newsitem.slug %>
+
+<% end %>
+<% end %> <%# END OF ARTICLE UPDATES %>

@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
       # logged in when they navigate around our website.
       session[:user_id] = user.id
       redirect_to :back
-      flash[:success] = "Welcome back #{current_user.name}!"
+      flash[:success] = "Welcome back!"
     else
     # If user's login doesn't work, send them back to the login form.
       redirect_to :back
@@ -23,7 +23,7 @@ class SessionsController < ApplicationController
     session[:user_id] = nil
     reset_session
     redirect_to '/'
-    flash[:success] = "Thanks for reading, see you next time!"
+    flash[:success] = "Thanks for reading!"
   end
 
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170716161832) do
+ActiveRecord::Schema.define(version: 20171221120320) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,8 @@ ActiveRecord::Schema.define(version: 20170716161832) do
     t.string   "notification_message"
     t.string   "short_lede"
     t.string   "short_headline"
+    t.boolean  "is_free"
+    t.string   "briefing_point"
   end
 
   create_table "articles_categories", id: false, force: :cascade do |t|
@@ -57,6 +59,11 @@ ActiveRecord::Schema.define(version: 20170716161832) do
   create_table "articles_types", id: false, force: :cascade do |t|
     t.integer "article_id"
     t.integer "type_id"
+  end
+
+  create_table "articles_users", id: false, force: :cascade do |t|
+    t.integer "article_id", null: false
+    t.integer "user_id",    null: false
   end
 
   create_table "audios", force: :cascade do |t|
@@ -161,6 +168,7 @@ ActiveRecord::Schema.define(version: 20170716161832) do
     t.string   "email_to"
     t.string   "short_slug"
     t.string   "short_headline"
+    t.string   "briefing_point"
   end
 
   create_table "newsitems_categories", id: false, force: :cascade do |t|
@@ -179,6 +187,25 @@ ActiveRecord::Schema.define(version: 20170716161832) do
   create_table "newsitems_stories", id: false, force: :cascade do |t|
     t.integer "newsitem_id"
     t.integer "story_id"
+  end
+
+  create_table "notifications", force: :cascade do |t|
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.integer  "user_id"
+    t.integer  "story_id"
+    t.string   "urgency"
+    t.integer  "notificationtype_id"
+    t.string   "update_token"
+  end
+
+  add_index "notifications", ["story_id", "user_id"], name: "index_notifications_on_story_id_and_user_id", using: :btree
+
+  create_table "notificationtypes", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name"
+    t.integer  "order"
   end
 
   create_table "organisations", force: :cascade do |t|
@@ -309,17 +336,13 @@ ActiveRecord::Schema.define(version: 20170716161832) do
     t.string   "avatar"
     t.text     "bio"
     t.boolean  "email_confirmed",          default: false
-    t.string   "confirm_token"
     t.string   "password_digest"
     t.string   "role"
     t.string   "reset_digest"
     t.datetime "reset_sent_at"
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
-    t.string   "sign_up_url"
-    t.string   "emailpref"
     t.string   "stripe_customer_id"
-    t.boolean  "allow_access",             default: false
     t.boolean  "is_author",                default: false
     t.datetime "becomes_customer_date"
     t.string   "credit_card_id"
@@ -328,6 +351,12 @@ ActiveRecord::Schema.define(version: 20170716161832) do
     t.string   "credit_card_last4"
     t.integer  "credit_card_expiry_month"
     t.integer  "credit_card_expiry_year"
+    t.datetime "access_date"
+    t.integer  "one_story_id"
+    t.datetime "one_story_date"
+    t.integer  "briefing_frequency"
+    t.string   "confirm_token"
+    t.string   "emailpref"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

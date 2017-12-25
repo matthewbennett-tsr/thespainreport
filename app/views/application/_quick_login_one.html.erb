@@ -1,13 +1,15 @@
 <div class="modal-content">
+      
       <div class="modal-header">
         <h1 class="modal-title" id="myModalLabel">Please log in for instant access to your article…</h1>
       </div>
       <div class="modal-body">
-        <div style="padding-bottom: 5px; border-bottom: 1px solid #AA151B; margin-bottom: 0px;">
+        <div class="">
+          <div class="">
         <%= form_tag '/login' do %>
         <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
-        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %><br />&nbsp;<span style="font-size: 12px;"><a href="https://www.thespainreport.com/password_resets/new">Need a new password?</a></span></div>
-        <div class="top-login-input-float"><button type="submit" class="blueformbutton" id="login">Log In</button></div>
+        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input200', placeholder: 'Enter your password...' %><br />&nbsp;<span style="font-size: 12px; font-family: Oswald, Arial;"><a href="https://www.thespainreport.com/password_resets/new">Need a new password?</a></span></div>
+        <div class="top-login-input-float" style="margin-top: 2px;"><button type="submit" class="blueformbutton" id="login">Log In</button></div>
         <div class="top-login-input-float" style="margin-top:7px;">
           <% if flash.present? %>
             <% flash.each do |name, msg| %>
@@ -17,6 +19,7 @@
         </div>
         <div class="clear"></div>
         <% end %>
+         </div>
         </div>
         
         <%= render 'emailsignup_one' %>

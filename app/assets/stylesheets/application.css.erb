@@ -57,16 +57,16 @@ iframe {margin:0; padding:0;}
 
 /* BIG BOX STRUCTURAL & COLOUR STUFF*/
 body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
-.wrap {position: relative; width: 100%; margin-top: 60px; padding-left: 295px; background-color: #fff;}
-.wrap-subscription {position: relative; width: 80%; margin: 60px auto; background-color: #fff;}
-#top-bar-wrap {position:fixed; left: 0%; top: 0%; width: 100%; height: 70px; background-color: #fff; z-index: 90;}
-#top-bar-layer {position:fixed; left: 0%; top: 0%; width: 100%; height: 60px; border-bottom: 3px solid #AA151B; background-color: #AA151B; z-index: 10000;}
-#email-sign-up-box {background-color: #fff; font-family: Georgia; padding: 5px; margin-bottom: 2px; font-size: 14px; line-height: 150%; border-bottom: 1px solid #F1BF00;}
-.left-hand-fixed-bar {position:fixed; margin-left: 10px; margin-top: 5px; width: 285px; height: 690px; background-color: #fff; padding: 10px;}
-.right-hand-fixed-bar {position:fixed; margin-left: 940px; margin-top: 0px; width: 320px; height: 690px; background-color: #fff; padding: 10px;}
-.content-left-new {float:left; width: 640px; margin-top: 5px; padding: 10px; background-color: #fff; }
-.content-left-new-page {float:left; width: 100%; margin-top: 13px; padding: 10px; background-color: #fff; }
+#top-bar-layer {position:relative; left: 0%; top: 0%; width: 100%; height: 60px; border-bottom: 3px solid #AA151B; background-color: #AA151B; z-index: 10000;}
+
+.wrap {position: relative; width: 1020px; height: auto; margin: 0 auto; background-color: #fff; border-left: 1px solid #B1A87D; border-right: 1px solid #B1A87D; overflow: hidden;}
+.wrap-subscription {position: relative; width: 80%; margin: 0 auto; background-color: #fff;}
+.left-hand-bar {position:relative; float:left; margin-left: 10px; margin-top: 5px; width: 285px; background-color: #fff; padding: 10px;}
+.content-left-new {float:left; width: 700px; margin-top: 5px; padding: 10px; background-color: #fff; }
+.content-left-new-page {float:left; width: 700px; margin-top: 0px; padding: 10px; background-color: #fff; }
 .content-left-subscription {float:left; width: 100%; margin-top: 13px; padding: 10px; background-color: #fff; }
+
+#email-sign-up-box {background-color: #fff; font-family: Georgia; padding: 5px; margin-bottom: 2px; font-size: 14px; line-height: 150%; border-bottom: 1px solid #F1BF00;}
 .content-right {float:right; width: 32%; margin-left: 5px; padding: 10px; background-color: #fff; margin-top: 13px;}
 .content-white-background {background-color: #fff; padding-bottom: 15px; border-bottom: 1px solid #E5D8A1; margin-bottom: 7px;}
 .side-block {background-color: #fff; padding: 12px 5px; border-bottom: 1px solid #F1BF00; margin-top: 0px;}
@@ -88,6 +88,11 @@ body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
 .side-block ul li a:hover, .side-block p a:hover {color: #F1BF00 !important; background-color: #AA151B; text-decoration: none;}
 
 /* TOPBAR THINGS */
+.site-title {margin-top: 15px; font-size: 40px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1; padding-bottom: 2px; border-bottom: 3px solid #F1BF00;}
+.site-title-new, .site-title-new a {font-family: Oswald, Arial, sans-serif; color:#ffe680; text-decoration: none;}
+.site-title-new {float: left; padding: 10px 10px 10px 10px; font-size: 39px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1;}
+.site-title-spain {font-family: Oswald, Arial, sans-serif; color:#F1BF00;}
+
 .highlight {background-color: #FEF9E6; padding: 3px;}
 .clear  {clear:both;}
 .user-bar {margin-top: 0px; height: 47px; background-color: #f5f5f5; padding: 7px 10px; font-family: Oswald, Arial, sans-serif; font-size: 16px; text-align:right;}
@@ -102,11 +107,9 @@ body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
 .user-bar-right-links a, .user-bar-right-links a:visited {color: #F1BF00;}
 .user-bar-right-links a:hover {color: #ffe680;}
 .user-bar-login {float: left;}
+.user-bar-login-form {margin-top: 0px;}
 .user-bar-right-links-basic-user {float:left; margin-top: 6px;}
 
-.site-title {margin-top: 15px; font-size: 40px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1; padding-bottom: 2px; border-bottom: 3px solid #F1BF00;}
-.site-title-spain {font-family: Oswald, Arial, sans-serif; color:#F1BF00;}
-.site-title-new {font-family: Oswald, Arial, sans-serif; color:#ffe680;}
 .site-description {margin-top: 4px; margin-bottom: 0px; color: #999999; font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 17px;}
 .site-description-left {float:left;}
 .site-description-right {float:right; font-size: 0; line-height: 0; margin: 0; padding: 0;}
@@ -182,8 +185,6 @@ ul.follow-stories {margin: 0; list-style: none;}
 ul.follow-stories-children {margin-top: 0px; margin-bottom: 0px; margin-left: 20px; list-style: none;}
 .related-stories {margin: 5px 0;}
 
-.homelink {position:fixed; margin-left: 10px; margin-top: 0; width: 315px; height: 60px; background-color: transparent; z-index: 500;}
-.site-title-new {float: left; padding: 10px 10px 10px 10px; font-size: 39px; font-family: Oswald, Arial, sans-serif; font-weight: bold; line-height: 1;}
 .site-description-new {color: #999999; font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 25px;}
 .email-sign-up-form-new {margin-top: 5px; margin-bottom: 5px;}
 
@@ -201,8 +202,13 @@ ul.follow-stories-children {margin-top: 0px; margin-bottom: 0px; margin-left: 20
 .headline a:active {color: #000000; text-decoration: none;}
 .headline a:visited {color: #000000; text-decoration: none;}
 
+.news-alert-wrap {padding-top: 10px; padding-bottom:5px;}
 .news-alert {margin-bottom: 5px; margin-right: 5px; float:left;}
 .news-alert-update {margin-bottom: 15px; float:left;}
+
+.resubscribe-box {border-top: 1px solid #AA151B; border-bottom: 1px solid #AA151B;}
+.resubscribe-text {padding: 10px; background-color: #FEF9E6;}
+.resubscribe-button-box {text-align:center; margin: 30px 0 25px 0;}
 
 .breaking {background-color: #AA151B; color: #ffffff; padding: 2px 5px; font-weight: normal; }
 .breaking a, .breaking a:visited {background-color: #AA151B; color: #ffffff;}
@@ -269,6 +275,11 @@ h1 .editorial-label {background-color: #34845B; color: #ffffff; padding: 5px 7px
 .sidebar-sign-up ul li {font-family: Arial; font-size: 14px;}
 .sidebar-sign-up-quote {margin-top: 10px; font-style: italic; width: 80%;}
 
+.user-block {margin-top: 0px; padding-bottom: 10px; border-bottom: 1px dotted #000000;}
+.user-paragraph {margin-top: 10px; margin-bottom: 10px;}
+.user-paragraph-label {margin-top: 0px; margin-bottom: 0px; font-weight:bold;}
+.admin-submit-button {margin-top: 10px; text-align: right;}
+
 .email-sign-up {margin-top: 15px; margin-bottom: 0px; padding: 10px; }
 .email-sign-up-image {float:right; width: 30%;}
 .email-sign-up-text {float:left; width: 70%; font-familiy: Georgia;}
@@ -276,7 +287,7 @@ h1 .editorial-label {background-color: #34845B; color: #ffffff; padding: 5px 7px
 .email-sign-up-text-two {width: 100%;}
 .email-sign-up-title {font-family: Oswald, Arial, sans-serif; line-height: 1; font-size: 19px; margin-bottom:0px; font-weight:bold; padding-bottom: 0;}
 .email-sign-up .email-submit {font-family: Oswald, Arial, sans-serif !important; line-height: 1.5 !important; font-size: 40px !important; margin-bottom:0px; font-weight:bold; padding: 10px;}
-.email-input-float {float:left; margin-right: 4px;}
+.email-input-float {float:left; margin-right: 4px; }
 .email-sign-up-form {margin-top: 20px; margin-bottom: 0px;}
 .email-sign-up-prompt {float:left; margin-right: 4px; margin-top: 6px;}
 .email-sign-up-ssl-image {float:left; width: 10%;}
@@ -287,10 +298,10 @@ h1 .editorial-label {background-color: #34845B; color: #ffffff; padding: 5px 7px
 .top-login-input-float {float:left; margin-right: 4px;}
 
 .login-article-form {margin-top: 5px; margin-bottom: 5px; padding: 10px; background-color: #E3EDED; border: 1px solid #999999;}
-.inputgeneral {font-size: 13px; padding: 5px;}
+.inputgeneral {font-size: 13px; padding: 5px; background-color: #FEF9E6;}
 .input50 {width: 50px; font-size: 13px; padding: 5px;}
-.input200 {width: 200px; font-size: 13px; padding: 5px;}
-.input170 {width: 170px; font-size: 13px; padding: 5px;}
+.input200 {width: 200px; font-size: 13px; padding: 5px; background-color: #FEF9E6;}
+.input170 {width: 170px; font-size: 13px; padding: 5px; background-color: #FEF9E6;}
 .inputtextarea {padding: 10px; line-height:140%;}
 .remember {margin-top: 5px; margin-right: 10px;}
 
@@ -325,6 +336,12 @@ td {font-family: Arial; font-size: 14px; vertical-align: top;}
 .article-text table th, .update-text table th, .listing-update-text table th {padding: 10px 10px 4px 10px; font-family: Oswald; font-size: 17px;}
 .article-text table td, .update-text table td, .listing-update-text table td {padding: 10px 10px 2px 10px; font-family: Arial;}
 
+.notifications-admin {border-bottom: 1px dotted #F1BF00; width: 700px;}
+.notifications-admin-left {padding-top: 5px; float:left; min-width: 200px;}
+.notifications-admin-right {padding-top: 5px; float:right; margin-left: 10px;}
+.notifications-admin label {margin-left: 3px; margin-right: 10px; font-weight: normal;}
+.user-block ul {margin-top: 0px;}
+.user-block ul li {font-family: Arial; font-size: 14px;}
 
 #error_explanation {width: 95%; float:left; background-color: #FEF9E6; border-color: #F1BF00;}
 #error_explanation h2 {font-family: Oswald, Arial, sans-serif; background-color: #F1BF00; font-weight:normal; line-height: 1.2; font-size: 19px; padding-bottom: 7px;}
@@ -334,10 +351,10 @@ td {font-family: Arial; font-size: 14px; vertical-align: top;}
 .error-explainer a, a:visited {text-decoration:underline;}
 .field_with_errors {background-color: #F1BF00; border-color: #F1BF00;}
 #flash_success {color: green !important;}
-#flash_success_div {width: 100; border: 2px solid green; background-color: #FEF9E6; margin: 10px 0px; text-align:center; padding: 10px;}
+#flash_success_div {width: 100; border: 1px solid green; background-color: #FEF9E6; margin: 5px 0px; text-align:left; padding: 0px 5px;}
 #flash_success_div_left {width: 100; border: 2px solid green; background-color: #FEF9E6; margin: 10px 0px; text-align:left; padding: 10px;}
 #flash_error {color: #AA151B !important;}
-#flash_error_div {width: 100; border: 2px solid #AA151B; background-color: #FEF9E6; margin: 10px 0px; text-align:center; padding: 10px;}
+#flash_error_div {width: 100; border: 1px solid #AA151B; background-color: #FEF9E6; margin: 5px 0px; text-align:left; padding: 0px 5px;}
 
 .blueformbutton {
     font-family: Oswald; font-size: 16px;
@@ -359,7 +376,7 @@ td {font-family: Arial; font-size: 14px; vertical-align: top;}
     user-select: none;
 }
 
-.blueformbutton:hover  {
+.blueformbutton:hover, a.blueformbutton:hover  {
 	cursor: pointer;
 	color:#ffe680 !important;
 	-webkit-box-shadow:inset 0 1px 1px rgba(255,255,255,.2), 0 1px 2px rgba(5,15,30,.4);

@@ -1,0 +1,24 @@
+<p style="font-weight:bold;">My Account</p>
+
+<p>Thank you for reading and subscribing to The Spain Report.</p>
+
+<ul>
+  <li>To manage your account <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
+</ul>
+
+<p>If you ever have any problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %> straight away.</p>
+
+<p style="font-weight:bold;">The Spain Report Ltd.</p>
+
+<p>
+  20-22 Wenlock Road<br />
+  London<br />
+  N1 7GU<br />
+  United Kingdom<br /><br />
+  (0044) (0)2076085570<br />
+  <%= link_to "The Spain Report", "https://www.thespainreport.com", {:style=>'color:#AA151B;'} %>
+</p>
+
+<p>Understand Spain, In English</p>
+
+<p>Copyright © <%= Time.now.year %> The Spain Report Ltd, All rights reserved.</p>

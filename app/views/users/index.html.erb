@@ -1,8 +1,16 @@
 <% title 'All Members' %>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
 
 <h1>All Members</h1>
 
-<div class="article-lede">The Spain Report now has <strong><%= @subscribercount %> subscribers</strong> (<%= @activesubscribercount %> active & <%= @straysubscribercount %> stray) and <strong><%= @readercount %> readers</strong>
+<div class="article-lede">
+- <%= @totalsubscribers %> total subscribers <br />
+- <%= @onestorysubscribers %> single-story subscribers <br />
+- <%= @allstorysubscribers %> all-story subscribers <br />
+- <%= @straysubscribercount %> non subscribers <br />
+- <%= @readercount %> readers <br />
+- <%= @guestcount %> guests
 </div>
 
   <%= form_tag(users_path, :method => "get", id: "search-form") do %>
@@ -25,48 +33,30 @@
       <td>Joined</td>
       <td>Role</td>
       <td>E-mail</td>
-      <td>Display Name</td>
-      <td>Twitter</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
+      <td>Confirm</td>
       <td>Stripe ID</td>
       <td></td>
     </tr>
   </thead>
 
   <tbody>
-    <% @latestsubscribers.each do |user| %>
+    <% User.all.each do |user| %>
       <tr>
         <td><%= link_to 'E', edit_user_path(user) %></td>
         <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
         <td>
         <% if user.role == 'editor' %>
             <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
+          <% elsif ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(user.role) %>
             <span class="subscriber-label-mini">
           <% elsif user.role == 'reader' %>
             <span class="reader-label-mini">
           <% else %>
             <span>
           <% end %>
-        <%= user.role.to_s.humanize %></span>
+        <%= user.role.to_s.titleize %></span>
         </td>
         <td><%= mail_to user.email %></td>
-        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
-        <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
-        <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
-          <% end %>
-        </td>
         <td><%= user.email_confirmed %></td>
         <td style="padding: 0px 1px;"><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
@@ -84,11 +74,7 @@
       <td>Joined</td>
       <td>Role</td>
       <td>E-mail</td>
-      <td>Display Name</td>
-      <td>Twitter</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td>Stripe ID</td>
+      <td>Confirm</td>
       <td>URL</td>
       <td></td>
     </tr>
@@ -111,25 +97,13 @@
           <% end %>
         <%= user.role.to_s.humanize %></span>
         </td>
-        <td><%= mail_to user.email %></td>
-        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
-        <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
+        <td><%= mail_to truncate(user.email, :length => 20) %></td>
+        <td><%= user.email_confirmed %></td>
         <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
+          <% user.articles.each do |a| %>
+           <%= link_to truncate(a.headline, :length => 20), a %>
           <% end %>
         </td>
-        <td><%= user.email_confirmed %></td>
-        <td style="padding: 0px 1px;"><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
-        <td><%= user.try(:sign_up_url) %></td>
         <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -138,61 +112,5 @@
 
 <% end %>
 
-<h3>All Members</h3>
-
-<table class="admin-table">
-  <thead>
-    <tr style="font-weight: bold;">
-      <td></td>
-      <td>Joined</td>
-      <td>Role</td>
-      <td>E-mail</td>
-      <td>Display Name</td>
-      <td>Twitter</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td>Stripe ID</td>
-      <td></td>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= link_to 'E', edit_user_path(user) %></td>
-        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
-        <td>
-        <% if user.role == 'editor' %>
-            <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
-          <% else %>
-            <span>
-          <% end %>
-        <%= user.role.to_s.humanize %></span>
-        </td>
-        <td><%= mail_to user.email %></td>
-        <td><% if user.name.present? %><%= link_to user.name, user %><% else %><%= link_to user.id, user %><% end %></td>
-        <td><%= link_to '@' + user.twitter.truncate(10), 'https://twitter.com/' + user.twitter unless user.twitter.blank? %></td>
-        <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
-          <% end %>
-        </td>
-        <td><%= user.email_confirmed %></td>
-        <td><% if user.stripe_customer_id.present? %><%= user.stripe_customer_id %><% end %></td>
-        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+</div>
+</div>

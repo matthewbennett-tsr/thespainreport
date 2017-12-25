@@ -2,16 +2,14 @@
 <div class="content-white-background">
 
 <% if User.find(params[:id]) == current_user %>
-<h1>Edit MyTSR</h1>
+  <h1>Edit MyTSR</h1>
 <% elsif @user.name.present? %>
-<h1>Editing <%= @user.name %></h1>
+  <h1>Editing <%= @user.name %></h1>
 <% else %>
-<h1>Editing <%= @user.email %></h1>
+  <h1>Editing <%= @user.email %></h1>
 <% end %>
 
 <%= render 'form' %>
-
-<p style="margin-top: 20px; line-height: 140%;"><%= @user.sign_up_url %></p>
 
 <hr />
 
@@ -31,7 +29,7 @@
 
 <% elsif @user.stripe_customer_id? && @user.role == 'reader' %>
 
-<% elsif @user.stripe_customer_id? && @user.role == 'subscriber' %>
+<% elsif @user.stripe_customer_id? && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
 <p>Your <strong>customer ID</strong> is <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %> and you first became a customer on <%= @user.becomes_customer_date.to_formatted_s(:long) unless @user.becomes_customer_date.nil? %></p>
 
 <div>
@@ -161,7 +159,7 @@
       <td><%= sub.stripe_subscription_id %></td>
       <td><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%Y") %></td>
       <td><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%Y") %></td>
-      <td><%= sub.stripe_subscription_quantity %> x £<%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> per <em><%= sub.stripe_subscription_interval %></em></td>
+      <td><%= sub.stripe_subscription_quantity %> x <%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> per <em><%= sub.stripe_subscription_interval %></em></td>
       <td class="right"><%= sub.stripe_subscription_ip %></td>
       <td><%= sub.stripe_subscription_ip_country %>, <%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %></td>
       <td class="right"><%= sub.stripe_subscription_tax_percent %>%</td>
@@ -206,13 +204,13 @@
       <td><%= inv.stripe_invoice_id %></td>
       <td><%= inv.stripe_invoice_item %></td>
       <td class="right"><%= inv.stripe_invoice_quantity %></td>
-      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %></td>
-      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_subtotal/100.round(2))) %></td>
+      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %></td>
+      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_subtotal/100.round(2))) %></td>
       <td class="right"><%= inv.stripe_invoice_credit_card_country %></td>
       <td class="right"><%= inv.stripe_invoice_ip_country_code %></td>
       <td class="right"><%= inv.stripe_invoice_tax_percent %>%</td>
-      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_tax_amount/100.round(2))) %></td>
-      <td class="right">£<%= sprintf("%.2f",(inv.stripe_invoice_total/100.round(2))) %></td>
+      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_tax_amount/100.round(2))) %></td>
+      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_total/100.round(2))) %></td>
       <td class="right">…</td>
     </tr>
   <% end %>

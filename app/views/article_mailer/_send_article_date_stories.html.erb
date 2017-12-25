@@ -1,0 +1,23 @@
+<p><strong>Published on:</strong> <%= @article.created_at.strftime("%b %d, %Y, %H:%M") %></p>
+
+<% if @article.stories.present? %>
+  <p style="font-weight:bold;">My Story Notifications</p>
+  <p>Your current settings are shown <em>in italics</em>. Just click to change it to something else for that story.</p>
+  <% @article.stories.each do |s| %>
+    <p>
+      <strong><%= s.story %>:</strong>
+      <% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 1) %>
+      <% s.notifications.where(user_id: @user).each do |n| %>
+        <% Notificationtype.all.order(:order).each do |nt| %>
+          <% if nt.id == n.notificationtype_id %>
+            <em><%= nt.name %></em>
+          <% else %>
+            <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+          <% end %>
+          <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+        <% end %>
+      <% end %>
+    </p>
+  <% end %>
+<% else %> 
+<% end %>

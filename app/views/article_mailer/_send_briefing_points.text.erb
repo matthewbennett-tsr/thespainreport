@@ -1,0 +1,23 @@
+<% if @user.access_date.blank? %>
+  <%= article.short_headline %>: <%= article.briefing_point %>
+  <% if article.newsitems.present? %>
+    <% article.newsitems.each do |newsitem| %>
+      <%= newsitem.slug %>: <%= newsitem.briefing_point %>
+    <% end %>
+  <% end %>  
+<% elsif @user.access_date < Time.current %>
+  <%= article.short_headline %>: <%= truncate(article.briefing_point, :length => 50) %>
+  <% if article.newsitems.present? %>
+    <% article.newsitems.each do |newsitem| %>
+      <%= newsitem.slug %>: <%= truncate(newsitem.briefing_point, :length => 50) %>
+    <% end %>
+  <% end %>          
+<% elsif @user.access_date >= Time.current %>
+  <%= article.short_headline %>: <%= article.briefing_point %>
+  <% if article.newsitems.present? %>
+    <% article.newsitems.each do |newsitem| %>
+      <%= newsitem.slug %>: <%= newsitem.briefing_point %>
+    <% end %>
+  <% end %>
+<% else %>
+<% end %>

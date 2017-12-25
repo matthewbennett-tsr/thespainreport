@@ -28,6 +28,7 @@ class ArticlesController < ApplicationController
       @bignews = Article.bignews.order('updated_at DESC')
       @articlesbymonth = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
+      briefing_sunday_10_am
     else
       redirect_to root_url
       flash[:success] = message_error_not_allowed
@@ -61,26 +62,41 @@ class ArticlesController < ApplicationController
     @last30 = Article.editorial.published.lastthirty
   end
   
+  def show_article_elements
+    @region = Article.find(params[:id])
+    @category = Article.find(params[:id])
+      @story = Article.find(params[:id])
+      @type = Article.find(params[:id])
+      @latestaudio = Audio.lastone
+      @title = "some custom page title"
+      @articleupdates = @article.newsitems.published
+      @comments = @article.comments
+      @last30items = Newsitem.published.lastthirty
+      @last6articles = Article.published.lastten
+      @notificationtypes = Notificationtype.all.order(:order)
+      @defaultnt = Notificationtype.where(:order => 2)
+  end
+  
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @region = Article.find(params[:id])
-    @category = Article.find(params[:id])
-    @story = Article.find(params[:id])
-    @type = Article.find(params[:id])
-    @latestaudio = Audio.lastone
-    @title = "some custom page title"
-    @articleupdates = @article.newsitems.published
-    @comments = @article.comments
-    @last30items = Newsitem.published.lastthirty
-    @last6articles = Article.published.lastsix
+    if ["published", "updated"].include?@article.status
+      show_article_elements
+    elsif current_user.nil? || current_user.role != 'editor'
+      redirect_to root_url
+      flash[:error] = "Article does not exist."
+    elsif current_user.role = 'editor'
+      show_article_elements
+    else
+      redirect_to root_url
+      flash[:error] = "Article does not exist."
+    end
   end
    
   # GET /articles/new
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article = Article.new
       @regions = Region.all.order(:region)
@@ -89,7 +105,6 @@ class ArticlesController < ApplicationController
       @types = Type.all.order(:name)
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -97,7 +112,6 @@ class ArticlesController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @regions = Region.all.order(:region)
       @categories = Category.all.order(:category)
@@ -105,7 +119,6 @@ class ArticlesController < ApplicationController
       @types = Type.all.order(:name)
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end  
   end
 
@@ -164,106 +177,130 @@ class ArticlesController < ApplicationController
    'https://www.youtube.com/watch?v=' + @article.video
   end
   
-  def emailsummaries
-    if @article.email_to == 'none'
-    
-    elsif @article.email_to == 'allfree'
-      User.wantssummariesbreaking.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-      end
-    elsif @article.email_to == 'all'
-      User.wantssummariesbreaking.editors.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-	  User.wantssummariesbreaking.subscribers.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-	  User.wantssummariesbreaking.trialreaders.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	  end
-	  User.wantssummariesbreaking.aftertrialreaders.each do |user|
-          ArticleMailer.delay.send_article_teaser(@article, user)
-	  end
-    elsif @article.email_to == 'readers'
-      User.wantssummariesbreaking.readers.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-    elsif @article.email_to == 'subscribers'
-      User.subscribers.wantssummariesbreaking.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-    else
+  def briefing_sunday_10_am
+    User.where(briefing_frequency: [2,3,6,12]).each do |user|
+      ArticleMailer.delay.send_briefing_12(user)
+    end
+    User.frequency_24.each do |user|
+      ArticleMailer.delay.send_briefing_24(user)
+    end
+    User.frequency_84.each do |user|
+      ArticleMailer.delay.send_briefing_84(user)
+    end
+    User.frequency_168.each do |user|
+      ArticleMailer.delay.send_briefing_168(user)
+    end
+  end
+  
+  def briefing_monday_to_saturday_10_am
+    User.where(briefing_frequency: [2,3,6,12]).each do |user|
+      ArticleMailer.delay.send_briefing_12(user)
+    end
+    User.frequency_24.each do |user|
+      ArticleMailer.delay.send_briefing_24(user)
+    end
+  end
+  
+  def briefing_every_day_10_pm
+    User.frequency_2.each do |user|
+      ArticleMailer.delay.send_briefing_2(user)
+    end
+    User.frequency_3.each do |user|
+      ArticleMailer.delay.send_briefing_3(user)
+    end
+    User.frequency_6.each do |user|
+      ArticleMailer.delay.send_briefing_6(user)
+    end
+    User.frequency_12.each do |user|
+      ArticleMailer.delay.send_briefing_12(user)
+    end
+  end
+
+  def briefing_every_day_4_pm
+    User.frequency_2.each do |user|
+      ArticleMailer.delay.send_briefing_2(user)
+    end
+    User.frequency_3.each do |user|
+      ArticleMailer.delay.send_briefing_3(user)
+    end
+    User.frequency_6.each do |user|
+      ArticleMailer.delay.send_briefing_6(user)
+    end
+  end
+
+  def briefing_wednesday_10pm
+    User.frequency_84.each do |user|
+      ArticleMailer.delay.send_briefing_84(user)
+    end
+  end
+  
+  def briefing_every_2_hours
+    User.frequency_2.each do |user|
+      ArticleMailer.delay.send_briefing_2(user)
+    end
+  end
+  
+  def briefing_every_3_hours
+    User.frequency_3.each do |user|
+      ArticleMailer.delay.send_briefing_3(user)
     end
   end
   
   def emailarticles
     if @article.email_to == 'none'
     
-    
     elsif @article.email_to == 'test'
-      User.wantsarticles.editors.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-      end
-    elsif @article.email_to == 'allfree'
-      User.wantsarticles.each do |user|
+      User.readers.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
       end
     elsif @article.email_to == 'all'
-      if @article.type.name == 'BLOG'
+      if ["BLOG"].include?(@article.type.try(:name))
         User.all.each do |user|
           ArticleMailer.delay.send_article_full(@article, user)
 	    end
-      else
-        User.wantsarticles.editors.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
+      elsif @article.is_free || ["LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name))
+        User.all.each do |user|
+          Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
+            ArticleMailer.delay.send_article_full(@article, user)
+          end
         end
-	    User.wantsarticles.subscribers.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
-	    User.wantsarticles.trialreaders.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
-	    User.wantsarticles.aftertrialreaders.each do |user|
-          ArticleMailer.delay.send_article_teaser(@article, user)
-	    end
+      else
+        User.all.each do |user|
+        Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
+          if user.access_date.blank?
+            ArticleMailer.delay.send_article_full(@article, user)
+          elsif user.access_date < Time.current
+            if ['reader', 'guest'].include?(user.role)
+              ArticleMailer.delay.send_article_subscribe(@article, user)
+            elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+              ArticleMailer.delay.send_article_resubscribe(@article, user)
+            end
+          elsif user.access_date >= Time.current
+            if user.role == 'subscriber_one_story'
+              if ["RECAP"].include?(@article.type.try(:name))
+                ArticleMailer.delay.send_article_full(@article, user)
+              elsif @article.story_ids.include?(user.one_story_id)
+                ArticleMailer.delay.send_article_full(@article, user)
+              elsif @article.story_ids.exclude?(user.one_story_id)
+                ArticleMailer.delay.send_article_upgrade(@article, user)
+              end
+            elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+              ArticleMailer.delay.send_article_full(@article, user)
+            end
+          else
+          end
+        end
+        end
       end
-    elsif @article.email_to == 'readers'
-      if @article.type.name == 'BLOG'
-        User.readers.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
-      else
-        User.wantsarticles.readers.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
+    elsif @article.email_to == 'readers' && @article.type.name == 'BLOG'
+      User.readers.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
 	  end
-    elsif @article.email_to == 'subscribers'
-      if @article.type.name == 'BLOG'
-        User.subscribers.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
-      else
-        User.subscribers.wantsarticles.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
+    elsif @article.email_to == 'subscribers' && @article.type.name == 'BLOG'
+      User.totalsubscribers.each do |user|
+        ArticleMailer.delay.send_article_full(@article, user)
 	  end
     else
-    end
-  end
-
-  def new_summary
-    if current_user.nil? 
-      redirect_to root_url
-      flash[:success] = message_error_not_allowed
-    elsif current_user.role == 'editor'
-      @article = Article.new
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
-      @stories = Story.all.order(:story)
-      @types = Type.all.order(:name)
-    else
-      redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
   
@@ -369,6 +406,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:body, :caption, :created_at, :email_to, :headline, :lede, :main, :notification_slug, :notification_message, :remove_main, :short_lede, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [])
+      params.require(:article).permit(:body, :briefing_point, :caption, :created_at, :email_to, :is_free, :headline, :lede, :main, :notification_slug, :notification_message, :remove_main, :short_lede, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [], :user_ids => [])
     end
 end

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+
+<p style="font-weight: bold;">Here are some articles for you to catch up on.</p>
+
+<p>Enjoy your 30-day free trial!</p>
+
+<p><strong>Latest News</strong></p>  
+<ul>
+  <% Article.news.published.lastfive.each do |article| %>
+    <li><%= link_to article.headline, article %></il>
+  <% end %>
+</ul>
+
+<p><strong>Editorials</strong></p>          
+<ul>
+  <% Article.editorial.published.lastfive.each do |article| %>
+    <li><%= link_to article.headline, article %></il>
+  <% end %>
+</ul>
+
+<p><strong>In-Depth</strong></p>  
+<ul>
+  <% Article.in_depth.published.lastfive.each do |article| %>
+    <li><%= link_to article.headline, article %></il>
+  <% end %>
+</ul>
+
+<p>Kindest regards from Spain,</p>
+
+<p>Matthew Bennett<br />Editor</p>
+
+<p>(<strong>P.S.</strong> If you have <em>any problems at all</em> with the site or access, just e-mail us and we'll help you fix them right away.)</p>
+
+</body>
+</html>

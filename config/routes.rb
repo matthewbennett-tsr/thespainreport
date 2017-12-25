@@ -1,10 +1,19 @@
 Rails.application.routes.draw do
+  resources :notificationtypes
+  resources :notifications do
+    member do
+      get :update_type
+      get :update_all_notification_tokens
+    end
+  end
   resources :taxes
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'
-  post 'new_spain_report_member' => 'subscriptions#new_spain_report_member'
+  post 'new_spain_report_reader' => 'subscriptions#new_spain_report_reader'
+  post 'new_spain_report_subscriber' => 'subscriptions#new_spain_report_subscriber'
   post 'update_credit_card' => 'subscriptions#update_credit_card'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
+  get 'subscriptions/spain'
   resources :subscriptions
   resources :provinces
   resources :quotes
@@ -65,7 +74,6 @@ Rails.application.routes.draw do
   get '/login' => 'sessions#new'
   post '/login' => 'sessions#create'
   get '/logout' => 'sessions#destroy'
-  get 'articles/new_summary' => 'articles#new_summary'
   get 'articles/admin'
   get 'articles/blog'
   get 'articles/editorial'

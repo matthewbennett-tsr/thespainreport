@@ -1,0 +1,2 @@
+module NotificationtypesHelper
+end

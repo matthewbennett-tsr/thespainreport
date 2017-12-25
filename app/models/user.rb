@@ -9,28 +9,25 @@ class User < ActiveRecord::Base
   validates :password_confirmation, :presence => true, :on => :create
   validates :password_confirmation, :presence => true, :on => :update, allow_blank: true
   
-  before_create :confirmation_token
-  before_create :set_default_role
-  before_create :set_default_emailpref
+  before_update :check_one_story_date
 
-  ROLES = %i[editor subscriber reader]
+  ROLES = %i[subscriber_all_stories subscriber_one_story subscriber reader guest editor staff]
   
   def self.search(search)
     where("email @@ ?", search)
   end
   
-  scope :subscribers, -> {where(role: 'subscriber')}
-  scope :activesubscribers, -> {where.not(stripe_customer_id: '')}
-  scope :straysubscribers, -> {where(role: 'subscriber').where('stripe_customer_id is null')}
+  scope :totalsubscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'])}
+  scope :onestorysubscribers, -> {where(role: 'subscriber_one_story')}
+  scope :allstorysubscribers, -> {where(role: 'subscriber_all_stories')}
+  scope :straysubscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories']).where('stripe_customer_id is null')}
   scope :readers, -> {where(role: 'reader')}
-  scope :trialreaders, -> {readers.trial}
-  scope :aftertrialreaders, -> {readers.aftertrial}
-  scope :offerreaders, -> {readers.where('reader_offer is true')}
+  scope :guests, -> {where(role: 'guest')}
   scope :editors, -> {where(role: 'editor')}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
-  scope :lastfew, -> {order('created_at DESC').limit(25)}
+  scope :lastfew, -> {order('created_at DESC').limit(50)}
   scope :oneday, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 24.hours.ago)}
   scope :twodays, -> {where('created_at <= ? and created_at >= ?', 24.hours.ago, 48.hours.ago)}
   scope :threedays, -> {where('created_at <= ? and created_at >= ?', 48.hours.ago, 72.hours.ago)}
@@ -55,11 +52,23 @@ class User < ActiveRecord::Base
   scope :thirtydays, -> {where('created_at <= ? and created_at >= ?', 720.hours.ago, 744.hours.ago)}
   scope :trial, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 744.hours.ago)}
   scope :aftertrial, -> {where('created_at <= ?', 744.hours.ago)}
+  scope :user_level_1, -> {joins(:notifications).merge(Notification.level_1)}
+  scope :frequency_2, -> {where(briefing_frequency: 2)}
+  scope :frequency_3, -> {where(briefing_frequency: 3)}
+  scope :frequency_6, -> {where(briefing_frequency: 6)}
+  scope :frequency_12, -> {where(briefing_frequency: 12)}
+  scope :frequency_24, -> {where(briefing_frequency: 24)}
+  scope :frequency_84, -> {where(briefing_frequency: 84)}
+  scope :frequency_168, -> {where(briefing_frequency: 168)}
   
   has_many :comments
   has_many :subscriptions
   has_many :invoices
-  has_and_belongs_to_many :stories
+  has_and_belongs_to_many :articles
+  
+  has_many :notifications, -> {joins(:story).order("story ASC")}, dependent: :destroy
+  has_many :stories, :through => :notifications
+  accepts_nested_attributes_for :notifications
   
   def password_complexity
     if password.present? and not password.match(/^(?=.*[A-Z])./) and not password.match(/^(?=.*[\s])./)
@@ -73,7 +82,6 @@ class User < ActiveRecord::Base
   
   def email_activate
     self.email_confirmed = true
-    self.confirm_token = nil
     save!(:validate => false)
   end
   
@@ -105,18 +113,11 @@ class User < ActiveRecord::Base
   end
   
   private
-  def confirmation_token
-    if self.confirm_token.blank?
-      self.confirm_token = SecureRandom.urlsafe_base64.to_s
+  def check_one_story_date
+    if self.one_story_id_changed?
+      self.one_story_date = Time.now
+    else
     end
-  end
-  
-  def set_default_role
-    self.role ||= 'reader'
-  end
-  
-  def set_default_emailpref
-    self.emailpref ||= 'articlesupdates'
   end
   
 end

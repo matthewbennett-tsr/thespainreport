@@ -126,7 +126,7 @@
   <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest Article Updates</div>
 
     <% @latestupdates.each do |newsitem| %>
-    <div class="content-white-background">
+    <div class="side-block">
       <% if newsitem.article.present? %>
         <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
             <% if newsitem.main? %>

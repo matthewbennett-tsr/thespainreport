@@ -132,29 +132,49 @@ class NewsitemsController < ApplicationController
   def email
     if @newsitem.email_to == 'none'
     
-    elsif @newsitem.email_to == 'allfree'
-      User.wantsupdates.each do |user|
+    elsif @newsitem.email_to == 'test'
+      User.editors.each do |user|
+        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+      end
+    elsif @newsitem.email_to == 'all' 
+      if @newsitem.article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@newsitem.article.type.try(:name))
+        User.all.each do |user|
+          NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+	    end
+      else
+        User.all.each do |user|
+        Notification.where(user_id: user.id, story_id: @newsitem.article.story_ids, notificationtype_id: 1).first(1).each do
+          if user.access_date.blank?
+            NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+          elsif user.access_date < Time.current
+            if ['reader', 'guest'].include?(user.role)
+              NewsitemMailer.delay.send_newsitem_subscribe(@newsitem, user)
+            elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+              NewsitemMailer.delay.send_newsitem_resubscribe(@newsitem, user)
+            end
+          elsif user.access_date >= Time.current
+            if user.role == 'subscriber_one_story'
+              if ["RECAP"].include?(@newsitem.article.type.try(:name))
+                NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+              elsif @newsitem.article.story_ids.include?(user.one_story_id)
+                NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+              elsif @newsitem.article.story_ids.exclude?(user.one_story_id)
+                NewsitemMailer.delay.send_newsitem_upgrade(@newsitem, user)
+              end
+            elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+              NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
+            end
+          else
+          end
+        end
+        end
+      end
+    elsif @newsitem.email_to == 'readers' && @newsitem.type.name == 'BLOG'
+      User.readers.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	  end
-    elsif @newsitem.email_to == 'all'
-      User.wantsupdates.editors.each do |user|
-        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-	  end
-      User.wantsupdates.subscribers.each do |user|
-        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-	  end
-	  User.wantsupdates.trialreaders.each do |user|
-        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-	  end
-	  User.wantsupdates.aftertrialreaders.each do |user|
-        NewsitemMailer.delay.send_newsitem_teaser(@newsitem, user)
-	  end
-    elsif @newsitem.email_to == 'readers'
-      User.wantsupdates.readers.each do |user|
-        NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-	  end
-    elsif @newsitem.email_to == 'subscribers'
-      User.subscribers.wantsupdates.each do |user|
+    elsif @newsitem.email_to == 'subscribers' && @newsitem.type.name == 'BLOG'
+      User.totalsubscribers.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	  end
     else
@@ -248,6 +268,6 @@ class NewsitemsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def newsitem_params
-      params.require(:newsitem).permit(:article_id, :caption, :created_at, :email_to, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :short_slug, :short_headline, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
+      params.require(:newsitem).permit(:article_id, :briefing_point, :caption, :created_at, :email_to, :imagesource, :item, :main, :source, :status, :updated_at, :remove_main, :short_slug, :short_headline, :slug, :url, :video, :summary, :summary_slug, :region_ids => [], :category_ids => [], :story_ids => [])
     end
 end

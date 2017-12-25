@@ -13,130 +13,51 @@
   <% end %>
   
   <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 740px;">
       <%= f.text_field :notification_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :notification_message, :size => "62", :maxlength => "70" %>
-      | T <%= check_box_tag 'tweet' %> 
-      | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["All - Free", "allfree"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
-         </div>
-    <div style="float:left; width: 175px; border-left: 1px solid #000; margin-left: 5px; margin-top: 2px; padding-left: 5px; text-align:right;">
-      <div style="float:left;">
-        <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
-        <%= f.submit %>
-      </div>
-      <div style="float:left;">
-        &nbsp;<%= link_to 'Go', @article, :target => 'blank' %>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <div class="clear"></div> 
+      <%= f.text_field :notification_message, :size => "59", :maxlength => "70" %>
+      T <%= check_box_tag 'tweet' %> 
+      <%= f.submit %>
+      &nbsp;<%= link_to 'Go', @article, :target => 'blank' %> 
   </div>
   
-  <div class="admin-block-images">
+  <div class="admin-block">
+  Top <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Morning", "morning"], ["Evening", "evening"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+      | <%= f.collection_select :type_id, @types, :id, :name %>
+      <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
+      <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
+      € <%= f.check_box :is_free %>
+  </div>
+  
+  <div class="admin-block">
   <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
-      <%= f.check_box :remove_main %>
-      | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
-      | <%= f.text_field :caption, :size => '60', :style => 'padding:5px;' %>
+      <%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+    <div style="margin-top: 3px;">
+      <%= f.text_field :caption, :size => '92', :style => 'padding:5px;' %>
+    </div>
   </div>
   
   <div class="admin-block">
     <div style="margin-top: 5px;">
-      
-       <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Morning", "morning"], ["Evening", "evening"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
-      | <%= f.collection_select :type_id, @types, :id, :name %>
-      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '29', :style => 'padding:5px;' %>
-       <%= f.text_field :short_lede, :size => '75', :class => "edit-short-lede", :style => 'padding:5px;' %>
+        <%= f.text_area :headline, :class => "edit-headline", :style => 'width: 100%; padding:5px;' %>
     </div>
     <div style="margin-top: 5px;">
-        <%= f.text_area :headline, :class => "edit-headline", :size => '47x2', :style => 'padding:5px;' %>
-    </div>
-    <div style="margin-top: 5px;">
-      <%= f.text_area :lede, :size => '62x2', :class => "edit-lede", :style => 'padding:5px;' %>
+      <%= f.text_area :lede, :class => "edit-lede", :style => 'width: 100%; padding:5px;' %>
     </div>
   </div>
   
 <div class="admin-block">
-<textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 320px;">
-<% if action_name == 'new_summary' %>
-<% Article.last24.published.each do |article| %>
-
-### X. <%= article.try(:headline) %>
-<% if article.main? %>
-[![alt](<%= article.try(:main) %>)](<%= article_url(article) %>)
-<% elsif article.video? %>
-**VIDEO:** [<%= article.try(:caption) %>](<%= article_url(article) %>) 
-<% else %>
-<% end %>
-<%= article.try(:body).truncate(300) %> ([Read full story](<%= article_url(article) %>))
-<% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-<% article.newsitems.each do |update| %>
-- [<%= update.slug %>](<%= article_url(update.article, anchor: update.id) %>)
-<% end %>
-<% end %>
-<% end %>
-
-### X. Top
-Xxxxx
-
-### X. Environment, climate, energy, agriculture, water, resources, population
-Xxxxx
-
-### X. Cities, towns, villages, property, infrastructure, construction
-Xxxxx
-
-### X. International, Europe, diplomacy, military, terrorism, immigration
-Xxxxx
-
-### X. Economy, business, investing, exports, tourism, pensions, retirement
-Xxxxx
-
-### X. Politics, government, royal family, parliaments
-Xxxxx
-
-### X. Media, technology, communications, Internet, social media
-Xxxxx
-
-### X. Law, justice, courts, police, crime, prisons, legislation
-Xxxxx
-
-### X. Healthcare, medicine, hospitals, patients, doctors, nurses
-Xxxxx
-
-### X. Family, children, education, learning
-Xxxxx
-
-### X. Society, religion, daily life, local life
-Xxxxx
-
-<% elsif action_name == 'new' %>
-What has just happened? What are the salient points, quotes and features of that event?
-Is there any extremely remarkable aspect? Any major quote?
-What are the stakes? Why is this important? What does it mean?
-Who is fighting or struggling against whom? Why? Goals? Glory?
-What does each like, want, believe, value, suffer for?
-How have other groups and observers reacted?
-Where are we at in the story? Gaps, emotions, arcs, tension
-Which universal values are we talking about?
-Which ideas are at stake? What do the parties think?
-Who is doing best with reality?
-Who has the best strategy, logistics, planning, execution?
-Who is lacking what? What problems is that causing them?
-Commitment, routine, habits?
-What is the context that event happened in? 
-How do they multiple layers of context overlap or interact?
-Which other Spain stories is this related to? How?
-Which external factors and forces are driving this? Structure and agency.
-Which fields of theory are relevant to explaining this?
-What are the theoretical options, states and limits?
-What do statistics and data say about this? Spain, Europe, World
-Which aspects of Spanish life, culture and history help explain this?
-<% else %>
-<%= @article.body %>
-<% end %>
-</textarea>
+<textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 660px;"><%= @article.body %></textarea>
 </div>
-
+  
+  <div class="admin-block">
+    <div style="margin-bottom: 5px;">
+      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '29', :style => 'padding:5px;' %>
+       <%= f.text_field :short_lede, :size => '85', :class => "edit-short-lede", :style => 'padding:5px;' %>
+    </div>
+    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
+  </div>
+  
   <div class="admin-block">
     <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
     <div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>

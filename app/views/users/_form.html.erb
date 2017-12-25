@@ -1,47 +1,79 @@
 <%= form_for @user, :html => {:multipart => true} do |f| %>
 
-  <div class="field">
-    <div class="email-input-float"><strong>Display Name</strong> <em>(max. 20 chars)</em><br/><%= f.text_field :name, :maxlength => 20, :class => "input200" %></div>
-    <div class="email-input-float"><strong>E-mail</strong><br/><%= f.text_field :email, :class => "input200" %></div>
-    <div class="email-input-float"><strong>Twitter <em>(max. 15 chars)</em>: @</strong><br/><%= f.text_field :twitter, :maxlength => 15, :class => "input200" %></div>
-    <div class="email-input-float">
-    <div style="margin-top: 23px;">
-    <% if current_user.role == 'editor' %>
-      <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.humanize}, :class => "input200") %> | <%= f.check_box :allow_access %> | <%= f.check_box :is_author %>
-    <% else %>
-      <% if @user.role == 'editor' %>
-         <span class="editor-label-mini">
-      <% elsif @user.role == 'subscriber' %>
-         <span class="subscriber-label-mini">
-      <% elsif @user.role == 'reader' %>
-         <span class="reader-label-mini">
+  <div class="user-block">
+    <p class="user-paragraph">
+    <strong>You first joined TSR on</strong> 
+      <% if current_user.role == 'editor' %>
+        <%= f.datetime_field :created_at, :size => '35' %>
       <% else %>
-         <span>
+        <%= @user.created_at.strftime("%b %d, %Y at %l:%M %P") %>
       <% end %>
-      <%= @user.role.to_s.humanize %></span>
-    <% end %>
+      
+      <% if @user.articles.present? %>
+       <% @user.articles.each do |a| %>
+         after reading <%= link_to a.headline, a %>.
+       <% end %>
+     <% end %>
+
+    </p>
+
+    <p class="user-paragraph">
+    <strong>You are a</strong>
+      <% if current_user.role == 'editor' %>
+        <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.titleize}, :class => "input200") %>
+        Access date: <%= f.datetime_field :access_date, :size => '35' %>
+      <% else %>
+        <% if @user.role == 'editor' %>
+          <span class="editor-label-mini">
+        <% elsif ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
+          <span class="subscriber-label-mini">
+        <% elsif ['guest', 'reader'].include?(@user.role) %>
+          <span class="reader-label-mini">
+        <% else %>
+          <span>
+        <% end %>
+        <%= @user.role.to_s.titleize %></span> and 
+        <% if @user.access_date.blank? %>
+          you do not appear to have a valid access date. Please e-mail <%= mail_to "subscriptions@thespainreport.com" %>.
+        <% elsif ['guest', 'reader'].include?(@user.role) && @user.access_date < Time.current %>
+          your <strong>guest access ran out</strong> on <%= @user.access_date.strftime("%b %d, %Y at %l:%M %P") %>: <a href="/subscriptions/new"><span class="highlight">please subscribe now</span></a>. You keep us 100% independent. Your subscription guarantees your Spain news.
+        <% elsif @user.access_date < Time.current %>
+          your <strong>current access ran out</strong> on <%= @user.access_date.strftime("%b %d, %Y at %l:%M %P") %>: <a href="/subscriptions/new"><span class="highlight">please re-subscribe now</span></a>. You keep us 100% independent. Your subscription guarantees your Spain news.
+        <% elsif @user.access_date > Time.current %>
+          your <strong>current access runs</strong> until <%= @user.access_date.strftime("%b %d, %Y at %l:%M %P") %>. Thanks!
+        <% end %>
+      <% end %>
+    </p>
+  </div>
+
+  <div class="user-block">
+    <h3>My Access Details</h3>
+    <div class="email-input-float">
+      <p class="user-paragraph-label">
+        My E-mail
+      </p>
+      <%= f.text_field :email, :class => "input200" %>
     </div>
+    <div class="email-input-float">
+      <p class="user-paragraph-label">
+        New password:
+      </p>
+      <%= f.password_field :password, :class => "input170" %>
     </div>
-    <div class="clear"></div>
-  </div>
-  
-  <% if false %>
-  <div class="field">
-    <strong>Bio. Tell us a bit about yourself</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
-      <%= f.text_area :bio, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
-  </div>
-  <% end %>
-  
-  <div style="margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #000000; border-bottom: 1px dotted #000000;">
-  <p style="margin-bottom: 10px;">If you want to change your password, enter the new one here twice:</p>
-  <div class="field" style="float:left;">
-    <div class="email-input-float"><%= f.password_field :password, :class => "input170", :placeholder => "Enter new password…" %></div>
-    <div class="email-input-float" style="padding-top: 10px;"> + </div>
-    <div class="email-input-float"><%= f.password_field :password_confirmation, :class => "input170", :placeholder => "Confirm new password…" %></div>
-    <div class="clear"></div>
-  </div>
-  
-  <% if @user.errors.any? %>
+    <div class="email-input-float">
+      <p class="user-paragraph-label">
+        Repeat new password:
+      </p>
+      <%= f.password_field :password_confirmation, :class => "input170" %>
+    </div>
+    <div class="email-input-float">
+      <p class="user-paragraph-label">
+        &nbsp;
+      </p>
+      <button type="submit" class="blueformbutton">Save Changes</button>
+    </div>
+    
+    <% if @user.errors.any? %>
     <div id="error_explanation">
       <h2>Ejem…just a little problem with that particular attempt…</h2>
 
@@ -53,60 +85,120 @@
       </ul>
     </div>
   <% end %>
+    <div class="clear"></div>
+  </div>
+  
+  <% if false %>
+  <div class="user-block">
+    <strong>Bio. Tell us a bit about yourself</strong> <em>(max. 1,000 characters &#8776; 160 words &#8776; size of this text box; no HTML.)</em><br />
+      <%= f.text_area :bio, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
+  </div>
+  <% end %>
+  
+  <% if @user.role == 'subscriber_one_story' %>
+    <div class="user-block">
+      <h3>My Subscription Story</h3>
+      <% if current_user.role == 'subscriber_one_story' && @user.one_story_date.blank? %>
+        <%= f.collection_select :one_story_id, @stories, :id, :story, include_blank: '', :selected => '' %>
+        <p class="user-paragraph">You can change the story you are following once every 30 days.</p>
+        <div id="flash_success_div">
+          <span id="flash_success">You have not yet selected a story to follow. Please do so.</span>
+        </div>
+      <% elsif current_user.role == 'subscriber_one_story' && @user.one_story_date < 30.days.ago || current_user.role == 'subscriber_one_story' && @user.one_story_date > 5.minutes.ago %>
+        <%= f.collection_select :one_story_id, @stories, :id, :story %>
+        <p class="user-paragraph">You can change the story you are following once every 30 days. You can change your story now if you want to.</p>
+        <p class="user-paragraph"><strong>Last change:</strong> <%= @user.one_story_date.strftime("%b %d, %Y, at %l:%M %P") unless @user.one_story_date.blank? %></p>
+        <% if !@user.one_story_date.blank? && @user.one_story_date > 5.minutes.ago %>
+          <div id="flash_success_div">
+            <span id="flash_success">You now have a 5-minute window to change your story, just to make sure you want to follow that one, or in case you made a mistake…</span>
+          </div>
+        <% end %> 
+      <% elsif current_user.role == 'subscriber_one_story' && @user.one_story_date > 30.days.ago %>
+        <%= f.collection_select :one_story_id, @stories, :id, :story, {}, {:style => 'background-color: #F8F8F8; color:#B0B0B0;', :disabled => true} %> 
+        <p class="user-paragraph">You can change the story you are following once every 30 days.</p>
+        <p class="user-paragraph"><strong>Last change:</strong> <%= @user.one_story_date.strftime("%b %d, %Y, at %l:%M %P") %></p>
+        <p class="user-paragraph">You can change your story again <strong>in <%= (@user.one_story_date+30.days - Time.now).to_i / 1.day %> days</strong>. <a href="/subscriptions/new"><span class="highlight">Upgrade to get all stories</span></a></p>
+      <% elsif current_user.role == 'editor' %>
+        <%= f.collection_select :one_story_id, @stories, :id, :story %> | 
+        <%= f.datetime_field :one_story_date %>
+      <% end %>
+    </div>
+  <% else %>
+  <% end %>
+  
+  <div class="user-block">
+  <h3>My Spain Stories & Notifications</h3>
+  <p class="user-paragraph">
+    You choose how much e-mail you want, how often, and about which stories.
+    Change your preferences here, at the bottom of every article or by clicking on the links at the bottom of every e-mail.
+  </p>
+  <p class="user-paragraph">
+    <strong>E-Mail Alerts:</strong> breaking news, headlines, updates and full-text articles as soon as we hit 'publish'.
+    Breaking stories start as e-mail alerts until you indicate another preference, so that you never miss anything important.
+  </p>
+  <p class="user-paragraph">
+    <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m. every day, Spanish time, according to the setting you choose.
+    If there are no new updates in the time period you choose, the e-mail tells you there is nothing new.
+  </p>
+  <p class="user-paragraph">
+  I want my briefings
+  <%= f.select :briefing_frequency, options_for_select([["Every 2 hours", 2], ["Every 3 hours", 3], ["Every 6 hours", 6], ["Every 12 hours", 12], ["Once a day", 24], ["Twice a week", 84], ["Once a week", 168]], @user.briefing_frequency) %>
+  </p>
+  <ul style="margin-top: 5px;">
+        <li><strong>Once a week:</strong> Sundays at 10 a.m.</li>
+        <li><strong>Twice a week:</strong> Sundays at 10 a.m., Wednesdays at 10 p.m.</li>
+        <li><strong>Once a day:</strong> 10 a.m.</li>
+        <li><strong>Every 12 hours:</strong> 10 a.m., 10 p.m.</li>
+        <li><strong>Every 6 hours:</strong> 10 a.m., 4 p.m., 10 p.m.</li>
+        <li><strong>Every 3 hours:</strong> 10 a.m., 1 p.m., 4 p.m., 7 p.m., 10 p.m.</li>
+        <li><strong>Every 2 hours:</strong> 10 a.m., 12 p.m., 2 p.m., 4 p.m., 6 p.m., 8 p.m., 10 p.m.</li>
+      </ul>
+  <p class="user-paragraph">
+  <strong>Website Only:</strong> you want to read these stories online but do not want e-mails about them;
+  </p>
+  <p class="user-paragraph">
+  <strong>Not interested:</strong> informs us you don't care about this story. No alerts, not included in your Spain briefings.
+  </p>
+  <p class="user-paragraph">
+    <strong>Turn e-mail off:</strong> if you don't want any e-mails at all, just set everything to <strong>Website Only</strong> or <strong>Not Interested</strong>.
+    You will occasionally get some service announcements.
+  </p>
+  
+  <%= f.fields_for :notifications, @user.notifications.level_1 do |n| %>
+  <div class="notifications-admin">
+    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
+    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
   <div class="clear"></div>
   </div>
+  <% end %>
   
-  <div style="padding-bottom: 10px; border-bottom: 1px dotted #999999; margin-bottom: 10px;">
-  <h3>My Notifications</h3>
-  
-  <p>
-  <strong>Current setting:</strong>
-    <% if @user.emailpref == 'articlesupdates' %>
-      "Everything: All Articles & Updates"
-    <% elsif @user.emailpref == 'justarticles' %>
-      "Just Articles, No Updates"
-    <% elsif @user.emailpref == 'justsummariesbreaking' %>
-      "Just Summaries & Breaking News"
-    <% elsif @user.emailpref == 'nothing' %>
-      "I Don't Want Any E-mail"
-    <% else %>
-      "No Preference Set Yet"
-    <% end %>
-  </p>
-   <p style="margin-top: 10px;"><strong>Change your e-mail preference:</strong>
-  <%= f.select :emailpref, options_for_select([["Everything: All Articles & Updates", "articlesupdates"], ["Just Articles, No Updates", "justarticles"], ["Just Summaries & Breaking News", "justsummariesbreaking"], ["I Don't Want Any E-mail", "nothing"]], @user.emailpref) %>
-  </p>
+  <%= f.fields_for :notifications, @user.notifications.level_2 do |n| %>
+  <div class="notifications-admin">
+    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
+    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
+  <div class="clear"></div>
   </div>
+  <% end %>
   
-  <h3>My Stories</h3>
-  <p>Check the Spain stories that your are most interested in.</p>
+  <%= f.fields_for :notifications, @user.notifications.level_3 do |n| %>
+  <div class="notifications-admin">
+    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
+    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
+  <div class="clear"></div>
+  </div>
+  <% end %>
   
-  <% @stories.group_by(&:parent).each do |parent, children| %>
+  <%= f.fields_for :notifications, @user.notifications.level_4 do |n| %>
+  <div class="notifications-admin">
+    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
+    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
+  <div class="clear"></div>
+  </div>
+  <% end %>
   
-  <ul class="follow-stories">
-    <li>
-      <label>
-      <%= check_box_tag 'user[story_ids][]', parent.id, @user.stories.include?(parent) unless parent.nil? %>
-      <%= parent.story unless parent.nil? %>
-      </label>
-    </li>
-    <ul class="follow-stories-children">
-      <% for s in children %>
-        <li>
-          <label>
-          <%= check_box_tag 'user[story_ids][]', s.id, @user.stories.include?(s) %>
-          <%= s.story %>
-          </label>
-        </li>
-      <% end %>
-    </ul>
-  </ul>
+    <div class="admin-submit-button">
+        <button type="submit" class="blueformbutton">Save Changes</button>
+    </div>
   
-  <% end %>  
-  <%= hidden_field_tag "user[story_ids][]", nil%>
-
-  
-  <div class="actions">
-    <button type="submit" class="blueformbutton">Save Changes</button>
   </div>
 <% end %>

@@ -76,8 +76,13 @@
 <% if @articleupdates.present? %>
   <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">UPDATES ADDED</span></span></div>
 <% end %>
+
 <% if @article.status == "updated" %>
   <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">ORIGINAL UPDATED</span></span></div>
+<% end %>
+
+<% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">FREE TO READ</span></span></div>
 <% end %>
 
 <div class="clear"></div>
@@ -171,6 +176,38 @@
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
     
+      <div class="meta">
+    <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
+  </div>
+  
+  <% if @article.stories.present? %>
+    <h2>Follow These Stories</h2>
+    <% @article.stories.group_by(&:parent).each do |parent, children| %>
+      <ul class="follow-stories">
+        <li>
+          <label>
+            <%= link_to parent.story, parent unless parent.nil? %>
+          </label>
+        </li>
+        <ul class="follow-stories-children">
+          <% for s in children %>
+            <li>
+              <label>
+                <%= link_to s.story, s %>
+              </label>
+            </li>
+          <% end %>
+        </ul>
+      </ul>
+    <% end %>
+  <% end %>
+  
+  <% if current_user.nil? %>
+   <div class="meta" style="padding: 10px;">
+     Thank you for reading, your subscription keeps us 100% independent: <a href="/subscriptions/new" title="Subscribe Now" >subscribe now</a>.
+   </div>
+  <% else %>
+  <% end %>
     
   
     </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
@@ -181,56 +218,8 @@
   <%= render 'emailsignup' %>
 <% else %>
 <% end %>
-
-<div class="comments-wrap">
-<h2 >COMMENTS</h2>
-
-<div style="margin-top: 20px;">
-<% @comments.each do |comment| %>
-<div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
-    <div style="width: 100%;">
-      <strong> 
-        <% if comment.user.blank? %> 
-        
-        <% elsif comment.user == current_user && comment.user.name.nil? %>
-          <%= link_to 'Set your display name here', edit_user_path(current_user) %> 
-        <% elsif comment.user.name.nil? %>
-          Anonymous
-        <% else %>
-          <%= comment.user.name %>
-        <% end %>
-      </strong>
-       |
-        <% if comment.user.blank? %>
-          Former Reader
-        <% else %>
-          <% if comment.user.role == 'editor' %>
-            <span class="editor-label-mini">Editor
-          <% elsif comment.user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">Subscriber
-          <% elsif comment.user.role == 'reader' %>
-            <span class="reader-label-mini">New Reader
-          <% else %>
-            <span>
-          <% end %>
-          </span>
-        <% end %>
-       &nbsp;| <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
-    </div>
-    <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
-      <%= comment.comment %>
-    </div>
-    <div class="clear"></div>
 </div>
-<% end %>
-<a name="commentcheck"></a>
 </div>
-
-</div>
-
-
-  </div>
-  </div>
   
 <% content_for :right_side_bar do %>
     <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
@@ -250,38 +239,6 @@
           </li>
     <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
     </ul>
-    
-    
-    <h3 style="margin-top: 20px;">Comments & Chat</h3>
-    <% if current_user %>
-      <p>What do you think, <strong><%= current_user.name %></strong>?</p>
-      <%= form_for [@article, Comment.new] do |f| %>
-      <div style="margin-top: 10px; padding-bottom: 10px;">
-      <div style="width: 100%;">
-      <%= f.text_area :comment, :style => "width:100%; min-height: 280px;", :maxlength => 1000, :class => "inputtextarea" %>
-      <br />
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-      </div>
-      <div class="clear"></div>
-      </div>
-      <% end %>
-    <% else %>
-      <p>Please log in—or join if it's your first visit—to comment or chat.</p>
-      
-      <div style="margin-top: 10px; padding-bottom: 10px;">
-      <div style="width: 100%;">
-      <%= text_area_tag 'body', nil, style: "width:100%; min-height: 280px;", maxlength: 1000, class: "inputtextarea" %>
-      <br />
-      <% if current_user %>
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-      <% else %>
-      <button type="submit" class="blueformbutton" style="float: right;" disabled>Add Your Comment</button>
-      <% end %>
-      </div>
-      <div class="clear"></div>
-      </div>
-      
-    <% end %>
 
   </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
   <% end %>
@@ -311,64 +268,55 @@
   
   <div class="article-text"> <%# MAIN TEXT %>
     
-<%# TESTING STUFF STARTS %>
-  <% if @article.type.try(:name) == "EDITORIAL" %>
-    <% if current_user.nil? && !paywall %>
+<%# PAYWALL LOGIC %>
+    <% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>
       <%= markdown(@article.body) %>
       <%= render 'articleupdates' %>
-    <% elsif current_user.nil? && paywall %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'quick_login_one' %>
-    <% elsif current_user.role == 'reader' && current_user.created_at > 30.days.ago || current_user.role == 'reader' && current_user.allow_access == true %> <%# NEW SUBSCRIBER ON 30-DAY TRIAL %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% elsif current_user.role == 'reader' && current_user.created_at < 30.days.ago %> <%# NEW SUBSCRIBER AFTER 30-DAY TRIAL %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'reader_subscribe' %>
-    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
-      <%= markdown(@article.body.truncate(1600)) %>
-      <%= render 'resubscribe' %>
-    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% elsif current_user.role == 'editor' %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% else %>
-    <% end %>
-  <% elsif ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
-    <%= markdown(@article.body) %>
-    <%= render 'articleupdates' %>
-  <% else %>
-    <% if current_user.nil? && !paywall %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% elsif current_user.nil? && paywall %>
-      <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'quick_login_one' %>
-    <% elsif current_user.role == 'reader' && current_user.created_at > 30.days.ago %> <%# NEW SUBSCRIBER ON 30-DAY TRIAL %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% elsif current_user.role == 'reader' && current_user.created_at < 30.days.ago %> <%# NEW SUBSCRIBER AFTER 30-DAY TRIAL %>
-      <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'reader_subscribe' %>
-    <% elsif current_user.role == 'subscriber' && !current_user.stripe_customer_id %>
-      <%= markdown(@article.body.truncate(600)) %>
-      <%= render 'resubscribe' %>
-    <% elsif current_user.role == 'subscriber' && current_user.stripe_customer_id %>
-      <%= markdown(@article.body) %>
-      <%= render 'articleupdates' %>
-    <% elsif current_user.role == 'editor' %>
-      <% if @article.summary.present? && !@article.body.present? %>
-        <%= @article.summary %>
-      <% elsif %>
+    <% elsif !@article.is_free %> <%# CONT: If article NOT free… %>
+      <% if current_user.nil? %> <%# START: logged-in/NOT. %>
+        <% if paywall %> <%# START: paywall/NOT. If yes > Log in. %>
+          <%= markdown(@article.body.truncate(600)) %>
+          <%= render 'quick_login_one' %>
+        <% elsif !paywall %> <%# CONT: …and has SOME free articles left… %>
+          <% if @article.created_at >= 48.hours.ago %> <%# START: article NEW/OLD. -48hours > Read. %>
+            <%= markdown(@article.body) %>
+            <%= render 'articleupdates' %>
+          <% elsif @article.created_at < 48.hours.ago %> <%# CONT: …+48 hours > Log in. %>
+            <%= markdown(@article.body.truncate(600)) %>
+            <%= render 'quick_login_one' %>
+          <% end %> <%# END: article NEW/OLD. %>   
+        <% end %> <%# END: paywall/NOT. %>
+      <% elsif current_user.access_date.blank? %> <%# CONT: logged-in/NOT: no access date set? > Read. %>
         <%= markdown(@article.body) %>
         <%= render 'articleupdates' %>
-      <% end %>
-    <% else %>
-    <% end %>
-  <% end %>
-<%# TESTING STUFF ENDS %>
+      <% elsif current_user.access_date < Time.current %> <%# CONT: logged-in/NOT: access date run out? > Re(subscribe). %>
+        <% if ['reader', 'guest'].include?(current_user.role) %> <%# START: user roles, if reader, guest… %>
+          <%= markdown(@article.body.truncate(600)) %>
+          <%= render 'reader_subscribe' %>
+        <% elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(current_user.role) %> <%# CONT: user roles, if subscriber, etc… %>
+          <%= markdown(@article.body.truncate(600)) %>
+          <%= render 'resubscribe' %>
+        <% end %> <%# END: user roles. %>
+      <% elsif current_user.access_date >= Time.current %> <%# CONT: logged-in/NOT: access date good? %>
+        <% if current_user.role == 'subscriber_one_story' %> <%# START: subscriber ONE/ALL? If one story subscriber… %>
+          <% if ["RECAP"].include?(@article.type.try(:name)) %>
+            <%= markdown(@article.body) %>
+            <%= render 'articleupdates' %>
+          <% elsif @article.story_ids.exclude?(current_user.one_story_id) %> <%# START: One-story logic. If NOT chosen story… %>
+            <%= markdown(@article.body.truncate(600)) %>
+            <%= render 'upgrade' %>
+          <% elsif @article.story_ids.include?(current_user.one_story_id) %> <%# CONT: One-story logic. If IS chosen story… %>
+            <%= markdown(@article.body) %>
+            <%= render 'articleupdates' %>
+          <% end %> <%# END: One-story logic. %>
+        <% elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(current_user.role) %> <%# CONT: subscriber ONE/ALL: If all stories subscriber, staff… %>
+          <%= markdown(@article.body) %>
+          <%= render 'articleupdates' %>
+        <% end %> <%# END: subscriber ONE/ALL %>
+      <% end %> <%# END: logged-in/NOT %>
+    <% end %> <%# END: free/NOT %>
+
+<%# PAYWALL LOGIC ENDS %>
 
 <% if ["DAILY BRIEFING"].include?(@article.type.try(:name)) && @articleupdates.count < 2 %>
   <p>…</p>
@@ -384,36 +332,39 @@
   <div class="meta">
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
-  
-  <% if @article.stories.present? %>
-    <h2>Follow These Stories</h2>
-    
-   <% @article.stories.group_by(&:parent).each do |parent, children| %>
-  
-  <ul class="follow-stories">
-    <li>
-      <label>
-      <%= link_to parent.story, parent unless parent.nil? %>
-      </label>
-    </li>
-    <ul class="follow-stories-children">
-      <% for s in children %>
-        <li>
-          <label>
-          <%= link_to s.story, s %>
-          </label>
-        </li>
+
+  <% if @article.stories.present? && current_user %>
+    <h2>My Story Notifications</h2>
+    <%= form_for current_user, :html => {:multipart => true} do |f| %>
+      <% @article.stories.each do |s| %>
+        <div class="notifications-admin">
+          <div class="notifications-admin-left"><%= link_to s.story, s %></div>
+          <div class="notifications-admin-right">
+            <% s.notifications.where(user_id: current_user).first_or_create(notificationtype_id: 4) %>
+            <% s.notifications.where(user_id: current_user).each do %>
+              <%= f.fields_for :notifications, current_user.notifications.where(:story_id => s.id) do |n| %>
+                <%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %>
+              <% end %> 
+            <% end %>
+          </div>
+          <div class="clear"></div>
+        </div>
       <% end %>
-    </ul>
-  </ul>
-  
-  <% end %> 
-  
+      <div class="admin-submit-button">
+        <button type="submit" class="blueformbutton">Save Changes</button>
+      </div>
+    <% end %>
+  <% elsif %>
+  <h2>My Story Notifications</h2>
+  <p>Please log in or sign up to change your notification preferences for these stories.</p>
+  <% @article.stories.each do |s| %>
+  <p><%= link_to s.story, s %></p>
+  <% end %>
   <% end %>
   
   <% if current_user.nil? %>
    <div class="meta" style="padding: 10px;">
-     Thank you for reading. Your subscription keeps us 100% independent. <a href="/subscriptions/new" title="Subscribe Now" class="miniformbutton">SUBSCRIBE NOW</a>
+     Thank you for reading, your subscription keeps us 100% independent: <a href="/subscriptions/new" title="Subscribe Now" >subscribe now</a>.
    </div>
   <% else %>
   <% end %>
@@ -426,7 +377,7 @@
 <% else %>
 <% end %>
 
-
+<% if false %> <%# NO COMMENTS %>
 <div class="comments-wrap">
 <% if @comments.present? %>
 <h2>Reader Comments</h2>
@@ -475,10 +426,8 @@
 
 </div>
 </div>
-
-<div style="text-align: center; margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Understand Spain, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
-  
-  </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
+<% end %> <%# END NO COMMENTS %>
+</div> <%# END OF LEFT-HAND CONTENT BLOCK %>
   
   <% content_for :right_side_bar do %>
     <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
@@ -486,7 +435,8 @@
      <a href="/subscriptions/new" title="Subscribe Now">Subscribe</a> | 
      <a href="/articles/blog/" title="Subscribe Now">Blog</a> | 
      <a href="/about/" title="Subscribe Now">About</a> | 
-     <a href="/contact/" title="Subscribe Now">Contact</a>
+     <a href="/contact/" title="Subscribe Now">Contact</a> | 
+     <a href="/password_resets/new">New password?</a>
      </p>
     
     <h3>Latest</h3>
@@ -499,7 +449,7 @@
     <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
     </ul>
     
-    
+    <% if false %> <%# NO COMMENTS BOX %>
     <h3 style="margin-top: 20px;">Comments & Chat</h3>
     <% if current_user %>
       <p>What do you think, <strong><%= current_user.name %></strong>?</p>
@@ -515,7 +465,6 @@
       <% end %>
     <% else %>
       <p>Please log in—or join if it's your first visit—to comment or chat.</p>
-      
       <div style="margin-top: 10px; padding-bottom: 10px;">
       <div style="width: 100%;">
       <%= text_area_tag 'body', nil, style: "width:100%; min-height: 280px;", maxlength: 1000, class: "inputtextarea" %>
@@ -528,8 +477,8 @@
       </div>
       <div class="clear"></div>
       </div>
-      
     <% end %>
+    <% end %> <%# END NO COMMENTS BOX %>
 
   </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
   <% end %>

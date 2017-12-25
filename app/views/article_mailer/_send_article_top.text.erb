@@ -1,0 +1,13 @@
+<%= @article.headline %>
+
+<% if @article.urgency == 'majorbreaking' %>
+MAJOR BREAKING <%= @article.type.name %>
+<% elsif @article.urgency == 'breaking' %>
+BREAKING <%= @article.type.name %>
+<% elsif @article.urgency == 'latest' %>
+LATEST <%= @article.type.name %>
+<% else %>
+<%= @article.type.name %>
+<% end %>
+
+<%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.lede %>

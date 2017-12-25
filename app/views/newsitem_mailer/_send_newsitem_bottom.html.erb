@@ -1,0 +1,59 @@
+<p><%= link_to 'Read on The Spain Report', article_url(@newsitem.article, anchor: @newsitem.id), {:style=>'color:#AA151B;'} %></p>
+
+<p><strong>Published on:</strong> <%= @newsitem.created_at.strftime("%b %d, %Y, %H:%M") %></p>
+
+<p>---------</p>
+
+<% if @newsitem.article.stories.present? %>
+  <p style="font-weight:bold;">My Story Notifications</p>
+  
+  <p>Your current story settings are shown <em>in italics</em>. Just click to change it to something else for that story.</p>
+  
+  <% @newsitem.article.stories.each do |s| %>
+  <p>
+    <strong><%= s.story %>:</strong>
+      <% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 1) %>
+        <% s.notifications.where(user_id: @user).each do |n| %>
+          <% Notificationtype.all.order(:order).each do |nt| %>
+            <% if nt.id == n.notificationtype_id %>
+              <em><%= nt.name %></em>
+            <% else %>
+              <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+            <% end %>
+              <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+          <% end %>
+        <% end %>
+  </p>
+  <% end %>
+<% else %> 
+<% end %>          
+
+<p>---------</p>
+ 
+<p style="font-weight:bold;">My Account</p>
+
+<p>Thank you for reading and subscribing to The Spain Report.</p>
+
+<ul>
+  <li>To manage your account <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
+</ul>
+
+<p>If you experience any problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %> straight away.</p>
+
+<p>---------</p>
+
+<p style="font-weight:bold;">The Spain Report Ltd.</p>
+
+<p>
+  20-22 Wenlock Road<br />
+  London<br />
+  N1 7GU<br />
+  United Kingdom<br /><br />
+  (0044) (0)2076085570<br />
+  <%= link_to "The Spain Report", "https://www.thespainreport.com", {:style=>'color:#AA151B;'} %><br />
+  Understand Spain, In English<br />
+  Copyright © <%= Time.now.year %> The Spain Report Ltd, All rights reserved.
+</p>
+
+</body>
+</html>

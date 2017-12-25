@@ -1,5 +1,19 @@
+### Adds country selector + subscriptions/spain method
+### Removes redirects from error messages
+### Adds sign-up fields for new_spain_report_member
+### Adds return + flash message after new_spain_report_member sign up
+
+
 class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: [:show, :edit, :update, :destroy]
+  
+  def country
+     if ip_country_code = "ES"
+          {:api_key => Rails.configuration.stripe[:secret_spain_key]}
+     else
+          {:api_key => Rails.configuration.stripe[:secret_key]}
+     end
+  end
   
   def new_subscription
     # Get the credit card details from the form and generate stripeToken
@@ -11,49 +25,41 @@ class SubscriptionsController < ApplicationController
     ip_country_code = params[:ip_country_code]
     ip_country_name = params[:ip_country_name]
     
+    if User.exists?(email: params[:email]) && current_user.nil?
+      redirect_to :back
+      flash[:error] = "E-mail already taken. Please use another or log in to continue."
+    elsif User.exists?(email: params[:email]) && current_user.email = params[:email]
+      redirect_to :back
+      flash[:success] = "Time to UPDATE your subscription."
+    else
+    
     begin
+
       # Create a new Stripe customer and add them to a subscription plan
-      customer = Stripe::Customer.create(
+      customer = Stripe::Customer.create({
         :source => token,
         :description => email_address,
         :plan => params[:plan],
         :tax_percent => tax_percent,
-        :quantity => how_many
+        :quantity => how_many}, country)
+  
+        thespainreport_new_user_create
+        thespainreport_user_roles
+        
+        user = User.find_by_email(params[:email])
+        
+        user.update(
+          stripe_customer_id: customer.id,
+          becomes_customer_date: Time.at(customer.created).to_datetime,
+          credit_card_id: customer.sources.data[0].id,
+          credit_card_brand: customer.sources.data[0].brand,
+          credit_card_country: customer.sources.data[0].country,
+          credit_card_last4: customer.sources.data[0].last4,
+          credit_card_expiry_month: customer.sources.data[0].exp_month,
+          credit_card_expiry_year: customer.sources.data[0].exp_year,
+          access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
         )
         
-      # Add Stripe customer details i) to an existing reader or ii) to a new Spain Report member
-      if user = User.find_by_email(params[:email])
-        user.stripe_customer_id = customer.id
-        user.becomes_customer_date = Time.at(customer.created).to_datetime
-        user.credit_card_id = customer.sources.data[0].id
-        user.credit_card_brand = customer.sources.data[0].brand
-        user.credit_card_country = customer.sources.data[0].country
-        user.credit_card_last4 = customer.sources.data[0].last4
-        user.credit_card_expiry_month = customer.sources.data[0].exp_month
-        user.credit_card_expiry_year = customer.sources.data[0].exp_year
-        user.role = 'subscriber'
-        user.save!
-        subscription = Subscription.new(
-          user_id: user.id,
-          stripe_customer_id: customer.id,
-          stripe_subscription_id: customer.subscription.data[0].id,
-          stripe_subscription_credit_card_country: customer.sources.data[0].country
-          )
-        subscription.save!
-        redirect_to :back
-      else
-        new_spain_report_member
-        user = User.find_by_email(params[:email])
-        user.stripe_customer_id = customer.id
-        user.becomes_customer_date = Time.at(customer.created).to_datetime
-        user.credit_card_id = customer.sources.data[0].id
-        user.credit_card_brand = customer.sources.data[0].brand
-        user.credit_card_country = customer.sources.data[0].country
-        user.credit_card_last4 = customer.sources.data[0].last4
-        user.credit_card_expiry_month = customer.sources.data[0].exp_month
-        user.credit_card_expiry_year = customer.sources.data[0].exp_year
-        user.role = 'subscriber'
-        user.save!
         subscription = Subscription.new
         subscription.user_id = user.id
         subscription.stripe_customer_id = customer.id
@@ -72,7 +78,8 @@ class SubscriptionsController < ApplicationController
         subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
         subscription.is_active = true
         subscription.save!
-        stripeinvs = Stripe::Invoice.all(:customer => user.stripe_customer_id)
+        
+        stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
         stripeinvs.each do |stripeinv|
           invoice = Invoice.new
           invoice.stripe_invoice_id = stripeinv.id
@@ -91,9 +98,10 @@ class SubscriptionsController < ApplicationController
           invoice.stripe_invoice_total = stripeinv.total
           invoice.save!
         end
-      end
+        
+      redirect_to :back
       flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
-      UserMailer.delay.thank_you_for_subscribing(user)
+      UserMailer.delay.new_subscriber_thank_you(user)
       
     rescue Stripe::CardError => e
       # Since it's a decline, Stripe::CardError will be caught
@@ -107,25 +115,82 @@ class SubscriptionsController < ApplicationController
       puts "Param is: #{err[:param]}"
       puts "Message is: #{err[:message]}"
       flash[:error] = "#{err[:message]}"
-      redirect_to '/subscriptions/new'
     rescue Stripe::InvalidRequestError => e
       flash[:error] = "Invalid request to payment processor. Please try again."
-      redirect_to '/subscriptions/new'
     rescue Stripe::AuthenticationError => e
       flash[:error] = "Could not connect to payment processor. Please try again."
-      redirect_to '/subscriptions/new'
     rescue Stripe::APIConnectionError => e
       flash[:error] = "Could not connect to payment processor. Please try again."
-      redirect_to '/subscriptions/new'
     rescue Stripe::StripeError => e
       flash[:error] = "General payment processor problem. Please try again."
-      redirect_to '/subscriptions/new'
     rescue => e
       flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
-      redirect_to '/subscriptions/new'
     end
   end
-  
+end
+
+   def thespainreport_new_user_create
+    autopassword = 'L e @ 4' + SecureRandom.hex(32)
+    generate_token = SecureRandom.urlsafe_base64
+     
+    user = User.create!(
+      email: params[:email],
+      article_ids: params[:article_ids],
+      emailpref: 'articlesupdates',
+      password: autopassword,
+      password_confirmation: autopassword,
+      password_reset_token: generate_token,
+      password_reset_sent_at: Time.zone.now
+      )
+   end
+   
+   def thespainreport_user_roles
+     user = User.find_by_email(params[:email])
+     if params[:plan] == "one_story"
+       user.update(
+         access_date: Time.now + 30.days,
+         role: 'subscriber_one_story'
+         )
+     elsif params[:plan] == "all_stories"
+       user.update(
+         access_date: Time.now + 30.days,
+         role: 'subscriber_all_stories'
+         )
+     else
+       user.update(
+         access_date: Time.now + 30.days,
+         role: 'reader'
+         )
+     end
+   end
+   
+   def new_spain_report_reader
+    thespainreport_new_user_create
+    thespainreport_user_roles
+    
+    # Create stories for new user and send some welcome e-mails
+    user = User.find_by_email(params[:email])
+    user.update(
+    briefing_frequency: 24
+    )
+    
+    Story.all.each do |s|
+      n = Notification.new
+      n.story_id = s.id
+      n.user_id = user.id
+      n.notificationtype_id = 1
+      n.save!
+    end
+    
+    UserMailer.delay.new_user_password_choose(user)
+    UserMailer.delay.new_user_story_notifications(user)
+    UserMailer.delay.new_user_catch_up(user)
+    
+    # Redirect to 
+    redirect_to :back
+    flash[:success] = "Welcome aboard! Check your e-mail."
+  end
+
   def new_spain_report_member
     # Generate tokens for passwords and reset links
     autopassword = 'L e @ 4' + SecureRandom.hex(32)
@@ -134,6 +199,9 @@ class SubscriptionsController < ApplicationController
     # Create the new member in users table
     user = User.create!(
      email: params[:email],
+     sign_up_url: params[:sign_up_url],
+     story_ids: params[:story_ids],
+     article_ids: params[:article_ids],
      password: autopassword,
      password_confirmation: autopassword,
      password_reset_token: generate_token,
@@ -147,6 +215,8 @@ class SubscriptionsController < ApplicationController
     
     # Redirect to 
     redirect_to :back
+    flash[:success] = "Welcome aboard! Check your e-mail."
+    return
     flash[:success] = "Welcome aboard! Check your e-mail."
   end
   
@@ -250,6 +320,11 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/new
   def new
+  	@taxes = Tax.all.order('tax_country_name ASC')
+  end
+  
+  # GET /subscriptions/spain
+  def spain
   	@taxes = Tax.all.order('tax_country_name ASC')
   end
 

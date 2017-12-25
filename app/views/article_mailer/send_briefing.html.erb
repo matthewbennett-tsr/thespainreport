@@ -1,0 +1,28 @@
+<%= render 'send_briefing_top' %>
+      
+<% if @user.access_date.blank? %>
+<% elsif @user.access_date < Time.current %>
+  <% if ['reader', 'guest'].include?(@user.role) %>
+    (<em><strong>**</strong> Thank you for enjoying your guest access to The Spain Report.
+    <a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please subscribe now</a> to keep getting your full-text e-mails.</em>)
+  <% elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(@user.role) %>
+    (<em><strong>**</strong> Thank you for subscribing to The Spain Report.
+    Your subscription has run out.
+    <a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please resubscribe now</a> to keep getting your full-text e-mails.</em>)
+  <% else %>
+  <% end %>
+<% else %>
+<% end %>
+      
+<% if @briefing_articles.present? %>
+  <% @briefing_articles.each do |article| %>
+    <%= render 'send_briefing_points', article: article %>
+  <% end %>
+  <%= render 'send_briefing_stories' %>    
+<% else %>
+  No new articles for you this time. 
+  Get the latest at <a href="https://www.thespainreport.com" style="color:#AA151B;">www.thespainreport.com</a> and manage <%= link_to "your e-mail notification settings here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>.
+  <%= render 'send_briefing_stories' %>
+<% end %>
+      
+<%= render 'send_article_briefing_bottom' %>

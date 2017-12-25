@@ -11,48 +11,43 @@
       </ul>
     </div>
   <% end %>
-  
-  <div class="admin-block-notify">
-    <div style="float:left; text-align:left; width: 740px;">
+   
+   <div class="admin-block-notify">
       <%= f.text_field :short_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :short_headline, :size => "62", :maxlength => "70" %>
-      | T <%= check_box_tag 'tweet' %>
-      | <%= f.select :email_to, options_for_select([["None", "none"], ["All", "all"], ["All - Free", "allfree"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
-    </div>
-    <div style="float:left; width: 175px; border-left: 1px solid #000; margin-top: 2px; margin-left: 5px; padding-left: 5px; text-align:right;">
-      <div style="float:left;">
-        <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
-        <%= f.submit %>
-      </div>
-      <div style="float:left;">
-        &nbsp;<%= link_to 'Go', @newsitem, :target => 'blank' %>
-      </div>
-      <div class="clear"></div>
-    </div>
-    <div class="clear"></div> 
-  </div>
-  
+      <%= f.text_field :short_headline, :size => "59", :maxlength => "70" %>
+      T <%= check_box_tag 'tweet' %>
+      <%= f.submit %> 
+      &nbsp;<%= link_to 'Go', @newsitem, :target => 'blank' %>
+   </div>
+   
+   <div class="admin-block">
+     <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, {:include_blank => true}, {:style => "width:450px;"} %>
+     <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @newsitem.status) %>
+     <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"]], "None") %>
+   </div>
+
   <div class="admin-block" style="background-color: #ffcccc;">
   <%= f.hidden_field :imagesource %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
-    <%= f.check_box :remove_main %>
-   | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
-   | <%= f.text_field :caption, :size => '60', :style => 'padding:5px;' %>
+    <%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+  <div style="margin-top: 3px;">
+    <%= f.text_field :caption, :style => 'width: 100%; padding:5px;' %>
+  </div>
   </div>
   
   <div class="admin-block">
   <div style="float:left; text-align:left;">
-   <%= f.text_field :slug, :class => "edit-headline", :size => "53", :maxlength => 97, :style => 'padding:5px;' %>
+   <%= f.text_field :slug, :class => "edit-headline", :maxlength => 97, :style => 'width: 100%; padding:5px;' %>
    </div>
    <div class="clear"></div>
    </div>
-
+  
   <div class="admin-block">
-    <%= f.text_area :item, :style => "width:100%; min-height: 170px;", :class => "inputtextarea", :maxlength => 1000 %>
+    <%= f.text_area :item, :style => "width:100%; min-height: 400px;", :class => "inputtextarea", :maxlength => 2000 %>
   </div>
   
   <div class="admin-block">
-  <strong>Article:</strong> <%= f.collection_select :article_id, @newsitemarticle, :id, :headline, :include_blank => true %>
+    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
   </div>
 
 <% if @newsitem.main? %>

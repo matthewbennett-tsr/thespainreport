@@ -12,7 +12,7 @@ class ApplicationController < ActionController::Base
     @last_active_stories = Story.latest
     @lasteditorial = Article.editorial.published.lastone
     @lastmorning = Article.morning.published.lastone
-    @lastevening = Article.evening.published.lastone
+    @lastnews = Article.news.published.lastone
     @lastindepth = Article.in_depth.published.lastone
   end
   
@@ -67,6 +67,8 @@ class ApplicationController < ActionController::Base
   
   def current_user
     @current_user ||= User.find(session[:user_id]) if session[:user_id]
+  rescue ActiveRecord::RecordNotFound
+    session[:user_id] = nil # or reset_session
   end
   helper_method :current_user
 

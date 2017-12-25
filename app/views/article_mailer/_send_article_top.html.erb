@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+  
+<p style="font-weight:bold;"><%= @article.headline %></p>
+
+<p><strong>
+<% if @article.urgency == 'majorbreaking' %>
+<span style="font-family: Oswald, Arial; background-color: #AA151B; color: #ffffff;">&nbsp;&nbsp;MAJOR BREAKING <%= @article.type.name %>&nbsp;&nbsp;</span>
+<% elsif @article.urgency == 'breaking' %>
+<span style="font-family: Oswald, Arial; background-color: #AA151B; color: #ffffff;">&nbsp;&nbsp;BREAKING <%= @article.type.name %>&nbsp;&nbsp;</span>
+<% elsif @article.urgency == 'latest' %>
+<span style="font-family: Oswald, Arial; background-color: #F1BF00; color: #ffffff;">&nbsp;&nbsp;LATEST <%= @article.type.name %>&nbsp;&nbsp;</span>
+<% elsif @article.type.name == 'LIVE BLOG' %>
+<span style="font-family: Oswald, Arial; background-color: #AA151B; color: #ffffff;">&nbsp;&nbsp;<%= @article.type.name %>&nbsp;&nbsp;</span>
+<% elsif @article.type.name == 'EDITORIAL' %>
+<span style="font-family: Oswald, Arial; background-color: green; color: #ffffff;">&nbsp;&nbsp;<%= @article.type.name %>&nbsp;&nbsp;</span>
+<% else %>
+<span style="font-family: Oswald, Arial; background-color: black; color: #ffffff;">&nbsp;&nbsp;<%= @article.type.name %>&nbsp;&nbsp;</span>
+<% end %>
+</strong></p>
+
+<strong><%= @article.created_at.strftime("%b %d %Y") %>—</strong><em><%= @article.lede %></em>
+
+<p>
+  <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
+    <%= link_to(article_url(@article)) do %>
+      <%= image_tag @article.main.url if @article.main? %>
+    <% end %>
+    <br />
+    <strong>IMAGE:</strong> <em><%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %></em>
+  <% elsif @article.video? %>
+    <strong>VIDEO:</strong> <%= link_to 'Watch here', article_url(@article), {:style=>'color:#AA151B;'} %>. <%= @article.caption unless @article.caption.empty? %>
+  <% else %>
+  <% end %>      
+</p>

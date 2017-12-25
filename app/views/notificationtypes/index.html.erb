@@ -1,0 +1,27 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Notificationtypes</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @notificationtypes.order(:order).each do |notificationtype| %>
+      <tr>
+        <td><%= notificationtype.order %></td>
+        <td><%= notificationtype.name %></td>
+        <td><%= link_to 'Show', notificationtype %></td>
+        <td><%= link_to 'Edit', edit_notificationtype_path(notificationtype) %></td>
+        <td><%= link_to 'Destroy', notificationtype, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Notificationtype', new_notificationtype_path %>

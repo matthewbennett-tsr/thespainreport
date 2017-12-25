@@ -3,33 +3,35 @@ class UsersController < ApplicationController
   def index
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       if params[:search]
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "email ILIKE '%#{term}%'" }.join(" OR ")
       @users = User.all.where(query).order("created_at DESC")
       @latestusers = User.readers.lastfew
-      @latestsubscribers = User.subscribers.lastfew
+      @latestsubscribers = User.totalsubscribers.lastfew
       else
       @users = User.lastfew.order ('users.role DESC, users.email ASC')
       @latestusers = User.readers.lastfew
-      @latestsubscribers = User.subscribers.lastfew
-      @subscribercount = User.subscribers.count
-      @activesubscribercount = User.activesubscribers.count
-      @straysubscribercount = User.subscribers.where('stripe_customer_id is null').count
+      @latestsubscribers = User.totalsubscribers.lastfew
+      @totalsubscribers = User.totalsubscribers.count
+      @onestorysubscribers = User.onestorysubscribers.count
+      @allstorysubscribers = User.allstorysubscribers.count
+      @straysubscribercount = User.straysubscribers.count
       @readercount = User.readers.count
+      @guestcount = User.guests.count
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     end
   end
   
   def show
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       @stories = Story.all.order(:story)
@@ -60,31 +62,27 @@ class UsersController < ApplicationController
     @user = User.new
   end
   
-  def confirm_email
-    user = User.find_by_confirm_token(params[:id])
-    if user
-      user.email_activate
-      flash[:success] = "Thank you very much. Enjoy TSR!"
-      redirect_to root_url
-    else
-      flash[:error] = "Sorry, that link is not valid."
-      redirect_to root_url
-    end
-  end
-  
   def edit
-    if current_user.nil? 
+    if !User.find_by_id(params[:id])
+      if current_user.nil?
+        redirect_to root_url
+      else
+        redirect_to edit_user_path(current_user)
+      end
+    elsif current_user.nil?
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
       elsif @user.stripe_customer_id? && @user.role == "reader"
-      elsif @user.stripe_customer_id?
+      elsif @user.stripe_customer_id? && @user.role == "subscriber"
       else
       end
       @stories = Story.all.order(:story)
-    else
+      @notificationtypes = Notificationtype.all.order(:order)
+    elsif current_user != User.find(params[:id])
+      redirect_to edit_user_path(current_user)
+    elsif current_user = User.find(params[:id])
       @user = current_user
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
       elsif @user.stripe_customer_id?
@@ -93,6 +91,8 @@ class UsersController < ApplicationController
       else
       end
       @stories = Story.all.order(:story)
+      @notificationtypes = Notificationtype.all.order(:order)
+    else
     end
   end
 
@@ -101,7 +101,6 @@ class UsersController < ApplicationController
     respond_to do |format|
     if current_user.nil? 
       if @user.save
-        UserMailer.delay.registration_confirmation(@user)
         format.html { redirect_to :action => 'confirm' }
         format.json { render :show, status: :created, location: @user }
       else
@@ -126,11 +125,15 @@ class UsersController < ApplicationController
   # PATCH/PUT /articles/1
   # PATCH/PUT /articles/1.json
   def update
-    if current_user.nil? 
+    if !User.find_by_id(params[:id])
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
+    elsif current_user.nil? 
+      redirect_to root_url
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @stories = Story.all.order(:story)
+      @notificationtypes = Notificationtype.all.order(:order)
       @user = User.find(params[:id])
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
       elsif @user.stripe_customer_id? && @user.role == "reader"
@@ -141,16 +144,22 @@ class UsersController < ApplicationController
       end
       respond_to do |format|
         if @user.update(user_params)
-          format.html { render :edit}
+          format.html { redirect_to :back}
           format.json { render :edit, status: :ok, location: @user }
-          flash[:notice] = "Well done, updates successful!"
+          flash[:success] = "Well done, update successful."
         else
-          format.html { render :edit }
+          format.html { redirect_to :back }
           format.json { render json: @user.errors, status: :unprocessable_entity }
+          flash[:error] = "Oh, problem with update…"
         end
       end
+    elsif current_user != User.find(params[:id])
+      redirect_to root_url
+      flash[:success] = "You're not allowed to do that."
     else
       @user = current_user
+      @stories = Story.all.order(:story)
+      @notificationtypes = Notificationtype.all.order(:order)
       if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE"
       elsif @user.stripe_customer_id?
         @stripe_customer_details = Stripe::Customer.retrieve(:id => @user.stripe_customer_id)
@@ -159,11 +168,11 @@ class UsersController < ApplicationController
       end
       respond_to do |format|
         if @user.update(user_params)
-          format.html { render :edit}
+          format.html { redirect_to :back}
           format.json { render :edit, status: :ok, location: @user }
           flash[:notice] = "Well done, updates successful!"
         else
-          format.html { render :edit }
+          format.html { redirect_to :back}
           format.json { render json: @user.errors, status: :unprocessable_entity }
         end
       end
@@ -175,17 +184,17 @@ class UsersController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @user = User.find(params[:id])
       @user.destroy
       respond_to do |format|
-        format.html { redirect_to users_path, notice: 'User was successfully destroyed.' }
+        format.html { redirect_to users_path, notice: 'User destroyed.' }
         format.json { head :no_content }
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
+      flash[:success] = "You're not allowed to do that."
     end
   end
 
@@ -197,7 +206,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:allow_access, :becomes_customer_date, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :is_author, :name, :bio, :role, :emailpref, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id, :story_ids => [])
+      params.require(:user).permit(:access_date, :allow_access, :becomes_customer_date, :briefing_frequency, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :id, :is_author, :name, :bio, :role, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id, :one_story_id, :one_story_date, :article_ids => [], :story_ids => [], notifications_attributes: [:id, :user_id, :story_id, :notificationtype_id])
     end
 
 end

@@ -1,0 +1,9 @@
+Published on: <%= @article.created_at.strftime("%b %d, %Y, %H:%M") %>
+
+<% if @article.stories.present? %>
+------------------------------
+My Story Notifications
+
+To change your story notifications settings, log in here:
+<%= edit_user_url(@user) %>
+<% end %>

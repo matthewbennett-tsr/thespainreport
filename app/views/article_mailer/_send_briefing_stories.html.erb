@@ -1,0 +1,19 @@
+<p style="font-weight: bold;">My Spain Briefing Notifications</p>
+
+<p>I want my Spain briefings every <strong><%= @user.briefing_frequency %> hours</strong>.</p>
+
+<% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
+  <p><strong><%= s.story %>:</strong>
+  <% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 2) %>
+  <% s.notifications.where(user_id: @user).each do |n| %>
+    <% Notificationtype.all.order(:order).each do |nt| %>
+      <% if nt.id == n.notificationtype_id %>
+        <em><%= nt.name %></em>
+      <% else %>
+        <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+      <% end %>
+      <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+    <% end %>
+  <% end %>
+  </p>
+<% end %>

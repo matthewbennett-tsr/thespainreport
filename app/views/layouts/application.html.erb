@@ -10,9 +10,29 @@
     <% end %>
   </title>
   
-  <% if controller_name == 'subscriptions' && action_name == 'new' %>
+<% if controller_name == 'subscriptions' && ["new", "spain"].include?(action_name) %>
   <script src="//js.maxmind.com/js/apis/geoip2/v2.1/geoip2.js" type="text/javascript"></script>
-  <% end %>
+  <script>
+    var onSuccess = function(x){
+      var country_code = x.country.iso_code;
+      document.getElementById('ip_country_code').value = country_code;
+      <% if controller_name == 'subscriptions' && action_name == 'spain' %>
+        if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/new');}
+      <% elsif controller_name == 'subscriptions' && action_name == 'new' %>
+        if (x.country.iso_code = "ES"){window.location.replace('/subscriptions/spain');}
+      <% end %>
+    };
+    
+    var onError = function(error){
+      alert(
+        "Error:\n\n"
+        + JSON.stringify(error, undefined, 4)
+        );
+    };
+
+    geoip2.insights(onSuccess, onError);
+  </script>
+<% end %>
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Oswald:400,700", media: "all" %>
@@ -41,22 +61,21 @@
   <meta property="fb:pages" content="290717157739482" />
   
 </head>
-<% if controller_name == 'subscriptions' && action_name == 'new' %>
+<% if controller_name == 'subscriptions' && ["new", "spain"].include?(action_name) %>
   <body onload="calculateTotal();">
 <% else %>
   <body>
 <% end %>
 
 <div id="top-bar-wrap"></div>
+
 <div id="top-bar-layer">
 <div style="max-width: 1260px; position: relative; margin: 0 auto;">
-<a href="/"><div class="homelink"></div></a>
+
+<div class="site-title-new"><a href="/">THE <span class="site-title-spain">SPAIN</span> REPORT</a></div>
 
 
-<div class="site-title-new">THE <span class="site-title-spain">SPAIN</span> REPORT</div>
-
-
-<% if controller_name == 'subscriptions' && action_name == 'new' %>
+<% if controller_name == 'subscriptions' && ["new", "spain"].include?(action_name) %>
 
 <% else %>
 <div class="user-bar-right-links" style="margin-top: 12px;">
@@ -71,7 +90,7 @@
       </div>
     <% elsif current_user.role == 'editor' %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left"><%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Summary", '/articles/new_summary' %> | <%= link_to "Story", new_story_path %></div>
+        <div class="user-float-left"><%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Story", new_story_path %></div>
         <div class="user-float-left">—</div>
         <div class="user-float-left"><%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %> | <%= link_to "News", entries_path %></div>
         <div class="user-float-left">—</div>
@@ -82,8 +101,6 @@
       <div class="clear"></div>
     <% elsif current_user %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left-no"><%= link_to "News Reader", entries_path %></div>
-        <div class="user-float-left"><%= link_to "Comments", comments_path %></div>
         <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
       </div>
       <div class="clear"></div>
@@ -96,50 +113,85 @@
 </div>
 </div>
 
-<% if controller_name == 'subscriptions' && action_name == 'new' %>
+<% if controller_name == 'subscriptions' && ["new", "spain"].include?(action_name) %>
 <div class="wrap-subscription">
 <% else %>
-<div style="max-width: 1260px; position: relative; margin: 0 auto;">
+<div class="wrap">
 
-<div class="left-hand-fixed-bar" style="z-index: 500;">
+<div class="left-hand-bar" style="z-index: 500;">
 <div class="sidebar-header-top-new">Understand Spain, in English</div>
 
 <div id="email-sign-up-box">
 <% if current_user.nil? %>
   <img src="<%= asset_path 'thespainreport-evssl-white.jpg' %>" style="width: 50px; float:right;" />
-  Original, independent reporting in English about how Spain is changing.
+  Original, independent reporting of the stories changing Spain.
   Full-text articles by e-mail. Free for 30 days.
-  No ads, no spam. Don't miss any important stories.
+  No ads, no spam. Don't miss it.<br />
+  <strong>Enter your e-mail:</strong>
   <div class="email-sign-up-form-new">
-    <%= form_tag '/new_spain_report_member', :class => '', :id => 'email-sign-up' do |f| %>
+    <%= form_tag '/new_spain_report_reader', :class => '', :id => 'email-sign-up' do |f| %>
       <div class="email-input-float">
-        <input type="email" size="22" name="email" id="email" placeholder="you@example.com" class="inputgeneral"/>
+        <input type="email" size="22" name="email" id="email" class="inputgeneral"/>
       </div>
       <div class="email-input-float email-button">
         <button type="submit" class="blueformbutton">Join Now</button>
       </div>
       <div class="clear"></div>
+      
+      <% if controller_name == 'articles' && action_name == 'show' %>
+        <%= hidden_field_tag 'article_ids[]', @article.id %>
+      <% end %>
+      
+    <% end %>
+  </div>
+  <div style="margin-bottom: 3px;">
+  <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, id: "flash_#{name}_div" do -%>
+          <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+        <% end -%>
+      <% end %>
     <% end %>
   </div>
 <% elsif current_user %>
   <div class="signed-in-details">
-  <div style="margin-bottom: 3px;"><% if current_user.name.present? %><%= current_user.name %><% else %><span class="highlight"><%= link_to "Choose a name", edit_user_path(current_user) %></span><% end %> · <%= link_to "Edit MyTSR", edit_user_path(current_user) %></div>
+  <div style="margin-bottom: 3px;"><%= link_to "Edit MyTSR", edit_user_path(current_user) %></div>
   <div style="margin-bottom: 3px;"><strong>E-mail:</strong> <%= current_user.try(:email) %></div>
-  <div style="margin-bottom: 3px;"><strong>Twitter:</strong> <% if current_user.twitter.present? %><a href="https://twitter.com/<%= current_user.twitter %>">@<%= current_user.twitter %></a><% else %><span class="highlight"><%= link_to "Add Twitter username", edit_user_path(current_user) %></span><% end %></div>
-  <div style="">
+  <div style="margin-bottom: 3px;">
       <% if current_user.role == 'editor' %>
-         <span class="editor-label-mini"><%= current_user.role.to_s.humanize.upcase %></span>
-      <% elsif current_user.role == 'subscriber' %>
-         <span class="subscriber-label-mini"><%= current_user.role.to_s.humanize.upcase %></span> · Thanks!
-      <% elsif current_user.role == 'reader' %>
-         <span class="reader-label-mini"><%= current_user.role.to_s.humanize.upcase %></span> <a href="/subscriptions/new"><span class="highlight">Subscribe now</span></a>
+         <span class="editor-label-mini"><%= current_user.role.to_s.titleize %></span>
+      <% elsif ['subscriber', 'subscriber_all_stories'].include?(current_user.role) %>
+         <span class="subscriber-label-mini"><%= current_user.role.to_s.titleize %></span> · Thanks!
+      <% elsif ['subscriber_one_story'].include?(current_user.role) %>
+         <span class="subscriber-label-mini"><%= current_user.role.to_s.titleize %></span> · Thanks! · <a href="/subscriptions/new"><span class="highlight">Upgrade</span></a>
+      <% elsif ['guest', 'reader'].include?(current_user.role) %>
+         <span class="reader-label-mini"><%= current_user.role.to_s.titleize %></span> <a href="/subscriptions/new"><span class="highlight">Subscribe now</span></a>
       <% else %>
          <span>
       <% end %>
   </div>
+  <div style="margin-bottom: 3px;">
+  <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, id: "flash_#{name}_div" do -%>
+          <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+        <% end -%>
+      <% end %>
+    <% end %>
+  </div>
   </div>
 <% end %>
 </div>
+
+  <% @lastnews.each do |article| %>
+    <div class="side-block">
+      <%= link_to article do %>
+        <h3><%= article.short_headline %></h3>
+        <p><%= article.short_lede %></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></p>
+      <% end %>
+    </div>
+  <% end %>
 
   <% @lastmorning.each do |article| %>
     <div class="side-block">
@@ -147,16 +199,6 @@
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
         <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></p>
-      <% end %>
-    </div>
-  <% end %>
-  
-  <% @lastevening.each do |article| %>
-    <div class="side-block">
-      <%= link_to article do %>
-        <h3><%= article.short_headline %></h3>
-        <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">EVENING RECAP</span></span></p>
       <% end %>
     </div>
   <% end %>
@@ -183,22 +225,17 @@
 
 
 </div>
-
-<% if controller_name == 'articles' && action_name == 'show' %>
-<div class="right-hand-fixed-bar" style="z-index: 5000;">
-    <%= yield(:right_side_bar) %>
-</div>
-<% else %>
 <% end %>
 
-<div class="wrap">
-<% end %>
 
 <%= yield %>
 
 
 <div class="clear"></div>
+
 </div>
+</div>
+<div style="text-align: center; margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #999999;">Copyright © <%= Time.now.year %> · The Spain Report Ltd. · Understand Spain, In English · <a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></div>
 
 <!-- Paywall -->
 <div class="modal" id="paywall" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="modal-open">

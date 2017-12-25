@@ -1,0 +1,34 @@
+Read on The Spain Report:
+<%= article_url(@newsitem.article, anchor: @newsitem.id) %>
+
+Published on: <%= @newsitem.created_at.strftime("%b %d, %Y, %H:%M") %>
+
+------------------------------
+My Stories
+
+To change your story notifications settings, log in here:
+<%= edit_user_url(@user) %>
+
+------------------------------
+My Account
+
+Thank you for reading and subscribing to The Spain Report.
+
+Manage your account here:
+<%= edit_user_url(@user) %>
+
+If you experience any problems, please e-mail: subscriptions@thespainreport.com
+
+------------------------------
+The Spain Report Ltd.
+20-22 Wenlock Road
+London
+N1 7GU
+United Kingdom
+
+(0044) (0)2076085570
+https://www.thespainreport.com
+
+Understand Spain, In English
+
+Copyright © <%= Time.now.year %> The Spain Report Ltd, All rights reserved.

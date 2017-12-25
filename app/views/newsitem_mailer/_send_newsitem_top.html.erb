@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+</head>
+<body>
+
+<p style="font-weight:bold;"><%= @newsitem.slug %></p>
+
+<p><%= @newsitem.created_at.strftime("%b %d %Y") %></p>
+
+<% if @newsitem.main? %> <%# MAIN IMAGE OR VIDEO %>
+<p>
+  <% if @newsitem.article.present? %>
+    <%= link_to(article_url(@newsitem.article, anchor: @newsitem.id)) do %>
+      <%= image_tag @newsitem.main.url if @newsitem.main? %>
+    <% end %>
+  <% else %>
+    <%= link_to(newsitem_url(@newsitem)) do %>
+      <%= image_tag @newsitem.main.url if @newsitem.main? %>
+    <% end %>
+  <% end %>
+  <br /><strong>IMAGE:</strong> <em><%= @newsitem.caption %></em>
+</p>
+<% elsif @newsitem.video? %>
+<p>
+  <strong>VIDEO:</strong>
+  <% if @newsitem.article.present? %>
+    <%= link_to 'Watch here', article_url(@newsitem.article, anchor: @newsitem.id), {:style=>'color:#AA151B;'} %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+  <% else %>
+    <%= link_to 'Watch here', newsitem_url(@newsitem), {:style=>'color:#AA151B;'} %>. <%= @newsitem.caption unless @newsitem.caption.empty? %>
+  <% end %>
+</p>
+<% else %>
+<% end %>

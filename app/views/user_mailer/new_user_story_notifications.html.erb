@@ -1,0 +1,65 @@
+<p>Right, then, let's dive in to your new story notifications.</p>
+
+<p>Spain Report subscribers get full-text e-mails in their inboxes as soon as we hit 'publish' (if they want them).</p>
+
+<p>Different people, though, are comfortable with different amounts of e-mail, so we have developed a little system to let you control that.</p>
+
+<p>
+  You can choose when you get e-mails about different stories (Podemos, Catalonia, Big Accident, etc.), and how you get them.
+  Change your preferences on your account page, at the bottom of every article or by clicking on the links at the bottom of every e-mail.
+</p>
+
+<p>Here is a quick explanation of the options, and below you can play around with them a bit.</p>
+
+<p>
+  <strong>E-Mail Alerts:</strong> breaking news, headlines, updates and full-text articles as soon as we hit 'publish'.
+  Breaking stories start as e-mail alerts until you indicate another preference, so that you never miss anything important.
+</p>
+
+<p>
+  <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m. every day, Spanish time, according to the setting you choose.
+  You can choose to get your briefings as frequently as every two hours, or once or twice daily, or once or twice a week.
+  Whatever you prefer.
+  If there are no new updates in the time period you choose, the e-mail tells you there is nothing new.
+</p>
+
+<p><strong>Website Only:</strong> you want to read these stories online but do not want e-mails about them;</p>
+
+<p><strong>Not interested:</strong> informs us you don't care about this story. No alerts, not included in your Spain briefings.</p>
+
+<p>
+  <strong>Turn e-mail off:</strong> some people visit the website every day or follow along on Twitter, and don't want any news e-mails.
+  That's absolutely fine. If you don't want any news e-mails at all, just set everything to <strong>Website Only</strong> or <strong>Not Interested</strong>.
+  You will occasionally get some service announcements, and breaking news stories, in case you are interested in those (you can also turn them off after the first alert, just by clicking on the link in the e-mail).
+</p>
+
+<p><strong>NOTE 1:</strong> Keep scrolling down to see your new e-mail notifications in action. Just click on the links to change some options.</p>
+
+<p><strong>NOTE 2:</strong> To change your My Spain Briefings frequency, you will have to <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>.</p>
+
+<p>Kindest regards,</p>
+
+<p>
+  Matthew Bennett<br />
+  Editor
+</p>
+
+<p style="font-weight: bold;">My Story Notifications</p>
+
+<p>Your current settings are shown <em>in italics</em>. Just click to change it to something else for that story.</p>
+
+<% @user.stories.each do |s| %>
+  <p>
+    <strong><%= s.story %>:</strong>
+    <% s.notifications.where(user_id: @user).each do |n| %>
+      <% Notificationtype.all.order(:order).each do |nt| %>
+        <% if nt.id == n.notificationtype_id %>
+          <em><%= nt.name %></em>
+        <% else %>
+          <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+        <% end %>
+        <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+      <% end %>
+    <% end %>
+  </p>
+<% end %>

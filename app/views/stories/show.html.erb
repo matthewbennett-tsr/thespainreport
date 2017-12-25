@@ -5,20 +5,14 @@
 <div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
 <div class="content-white-background">
 
-<h1><%= @story.story %>: Latest News & Analysis</h1>
-
-<p class="related-stories"><strong>Related stories:</strong>
-<% if @story.parent_id %>
-    <%= link_to @story.parent.story, @story.parent %> / 
+<h1>
+<% if current_user.nil? || current_user.role != 'editor' %>
+  <%= @story.story %>
+<% elsif current_user.role == 'editor' %>
+  <%= link_to @story.story, edit_story_path(@story) %>
 <% else %>
 <% end %>
-
-<% if @story.children %>
-<% @story.children.each do |s| %>
-    <%= link_to s.story, s %><%= ", " unless s == @story.children.last %> 
-   <% end %>
-<% end %>
-</p>
+</h1>
 
 <% if @story.created_at >= 24.hours.ago %>
   <div class="news-alert"><span class="breaking-label-mini">NEW STORY</span></div>
