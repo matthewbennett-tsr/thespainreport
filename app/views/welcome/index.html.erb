@@ -121,60 +121,7 @@
 
 </div>
 
-<div class="content-right">
-  
-  <div class="sidebar-header-top-new" style="margin-top: 10px;">Latest Article Updates</div>
 
-    <% @latestupdates.each do |newsitem| %>
-    <div class="side-block">
-      <% if newsitem.article.present? %>
-        <%= link_to article_url(newsitem.article, anchor: newsitem.id) do %>
-            <% if newsitem.main? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <%= image_tag newsitem.main.url if newsitem.main? %>
-              </div>
-            <% elsif newsitem.video? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <div class="video-wrapper">
-                  <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-                </div>
-              </div>
-            <% else %>
-            <% end %>
-            <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= newsitem.slug %></span></p>
-            <p style="font-size: 12px;"><%= newsitem.item.truncate(150) %></p>
-            <p style="font-size: 11px; margin-top: 5px; ">
-              <span class="feed-item-date"><%= newsitem.created_at.to_formatted_s(:short) %></span>
-              <% if newsitem.article.type.name == "LIVE BLOG" %>
-                <span class="breaking-label-mini">LIVE BLOG</span>
-              <% end %>
-            </p>
-        <% end %>
-      <% else %>
-        <%= link_to newsitem do %>
-            <% if newsitem.main? %>
-              <div style="width:100%; margin-bottom: 3px;">
-                <%= image_tag newsitem.main.url if newsitem.main? %>
-              </div>
-            <% elsif newsitem.video? %>
-              <div style="width:100%; margin-bottom: 3px;">
-              <div class="video-wrapper">
-                <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-              </div>
-              </div>
-            <% else %>
-            <% end %>
-            <p><span style="font-weight:bold; font-family: Oswald; font-size: 13px;"><%= newsitem.slug %></span></p>
-            <p style="font-size: 12px;"><%= newsitem.item.truncate(150) %></p>
-            <p style="font-size: 11px; margin-top: 5px; ">
-              <span class="feed-item-date"><%= newsitem.created_at.to_formatted_s(:short) %></span>
-            </p>
-        <% end %>
-      <% end %>
-      </div>
-<% end %>
-
-</div>
 
 <div class="clear"></div>
 
