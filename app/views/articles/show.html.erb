@@ -107,7 +107,7 @@
     <div class="main-image">
         <%= image_tag @article.main.url if @article.main? %>
     <div class="main-caption">
-      <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+      <strong>Image:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
     </div>
     </div>
   <% elsif @article.video? %>
@@ -116,7 +116,7 @@
         <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
       </div>
       <div class="main-caption">
-        <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+        <strong>Video:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
       </div>
     </div>
   <% else %>
@@ -251,7 +251,7 @@
     <div class="main-image">
         <%= image_tag @article.main.url if @article.main? %>
     <div class="main-caption">
-      <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+      <strong>Image:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
     </div>
     </div>
   <% elsif @article.video? %>
@@ -260,7 +260,7 @@
         <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
       </div>
       <div class="main-caption">
-        <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+        <strong>Video:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
       </div>
     </div>
   <% else %>

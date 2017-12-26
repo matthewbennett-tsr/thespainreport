@@ -445,55 +445,37 @@ input.edit-headline {font-family: Oswald, Arial, sans-serif !important; font-wei
 video { width: 100% !important; height: auto !important;}
 .video-wrapper {position: relative; padding-bottom: 56.25%; /* 16:9 */ padding-top: 25px; height: 0;}
 .video-wrapper iframe {position: absolute; top: 0; left: 0; width: 100%; height: 100%;}
-.main-caption {margin-top: 5px; margin-bottom: 7px; font-size: 11px; font-style:italic; text-align: right; line-height: 1;}
+.main-caption {margin-top: 5px; margin-bottom: 7px; font-size: 11px; font-style:italic; text-align: left; line-height: 1;}
 .liveblog-caption {margin-top: 5px; margin-bottom: 7px; font-size: 12px; font-style:italic; text-align: left; line-height: 1;}
 
 /* # Media Queries
 ---------------------------------------------------------------------------------------------------- */
 
-@media only screen and (max-width: 1035px) {
-  .right-hand-fixed-bar {display: none;}
-}
-
-@media only screen and (max-width: 915px) {
+@media only screen and (max-width: 1019px) {
+  .wrap {width:100%;}
+  .left-hand-bar {display:none;}
+  .content-left-new {width:100%;}
   h1 {font-size: 24px;}
-  .content-left-new {width:100%;}
-  .content-right {width:100%;}
-}
-
-@media only screen and (max-width: 815px) {
-  .content-left-new {width:100%;}
-  .content-right {width:100%;}
-}
-
-@media only screen and (max-width: 780px) {
-  h1 {font-size: 22px;}
-  .main-image-liveblog-update {width: 100%; margin-left: 0px; margin-bottom: 5px; }
-  .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
-}
-
-@media only screen and (max-width: 740px) {
-  .user-bar-right-links {width: 430px; background-color: #FFFADB; padding: 0px 0px 0px 0px; margin-right: 0px;}
+  .user-bar-right-links {display:none;}
   .top-login-input-float {width: 32%; margin-right: 5px;}
   .input200 {width: 100%;}
   .input170 {width: 100%;}
 }
 
+@media only screen and (max-width: 780px) {
+  h1 {font-size: 22px;}
+  
+  .main-image-liveblog-update {width: 100%; margin-left: 0px; margin-bottom: 5px; }
+  .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
+}
+
+@media only screen and (max-width: 740px) {
+}
+
 @media only screen and (max-width: 735px) {
-  .user-bar-right-links {display:none;}
-  .wrap {margin-top: 60px;}
 }
 
 @media only screen and (max-width: 680px) {
-  .left-hand-fixed-bar {display:none;}
-  #top-bar-wrap {height: 72px;}
-  .wrap {padding-left: 0px; margin-top: 60px;}
-  .user-bar-right-links {width: 100%; background-color: #FFFADB; padding: 0px 0px 10px 0px;}
-  .user-bar-right-links-basic-user {margin-left: 20px; margin-top: 7px;}
-  .user-bar-login-form {margin-left: 20px; width: 90%;}
-  .top-login-input-float {width: 30%;}
-  .input200 {width: 100%;}
-  .input170 {width: 100%;}
   .content-left-new {width:100%; padding: 0px;}
   .content-white-background {width:100%; padding: 0px;}
   h1 {font-size: 22px; padding: 0px 10px;}
