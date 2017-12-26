@@ -66,10 +66,19 @@ body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
 
 #email-sign-up-box {background-color: #fff; font-family: Georgia; padding: 5px; margin-bottom: 2px; font-size: 14px; line-height: 150%; border-bottom: 1px solid #F1BF00;}
 .content-right {float:right; width: 32%; margin-left: 5px; padding: 10px; background-color: #fff; margin-top: 13px;}
+.top-story-block {width:100%; padding-bottom: 15px; margin-bottom: 15px; background-color: #fff; border-bottom: 1px solid #E5D8A1;}
+
+
+.index-story {background-color: #fff; padding-bottom: 15px; border-bottom: 1px solid #E5D8A1; margin-bottom: 7px;}
+.index-story-text {font-family: Georgia; margin-top: 7px; margin-bottom: 7px;}
+.index-story-updates {}
+.index-story-updates ul {margin-top: 0px; margin-bottom: 10px; margin-left: 30px; margin-right: 0;}
+.index-story-updates ul li {margin: 0 auto; text-align:left; font-style: normal; font-family: Eczar; font-size:16px;}
+.index-story-meta {margin-top: 10px;}
+
 .content-white-background {background-color: #fff; padding-bottom: 15px; border-bottom: 1px solid #E5D8A1; margin-bottom: 7px;}
 .side-block {background-color: #fff; padding: 12px 5px; border-bottom: 1px solid #F1BF00; margin-top: 0px;}
 .side-block-right {background-color: #fff; padding: 0px 0px 15px 0px; border-bottom: 1px solid #E5D8A1;}
-.home-page-top-story {width:100%; padding-bottom: 15px; margin-bottom: 15px; background-color: #fff; border-bottom: 1px solid #E5D8A1;}
 .signed-in-details {border-left: 5px solid #B1A87D; padding-left: 5px;}
 
 /* SIDEBAR THINGS */
@@ -122,11 +131,11 @@ body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
 
 .major-breaking-news-top {padding-top: 11px; margin-bottom: -7px; padding-bottom: 3px; line-height: 1.5; font-weight:bold; font-family: Oswald;}
 .major-breaking-news-top a, .major-breaking-news-top a:visited {color: #AA151B; text-decoration:none;}
-.major-breaking-news-top a:hover {color: #006633;}
+.major-breaking-news-top a:hover {color: #F1BF00;}
 
 .breaking-news-top {padding-top: 11px; margin-bottom: -7px; padding-bottom: 3px; line-height: 1.5; font-weight:bold; font-family: Oswald;}
 .breaking-news-top a, .breaking-news-top a:visited {color: #AA151B; text-decoration:none;}
-.breaking-news-top a:hover {color: #006633; }
+.breaking-news-top a:hover {color: #F1BF00; }
 
 .latest-news-top {padding-top: 11px; margin-bottom: -7px; padding-bottom: 3px; line-height: 1.5; font-weight:bold; font-family: Oswald;}
 .latest-news-top a, .latest-news-top a:visited {text-decoration:none;}
@@ -451,10 +460,10 @@ video { width: 100% !important; height: auto !important;}
 ---------------------------------------------------------------------------------------------------- */
 
 @media only screen and (max-width: 1019px) {
+  h1 {font-size: 24px;}
   .wrap {width:100%;}
   .left-hand-bar {display:none;}
   .content-left-new {width:100%;}
-  h1 {font-size: 24px;}
   .user-bar-right-links {display:none;}
   .top-login-input-float {width: 32%; margin-right: 5px;}
   .input200 {width: 100%;}
@@ -463,7 +472,6 @@ video { width: 100% !important; height: auto !important;}
 
 @media only screen and (max-width: 780px) {
   h1 {font-size: 22px;}
-  
   .main-image-liveblog-update {width: 100%; margin-left: 0px; margin-bottom: 5px; }
   .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
 }
@@ -475,9 +483,11 @@ video { width: 100% !important; height: auto !important;}
 }
 
 @media only screen and (max-width: 680px) {
-  .content-left-new {width:100%; padding: 0px;}
-  .content-white-background {width:100%; padding: 0px;}
-  h1 {font-size: 22px; padding: 0px 10px;}
+  h1 {font-size: 22px;}
+  h1.modal-title {padding: 0px; font-size: 19px;}
+  input#email {width: 100%;}
+  .content-left-new {width:100%; padding-top: 10px;}
+  .index-story {width:100%; padding-left: 10px; padding-right: 10px;}
   .news-alert-wrap {padding: 0px 10px;}
   .article-lede {padding: 0px 10px;}
   .main-image {width: 100%;}
@@ -485,11 +495,9 @@ video { width: 100% !important; height: auto !important;}
   .meta {padding: 0px 10px;}
   .comments-wrap {padding: 0px 10px;}
   .modal-header {padding: 10px;}
-  h1.modal-title {padding: 0px; font-size: 19px;}
   .modal-body {padding: 10px;}
   .modal-body .top-login-input-float {width: 100%;}
   .email-sign-up-prompt {margin-top: 0px;}
-  input#email {width: 100%;}
 }
 
 @media only screen and (max-width: 650px) {
