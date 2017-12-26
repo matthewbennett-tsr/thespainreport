@@ -3,29 +3,30 @@
 <div class="content-wrapper">
 <div class="content-left-main">
 <div class="content-left-new">
-<div class="content-left-top">
-<div style="">
-<div class="index-story">
-<% @lasttopstory.each do |article| %>
-<% if article.main? %>
-        <div style="width:100%; margin-bottom: 3px;">
-          <%= link_to(article) do %>
-          <%= image_tag article.main.url if article.main? %>
-          <% end %>
-        </div>
-      <% elsif article.video? %>
-          <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
-          </div>
-    <% else %>
-<% end %>
-<div style="margin-top: 5px;">
-<h1 class="headline"><%= link_to article.headline, article %></h1>
-<div class="index-story-text">
-  <strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).
-</div>
 
-<% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+<div class="index-story">
+  <% @lasttopstory.each do |article| %>
+    
+    <% if article.main? %>
+      <div class="index-image">
+        <%= link_to(article) do %>
+          <%= image_tag article.main.url if article.main? %>
+        <% end %>
+      </div>
+    <% elsif article.video? %>
+      <div class="index-video">
+        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+      </div>
+    <% else %>
+    <% end %>
+
+    <h1 class="headline"><%= link_to article.headline, article %></h1>
+    
+    <div class="index-story-text">
+      <strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).
+    </div>
+    
+    <% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
       <div class="index-story-updates">
         <ul>
           <% article.newsitems.each do |newsitem| %>
@@ -36,51 +37,46 @@
         </ul>
       </div>
     <% end %>
-  
-<div class="index-story-meta">
-  <span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span>
-  
-  <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
-    <span class="breaking-label-mini">MAJOR BREAKING</span>
-  <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
-    <span class="breaking-label-mini">BREAKING</span>
-  <% elsif article.urgency == 'latest' && article.created_at >= 2.hours.ago %>
-    <span class="latest-label-mini">LATEST</span>
-  <% else %>
-  <% end %>
-
-  <% if article.type.name == "LIVE BLOG" %>
-    <span class="breaking-label-mini">LIVE BLOG</span>  
-  <% elsif article.type.name == 'EDITORIAL' %>
-    <span class="editorial-label-mini">EDITORIAL</span>
-  <% elsif article.type.name == 'ANALYSIS' %>
-    <span class="editorial-label-mini">ANALYSIS</span>
-  <% elsif article.type.name == 'DAILY BRIEFING' %>
-    <span class="latest-label-mini">DAILY BRIEFING</span>
-  <% elsif !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
-    <span class="indepth-label-mini">IN-DEPTH</span>
-  <% end %>
-</div>
+    
+    <div class="index-story-meta">
+      <span class="feed-item-date"><%= article.created_at.strftime("%A, %B %-d, %Y at %l:%M %p") %></span>
+      
+      <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
+        <span class="breaking-label-mini">MAJOR BREAKING</span>
+      <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
+        <span class="breaking-label-mini">BREAKING</span>
+      <% elsif article.urgency == 'latest' && article.created_at >= 2.hours.ago %>
+        <span class="latest-label-mini">LATEST</span>
+      <% else %>
+      <% end %>
+      
+      <% if article.type.name == "LIVE BLOG" %>
+        <span class="breaking-label-mini">LIVE BLOG</span>  
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="editorial-label-mini">EDITORIAL</span>
+      <% elsif article.type.name == 'ANALYSIS' %>
+        <span class="editorial-label-mini">ANALYSIS</span>
+      <% elsif article.type.name == 'DAILY BRIEFING' %>
+        <span class="latest-label-mini">DAILY BRIEFING</span>
+      <% elsif !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
+        <span class="indepth-label-mini">IN-DEPTH</span>
+      <% end %>
+    </div>
   
 <% end %>
-
-
-</div>
-</div>
-</div>
-
-
 </div>
 
 <% @lasttwenty.each do |article| %>
   <div class="index-story" style="margin-bottom: 10px;">
     
     <% if article.main? %>
-      <div style="width:100%; margin-bottom: 3px;">
-        <%= image_tag article.main.url if article.main? %>
+      <div class="index-image">
+        <%= link_to(article) do %>
+          <%= image_tag article.main.url if article.main? %>
+        <% end %>
       </div>
     <% elsif article.video? %>
-      <div class="video-wrapper">
+      <div class="index-video">
         <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
       </div>
     <% else %>
@@ -105,7 +101,7 @@
     <% end %>
     
     <div class="index-story-meta">
-      <span class="feed-item-date"> <%= article.created_at.strftime("%A") %></span>
+      <span class="feed-item-date"><%= article.created_at.strftime("%A, %B %-d, %Y at %l:%M %p") %></span>
       
       <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
         <span class="breaking-label-mini">MAJOR BREAKING</span>
@@ -129,7 +125,7 @@
       <% end %>
     </div>  
         
-    </div>
+    </div> 
 <% end %>
 
 </div>
