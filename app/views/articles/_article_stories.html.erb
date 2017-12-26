@@ -1,0 +1,28 @@
+  <% if @article.stories.present? && current_user %>
+    <h2>My Story Notifications</h2>
+    <%= form_for current_user, :html => {:multipart => true} do |f| %>
+      <% @article.stories.each do |s| %>
+        <div class="notifications-admin">
+          <div class="notifications-admin-left"><%= link_to s.story, s %></div>
+          <div class="notifications-admin-right">
+            <% s.notifications.where(user_id: current_user).first_or_create(notificationtype_id: 4) %>
+            <% s.notifications.where(user_id: current_user).each do %>
+              <%= f.fields_for :notifications, current_user.notifications.where(:story_id => s.id) do |n| %>
+                <%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %>
+              <% end %> 
+            <% end %>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
+      <div class="admin-submit-button">
+        <button type="submit" class="blueformbutton">Save Changes</button>
+      </div>
+    <% end %>
+  <% else %>
+  <h2>My Story Notifications</h2>
+  <p>Please log in or sign up to change your notification preferences for these stories.</p>
+  <% @article.stories.each do |s| %>
+  <p><%= link_to s.story, s %></p>
+  <% end %>
+  <% end %>

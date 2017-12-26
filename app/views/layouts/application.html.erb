@@ -35,11 +35,15 @@
 <% end %>
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
   <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Eczar:400,600,700", media: "all" %>
   <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Oswald:400,700", media: "all" %>
   <!--[if IE]>
-  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Oswald", media: "all" %>
+  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Oswald:400", media: "all" %>
   <%= stylesheet_link_tag "http://fonts.googleapis.com/css?family=Oswald:700", media: "all" %>
+  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Eczar:400", media: "all" %>
+  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Eczar:600", media: "all" %>
+  <%= stylesheet_link_tag "https://fonts.googleapis.com/css?family=Eczar:700", media: "all" %>
   <![endif]-->
   
   <%= yield(:meta) %>
@@ -189,7 +193,7 @@
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">LATEST NEWS</span></span></p>
       <% end %>
     </div>
   <% end %>
@@ -199,7 +203,7 @@
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">MORNING LEAD</span></span></p>
       <% end %>
     </div>
   <% end %>
@@ -209,7 +213,7 @@
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">EDITORIAL</span></span></p>
       <% end %>
     </div>
   <% end %>
@@ -219,7 +223,7 @@
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="latest-label-mini">DEEP SPAIN</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">DEEP SPAIN</span></span></p>
       <% end %>
     </div>
   <% end %>

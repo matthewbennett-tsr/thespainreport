@@ -54,6 +54,8 @@
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
 <% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
   <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">BREAKING NEWS</span></span></div>
+<% elsif @article.urgency == 'latest' && @article.updated_at >= 2.hours.ago %>
+  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></div>
 <% elsif @article.urgency == 'morning' && @article.type.try(:name) == 'NEWS' %>
   <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></div>
 <% elsif @article.urgency == 'evening' && @article.type.try(:name) == 'RECAP' %>
@@ -132,16 +134,16 @@
   
   <%= markdown(@article.body) %>
   
+  <h2>Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
+  
   <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-    <ul style="margin-top: 3px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
-    <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
+    <ul style="margin-top: 3px; margin-bottom: 25px; margin-left: 30px; margin-right: 0;">
+      <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
         <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
-    <% end %>
+      <% end %>
     </ul>
   <% else %>
   <% end %>
-  
-  <h2>Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
   
     <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
       <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
@@ -181,27 +183,7 @@
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
   
-  <% if @article.stories.present? %>
-    <h2>Follow These Stories</h2>
-    <% @article.stories.group_by(&:parent).each do |parent, children| %>
-      <ul class="follow-stories">
-        <li>
-          <label>
-            <%= link_to parent.story, parent unless parent.nil? %>
-          </label>
-        </li>
-        <ul class="follow-stories-children">
-          <% for s in children %>
-            <li>
-              <label>
-                <%= link_to s.story, s %>
-              </label>
-            </li>
-          <% end %>
-        </ul>
-      </ul>
-    <% end %>
-  <% end %>
+  <%= render 'article_stories', article: @article %>
   
   <% if current_user.nil? %>
    <div class="meta" style="padding: 10px;">
@@ -221,28 +203,6 @@
 <% end %>
 </div>
 </div>
-  
-<% content_for :right_side_bar do %>
-    <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
-    <p class="toplinks">
-     <a href="/subscriptions/new" title="Subscribe Now">Subscribe</a> | 
-     <a href="/articles/blog/" title="Subscribe Now">Blog</a> | 
-     <a href="/about/" title="Subscribe Now">About</a> | 
-     <a href="/contact/" title="Subscribe Now">Contact</a>
-     </p>
-    
-    <h3>Latest</h3>
-    <ul>
-    <% @last6articles.reject {|a| a == @article}.each do |article| %> 
-          <li>
-          <%= article.created_at.strftime("%d/%m, %H:%M") %>: 
-          <%= link_to article.short_headline, article %>
-          </li>
-    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
-    </ul>
-
-  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
-  <% end %>
   
   <div class="clear"></div>
 
@@ -333,35 +293,8 @@
   <div class="meta">
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
-
-  <% if @article.stories.present? && current_user %>
-    <h2>My Story Notifications</h2>
-    <%= form_for current_user, :html => {:multipart => true} do |f| %>
-      <% @article.stories.each do |s| %>
-        <div class="notifications-admin">
-          <div class="notifications-admin-left"><%= link_to s.story, s %></div>
-          <div class="notifications-admin-right">
-            <% s.notifications.where(user_id: current_user).first_or_create(notificationtype_id: 4) %>
-            <% s.notifications.where(user_id: current_user).each do %>
-              <%= f.fields_for :notifications, current_user.notifications.where(:story_id => s.id) do |n| %>
-                <%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %>
-              <% end %> 
-            <% end %>
-          </div>
-          <div class="clear"></div>
-        </div>
-      <% end %>
-      <div class="admin-submit-button">
-        <button type="submit" class="blueformbutton">Save Changes</button>
-      </div>
-    <% end %>
-  <% elsif %>
-  <h2>My Story Notifications</h2>
-  <p>Please log in or sign up to change your notification preferences for these stories.</p>
-  <% @article.stories.each do |s| %>
-  <p><%= link_to s.story, s %></p>
-  <% end %>
-  <% end %>
+  
+  <%= render 'article_stories', article: @article %>
   
   <% if current_user.nil? %>
    <div class="meta" style="padding: 10px;">
@@ -429,63 +362,9 @@
 </div>
 <% end %> <%# END NO COMMENTS %>
 </div> <%# END OF LEFT-HAND CONTENT BLOCK %>
-  
-  <% content_for :right_side_bar do %>
-    <div class="side-block"> <%# START OF RIGHT-HAND CONTENT BLOCK %>
-    <p class="toplinks">
-     <a href="/subscriptions/new" title="Subscribe Now">Subscribe</a> | 
-     <a href="/articles/blog/" title="Subscribe Now">Blog</a> | 
-     <a href="/about/" title="Subscribe Now">About</a> | 
-     <a href="/contact/" title="Subscribe Now">Contact</a> | 
-     <a href="/password_resets/new">New password?</a>
-     </p>
-    
-    <h3>Latest</h3>
-    <ul>
-    <% @last6articles.reject {|a| a == @article}.each do |article| %> 
-          <li>
-          <%= article.created_at.strftime("%d/%m, %H:%M") %>: 
-          <%= link_to article.short_headline, article %>
-          </li>
-    <% end %> <%# END OF GENERIC UPDATES IF NO STORY UPDATES %>
-    </ul>
-    
-    <% if false %> <%# NO COMMENTS BOX %>
-    <h3 style="margin-top: 20px;">Comments & Chat</h3>
-    <% if current_user %>
-      <p>What do you think, <strong><%= current_user.name %></strong>?</p>
-      <%= form_for [@article, Comment.new] do |f| %>
-      <div style="margin-top: 10px; padding-bottom: 10px;">
-      <div style="width: 100%;">
-      <%= f.text_area :comment, :style => "width:100%; min-height: 280px;", :maxlength => 1000, :class => "inputtextarea" %>
-      <br />
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-      </div>
-      <div class="clear"></div>
-      </div>
-      <% end %>
-    <% else %>
-      <p>Please log in—or join if it's your first visit—to comment or chat.</p>
-      <div style="margin-top: 10px; padding-bottom: 10px;">
-      <div style="width: 100%;">
-      <%= text_area_tag 'body', nil, style: "width:100%; min-height: 280px;", maxlength: 1000, class: "inputtextarea" %>
-      <br />
-      <% if current_user %>
-      <button type="submit" class="blueformbutton" style="float: right;">Add Your Comment</button>
-      <% else %>
-      <button type="submit" class="blueformbutton" style="float: right;" disabled>Add Your Comment</button>
-      <% end %>
-      </div>
-      <div class="clear"></div>
-      </div>
-    <% end %>
-    <% end %> <%# END NO COMMENTS BOX %>
 
-  </div> <%# END OF RIGHT-HAND CONTENT BLOCK %>
-  <% end %>
   
-  <div class="clear"></div>
-
+<div class="clear"></div>
 
 
 <% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>
