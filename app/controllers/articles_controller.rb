@@ -326,7 +326,7 @@ class ArticlesController < ApplicationController
         elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           twitter
           story_last_active
-          emailsummaries
+          emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.save && ["published", "updated"].include?(@article.status)
@@ -360,7 +360,7 @@ class ArticlesController < ApplicationController
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
           twitter
           story_last_active
-          emailsummaries
+          emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully udpated.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)

@@ -122,12 +122,13 @@
   <% else %>
   <% end %>
   
-  <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
   <div class="article-text">
-  
+
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
     (Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts to get updates pushed to your device as soon as we publish them.)
   </p>
+  
+  <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
   
   <%= markdown(@article.body) %>
   
@@ -140,7 +141,7 @@
   <% else %>
   <% end %>
   
-  <h2 style="margin-top:15px;">Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
+  <h2>Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
   
     <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
       <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
