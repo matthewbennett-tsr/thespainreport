@@ -1,5 +1,5 @@
+<h2>My Story Notifications</h2>
   <% if @article.stories.present? && current_user %>
-    <h2>My Story Notifications</h2>
     <%= form_for current_user, :html => {:multipart => true} do |f| %>
       <% @article.stories.each do |s| %>
         <div class="notifications-admin">
@@ -20,9 +20,33 @@
       </div>
     <% end %>
   <% else %>
-  <h2>My Story Notifications</h2>
-  <p>Please log in or sign up to change your notification preferences for these stories.</p>
-  <% @article.stories.each do |s| %>
-  <p><%= link_to s.story, s %></p>
+    <p class="user-paragraph">
+      Please log in or join The Spain Report to change your notifications for these stories.
+    </p>
+      <% @article.stories.each do |s| %>
+        <div class="notifications-admin">
+          <div class="notifications-admin-left"><%= link_to s.story, s %></div>
+          <div class="notifications-admin-right">
+            <input type="radio" name="<%= s.id %>" value="" checked="checked"> <label>E-Mail Alerts</label>
+            <input type="radio" name="<%= s.id %>" value=""> <label>My Spain Briefings</label>
+            <input type="radio" name="<%= s.id %>" value=""> <label>Website Only</label>
+            <input type="radio" name="<%= s.id %>" value=""> <label>Not Interested</label>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
   <% end %>
+  
+
+  <% if current_user.nil? && @article.type.try(:name) == "LIVE BLOG" %>
+    <div style="margin: 20px 0;">
+      <%= render 'quick_login_two' %>
+    </div>
+  <% else %>
   <% end %>
+  
+  
+  <h3>Thank You For Reading</h3>
+  <p class="user-paragraph">
+     Your subscription keeps us 100% independent.
+  </p>

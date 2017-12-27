@@ -1,0 +1,51 @@
+<% if current_user.nil? %>
+
+  <div class="email-sign-up">
+    
+    <div class="email-sign-up-text-two">
+    <h3>…or join The Spain Report now for free</h3>
+    <div class="email-sign-up-image" style="margin-top: 5px; margin-left: 5px;">
+      <%= image_tag "tsr-multiple-300.jpg" %>
+    </div>
+    <p style="font-family: Georgia; font-size: 17px; margin-top: 20px; margin-bottom: 7px; line-height: 150%;">
+      <%= render 'emailsignup_text' %>
+    </p>
+    
+    <div class="email-sign-up-form">
+    <%= form_tag '/new_spain_report_reader', :class => '', :id => 'payment-form' do |f| %>
+      <div class="email-sign-up-prompt">
+        <span style="font-family: Oswald; font-size: 15px;">Enter Your E-mail:</span>
+      </div>
+      <div class="email-input-float">
+        <input type="email" size="40" name="email" id="email" class="inputgeneral"/>
+      </div>
+      <div class="email-input-float email-button">
+        <button type="submit" class="blueformbutton">Join Now</button>
+      </div>
+      <div class="clear"></div>
+      
+      <% if controller_name == 'articles' && action_name == 'show' %>
+        <%= hidden_field_tag 'article_ids[]', @article.id %>
+        <% @article.stories.each do |s| %>
+          <%= hidden_field_tag 'story_ids[]', s.id %>
+        <% end %>
+      <% end %> 
+        
+    <% end %>
+    </div>
+    
+    <div style="margin-bottom: 3px;">
+      <% if flash.present? %>
+        <% flash.each do |name, msg| %>
+          <%= content_tag :div, id: "flash_#{name}_div" do -%>
+            <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+          <% end -%>
+        <% end %>
+      <% end %>
+    </div>
+    
+    </div>
+    <div class="clear"></div>
+
+  </div>
+<% end %>
