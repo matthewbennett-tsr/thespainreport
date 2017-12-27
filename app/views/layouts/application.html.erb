@@ -87,9 +87,9 @@
 <% if current_user.nil? %>
       <div class="user-bar-login-form">
         <%= form_tag '/login' do %>
-        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Enter your e-mail...' %></div>
-        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Enter your password...' %></div>
-        <div class="top-login-input-float"><button type="submit" class="blueformbutton">Log In</button></div>
+        <div class="top-login-input-float"><%= text_field_tag 'email', nil, class: 'input200', placeholder: 'Your e-mail...' %></div>
+        <div class="top-login-input-float"><%= password_field_tag 'password', nil, class: 'input170', placeholder: 'Your password...' %></div>
+        <div class="top-login-input-float-submit"><button type="submit" class="blueformbutton">Log In</button></div>
         <div class="clear"></div>
         <% end %>
       </div>
@@ -106,7 +106,13 @@
       <div class="clear"></div>
     <% elsif current_user %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
+        <div class="web-width">
+          <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
+        </div>
+        <div class="mobile-width">
+          <div class="user-float-left"><%= link_to "Edit MyTSR", edit_user_path(current_user) %></div>
+          <div class="user-float-left"><%= link_to "Log Out", '/logout' %></div>
+        </div>
       </div>
       <div class="clear"></div>
     <% else %>

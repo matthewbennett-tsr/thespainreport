@@ -312,6 +312,7 @@ h1 .editorial-label {background-color: #34845B; color: #ffffff; padding: 5px 7px
 .happy-subscribers p {margin-bottom: 20px; border-left: 5px solid #B1A87D; padding-left: 10px; font-family: Georgia; font-style:italic; line-height: 140%; }
 
 .top-login-input-float {float:left; margin-right: 4px;}
+.top-login-input-float-submit {float: left;}
 
 .login-article-form {margin-top: 5px; margin-bottom: 5px; padding: 10px; background-color: #E3EDED; border: 1px solid #999999;}
 .inputgeneral {font-size: 13px; padding: 5px; background-color: #FEF9E6;}
@@ -463,6 +464,8 @@ video { width: 100% !important; height: auto !important;}
 .main-caption {margin-top: 5px; margin-bottom: 7px; font-size: 11px; font-style:italic; text-align: left; line-height: 1;}
 .liveblog-caption {margin-top: 5px; margin-bottom: 7px; font-size: 12px; font-style:italic; text-align: left; line-height: 1;}
 
+.mobile-width {display: none;}
+
 /* # Media Queries
 ---------------------------------------------------------------------------------------------------- */
 
@@ -471,10 +474,15 @@ video { width: 100% !important; height: auto !important;}
   .wrap {width:100%;}
   .left-hand-bar {display:none;}
   .content-left-new {width:100%;}
-  .user-bar-right-links {display:none;}
-  .top-login-input-float {width: 32%; margin-right: 5px;}
-  .input200 {width: 100%;}
-  .input170 {width: 100%;}
+  .content-left-new-page {width:100%;}
+  .notifications-admin {width:100%;}
+  
+  .user-bar-right-links {position: relative; width: 100%; padding: 0px 10px 7px 10px; margin-top: 0px !important; margin-right: 0px; background-color: #F1BF00;}
+  .user-bar-right-links a, .user-bar-right-links a:visited {color: #AA151B;}
+  .user-bar-right-links a:hover {color: #ffe680; background-color: #F1BF00;}
+  .web-width {display: none;}
+  .mobile-width {display: inline;}
+  .user-bar-login-form {padding-top: 5px;}
 }
 
 @media only screen and (max-width: 780px) {
@@ -483,10 +491,18 @@ video { width: 100% !important; height: auto !important;}
   .main-image-liveblog-update-video {width: 100%; margin-left: 0px; margin-bottom: 15px; }
 }
 
-@media only screen and (max-width: 740px) {
+@media only screen and (max-width: 750px) {
+  
 }
 
-@media only screen and (max-width: 735px) {
+@media only screen and (max-width: 700px) {
+  .notifications-admin-left {width:100%;}
+  .notifications-admin-right {width:100%;}
+  .notifications-admin-right input {float: left;}
+  .notifications-admin-right label {float: left;}
+  .top-login-input-float {width: 32%; margin-right: 5px;}
+  .input200 {width: 100%;}
+  .input170 {width: 100%;}
 }
 
 @media only screen and (max-width: 680px) {
@@ -504,11 +520,11 @@ video { width: 100% !important; height: auto !important;}
 }
 
 @media only screen and (max-width: 650px) {
-
+  
 }
 
 @media only screen and (max-width: 610px) {
- 
+  .email-input-float {width: 95%;}
 }
 
 @media only screen and (max-width: 580px) {
@@ -521,7 +537,11 @@ video { width: 100% !important; height: auto !important;}
 
 }
 
-@media only screen and (max-width: 385px) {
+@media only screen and (max-width: 450px) {
+  .notifications-admin-right input {float: left; width: 5%;}
+  .notifications-admin-right label {float: left; width: 90%;}
+  .top-login-input-float {float: left; width: 36%; margin-right: 1px;}
+  .top-login-input-float-submit {float: left; width: 18%; margin-right: 1px;}
 }
 
 @media only screen and (max-width: 370px) {
@@ -532,7 +552,6 @@ video { width: 100% !important; height: auto !important;}
 
 
 @media only screen and (max-width: 320px) {
-  h1.modal-title {padding: 0px; font-size: 14px;}
 }
 
 @media only screen and (max-width: 315px) {
