@@ -30,74 +30,68 @@
 <%= render 'tickerstories' %>
 
 <div class="content-left-new"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
-<div class="content-white-background">
 
 <h1 class="headline">
-<% if current_user.nil? || current_user.role != 'editor' %>
-  <% if @article.type.try(:name) == "LIVE BLOG" %>
-    LIVE BLOG: 
-  <% else %>
-  <% end %>
-  <%= @article.headline %>
-<% elsif current_user.role == 'editor' %>
-  <% if @article.type.try(:name) == "LIVE BLOG" %>
-    LIVE BLOG: 
-  <% else %>
-  <% end %>
-  <%= link_to @article.headline, edit_article_path(@article) %>
-<% else %>
-<% end %>
+    <% if @article.type.try(:name) == "LIVE BLOG" %>
+      LIVE BLOG: 
+    <% else %>
+    <% end %>
+    
+    <% if current_user.nil? || current_user.role != 'editor' %>
+      <%= @article.headline %>
+    <% elsif current_user.role == 'editor' %>
+      <%= link_to @article.headline, edit_article_path(@article) %>
+    <% else %>
+    <% end %>
 </h1>
 
 <div class="news-alert-wrap">
-<% if @article.urgency == 'majorbreaking' && @article.updated_at >= 2.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">BREAKING NEWS</span></span></div>
-<% elsif @article.urgency == 'latest' && @article.updated_at >= 2.hours.ago %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">LATEST NEWS</span></span></div>
-<% elsif @article.urgency == 'morning' && @article.type.try(:name) == 'NEWS' %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">MORNING LEAD</span></span></div>
-<% elsif @article.urgency == 'evening' && @article.type.try(:name) == 'RECAP' %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="latest-label-mini">EVENING RECAP</span></span></div>
-<% else %>
-<% end %>
+  <% if @article.urgency == 'majorbreaking' && @article.updated_at >= 2.hours.ago %>
+    <div class="news-alert"><span class="breaking-label-mini">MAJOR BREAKING NEWS</span></div>
+  <% elsif @article.urgency == 'breaking' && @article.updated_at >= 2.hours.ago %>
+    <div class="news-alert"><span class="breaking-label-mini">BREAKING NEWS</span></div>
+  <% elsif @article.urgency == 'latest' && @article.updated_at >= 2.hours.ago %>
+    <div class="news-alert"><span class="latest-label-mini">LATEST NEWS</span></div>
+  <% elsif @article.urgency == 'morning' && @article.type.try(:name) == 'NEWS' %>
+    <div class="news-alert"><span class="black-label-mini">MORNING LEAD</span></div>
+  <% elsif @article.urgency == 'evening' && @article.type.try(:name) == 'RECAP' %>
+    <div class="news-alert"><span class="black-label-mini">EVENING RECAP</span></div>
+  <% else %>
+  <% end %>
 
-<% if @article.type.try(:name) == 'EDITORIAL' %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span></span></div>
-<% end %>
+  <% if @article.type.try(:name) == 'EDITORIAL' %>
+    <div class="news-alert"><span class="black-label-mini">EDITORIAL</span></div>
+  <% elsif @article.type.try(:name) == "LIVE BLOG" %>
+    <div class="news-alert"><span class="breaking-label-mini">LIVE BLOG</span></div>
+  <% elsif !["NEWS", "RECAP", "EDITORIAL", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
+    <div class="news-alert"><span class="black-label-mini"><%= @article.type.try(:name) %></span></div>
+  <% else %>
+  <% end %>
 
-<% if @article.type.try(:name) == "LIVE BLOG" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="breaking-label-mini">LIVE BLOG</span></span></div>
-<% end %>
+  <% if @articleupdates.present? %>
+    <div class="news-alert"><span class="black-label-mini">UPDATES ADDED</span></div>
+  <% else %>
+  <% end %>
+  
+  <% if @article.status == "updated" %>
+    <div class="news-alert"><span class="black-label-mini">ORIGINAL UPDATED</span></div>
+  <% end %>
 
-<% if !["NEWS", "RECAP", "EDITORIAL", "BLOG", "LIVE BLOG"].include?(@article.type.try(:name)) %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="indepth-label-mini"><%= @article.type.try(:name) %></span></span></div>
-<% end %>
-
-<% if @articleupdates.present? %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">UPDATES ADDED</span></span></div>
-<% end %>
-
-<% if @article.status == "updated" %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">ORIGINAL UPDATED</span></span></div>
-<% end %>
-
-<% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
-  <div class="news-alert"><span class="listing-update-slug"><span class="updated-label-mini">FREE TO READ</span></span></div>
-<% end %>
-
+  <% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
+    <div class="news-alert"><span class="black-label-mini">FREE TO READ</span></div>
+  <% else %>
+  <% end %>
 <div class="clear"></div>
 </div>
 
-<div class="article-lede"><strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %>
+<div class="article-lede">
+  <strong><%= @article.created_at.strftime("%b %d %Y") %>—<%= @article.type.try(:name) %></strong>—<%= @article.lede %>
   <% if ["IMAGES", "LIVE BLOG", "DAILY BRIEFING"].include?(@article.type.try(:name)) %>
-  
   <% elsif @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 5px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
-    <% @article.newsitems.each do |newsitem| %>
+      <% @article.newsitems.each do |newsitem| %>
         <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
-    <% end %>
+      <% end %>
     </ul>
   <% else %>
   <% end %>
@@ -179,7 +173,7 @@
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
     
-      <div class="meta">
+<div class="meta">
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
   
@@ -187,11 +181,8 @@
   
     </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
     </div> <%# END OF LIVE-BLOG ARTICLE TEXT & ENTRIES %>
-
-  
-</div>
-  
-  <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
 
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
   
@@ -263,8 +254,8 @@
         <% end %> <%# END: subscriber ONE/ALL %>
       <% end %> <%# END: logged-in/NOT %>
     <% end %> <%# END: free/NOT %>
-
-<%# PAYWALL LOGIC ENDS %>
+    
+    <%# PAYWALL LOGIC ENDS %>
 </div> <%# END OF ARTICLE TEXT %>
   
   <div class="meta">
@@ -273,68 +264,8 @@
   
   <%= render 'article_stories', article: @article %>
 
+  </div>
   </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
-  
-  <div class="content-white-background">
-  <% if current_user.nil? && !paywall %>
-  <%= render 'emailsignup' %>
-<% else %>
-<% end %>
-
-<% if false %> <%# NO COMMENTS %>
-<div class="comments-wrap">
-<% if @comments.present? %>
-<h2>Reader Comments</h2>
-<% end %>
-
-<div style="margin-top: 20px;">
-<% @comments.each do |comment| %>
-<div style="margin-top: 10px; padding-bottom: 10px; border-bottom: 1px dotted #999999;">
-    <div style="width: 100%;">
-      <strong> 
-        <% if comment.user.blank? %> 
-        
-        <% elsif comment.user == current_user && comment.user.name.nil? %>
-          <%= link_to 'Set your display name here', edit_user_path(current_user) %> 
-        <% elsif comment.user.name.nil? %>
-          Anonymous
-        <% else %>
-          <%= comment.user.name %>
-        <% end %>
-      </strong>
-       |
-        <% if comment.user.blank? %>
-          Former Reader
-        <% else %>
-          <% if comment.user.role == 'editor' %>
-            <span class="editor-label-mini">Editor
-          <% elsif comment.user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">Subscriber
-          <% elsif comment.user.role == 'reader' %>
-            <span class="reader-label-mini">New Reader
-          <% else %>
-            <span>
-          <% end %>
-          </span>
-        <% end %>
-       &nbsp;| <%= comment.updated_at.strftime("%b %d %Y, %H:%M") %>
-    </div>
-    <div style="width: 100%; font-size: 14px; padding: 10px 0px 10px 10px; line-height: 140%;">
-      <%= comment.comment %>
-    </div>
-    <div class="clear"></div>
-</div>
-<% end %>
-<a name="commentcheck"></a>
-</div>
-
-</div>
-</div>
-<% end %> <%# END NO COMMENTS %>
-</div> <%# END OF LEFT-HAND CONTENT BLOCK %>
-
-  
-<div class="clear"></div>
-
+  <div class="clear"></div>
 
 <% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>
