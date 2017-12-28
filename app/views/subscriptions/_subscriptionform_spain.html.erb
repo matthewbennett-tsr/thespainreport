@@ -11,7 +11,8 @@
     <% end %>
     
     <div class="subscription-form-section-top">
-      <% if current_user.role == 'subscriber_one_story' %>
+      <% if current_user.nil? %>
+      <% elsif current_user.role == 'subscriber_one_story' %>
         Upgrade your subscription here.
       <% elsif current_user.role == 'subscriber_all_stories' %>
         Downgrade your subscription here.
