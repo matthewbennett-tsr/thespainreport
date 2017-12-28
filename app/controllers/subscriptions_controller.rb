@@ -8,7 +8,7 @@ class SubscriptionsController < ApplicationController
   before_action :set_subscription, only: [:show, :edit, :update, :destroy]
   
   def country
-     if ip_country_code = "ES"
+     if ip_country_code == "ES"
           {:api_key => Rails.configuration.stripe[:secret_spain_key]}
      else
           {:api_key => Rails.configuration.stripe[:secret_key]}
