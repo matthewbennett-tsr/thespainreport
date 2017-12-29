@@ -10,8 +10,9 @@ class User < ActiveRecord::Base
   validates :password_confirmation, :presence => true, :on => :update, allow_blank: true
   
   before_update :check_one_story_date
-
-  ROLES = %i[subscriber_all_stories subscriber_one_story subscriber reader guest editor staff]
+  before_save :check_update_token
+  
+  ROLES = %i[subscriber_all_stories subscriber_one_story subscriber reader guest deleted_reader deleted editor staff]
   
   def self.search(search)
     where("email @@ ?", search)
@@ -21,13 +22,16 @@ class User < ActiveRecord::Base
   scope :onestorysubscribers, -> {where(role: 'subscriber_one_story')}
   scope :allstorysubscribers, -> {where(role: 'subscriber_all_stories')}
   scope :straysubscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories']).where('stripe_customer_id is null')}
+  scope :totalreaders, -> {where(role: ['reader', 'guest'])}
   scope :readers, -> {where(role: 'reader')}
   scope :guests, -> {where(role: 'guest')}
   scope :editors, -> {where(role: 'editor')}
+  scope :deleted, -> {where(role: 'deleted')}
+  scope :notdeleted, -> {where.not(role: 'deleted')}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
-  scope :lastfew, -> {order('created_at DESC').limit(50)}
+  scope :lastfew, -> {order('created_at DESC').limit(25)}
   scope :oneday, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 24.hours.ago)}
   scope :twodays, -> {where('created_at <= ? and created_at >= ?', 24.hours.ago, 48.hours.ago)}
   scope :threedays, -> {where('created_at <= ? and created_at >= ?', 48.hours.ago, 72.hours.ago)}
@@ -112,6 +116,12 @@ class User < ActiveRecord::Base
     UserMailer.delay.password_reset(self)
   end
   
+  def check_update_token
+    if self.update_token.blank?
+      self.update_token = SecureRandom.urlsafe_base64.to_s
+    end
+  end
+  
   private
   def check_one_story_date
     if self.one_story_id_changed?
@@ -119,5 +129,7 @@ class User < ActiveRecord::Base
     else
     end
   end
+  
+  
   
 end

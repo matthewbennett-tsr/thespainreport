@@ -5,12 +5,11 @@
 <h1>All Members</h1>
 
 <div class="article-lede">
-- <%= @totalsubscribers %> total subscribers <br />
-- <%= @onestorysubscribers %> single-story subscribers <br />
-- <%= @allstorysubscribers %> all-story subscribers <br />
+- <%= @subscribercount %> total subscribers: <%= @onestorysubscribers %> single-story and <%= @allstorysubscribers %> all-story<br />
 - <%= @straysubscribercount %> non subscribers <br />
 - <%= @readercount %> readers <br />
-- <%= @guestcount %> guests
+- <%= @guestcount %> guests <br />
+- <%= @deletedcount %> deleted <br />
 </div>
 
   <%= form_tag(users_path, :method => "get", id: "search-form") do %>
@@ -23,118 +22,8 @@
     <div class="clear"></div>
   <% end %>
 
-<% unless params[:search] %>
-<h3>Latest Subscribers</h3>
-
-<table class="admin-table">
-  <thead>
-    <tr style="font-weight: bold;">
-      <td></td>
-      <td>Joined</td>
-      <td>Role</td>
-      <td>E-mail</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td></td>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @latestsubscribers.each do |user| %>
-      <tr>
-        <td><%= link_to 'E', edit_user_path(user) %></td>
-        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
-        <td>
-        <% if user.role == 'editor' %>
-            <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
-          <% else %>
-            <span>
-          <% end %>
-        <%= user.role.to_s.humanize %></span>
-        </td>
-        <td><%= mail_to user.email %></td>
-        <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
-          <% end %>
-        </td>
-        <td><%= user.email_confirmed %></td>
-        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<h3>Latest Readers</h3>
-
-<table class="admin-table">
-  <thead>
-    <tr style="font-weight: bold;">
-      <td></td>
-      <td>Joined</td>
-      <td>Role</td>
-      <td>E-mail</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td>URL</td>
-      <td></td>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @latestusers.each do |user| %>
-      <tr>
-        <td><%= link_to 'E', edit_user_path(user) %></td>
-        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
-        <td>
-        <% if user.role == 'editor' %>
-            <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
-          <% else %>
-            <span>
-          <% end %>
-        <%= user.role.to_s.humanize %></span>
-        </td>
-        <td><%= mail_to user.email %></td>
-        <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
-          <% end %>
-        </td>
-        <td><%= user.email_confirmed %></td>
-        <td><%= user.try(:sign_up_url) %></td>
-        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<% end %>
-
-<h3>All Members</h3>
+<% if params[:search] %>
+  <h3>Members including "<%= params[:search] %>"</h3>
 
 <table class="admin-table">
   <thead>
@@ -186,6 +75,172 @@
     <% end %>
   </tbody>
 </table>
+
+<% else %>
+
+<h3>Subscribers</h3>
+
+<table class="admin-table">
+  <thead>
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>Joined</td>
+      <td>Role</td>
+      <td>E-mail</td>
+      <td>E-mails</td>
+      <td>Conf?</td>
+      <td></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @subscribers.each do |user| %>
+      <tr>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
+        <td>
+        <% if user.role == 'editor' %>
+            <span class="editor-label-mini">
+          <% elsif user.role == 'subscriber' %>
+            <span class="subscriber-label-mini">
+          <% elsif user.role == 'reader' %>
+            <span class="reader-label-mini">
+          <% else %>
+            <span>
+          <% end %>
+        <%= user.role.to_s.humanize %></span>
+        </td>
+        <td><%= mail_to user.email %></td>
+        <td>
+          <% if user.emailpref == 'articlesupdates' %>
+            Everything
+          <% elsif user.emailpref == 'justarticles' %>
+            Just Articles
+          <% elsif user.emailpref == 'justsummariesbreaking' %>
+            Summaries
+          <% elsif user.emailpref == 'nothing' %>
+            No E-mail
+          <% else %>
+            Not Set
+          <% end %>
+        </td>
+        <td><%= user.update_token %></td>
+        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3>Readers</h3>
+
+<table class="admin-table">
+  <thead>
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>Joined</td>
+      <td>Role</td>
+      <td>E-mail</td>
+      <td>E-mails</td>
+      <td>Conf?</td>
+      <td>URL</td>
+      <td></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @readers.each do |user| %>
+      <tr>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
+        <td>
+        <% if user.role == 'editor' %>
+            <span class="editor-label-mini">
+          <% elsif user.role == 'subscriber' %>
+            <span class="subscriber-label-mini">
+          <% elsif user.role == 'reader' %>
+            <span class="reader-label-mini">
+          <% else %>
+            <span>
+          <% end %>
+        <%= user.role.to_s.humanize %></span>
+        </td>
+        <td><%= mail_to user.email %></td>
+        <td>
+          <% if user.emailpref == 'articlesupdates' %>
+            Everything
+          <% elsif user.emailpref == 'justarticles' %>
+            Just Articles
+          <% elsif user.emailpref == 'justsummariesbreaking' %>
+            Summaries
+          <% elsif user.emailpref == 'nothing' %>
+            No E-mail
+          <% else %>
+            Not Set
+          <% end %>
+        </td>
+        <td><%= user.email_confirmed %></td>
+        <td><%= user.try(:sign_up_url) %></td>
+        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h3>Deleted</h3>
+
+<table class="admin-table">
+  <thead>
+    <tr style="font-weight: bold;">
+      <td></td>
+      <td>Joined</td>
+      <td>Role</td>
+      <td>E-mail</td>
+      <td>E-mails</td>
+      <td>Conf?</td>
+      <td></td>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @deleted.each do |user| %>
+      <tr>
+        <td><%= link_to 'E', edit_user_path(user) %></td>
+        <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
+        <td>
+        <% if user.role == 'editor' %>
+            <span class="editor-label-mini">
+          <% elsif user.role == 'subscriber' %>
+            <span class="subscriber-label-mini">
+          <% elsif user.role == 'reader' %>
+            <span class="reader-label-mini">
+          <% else %>
+            <span>
+          <% end %>
+        <%= user.role.to_s.humanize %></span>
+        </td>
+        <td><%= mail_to user.email %></td>
+        <td>
+          <% if user.emailpref == 'articlesupdates' %>
+            Everything
+          <% elsif user.emailpref == 'justarticles' %>
+            Just Articles
+          <% elsif user.emailpref == 'justsummariesbreaking' %>
+            Summaries
+          <% elsif user.emailpref == 'nothing' %>
+            No E-mail
+          <% else %>
+            Not Set
+          <% end %>
+        </td>
+        <td><%= user.email_confirmed %></td>
+        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<% end %>
 
 </div>
 </div>

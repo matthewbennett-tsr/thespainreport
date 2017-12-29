@@ -1,12 +1,30 @@
+<p>--------</p>
+
 <p style="font-weight:bold;">My Account</p>
 
 <p>Thank you for reading and subscribing to The Spain Report.</p>
 
 <ul>
-  <li>To manage your account <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
+  <li>To manage your account, <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
 </ul>
 
-<p>If you ever have any problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %> straight away.</p>
+
+<% if ['reader', 'guest'].include?@user.role %>
+<p>--------</p>
+
+<p style="font-weight:bold;">Unsubscribe</p>
+
+<p>To unsubscribe from The Spain Report, click the link below. This will remove your e-mail address from our system.</p>
+
+<ul>
+  <li><%= link_to "Unsubscribe", unsubscribe_subscription_url(@user.update_token), {:style=>'color:#AA151B;'} %></li>
+</ul>
+
+<p>If you ever have any other problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %>.</p>
+<% else %>
+<% end %>
+
+<p>--------</p>
 
 <p style="font-weight:bold;">The Spain Report Ltd.</p>
 

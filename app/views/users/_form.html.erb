@@ -20,7 +20,11 @@
     <p class="user-paragraph">
     <strong>You are a</strong>
       <% if current_user.role == 'editor' %>
-        <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.titleize}, :class => "input200") %>
+        <% if @user.role == 'deleted' %>
+          <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.titleize}, {}, {:class => "input200", :disabled => true}) %>
+        <% else %>
+          <%= f.collection_select(:role, User::ROLES, :to_s, lambda{|i| i.to_s.titleize}, :class => "input200") %>
+        <% end %>
         Access date: <%= f.datetime_field :access_date, :size => '35' %>
       <% else %>
         <% if @user.role == 'editor' %>

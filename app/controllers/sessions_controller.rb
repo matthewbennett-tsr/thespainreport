@@ -15,7 +15,7 @@ class SessionsController < ApplicationController
     else
     # If user's login doesn't work, send them back to the login form.
       redirect_to :back
-      flash[:notice] = "Please try again…<a href=\"#{new_password_reset_path}\" style=\"color: #005BBF !important; text-decoration:underline !important;\">Forgotten your password?</a>"
+      flash[:password] = "<a href=\"#{new_password_reset_path}\" style=\"color: #AA151B !important; text-decoration:underline !important;\">Forgotten your password?</a>"
     end
   end
 

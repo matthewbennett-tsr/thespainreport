@@ -1,6 +1,7 @@
 <p><strong>Published on:</strong> <%= @article.created_at.strftime("%b %d, %Y, %H:%M") %></p>
 
 <% if @article.stories.present? %>
+  <p>--------</p>
   <p style="font-weight:bold;">My Story Notifications</p>
   <p>Your current settings are shown <em>in italics</em>. Just click to change it to something else for that story.</p>
   <% @article.stories.each do |s| %>
@@ -19,5 +20,6 @@
       <% end %>
     </p>
   <% end %>
+    <p>To switch off all news notifications (no alerts or briefings, for any story), <%= link_to "click this link", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>. You can switch some back on at any point by logging in to your account.</p>
 <% else %> 
 <% end %>

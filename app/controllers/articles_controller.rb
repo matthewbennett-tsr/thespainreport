@@ -178,70 +178,70 @@ class ArticlesController < ApplicationController
   end
   
   def briefing_sunday_10_am
-    User.where(briefing_frequency: [2,3,6,12]).each do |user|
+    User.notdeleted.where(briefing_frequency: [2,3,6,12]).each do |user|
       ArticleMailer.delay.send_briefing_12(user)
     end
-    User.frequency_24.each do |user|
+    User.notdeleted.frequency_24.each do |user|
       ArticleMailer.delay.send_briefing_24(user)
     end
-    User.frequency_84.each do |user|
+    User.notdeleted.frequency_84.each do |user|
       ArticleMailer.delay.send_briefing_84(user)
     end
-    User.frequency_168.each do |user|
+    User.notdeleted.frequency_168.each do |user|
       ArticleMailer.delay.send_briefing_168(user)
     end
   end
   
   def briefing_monday_to_saturday_10_am
-    User.where(briefing_frequency: [2,3,6,12]).each do |user|
+    User.notdeleted.where(briefing_frequency: [2,3,6,12]).each do |user|
       ArticleMailer.delay.send_briefing_12(user)
     end
-    User.frequency_24.each do |user|
+    User.notdeleted.frequency_24.each do |user|
       ArticleMailer.delay.send_briefing_24(user)
     end
   end
   
   def briefing_every_day_10_pm
-    User.frequency_2.each do |user|
+    User.notdeleted.frequency_2.each do |user|
       ArticleMailer.delay.send_briefing_2(user)
     end
-    User.frequency_3.each do |user|
+    User.notdeleted.frequency_3.each do |user|
       ArticleMailer.delay.send_briefing_3(user)
     end
-    User.frequency_6.each do |user|
+    User.notdeleted.frequency_6.each do |user|
       ArticleMailer.delay.send_briefing_6(user)
     end
-    User.frequency_12.each do |user|
+    User.notdeleted.frequency_12.each do |user|
       ArticleMailer.delay.send_briefing_12(user)
     end
   end
 
   def briefing_every_day_4_pm
-    User.frequency_2.each do |user|
+    User.notdeleted.frequency_2.each do |user|
       ArticleMailer.delay.send_briefing_2(user)
     end
-    User.frequency_3.each do |user|
+    User.notdeleted.frequency_3.each do |user|
       ArticleMailer.delay.send_briefing_3(user)
     end
-    User.frequency_6.each do |user|
+    User.notdeleted.frequency_6.each do |user|
       ArticleMailer.delay.send_briefing_6(user)
     end
   end
 
   def briefing_wednesday_10pm
-    User.frequency_84.each do |user|
+    User.notdeleted.frequency_84.each do |user|
       ArticleMailer.delay.send_briefing_84(user)
     end
   end
   
   def briefing_every_2_hours
-    User.frequency_2.each do |user|
+    User.notdeleted.frequency_2.each do |user|
       ArticleMailer.delay.send_briefing_2(user)
     end
   end
   
   def briefing_every_3_hours
-    User.frequency_3.each do |user|
+    User.notdeleted.frequency_3.each do |user|
       ArticleMailer.delay.send_briefing_3(user)
     end
   end
@@ -250,22 +250,22 @@ class ArticlesController < ApplicationController
     if @article.email_to == 'none'
     
     elsif @article.email_to == 'test'
-      User.readers.each do |user|
+      User.editors.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
       end
     elsif @article.email_to == 'all'
       if ["BLOG"].include?(@article.type.try(:name))
-        User.all.each do |user|
+        User.notdeleted.each do |user|
           ArticleMailer.delay.send_article_full(@article, user)
 	    end
       elsif @article.is_free || ["LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name))
-        User.all.each do |user|
+        User.notdeleted.each do |user|
           Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
             ArticleMailer.delay.send_article_full(@article, user)
           end
         end
       else
-        User.all.each do |user|
+        User.notdeleted.each do |user|
         Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
           if user.access_date.blank?
             ArticleMailer.delay.send_article_full(@article, user)
@@ -293,7 +293,7 @@ class ArticlesController < ApplicationController
         end
       end
     elsif @article.email_to == 'readers' && @article.type.name == 'BLOG'
-      User.readers.each do |user|
+      User.totalreaders.each do |user|
         ArticleMailer.delay.send_article_full(@article, user)
 	  end
     elsif @article.email_to == 'subscribers' && @article.type.name == 'BLOG'

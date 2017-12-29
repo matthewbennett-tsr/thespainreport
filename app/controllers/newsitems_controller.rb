@@ -138,11 +138,11 @@ class NewsitemsController < ApplicationController
       end
     elsif @newsitem.email_to == 'all' 
       if @newsitem.article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@newsitem.article.type.try(:name))
-        User.all.each do |user|
+        User.notdeleted.each do |user|
           NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	    end
       else
-        User.all.each do |user|
+        User.notdeleted.each do |user|
         Notification.where(user_id: user.id, story_id: @newsitem.article.story_ids, notificationtype_id: 1).first(1).each do
           if user.access_date.blank?
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
@@ -170,7 +170,7 @@ class NewsitemsController < ApplicationController
         end
       end
     elsif @newsitem.email_to == 'readers' && @newsitem.type.name == 'BLOG'
-      User.readers.each do |user|
+      User.totalreaders.each do |user|
         NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	  end
     elsif @newsitem.email_to == 'subscribers' && @newsitem.type.name == 'BLOG'

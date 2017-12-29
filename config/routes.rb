@@ -14,7 +14,11 @@ Rails.application.routes.draw do
   post 'update_credit_card' => 'subscriptions#update_credit_card'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
   get 'subscriptions/spain'
-  resources :subscriptions
+  resources :subscriptions do
+   member do
+    get :unsubscribe
+   end
+  end
   resources :provinces
   resources :quotes
   resources :organisations
@@ -85,6 +89,7 @@ Rails.application.routes.draw do
   resources :users do
     member do
       get :confirm_email
+      get :all_off
     end
   end
   resources :audios

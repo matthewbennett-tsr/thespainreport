@@ -59,7 +59,7 @@ class NotificationsController < ApplicationController
   def update_type
     n = Notification.find_by_update_token(params[:id])
     n.update(notificationtype_id: params[:type])
-    flash[:success] = "Update successful"
+    flash[:success] = "Update successful."
     redirect_to root_url
   end
 

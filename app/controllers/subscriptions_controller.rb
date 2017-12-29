@@ -168,12 +168,13 @@ end
     thespainreport_new_user_create
     thespainreport_user_roles
     
-    # Create stories for new user and send some welcome e-mails
+    # Get new user and set briefing frequency…
     user = User.find_by_email(params[:email])
     user.update(
     briefing_frequency: 24
     )
     
+    # …then add stories…
     Story.all.each do |s|
       n = Notification.new
       n.story_id = s.id
@@ -182,6 +183,7 @@ end
       n.save!
     end
     
+    # …then send some welcome e-mails…
     UserMailer.delay.new_user_password_choose(user)
     UserMailer.delay.new_user_story_notifications(user)
     UserMailer.delay.new_user_catch_up(user)
@@ -189,6 +191,19 @@ end
     # Redirect to 
     redirect_to :back
     flash[:success] = "Welcome aboard! Check your e-mail."
+  end
+  
+  def unsubscribe
+    user = User.find_by_update_token(params[:id])
+    user.email = 'deleted-' + SecureRandom.hex(10)
+    user.role = 'deleted'
+    user.save(:validate => false)
+    
+    session[:user_id] = nil
+    reset_session
+    
+    redirect_to root_url
+    flash[:success] = "Thank you: you have unsubscribed."
   end
 
   def new_spain_report_member
