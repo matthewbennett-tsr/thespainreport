@@ -262,7 +262,9 @@
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
   
-  <%= render 'article_stories', article: @article %>
+  <% unless @article.type.try(:name) == "BLOG" %>
+    <%= render 'article_stories', article: @article %>
+  <% end %>
 
   </div>
   </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
