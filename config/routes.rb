@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :subscriptions do
    member do
     get :unsubscribe
+    get :unsubscribe_by_staff
    end
   end
   resources :provinces

@@ -205,6 +205,16 @@ end
     redirect_to root_url
     flash[:success] = "Thank you: you have unsubscribed."
   end
+  
+  def unsubscribe_by_staff
+    user = User.find_by_id(params[:id])
+    user.email = 'deleted-' + SecureRandom.hex(10)
+    user.role = 'deleted'
+    user.save(:validate => false)
+    
+    redirect_to :back
+    flash[:success] = "Thank you: you have unsubscribed."
+  end
 
   def new_spain_report_member
     # Generate tokens for passwords and reset links
