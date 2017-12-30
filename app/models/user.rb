@@ -31,7 +31,7 @@ class User < ActiveRecord::Base
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
-  scope :lastfew, -> {order('created_at DESC').limit(25)}
+  scope :lastfew, -> {order('created_at DESC').limit(10)}
   scope :oneday, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 24.hours.ago)}
   scope :twodays, -> {where('created_at <= ? and created_at >= ?', 24.hours.ago, 48.hours.ago)}
   scope :threedays, -> {where('created_at <= ? and created_at >= ?', 48.hours.ago, 72.hours.ago)}
