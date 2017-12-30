@@ -82,6 +82,19 @@ class ArticlesController < ApplicationController
   def show
     if ["published", "updated"].include?@article.status
       show_article_elements
+      if current_user.nil?
+      
+      else
+        h = History.where(article_id: @article, user_id: current_user).first
+        if h.present?
+        h.touch
+        else
+        h = History.new
+        h.article_id = @article.id
+        h.user_id = current_user.id
+        h.save!
+        end
+      end
     elsif current_user.nil? || current_user.role != 'editor'
       redirect_to root_url
       flash[:error] = "Article does not exist."

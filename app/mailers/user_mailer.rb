@@ -4,7 +4,7 @@ class UserMailer < ApplicationMailer
   
   def new_user_password_choose(user)
     @user = user
-    mail to: user.email, subject: "Welcome to The Spain Report (1): choose a password"
+    mail to: user.email, subject: "Welcome to The Spain Report (1): choose a password and log in"
   end
   
   def new_user_story_notifications(user)

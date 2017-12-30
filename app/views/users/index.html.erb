@@ -153,9 +153,13 @@
         <td><%= mail_to user.email.truncate(15) %></td>
         <td><%= user.email_confirmed %></td>
         <td>
-          <% if user.articles.present? %>
-            <% user.articles.each do |a| %>
-              <%= link_to a.headline.truncate(45), a %>
+          <% if user.histories %>
+            <% user.histories.firstone.each do |h| %>
+              <% if h.article.nil? %>
+                <%= link_to "Home", root_url %>
+              <% else %>
+                <%= link_to h.article.headline.truncate(45), h.article %>
+              <% end %>
             <% end %>
           <% end %>
         </td>

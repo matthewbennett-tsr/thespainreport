@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :histories
   resources :notificationtypes
   resources :notifications do
     member do

@@ -193,7 +193,7 @@ class UsersController < ApplicationController
         if @user.update(user_params)
           format.html { redirect_to :back}
           format.json { render :edit, status: :ok, location: @user }
-          flash[:notice] = "Well done, updates successful!"
+          flash[:success] = "Well done, updates successful!"
         else
           format.html { redirect_to :back}
           format.json { render json: @user.errors, status: :unprocessable_entity }

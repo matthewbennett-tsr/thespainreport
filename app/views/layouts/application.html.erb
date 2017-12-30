@@ -160,7 +160,7 @@
       <div class="clear"></div>
       
       <% if controller_name == 'articles' && action_name == 'show' %>
-        <%= hidden_field_tag 'article_ids[]', @article.id %>
+        <%= hidden_field_tag 'article_id', @article.id %>
       <% end %>
       
     <% end %>
@@ -201,6 +201,25 @@
     <% end %>
   </div>
   </div>
+  
+  <div class="signed-in-details" style="margin-top: 10px;">
+    <p><strong>My Reading History</strong></p>
+    <ul style="margin-top: 3px; list-style: none; margin-left: 0px;">
+    <% current_user.histories.lastten.where.not(article_id: current_article).each do |h| %>
+      <li style="font-size: 13px;">
+        <% if h.article.nil? %>
+          <%= link_to "Home", root_url %>
+        <% else %>
+          <% if h.article.short_headline.present? %>
+            <%= link_to h.article.short_headline, h.article %>
+          <% else %>
+            <%= link_to h.article.headline.truncate(38), h.article %>
+          <% end %>
+        <% end %>
+      </li>
+    <% end %>
+    </ul>
+</div>
 <% end %>
 </div>
 

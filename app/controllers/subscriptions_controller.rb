@@ -135,8 +135,6 @@ end
      
     user = User.create!(
       email: params[:email],
-      article_ids: params[:article_ids],
-      emailpref: 'articlesupdates',
       password: autopassword,
       password_confirmation: autopassword,
       password_reset_token: generate_token,
@@ -173,6 +171,11 @@ end
     user.update(
     briefing_frequency: 24
     )
+    
+    # …then record sign-up url in a History record
+      h = History.create(
+      user_id: user.id,
+      article_id: params[:article_id])
     
     # …then add stories…
     Story.all.each do |s|

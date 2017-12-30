@@ -1,21 +1,16 @@
 <div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
-<div class="content-white-background">
 
 <h1>Set Your Password</h1>
 
-<%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>
-  <div style="margin: 10px auto; padding: 10px 0px; border-top: 1px dotted #000000; border-bottom: 1px dotted #000000;">
-    
-    <div style="float:left; width:50%; padding:7px;">
-      
+<%= form_for @user, :url => password_reset_path(params[:id]) do |f| %>    
+    <div class="password-reset-form-fields">
       <p style="margin-bottom: 10px;">To choose a new password, or reset an existing one, enter it here:</p>
-      
-      <div class="field" style="float:left;">
+      <div class="field" >
         <div class="email-input-float"><%= f.password_field :password, :class => "input170", :placeholder => "Enter new password…" %></div>
         <div class="email-input-float" style="padding-top: 10px;"> + </div>
         <div class="email-input-float"><%= f.password_field :password_confirmation, :class => "input170", :placeholder => "Confirm new password…" %></div>
+        <div class="email-input-float"><button type="submit" class="blueformbutton">Save New Password</button></div>
         <div class="clear"></div>
-        <div style="margin-top:15px;"><button type="submit" class="blueformbutton">Save New Password</button></div>
       </div>
       
       <% if @user.errors.any? %>
@@ -28,10 +23,9 @@
           </ul>
         </div>
       <% end %>
-    
     </div>
     
-    <div class="error-explainer"><h2>Safe, Secure, Easy-to-Remember Passwords…</h2>
+    <div class="password-reset-explainer"><h2>Safe, Secure, Easy-to-Remember Passwords…</h2>
       <p>
       Choose a <strong>simple human pass-phrase</strong> instead of a random, confusing group of letters.
       They are easier to remember and more secure. 
@@ -58,6 +52,6 @@
 <% end %>
 <div class="clear"></div>
 
-</div>
+
 </div>
 <div style="clear:both;"></div>

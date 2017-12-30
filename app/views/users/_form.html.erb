@@ -9,11 +9,17 @@
         <%= @user.created_at.strftime("%b %d, %Y at %l:%M %P") %>
       <% end %>
       
-      <% if @user.articles.present? %>
-       <% @user.articles.each do |a| %>
-         after reading <%= link_to a.headline, a %>.
-       <% end %>
-     <% end %>
+      <% if @user.histories %>
+        <% @user.histories.firstone.each do |h| %>
+        after reading 
+          <% if h.article.nil? %>
+            <%= link_to "Home", root_url %>
+          <% else %>
+            <%= link_to h.article.headline.truncate(45), h.article %>
+          <% end %>
+        .
+        <% end %>
+      <% end %>
 
     </p>
 
@@ -98,6 +104,23 @@
       <%= f.text_area :bio, :size => '105x9', :maxlength => 1000, :class => "inputtextarea" %>
   </div>
   <% end %>
+  
+  <div class="user-block">
+  <h3>My Reading History</h3>
+  <p class="user-paragraph">
+  <ul>
+   <% @user.histories.lastten.each do |h| %>
+    <li>
+      <% if h.article.nil? %>
+        <%= link_to "Home", root_url %>
+      <% else %>
+        <%= link_to h.article.headline.truncate(45), h.article %>
+      <% end %>
+    </li>
+   <% end %>
+  </ul>
+  </p>
+  </div>
   
   <% if @user.role == 'subscriber_one_story' %>
     <div class="user-block">

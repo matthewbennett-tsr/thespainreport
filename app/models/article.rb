@@ -2,10 +2,11 @@ class Article < ActiveRecord::Base
   has_and_belongs_to_many :categories
   has_and_belongs_to_many :regions
   has_and_belongs_to_many :stories
-  has_and_belongs_to_many :users
   belongs_to :type
   has_many :newsitems
   has_many :comments, as: :commentable, dependent: :destroy
+  has_many :histories
+  has_many :users, :through => :histories
   
   mount_uploader :main, MainUploader
   

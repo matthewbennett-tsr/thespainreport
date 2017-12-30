@@ -68,7 +68,8 @@ class User < ActiveRecord::Base
   has_many :comments
   has_many :subscriptions
   has_many :invoices
-  has_and_belongs_to_many :articles
+  has_many :histories
+  has_many :articles, :through => :histories
   
   has_many :notifications, -> {joins(:story).order("story ASC")}, dependent: :destroy
   has_many :stories, :through => :notifications

@@ -25,10 +25,7 @@
       <div class="clear"></div>
       
       <% if controller_name == 'articles' && action_name == 'show' %>
-        <%= hidden_field_tag 'article_ids[]', @article.id %>
-        <% @article.stories.each do |s| %>
-          <%= hidden_field_tag 'story_ids[]', s.id %>
-        <% end %>
+        <%= hidden_field_tag 'article_id', @article.id %>
       <% end %> 
         
     <% end %>

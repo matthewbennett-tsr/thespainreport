@@ -14,6 +14,10 @@ class ApplicationController < ActionController::Base
     @lastmorning = Article.morning.published.lastone
     @lastnews = Article.news.published.lastone
     @lastindepth = Article.in_depth.published.lastone
+    if controller_name == 'articles' && action_name == 'show'
+    @article = @article
+    else
+    end
   end
   
   def message_error_not_allowed
@@ -61,6 +65,15 @@ class ApplicationController < ActionController::Base
     session[:user_id] = nil # or reset_session
   end
   helper_method :current_user
+  
+  def current_article
+   if controller_name == 'articles' && action_name == 'show'
+   current_article = @article
+   else
+   current_article = nil
+   end
+  end
+  helper_method :current_article
 
   def authorize
     redirect_to '/login' unless current_user
