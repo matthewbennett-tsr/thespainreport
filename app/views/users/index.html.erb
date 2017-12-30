@@ -138,9 +138,9 @@
       <td>Joined</td>
       <td>Role</td>
       <td>E-mail</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td>URL</td>
+      <td>Conf</td>
+      <td>Signed-up at…</td>
+      <td></td>
     </tr>
   </thead>
 
@@ -149,41 +149,17 @@
       <tr>
         <td><%= link_to 'E', edit_user_path(user) %></td>
         <td><%= user.created_at.strftime("%d/%m/%Y") %></td>
-        <td>
-        <% if user.role == 'editor' %>
-            <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
-          <% else %>
-            <span>
-          <% end %>
-        <%= user.role.to_s.humanize %></span>
-        </td>
-        <td><%= mail_to user.email %></td>
-        <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
-          <% end %>
-        </td>
+        <td><span class="reader-label-mini"><%= user.role.to_s.humanize %></span></td>
+        <td><%= mail_to user.email.truncate(15) %></td>
         <td><%= user.email_confirmed %></td>
         <td>
           <% if user.articles.present? %>
             <% user.articles.each do |a| %>
-              <%= link_to a.headline, a %>
+              <%= link_to a.headline.truncate(45), a %>
             <% end %>
           <% end %>
         </td>
-        <td><%= link_to 'Uns?', unsubscribe_by_staff_subscription_url(user), data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'U?', unsubscribe_by_staff_subscription_url(user), data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
@@ -195,12 +171,11 @@
   <thead>
     <tr style="font-weight: bold;">
       <td></td>
-      <td>Joined</td>
+      <td>For…</td>
       <td>Role</td>
       <td>E-mail</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
-      <td></td>
+      <td>Conf</td>
+      <td>Signed-up at…</td>
     </tr>
   </thead>
 
@@ -209,19 +184,9 @@
       <tr>
         <td><%= link_to 'E', edit_user_path(user) %></td>
         <td><%= distance_of_time_in_words(user.updated_at, user.created_at) %></td>
-        <td>
-        <% if user.role == 'editor' %>
-            <span class="editor-label-mini">
-          <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
-          <% else %>
-            <span>
-          <% end %>
-        <%= user.role.to_s.humanize %></span>
-        </td>
+        <td><%= user.role.to_s.humanize %></td>
         <td><%= mail_to user.email.truncate(15) %></td>
+        <td><%= user.email_confirmed %></td>
         <td>
           <% if user.articles.present? %>
             <% user.articles.each do |a| %>
