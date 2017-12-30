@@ -51,16 +51,6 @@ class ApplicationController < ActionController::Base
   end
   helper_method :paywall
   
-  def paywall_reader
-    if controller_name == 'articles' && action_name == 'show'
-      cookies[:visits].to_i > 10
-    elsif controller_name == 'newsitems' && action_name == 'show'
-      cookies[:visits].to_i > 15
-    else
-    end
-  end
-  helper_method :paywall_reader
-  
   def allow_iframe_requests
     response.headers.delete('X-Frame-Options')
   end
