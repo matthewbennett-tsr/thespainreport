@@ -1,9 +1,7 @@
 class Story < ActiveRecord::Base
-  belongs_to :parent, class_name: "Story"
-  has_many :children, class_name: "Story", foreign_key: "parent_id"
-  
   has_and_belongs_to_many :newsitems
   has_and_belongs_to_many :articles
+  belongs_to :category
   has_many :notifications, dependent: :destroy
   has_many :users, :through => :notifications
   

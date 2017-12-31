@@ -87,8 +87,8 @@
       <td>Joined</td>
       <td>Role</td>
       <td>E-mail</td>
-      <td>E-mails</td>
-      <td>Conf?</td>
+      <td>Briefings</td>
+      <td>Signed-up at…</td>
     </tr>
   </thead>
 
@@ -110,20 +110,18 @@
         <%= user.role.to_s.humanize %></span>
         </td>
         <td><%= mail_to user.email %></td>
+        <td><%= user.briefing_frequency.briefing_frequency unless user.briefing_frequency.nil? %></td>
         <td>
-          <% if user.emailpref == 'articlesupdates' %>
-            Everything
-          <% elsif user.emailpref == 'justarticles' %>
-            Just Articles
-          <% elsif user.emailpref == 'justsummariesbreaking' %>
-            Summaries
-          <% elsif user.emailpref == 'nothing' %>
-            No E-mail
-          <% else %>
-            Not Set
+          <% if user.histories %>
+            <% user.histories.firstone.each do |h| %>
+              <% if h.article.nil? %>
+                <%= link_to "Home", root_url %>
+              <% else %>
+                <%= link_to h.article.headline.truncate(45), h.article %>
+              <% end %>
+            <% end %>
           <% end %>
         </td>
-        <td><%= user.update_token %></td>
       </tr>
     <% end %>
   </tbody>
@@ -139,6 +137,7 @@
       <td>Role</td>
       <td>E-mail</td>
       <td>Conf</td>
+      <td>Briefings</td>
       <td>Signed-up at…</td>
       <td></td>
     </tr>
@@ -152,6 +151,7 @@
         <td><span class="reader-label-mini"><%= user.role.to_s.humanize %></span></td>
         <td><%= mail_to user.email.truncate(15) %></td>
         <td><%= user.email_confirmed %></td>
+        <td><%= user.briefing_frequency.briefing_frequency unless user.briefing_frequency.nil? %></td>
         <td>
           <% if user.histories %>
             <% user.histories.firstone.each do |h| %>
@@ -192,9 +192,13 @@
         <td><%= mail_to user.email.truncate(15) %></td>
         <td><%= user.email_confirmed %></td>
         <td>
-          <% if user.articles.present? %>
-            <% user.articles.each do |a| %>
-              <%= link_to a.headline.truncate(45), a %>
+          <% if user.histories %>
+            <% user.histories.firstone.each do |h| %>
+              <% if h.article.nil? %>
+                <%= link_to "Home", root_url %>
+              <% else %>
+                <%= link_to h.article.headline.truncate(45), h.article %>
+              <% end %>
             <% end %>
           <% end %>
         </td>

@@ -58,10 +58,20 @@
     <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
   </div>
   
-  <div class="admin-block">
-    <div class="admin-classify"><strong>STORIES:</strong> <%= collection_check_boxes(:article, :story_ids, @stories, :id, :story) %></div>
-    <div class="admin-classify"><strong>REGIONS:</strong> <%= collection_check_boxes(:article, :region_ids, @regions, :id, :region) %></div>
-    <div class="admin-classify"><strong>CATEGORIES:</strong> <%= collection_check_boxes(:article, :category_ids, @categories, :id, :category) %></div>
+  <div class="admin-block">   
+    <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+      <div class="admin-stories-in-categories">
+        <strong><%= c.category unless c.nil? %></strong>
+          <ul>
+            <% for s in stories %>
+              <li>
+                <%= check_box_tag "article[story_ids][]", s.id, @article.stories.include?(s) %>
+                <%= s.story %>
+              </li>
+            <% end %>
+          </ul>
+      </div>
+    <% end %>
   </div>
   
   <% if @article.main? %>

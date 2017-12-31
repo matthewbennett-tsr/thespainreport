@@ -16,7 +16,7 @@
 <% @stories.each do |story| %>
   <div style="width:100%; padding-top: 3px; font-size: 13px;">
     <div style="width: 9%; float:left;">
-      <%= story.updated_at.to_formatted_s(:short) %>
+      <%= story.last_active.to_formatted_s(:short) unless story.last_active.nil? %>
     </div>
     <div style="width: 10%; margin-right: 5px; float:left; text-align:right; font-size: 13px;">
       <% if story.status == 'archived' %>

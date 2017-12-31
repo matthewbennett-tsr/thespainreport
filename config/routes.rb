@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :briefing_frequencies
   resources :histories
   resources :notificationtypes
   resources :notifications do
@@ -92,6 +93,7 @@ Rails.application.routes.draw do
     member do
       get :confirm_email
       get :all_off
+      get :update_freq
     end
   end
   resources :audios

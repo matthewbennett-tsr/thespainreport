@@ -6,7 +6,6 @@ class SalesemailsController < ApplicationController
   def index
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @salesemails = Salesemail.all
       @salesemails_readers = Salesemail.readers.order( 'salesemails.send_order ASC' )
@@ -20,7 +19,6 @@ class SalesemailsController < ApplicationController
   def show
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
     else
     end
@@ -30,7 +28,6 @@ class SalesemailsController < ApplicationController
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @salesemail = Salesemail.new
     else
@@ -41,7 +38,6 @@ class SalesemailsController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
     else
     end
@@ -52,7 +48,6 @@ class SalesemailsController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @salesemail = Salesemail.new(salesemail_params)
       respond_to do |format|
@@ -73,7 +68,6 @@ class SalesemailsController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @salesemail.update(salesemail_params)

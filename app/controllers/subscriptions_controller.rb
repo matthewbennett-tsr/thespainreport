@@ -169,7 +169,7 @@ end
     # Get new user and set briefing frequency…
     user = User.find_by_email(params[:email])
     user.update(
-    briefing_frequency: 24
+    briefing_frequency_id: 5
     )
     
     # …then record sign-up url in a History record
@@ -182,7 +182,11 @@ end
       n = Notification.new
       n.story_id = s.id
       n.user_id = user.id
-      n.notificationtype_id = 1
+      if s.last_active > 30.days.ago
+        n.notificationtype_id = 1
+      else
+        n.notificationtype_id = 2
+      end
       n.save!
     end
     

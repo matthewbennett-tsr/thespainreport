@@ -1,5 +1,26 @@
 <p>--------</p>
 
+<p style="font-weight:bold;">My Spain Briefings Frequency</p>
+
+<p>To adjust the frequency of your Spain Briefings, click a link. Your current setting <em>is in italics</em>.</p>
+          
+<% BriefingFrequency.all.each do |bf| %>
+  <% if @user.briefing_frequency == bf %>
+    <em><%= bf.name %></em>
+  <% else%>
+    <%= link_to bf.name, update_freq_user_url(@user.update_token, freq: bf.id), {:style=>'color:#AA151B;'} %>
+  <% end %>
+  <%= ' — ' unless bf == BriefingFrequency.all.order(:briefing_frequency).last %>
+<% end %>
+
+<p>--------</p>
+
+<p style="font-weight:bold;">Switch Off All News E-mails</p>
+
+<p>To switch off all news notifications (no alerts or briefings, for any story), <%= link_to "click this link", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>. You can switch some back on at any point by logging in to your account.</p>
+
+<p>--------</p>
+
 <p style="font-weight:bold;">My Account</p>
 
 <p>Thank you for reading and subscribing to The Spain Report.</p>

@@ -17,7 +17,7 @@
     <%= f.text_field :last_active, :class => "edit-lede", :size => '50' %><br /><br />
     <%= f.text_area :keywords, :size => '130x10' %><br /><br />
     <%= f.select :status, options_for_select([["Active", "active"], ["Archived", "archived"]], @story.status) %>
-    <%= f.collection_select :parent_id, @stories, :id, :story, :include_blank => true %>
+    <%= f.collection_select :category_id, @categories, :id, :category %>
   </div>
 
   <div class="actions">

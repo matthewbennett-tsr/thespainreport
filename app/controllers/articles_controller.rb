@@ -191,11 +191,8 @@ class ArticlesController < ApplicationController
   end
   
   def briefing_sunday_10_am
-    User.notdeleted.where(briefing_frequency: [2,3,6,12]).each do |user|
-      ArticleMailer.delay.send_briefing_12(user)
-    end
-    User.notdeleted.frequency_24.each do |user|
-      ArticleMailer.delay.send_briefing_24(user)
+    User.notdeleted.where(briefing_frequency: [2,3,6,12,24]).each do |user|
+      ArticleMailer.delay.send_briefing_48(user)
     end
     User.notdeleted.frequency_84.each do |user|
       ArticleMailer.delay.send_briefing_84(user)
@@ -205,7 +202,7 @@ class ArticlesController < ApplicationController
     end
   end
   
-  def briefing_monday_to_saturday_10_am
+  def briefing_monday_to_friday_10_am
     User.notdeleted.where(briefing_frequency: [2,3,6,12]).each do |user|
       ArticleMailer.delay.send_briefing_12(user)
     end
@@ -214,7 +211,7 @@ class ArticlesController < ApplicationController
     end
   end
   
-  def briefing_every_day_10_pm
+  def briefing_monday_to_friday_10_pm
     User.notdeleted.frequency_2.each do |user|
       ArticleMailer.delay.send_briefing_2(user)
     end
@@ -229,7 +226,7 @@ class ArticlesController < ApplicationController
     end
   end
 
-  def briefing_every_day_4_pm
+  def briefing_monday_to_friday_4_pm
     User.notdeleted.frequency_2.each do |user|
       ArticleMailer.delay.send_briefing_2(user)
     end

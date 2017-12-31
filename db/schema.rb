@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171230185716) do
+ActiveRecord::Schema.define(version: 20171231144729) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,13 @@ ActiveRecord::Schema.define(version: 20171230185716) do
     t.string   "url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "briefing_frequencies", force: :cascade do |t|
+    t.string   "name"
+    t.integer  "briefing_frequency"
+    t.datetime "created_at",         null: false
+    t.datetime "updated_at",         null: false
   end
 
   create_table "categories", force: :cascade do |t|
@@ -290,7 +297,7 @@ ActiveRecord::Schema.define(version: 20171230185716) do
     t.string   "description"
     t.string   "keywords"
     t.datetime "last_active"
-    t.integer  "parent_id"
+    t.integer  "category_id"
   end
 
   create_table "stories_users", id: false, force: :cascade do |t|
@@ -361,7 +368,7 @@ ActiveRecord::Schema.define(version: 20171230185716) do
     t.datetime "access_date"
     t.integer  "one_story_id"
     t.datetime "one_story_date"
-    t.integer  "briefing_frequency"
+    t.integer  "briefing_frequency_id"
     t.string   "confirm_token"
     t.string   "emailpref"
     t.string   "update_token"

@@ -1,7 +1,5 @@
 <p style="font-weight: bold;">My Spain Briefing Notifications</p>
 
-<p>I want my Spain briefings every <strong><%= @user.briefing_frequency %> hours</strong>.</p>
-
 <% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
   <p><strong><%= s.story %>:</strong>
   <% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 2) %>

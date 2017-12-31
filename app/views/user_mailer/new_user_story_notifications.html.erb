@@ -12,15 +12,28 @@
 <p>Here is a quick explanation of the options, and below you can play around with them a bit.</p>
 
 <p>
-  <strong>E-Mail Alerts:</strong> breaking news, headlines, updates and full-text articles as soon as we hit 'publish'.
-  Breaking stories start as e-mail alerts until you indicate another preference, so that you never miss anything important.
+  <strong>E-Mail Alerts:</strong> breaking news headlines, updates (1, 2, etc.) and full-text articles as soon as we hit 'publish'.
+  Major new stories start as e-mail alerts until you indicate otherwise, so you never miss anything important.
 </p>
 
 <p>
-  <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m. every day, Spanish time, according to the setting you choose.
-  You can choose to get your briefings as frequently as every two hours, or once or twice daily, or once or twice a week.
-  Whatever you prefer.
+  <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m., Mon-Fri, Spanish time, according to the setting you choose.
   If there are no new updates in the time period you choose, the e-mail tells you there is nothing new.
+  The <em>Every X Hours</em> options on weekdays also get the morning briefing on Sundays, with the last 48 hours.
+  There are no brieifings on Saturdays.
+</p>
+
+<p>Click to adjust the frequency of your Spain Briefings. Your current setting <em>is in italics</em>.</p>
+    
+<p>      
+<% BriefingFrequency.all.each do |bf| %>
+  <% if @user.briefing_frequency == bf %>
+    <em><%= bf.name %></em>
+  <% else%>
+    <%= link_to bf.name, update_freq_user_url(@user.update_token, freq: bf.id), {:style=>'color:#AA151B;'} %>
+  <% end %>
+  <%= ' — ' unless bf == BriefingFrequency.all.order(:briefing_frequency).last %>
+<% end %>
 </p>
 
 <p><strong>Website Only:</strong> you want to read these stories online but do not want e-mails about them;</p>
@@ -28,14 +41,13 @@
 <p><strong>Not interested:</strong> informs us you don't care about this story. No alerts, not included in your Spain briefings.</p>
 
 <p>
-  <strong>Turn e-mail off:</strong> some people visit the website every day or follow along on Twitter, and don't want any news e-mails.
-  That's absolutely fine. If you don't want any news e-mails at all, just set everything to <strong>Website Only</strong> or <strong>Not Interested</strong>.
+  <strong>Switch e-mail off:</strong> some people visit the website every day or follow along on Twitter, and don't want any news e-mails.
+  That's absolutely fine. If you don't want any news e-mails at all (no alerts or briefings, for any story), <%= link_to "click this link", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>.
+  You can switch some back on at any point by logging in to your account.
   You will occasionally get some service announcements, and breaking news stories, in case you are interested in those (you can also turn them off after the first alert, just by clicking on the link in the e-mail).
 </p>
 
 <p><strong>NOTE 1:</strong> Keep scrolling down to see your new e-mail notifications in action. Just click on the links to change some options.</p>
-
-<p><strong>NOTE 2:</strong> To change your My Spain Briefings frequency, you will have to <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>.</p>
 
 <p>Kindest regards,</p>
 
@@ -48,18 +60,23 @@
 
 <p>Your current settings are shown <em>in italics</em>. Just click to change it to something else for that story.</p>
 
-<% @user.stories.each do |s| %>
-  <p>
-    <strong><%= s.story %>:</strong>
-    <% s.notifications.where(user_id: @user).each do |n| %>
-      <% Notificationtype.all.order(:order).each do |nt| %>
-        <% if nt.id == n.notificationtype_id %>
-          <em><%= nt.name %></em>
-        <% else %>
-          <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
-        <% end %>
-        <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
-      <% end %>
-    <% end %>
-  </p>
-<% end %>
+  <% Story.all.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+      <div style="margin-bottom: 10px;">
+        <div style="font-weight: bold;"><%= c.category unless c.nil? %></div>
+          <% for s in stories %>
+            <p>
+              <%= s.story %>:
+                <% s.notifications.where(user_id: @user).each do |n| %>
+                  <% Notificationtype.all.order(:order).each do |nt| %>
+                    <% if nt.id == n.notificationtype_id %>
+                      <em><%= nt.name %></em>
+                    <% else %>
+                      <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+                    <% end %>
+                    <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+                  <% end %>
+                <% end %>
+            </p>
+          <% end %>
+      </div>
+    <% end %> 

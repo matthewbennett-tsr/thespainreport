@@ -160,25 +160,27 @@
     Change your preferences here, at the bottom of every article or by clicking on the links at the bottom of every e-mail.
   </p>
   <p class="user-paragraph">
-    <strong>E-Mail Alerts:</strong> breaking news, headlines, updates and full-text articles as soon as we hit 'publish'.
-    Breaking stories start as e-mail alerts until you indicate another preference, so that you never miss anything important.
+    <strong>E-Mail Alerts:</strong> breaking news headlines, updates (1, 2, etc.) and full-text articles as soon as we hit 'publish'.
+    Major new stories start as e-mail alerts until you indicate otherwise, so you never miss anything important.
   </p>
   <p class="user-paragraph">
-    <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m. every day, Spanish time, according to the setting you choose.
+    <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m., Mon-Fri, Spanish time, according to the setting you choose.
     If there are no new updates in the time period you choose, the e-mail tells you there is nothing new.
+    The <em>Every X Hours</em> options on weekdays also get the morning briefing on Sundays, with the last 48 hours.
+    There are no briefings on Saturdays.
   </p>
   <p class="user-paragraph">
   I want my briefings
-  <%= f.select :briefing_frequency, options_for_select([["Every 2 hours", 2], ["Every 3 hours", 3], ["Every 6 hours", 6], ["Every 12 hours", 12], ["Once a day", 24], ["Twice a week", 84], ["Once a week", 168]], @user.briefing_frequency) %>
+  <%= f.collection_select :briefing_frequency_id, @briefingfrequencies, :id, :name %>
   </p>
   <ul style="margin-top: 5px;">
-        <li><strong>Once a week:</strong> Sundays at 10 a.m.</li>
-        <li><strong>Twice a week:</strong> Sundays at 10 a.m., Wednesdays at 10 p.m.</li>
-        <li><strong>Once a day:</strong> 10 a.m.</li>
-        <li><strong>Every 12 hours:</strong> 10 a.m., 10 p.m.</li>
-        <li><strong>Every 6 hours:</strong> 10 a.m., 4 p.m., 10 p.m.</li>
-        <li><strong>Every 3 hours:</strong> 10 a.m., 1 p.m., 4 p.m., 7 p.m., 10 p.m.</li>
-        <li><strong>Every 2 hours:</strong> 10 a.m., 12 p.m., 2 p.m., 4 p.m., 6 p.m., 8 p.m., 10 p.m.</li>
+        <li><strong>Once a week:</strong> Sundays at 10 a.m.;</li>
+        <li><strong>Twice a week:</strong> Sundays at 10 a.m., Wednesdays at 10 p.m.;</li>
+        <li><strong>Once a day:</strong> 10 a.m., Mon-Fri, Sundays;</li>
+        <li><strong>Every 12 hours:</strong> 10 a.m., 10 p.m., Mon-Fri;</li>
+        <li><strong>Every 6 hours:</strong> 10 a.m., 4 p.m., 10 p.m., Mon-Fri;</li>
+        <li><strong>Every 3 hours:</strong> 10 a.m., 1 p.m., 4 p.m., 7 p.m., 10 p.m., Mon-Fri;</li>
+        <li><strong>Every 2 hours:</strong> 10 a.m., 12 p.m., 2 p.m., 4 p.m., 6 p.m., 8 p.m., 10 p.m., Mon-Fri;</li>
       </ul>
   <p class="user-paragraph">
   <strong>Website Only:</strong> you want to read these stories online but do not want e-mails about them;
@@ -187,41 +189,26 @@
   <strong>Not interested:</strong> informs us you don't care about this story. No alerts, not included in your Spain briefings.
   </p>
   <p class="user-paragraph">
-    <strong>Turn e-mail off:</strong> if you don't want any e-mails at all, just set everything to <strong>Website Only</strong> or <strong>Not Interested</strong>.
+    <strong>Turn e-mail off:</strong> if you don't want any e-mails at all, just set everything to <em>Website Only</em> or <em>Not Interested</em>.
     You will occasionally get some service announcements.
   </p>
   
-  <%= f.fields_for :notifications, @user.notifications.level_1 do |n| %>
-  <div class="notifications-admin">
-    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
-    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
-  <div class="clear"></div>
-  </div>
-  <% end %>
-  
-  <%= f.fields_for :notifications, @user.notifications.level_2 do |n| %>
-  <div class="notifications-admin">
-    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
-    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
-  <div class="clear"></div>
-  </div>
-  <% end %>
-  
-  <%= f.fields_for :notifications, @user.notifications.level_3 do |n| %>
-  <div class="notifications-admin">
-    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
-    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
-  <div class="clear"></div>
-  </div>
-  <% end %>
-  
-  <%= f.fields_for :notifications, @user.notifications.level_4 do |n| %>
-  <div class="notifications-admin">
-    <div class="notifications-admin-left"><%= link_to n.object.story.story, n.object.story unless !n.object.story %></div>
-    <div class="notifications-admin-right"><%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %></div>
-  <div class="clear"></div>
-  </div>
-  <% end %>
+    <% Story.all.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+      <div style="margin-bottom: 10px;">
+        <div style="font-weight: bold; font-family: Georgia; "><%= c.category unless c.nil? %></div>
+            <% for s in stories %>
+              <div class="notifications-admin">
+                <div class="notifications-admin-left"><%= link_to s.story, s %></div>
+                <div class="notifications-admin-right">
+                <%= f.fields_for :notifications, @user.notifications.where(story_id: s.id) do |n| %>
+                  <%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %>
+                <% end %>
+                </div>
+                <div class="clear"></div>
+              </div>
+            <% end %>
+      </div>
+    <% end %>
   
     <div class="admin-submit-button">
         <button type="submit" class="blueformbutton">Save Changes</button>

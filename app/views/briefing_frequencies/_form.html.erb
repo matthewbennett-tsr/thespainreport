@@ -1,0 +1,25 @@
+<%= form_for(@briefing_frequency) do |f| %>
+  <% if @briefing_frequency.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@briefing_frequency.errors.count, "error") %> prohibited this briefing_frequency from being saved:</h2>
+
+      <ul>
+      <% @briefing_frequency.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %><br>
+    <%= f.text_field :name %>
+  </div>
+  <div class="field">
+    <%= f.label :briefing_frequency %><br>
+    <%= f.number_field :briefing_frequency %>
+  </div>
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

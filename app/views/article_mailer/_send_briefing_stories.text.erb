@@ -1,7 +1,5 @@
 My Spain Briefing Notifications
 
-I want my Spain briefings every <%= @user.briefing_frequency %> hours.
-
 <% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
 <%= s.story %>:
 

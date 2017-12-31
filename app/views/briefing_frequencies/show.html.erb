@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @briefing_frequency.name %>
+</p>
+
+<p>
+  <strong>Briefing frequency:</strong>
+  <%= @briefing_frequency.briefing_frequency %>
+</p>
+
+<%= link_to 'Edit', edit_briefing_frequency_path(@briefing_frequency) %> |
+<%= link_to 'Back', briefing_frequencies_path %>

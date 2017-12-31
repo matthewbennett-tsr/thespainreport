@@ -13,7 +13,6 @@ class NewsitemsController < ApplicationController
   def admin
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitems = Newsitem.all.order( 'newsitems.updated_at DESC' )
       @updatecount = Newsitem.count
@@ -21,7 +20,6 @@ class NewsitemsController < ApplicationController
       @updatesbyweek = Newsitem.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -41,7 +39,6 @@ class NewsitemsController < ApplicationController
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitemarticle = Article.published.lastthirty
       @newsitem = Newsitem.new
@@ -50,7 +47,6 @@ class NewsitemsController < ApplicationController
       @stories = Story.all.order(:story)
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -58,7 +54,6 @@ class NewsitemsController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitemarticle = Article.published.lastthirty
       @regions = Region.all.order(:region)
@@ -66,7 +61,6 @@ class NewsitemsController < ApplicationController
       @stories = Story.all.order(:story)
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end 	
   end
 
@@ -186,7 +180,6 @@ class NewsitemsController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitem = Newsitem.new(newsitem_params)
       respond_to do |format|
@@ -208,7 +201,6 @@ class NewsitemsController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -217,7 +209,6 @@ class NewsitemsController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @newsitem.update(newsitem_params) && ["draft", "editing"].include?(@newsitem.status)
@@ -238,7 +229,6 @@ class NewsitemsController < ApplicationController
       end  
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -247,7 +237,6 @@ class NewsitemsController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @newsitem.destroy
       respond_to do |format|
@@ -256,7 +245,6 @@ class NewsitemsController < ApplicationController
       end   
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 

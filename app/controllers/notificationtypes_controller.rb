@@ -6,12 +6,10 @@ class NotificationtypesController < ApplicationController
   def index
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @notificationtypes = Notificationtype.all
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end
   end
 
@@ -20,11 +18,9 @@ class NotificationtypesController < ApplicationController
   def show
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end
   end
 
@@ -32,12 +28,10 @@ class NotificationtypesController < ApplicationController
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @notificationtype = Notificationtype.new
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end
   end
 
@@ -45,11 +39,9 @@ class NotificationtypesController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end
   end
 
@@ -58,7 +50,6 @@ class NotificationtypesController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @notificationtype = Notificationtype.new(notificationtype_params)
       respond_to do |format|
@@ -73,7 +64,6 @@ class NotificationtypesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end  
   end
 
@@ -82,7 +72,6 @@ class NotificationtypesController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @notificationtype.update(notificationtype_params)
@@ -96,7 +85,6 @@ class NotificationtypesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end 
   end
 
@@ -105,7 +93,6 @@ class NotificationtypesController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     elsif current_user.role == 'editor'
       @notificationtype.destroy
       respond_to do |format|
@@ -115,7 +102,6 @@ class NotificationtypesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "You're not allowed to do that."
     end
   end
 
