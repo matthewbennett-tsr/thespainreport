@@ -61,6 +61,13 @@ class ArticleMailer < ApplicationMailer
     mail(:to => "<#{user.email}>", :subject => "My 9 a.m. Spain Briefing", template_name: 'send_briefing')
   end
   
+  def send_briefing_48(user)
+    @user = user
+    @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
+    @briefing_articles = Article.last48.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
+    mail(:to => "<#{user.email}>", :subject => "My Sunday Morning Spain Briefing", template_name: 'send_briefing')
+  end
+  
   def send_briefing_84(user)
     @user = user
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
