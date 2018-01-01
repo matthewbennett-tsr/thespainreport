@@ -25,7 +25,7 @@ class Article < ActiveRecord::Base
   scope :topstory, -> {where(:topstory => true)}
   scope :not_top, -> {where(:topstory => false)}
   scope :not_latest_top_story, -> { where.not(id: topstory.lastone) }
-  scope :in_depth, -> {where.not(:type_id => [1,2,26,31,32])}
+  scope :in_depth, -> {where.not(:type_id => [1,2,26,27,31,32])}
   scope :not_latest_in_depth, -> { where.not(id: in_depth.lastone) }
   scope :morning, -> {where(:urgency => 'morning')}
   scope :evening, -> {where(:urgency => 'evening')}

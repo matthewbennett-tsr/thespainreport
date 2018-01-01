@@ -233,12 +233,12 @@
     </div>
   <% end %>
 
-  <% @lastmorning.each do |article| %>
+  <% @lastbriefing.each do |article| %>
     <div class="side-block">
       <%= link_to article do %>
         <h3><%= article.short_headline %></h3>
         <p><%= article.short_lede %></p>
-        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">MORNING LEAD</span></span></p>
+        <p class="meta"><span class="feed-item-date"><%= article.created_at.to_formatted_s(:short) %></span> <span class="listing-update-slug"><span class="black-label-mini">SPAIN BRIEFING</span></span></p>
       <% end %>
     </div>
   <% end %>

@@ -10,14 +10,10 @@ class ApplicationController < ActionController::Base
   
   def app_wide
     @last_active_stories = Story.latest
-    @lasteditorial = Article.editorial.published.lastone
-    @lastmorning = Article.morning.published.lastone
     @lastnews = Article.news.published.lastone
+    @lastbriefing = Article.briefing.published.lastone
+    @lasteditorial = Article.editorial.published.lastone
     @lastindepth = Article.in_depth.published.lastone
-    if controller_name == 'articles' && action_name == 'show'
-    @article = @article
-    else
-    end
   end
   
   def message_error_not_allowed
