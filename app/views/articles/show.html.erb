@@ -77,7 +77,7 @@
     <div class="news-alert"><span class="black-label-mini">ORIGINAL UPDATED</span></div>
   <% end %>
 
-  <% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
+  <% if @article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
     <div class="news-alert"><span class="black-label-mini">FREE TO READ</span></div>
   <% else %>
   <% end %>
@@ -97,8 +97,6 @@
   <% end %>
 </div>
 
-<% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
-  
   <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
     <div class="main-image">
         <%= image_tag @article.main.url if @article.main? %>
@@ -117,8 +115,10 @@
     </div>
   <% else %>
   <% end %>
-  
-  <div class="article-text">
+
+  <div class="article-text"> <%# MAIN TEXT %>
+
+<% if @article.type.try(:name) == "LIVE BLOG" %> <%# LIVE-BLOG LAYOUT STARTS HERE %>
 
   <p style="font-style:italic;"> <%# LIVE-BLOG TEASER TEXT %>
     (Our live blogs are free to read. Refresh for updates. Sign-up for e-mail alerts to get updates pushed to your device as soon as we publish them.)
@@ -172,43 +172,11 @@
         Brand new live blog for breaking story, standby for first update very shortly. Refresh page.
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
-    
-<div class="meta">
-    <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
-  </div>
-  
-  <%= render 'article_stories', article: @article %>
-  
-    </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
-    </div> <%# END OF LIVE-BLOG ARTICLE TEXT & ENTRIES %>
-    </div>
-    <div class="clear"></div>
 
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
-  
-  <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
-    <div class="main-image">
-        <%= image_tag @article.main.url if @article.main? %>
-    <div class="main-caption">
-      <strong>Image:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
-    </div>
-    </div>
-  <% elsif @article.video? %>
-    <div class="main-image">
-      <div class="video-wrapper">
-        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
-      </div>
-      <div class="main-caption">
-        <strong>Video:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
-      </div>
-    </div>
-  <% else %>
-  <% end %>
-  
-  <div class="article-text"> <%# MAIN TEXT %>
-    
+
 <%# PAYWALL LOGIC %>
-    <% if @article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>
+    <% if @article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>
       <%= markdown(@article.body) %>
       <%= render 'articleupdates' %>
     <% elsif !@article.is_free %> <%# CONT: If article NOT free… %>
@@ -238,10 +206,7 @@
         <% end %> <%# END: user roles. %>
       <% elsif current_user.access_date >= Time.current %> <%# CONT: logged-in/NOT: access date good? %>
         <% if current_user.role == 'subscriber_one_story' %> <%# START: subscriber ONE/ALL? If one story subscriber… %>
-          <% if ["RECAP"].include?(@article.type.try(:name)) %>
-            <%= markdown(@article.body) %>
-            <%= render 'articleupdates' %>
-          <% elsif @article.story_ids.exclude?(current_user.one_story_id) %> <%# START: One-story logic. If NOT chosen story… %>
+          <% if @article.story_ids.exclude?(current_user.one_story_id) %> <%# START: One-story logic. If NOT chosen story… %>
             <%= markdown(@article.body.truncate(600)) %>
             <%= render 'upgrade' %>
           <% elsif @article.story_ids.include?(current_user.one_story_id) %> <%# CONT: One-story logic. If IS chosen story… %>
@@ -256,18 +221,32 @@
     <% end %> <%# END: free/NOT %>
     
     <%# PAYWALL LOGIC ENDS %>
-</div> <%# END OF ARTICLE TEXT %>
-  
+<% end %> <%# END OF LIVE-BLOGS vs. NORMAL ARTICLES %>
+</div> <%# END OF MAIN ARTICLE TEXT & ENTRIES %>
+
+<%# AFTER ARTICLE STUFF %>
   <div class="meta">
     <strong>First published:</strong> <%= @article.created_at.strftime("%b %d, %Y, %l:%M %P") %> | <strong>Last updated:</strong> <%= @article.updated_at.strftime("%b %d, %Y, %l:%M %P") %>
   </div>
   
-  <% unless @article.type.try(:name) == "BLOG" %>
+  <% unless @article.type.try(:name) == "BLOG" || !@article.stories.present? %>
     <%= render 'article_stories', article: @article %>
   <% end %>
+  
+  <% if current_user.nil? && ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %>
+    <div style="margin: 20px 0;">
+      <%= render 'quick_login_two' %>
+    </div>
+  <% else %>
+  <% end %>
+  
+  <h3>Thank You For Reading</h3>
+  <p class="user-paragraph">
+     Your subscription keeps us 100% independent.
+  </p>
+<%# END OF AFTER ARTICLE STUFF %>
 
-  </div>
-  </div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
-  <div class="clear"></div>
-
-<% end %> <%# END OF LIVE-BLOG vs. NORMAL ARTICLE LAYOUT LOGIC HERE %>
+</div>
+</div> <%# END OF LEFT-HAND CONTENT WHITE BACKGROUND %>
+<div class="clear"></div>
+<%# END OF WRAPPER DIVS FOR ALL ARTICLES %>

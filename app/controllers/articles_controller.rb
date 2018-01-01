@@ -28,12 +28,32 @@ class ArticlesController < ApplicationController
       @bignews = Article.bignews.order('updated_at DESC')
       @articlesbymonth = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
-     
+      test_create_briefing
     else
       redirect_to root_url
       flash[:success] = message_error_not_allowed
     end
   end
+  
+  def test_article_text
+    arr = Array.new
+    Article.lastten.notbriefing.published.each do |a|
+    arr << "**" + a.short_headline.to_s + "**: " + a.briefing_point.to_s + " ([Read now](/articles/#{a.id}-#{a.created_at.strftime("%y%m%d%H%M%S")}-#{a.headline.parameterize}))"
+    end
+    arr.join("\n\n")
+  end
+  
+  def test_create_briefing
+    a = Article.new
+    a.type_id = 27
+    a.status = 'published'
+    a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
+    a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%Y, %l:%M %p")
+    a.lede = 'Sign up now to get these briefings in your inbox.'
+    a.body = test_article_text
+    a.save!
+  end
+  
   
   # GET /articles/blog
   # GET /articles/blog.json

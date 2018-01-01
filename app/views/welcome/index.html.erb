@@ -61,6 +61,11 @@
       <% elsif !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
         <span class="indepth-label-mini">IN-DEPTH</span>
       <% end %>
+      
+      <% if article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(article.type.try(:name)) %>
+    <span class="black-label-mini">FREE TO READ</span>
+  <% else %>
+  <% end %>
     </div>
   
 <% end %>
@@ -123,6 +128,11 @@
       <% elsif !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
         <span class="indepth-label-mini">IN-DEPTH</span>
       <% end %>
+      
+      <% if article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(article.type.try(:name)) %>
+    <span class="black-label-mini">FREE TO READ</span>
+  <% else %>
+  <% end %>
     </div>  
         
     </div> 

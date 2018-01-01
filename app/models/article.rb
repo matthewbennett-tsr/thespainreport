@@ -20,6 +20,8 @@ class Article < ActiveRecord::Base
   
   scope :is_blog, -> {where(:type_id => 26)}
   scope :not_blog, -> {where.not(:type_id => 26)}
+  scope :briefing, -> {where(:type_id => 27)}
+  scope :notbriefing, -> {where.not(:type_id => 27)}
   scope :topstory, -> {where(:topstory => true)}
   scope :not_top, -> {where(:topstory => false)}
   scope :not_latest_top_story, -> { where.not(id: topstory.lastone) }
@@ -52,6 +54,7 @@ class Article < ActiveRecord::Base
   scope :last6, -> {where(:created_at => 6.hours.ago..DateTime.now.in_time_zone)}
   scope :last12, -> {where(:created_at => 12.hours.ago..DateTime.now.in_time_zone)}
   scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
+  scope :last48, -> {where(:created_at => 48.hours.ago..DateTime.now.in_time_zone)}
   scope :last84, -> {where(:created_at => 84.hours.ago..DateTime.now.in_time_zone)}
   scope :last168, -> {where(:created_at => 168.hours.ago..DateTime.now.in_time_zone)}
   scope :next24, -> {where('created_at <= ? and created_at >= now()', 24.hours.from_now).limit(20)}
