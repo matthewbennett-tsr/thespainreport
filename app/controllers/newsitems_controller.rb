@@ -87,7 +87,7 @@ class NewsitemsController < ApplicationController
     elsif @newsitem.article.present? && @newsitem.article.type.name == "LIVE BLOG"
       'LIVE BLOG: '
     else
-      'UPDATE: '
+      'LATEST: '
     end
   end
 

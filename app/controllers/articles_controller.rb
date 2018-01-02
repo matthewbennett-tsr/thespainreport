@@ -147,12 +147,12 @@ class ArticlesController < ApplicationController
       else
         h = History.where(article_id: @article, user_id: current_user).first
         if h.present?
-        h.touch
+          h.touch
         else
-        h = History.new
-        h.article_id = @article.id
-        h.user_id = current_user.id
-        h.save!
+          h = History.new
+          h.article_id = @article.id
+          h.user_id = current_user.id
+          h.save!
         end
       end
     elsif current_user.nil? || current_user.role != 'editor'

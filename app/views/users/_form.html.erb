@@ -193,7 +193,7 @@
     You will occasionally get some service announcements.
   </p>
   
-    <% Story.all.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+    <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
       <div style="margin-bottom: 10px;">
         <div style="font-weight: bold; font-family: Georgia; "><%= c.category unless c.nil? %></div>
             <% for s in stories %>
