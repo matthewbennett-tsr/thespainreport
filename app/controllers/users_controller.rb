@@ -30,11 +30,8 @@ class UsersController < ApplicationController
   end
   
   def update_all_update_tokens
-    @users = User.all
-    @users.each do |u|
-      u.update(
-      update_token: SecureRandom.urlsafe_base64.to_s
-      )
+    User.all.each do |u|
+      u.check_update_token
     end
   end
   
