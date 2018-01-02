@@ -102,7 +102,7 @@ class ArticleMailer < ApplicationMailer
     if @article.notification_message?
       @article.notification_message
     else
-      @article.headline
+      @article.headline.present? ? @article.headline : @article.short_headline
     end
   end
 

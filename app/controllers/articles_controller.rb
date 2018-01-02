@@ -180,6 +180,28 @@ class ArticlesController < ApplicationController
       redirect_to root_url
     end
   end
+  
+  # GET /articles/breaking
+  def breaking
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @article = Article.new
+      @regions = Region.all.order(:region)
+      @categories = Category.all.order(:category)
+      @stories = Story.all.order(:story)
+      @types = Type.all.order(:name)
+      @article.type_id = 2
+      @article.urgency = 'breaking'
+      @article.status = 'published'
+      @article.topstory = true
+      @article.lede = 'Breaking story…more to follow.'
+      @article.body = '*(Breaking story…more to follow.)*'
+      @article.short_headline = 'XXXXX'
+    else
+      redirect_to root_url
+    end
+  end
 
   # GET /articles/1/edit
   def edit
@@ -230,7 +252,7 @@ class ArticlesController < ApplicationController
     if @article.notification_message?
       @article.notification_message
     else
-      @article.headline
+      @article.headline.present? ? @article.headline : @article.short_headline
     end
   end
 
@@ -347,9 +369,7 @@ class ArticlesController < ApplicationController
             end
           elsif user.access_date >= Time.current
             if user.role == 'subscriber_one_story'
-              if ["RECAP"].include?(@article.type.try(:name))
-                ArticleMailer.delay.send_article_full(@article, user)
-              elsif @article.story_ids.include?(user.one_story_id)
+              if @article.story_ids.include?(user.one_story_id)
                 ArticleMailer.delay.send_article_full(@article, user)
               elsif @article.story_ids.exclude?(user.one_story_id)
                 ArticleMailer.delay.send_article_upgrade(@article, user)
@@ -380,6 +400,26 @@ class ArticlesController < ApplicationController
       story.save
     end
   end
+  
+  def new_breaking_story
+    if params[:new_story] == '1' && ["breaking", "majorbreaking"].include?(@article.urgency)
+      s = Story.new
+      s.story = @article.short_headline
+      s.category_id = 12
+      s.save
+        
+      User.notdeleted.each do |u|
+        n = Notification.new
+        n.user_id = u.id
+        n.story_id = s.id
+        n.notificationtype_id = 1
+        n.save  
+      end
+      
+      @article.stories << s
+    else
+    end
+  end
 
   # POST /articles
   # POST /articles.json
@@ -393,13 +433,8 @@ class ArticlesController < ApplicationController
         if @article.save && ["draft", "editing"].include?(@article.status)
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.save && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.save && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
-          twitter
-          story_last_active
-          emailarticles
-          format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
-          format.json { render :show, status: :created, location: @article }
         elsif @article.save && ["published", "updated"].include?(@article.status)
+          new_breaking_story
           twitter
           story_last_active
           emailarticles

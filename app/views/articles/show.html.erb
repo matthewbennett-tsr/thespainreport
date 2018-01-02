@@ -1,7 +1,7 @@
 <% if @article.type.try(:name) == "LIVE BLOG" %>
-  <% title 'LIVE BLOG: ' + @article.headline %>
+  <% title 'LIVE BLOG: ' + @article.headline.present? ? @article.headline : @article.short_headline %>
 <% else %>
-  <% title @article.headline %>
+  <% title @article.headline.present? ? @article.headline : @article.short_headline %>
 <% end %>
 
 <% content_for :meta do %>
@@ -38,9 +38,11 @@
     <% end %>
     
     <% if current_user.nil? || current_user.role != 'editor' %>
-      <%= @article.headline %>
+      <%= @article.headline.present? ? @article.headline : @article.short_headline %>
     <% elsif current_user.role == 'editor' %>
-      <%= link_to @article.headline, edit_article_path(@article) %>
+      <%= link_to edit_article_path(@article) do %>
+        <%= @article.headline.present? ? @article.headline : @article.short_headline %>
+      <% end %>
     <% else %>
     <% end %>
 </h1>

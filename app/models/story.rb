@@ -17,7 +17,7 @@ class Story < ActiveRecord::Base
   scope :active, -> {where(:status => ['active'])}
   
   def story_notifications
-    User.all.each do |u|
+    User.notdeleted.each do |u|
       Notification.where(user_id: u.id, story_id: self.id).first_or_create(notificationtype_id: 1)
     end
   end

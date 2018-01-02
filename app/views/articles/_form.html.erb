@@ -22,10 +22,11 @@
   
   <div class="admin-block">
   Top <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Morning", "morning"], ["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
-      | <%= f.collection_select :type_id, @types, :id, :name %>
+      | <%= f.collection_select :type_id, @types, :id, :name, {:selected => @article.type_id ? @article.type_id : 2} %>
       <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
-      <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], "None") %>
+      <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], controller_name == "articles" && action_name == "breaking" ? 'all' : 'none') %>
       € <%= f.check_box :is_free %>
+      Story? <%= check_box_tag 'new_story' %> 
   </div>
   
   <div class="admin-block">
