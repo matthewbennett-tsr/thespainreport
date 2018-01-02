@@ -13,7 +13,7 @@ class StoriesController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @stories = Story.all.order( 'stories.updated_at DESC' )
+      @stories = Story.all.order(:story)
       @storycount = Story.count
     else
       redirect_to root_url
