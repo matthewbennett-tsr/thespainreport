@@ -6,6 +6,7 @@ class Story < ActiveRecord::Base
   has_many :users, :through => :notifications
   
   before_save :story_notifications
+  after_create :story_notifications
   
   def to_param
   "#{id}-#{created_at.strftime("%y%m%d%H%M%S")}-#{story.parameterize}"
