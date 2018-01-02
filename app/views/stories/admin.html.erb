@@ -3,33 +3,47 @@
 <div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
 <div class="content-white-background">
 
-<h1>Edit All Stories</h1>
+<h1>All Stories</h1>
 
 <div class="article-lede">There are <strong><%= @storycount %></strong> stories.</div>
-
-<table class="admin-table">
+ 
+ <table class="admin-table">
   <tr>
     <td></td>
-    <td>Story</td>
-    <td>E-Mail Alerts</td>
-    <td>Briefings</td>
-    <td>Website Only</td>
-    <td>Not Interested</td>
-    <td>Articles</td>
+    <td style="min-width:240px;"></td>
+    <td style="min-width:70px; text-align: right; font-weight: bold;">Alerts</td>
+    <td style="min-width:70px; text-align: right; font-weight: bold;">Briefings</td>
+    <td style="min-width:70px; text-align: right; font-weight: bold;">Website</td>
+    <td style="min-width:70px; text-align: right; font-weight: bold;">Nope</td>
+    <td style="min-width:70px; text-align: right; font-weight: bold;">Articles</td>
   </tr>
-<% @stories.each do |s| %>
+ </table>
+ 
+  <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+  <table class="admin-table" style="margin-bottom: 15px;">
+  <tr>
+    <td></td>
+    <td style="min-width:230px; font-weight: bold;"><%= c.category unless c.nil? %></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+  <% for s in stories %>
   <tr>
     <td><%= link_to 'E', edit_story_path(s) %></td>
-    <td><%= link_to s.story, s unless s.story.nil? %></td>
-    <td><%= s.notifications.level_1.count %></td>
-    <td><%= s.notifications.level_2.count %></td>
-    <td><%= s.notifications.level_3.count %></td>
-    <td><%= s.notifications.level_4.count %></td>
-    <td><%= s.articles.count %></td>
+    <td style="min-width:230px; text-align: left;"><%= link_to s.story, s unless s.story.nil? %></td>
+    <td style="min-width:70px; text-align: right;"><%= s.notifications.level_1.count %></td>
+    <td style="min-width:70px; text-align: right;"><%= s.notifications.level_2.count %></td>
+    <td style="min-width:70px; text-align: right;"><%= s.notifications.level_3.count %></td>
+    <td style="min-width:70px; text-align: right;"><%= s.notifications.level_4.count %></td>
+    <td style="min-width:70px; text-align: right;"><%= s.articles.count %></td>
   </tr>
-<% end %>
-
-</table>
+  <% end %>
+  </tr>
+  <% end %>
+  </table>
 
 </div>
 </div>
