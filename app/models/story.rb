@@ -5,7 +5,7 @@ class Story < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
   has_many :users, :through => :notifications
   
-  after_create :new_story_notifications
+  before_save :story_notifications
   
   def to_param
   "#{id}-#{created_at.strftime("%y%m%d%H%M%S")}-#{story.parameterize}"
@@ -16,13 +16,9 @@ class Story < ActiveRecord::Base
   scope :ticker, -> {limit(1)}
   scope :active, -> {where(:status => ['active'])}
   
-  def new_story_notifications
+  def story_notifications
     User.all.each do |u|
-      n = Notification.new
-      n.story_id = self.id
-      n.user_id = u.id
-      n.notificationtype_id = 1
-      n.save!
+      Notification.where(user_id: u.id, story_id: self.id).first_or_create(notificationtype_id: 1)
     end
   end
   

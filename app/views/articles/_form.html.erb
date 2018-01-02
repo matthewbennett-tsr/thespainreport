@@ -37,6 +37,14 @@
     </div>
   </div>
   
+    <div class="admin-block">
+    <div style="margin-bottom: 5px;">
+      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '27', :style => 'padding:5px;' %>
+      <%= f.text_field :short_lede, :size => '57', :class => "edit-short-lede", :style => 'padding:5px;' %>
+    </div>
+    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
+  </div>
+  
   <div class="admin-block">
     <div style="margin-top: 5px;">
         <%= f.text_area :headline, :class => "edit-headline", :style => 'width: 100%; padding:5px;' %>
@@ -49,14 +57,6 @@
 <div class="admin-block">
 <textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 660px;"><%= @article.body %></textarea>
 </div>
-  
-  <div class="admin-block">
-    <div style="margin-bottom: 5px;">
-      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '27', :style => 'padding:5px;' %>
-      <%= f.text_field :short_lede, :size => '57', :class => "edit-short-lede", :style => 'padding:5px;' %>
-    </div>
-    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
-  </div>
   
   <div class="admin-block">   
     <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>

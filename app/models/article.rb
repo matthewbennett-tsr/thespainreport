@@ -20,18 +20,18 @@ class Article < ActiveRecord::Base
   
   scope :is_blog, -> {where(:type_id => 26)}
   scope :not_blog, -> {where.not(:type_id => 26)}
-  scope :briefing, -> {where(:type_id => 27)}
-  scope :notbriefing, -> {where.not(:type_id => 27)}
+  scope :briefing, -> {where(:type_id => 32)}
+  scope :notbriefing, -> {where.not(:type_id => 32)}
   scope :topstory, -> {where(:topstory => true)}
   scope :not_top, -> {where(:topstory => false)}
   scope :not_latest_top_story, -> { where.not(id: topstory.lastone) }
-  scope :in_depth, -> {where.not(:type_id => [1,2,26,27,31,32])}
+  scope :in_depth, -> {where.not(:type_id => [1,2,22,26,31,32])}
   scope :not_latest_in_depth, -> { where.not(id: in_depth.lastone) }
   scope :morning, -> {where(:urgency => 'morning')}
   scope :evening, -> {where(:urgency => 'evening')}
   scope :editorial, -> {where(:type_id => 1)}
   scope :not_latest_editorial, -> { where.not(id: editorial.lastone) }
-  scope :news, -> {where(:type_id => [2,31,32])}
+  scope :news, -> {where(:type_id => [2,31])}
   scope :bignews, -> {where(:urgency => ['latest', 'breaking', 'majorbreaking'])}
   scope :breakingonly, -> {where(:urgency => ['breaking', 'majorbreaking'])}
   scope :latest, -> {order('created_at DESC').where(:created_at => (Time.now - 24.hours)..Time.now)}
