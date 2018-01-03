@@ -4,25 +4,35 @@ class CategoriesController < ApplicationController
   # GET /categories
   # GET /categories.json
   def index
-    @categories = Category.all.order( 'categories.category ASC' )
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @categories = Category.all.order( 'categories.category ASC' )
+    else
+      redirect_to root_url
+    end
   end
 
   # GET /categories/1
   # GET /categories/1.json
   def show
-    @newsitem = Category.find(params[:id])
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @newsitem = Category.find(params[:id])
+    else
+      redirect_to root_url
+    end
   end
 
   # GET /categories/new
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @category = Category.new
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -30,12 +40,10 @@ class CategoriesController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -44,7 +52,6 @@ class CategoriesController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @category = Category.new(category_params)
       respond_to do |format|
@@ -58,7 +65,6 @@ class CategoriesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -67,7 +73,6 @@ class CategoriesController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @category.update(category_params)
@@ -80,7 +85,6 @@ class CategoriesController < ApplicationController
       end 
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -89,7 +93,6 @@ class CategoriesController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @category.destroy
       respond_to do |format|
@@ -98,7 +101,6 @@ class CategoriesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end   
   end
 

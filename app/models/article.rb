@@ -48,6 +48,7 @@ class Article < ActiveRecord::Base
   scope :lastten, -> {order('created_at DESC').limit(10)}
   scope :lasttwenty, -> {order('created_at DESC').limit(20)}
   scope :lastthirty, -> {order('created_at DESC').limit(30)}
+  scope :last100, -> {order('created_at DESC').limit(100)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
   scope :last2, -> {where(:created_at => 2.hours.ago..DateTime.now.in_time_zone)}
   scope :last3, -> {where(:created_at => 3.hours.ago..DateTime.now.in_time_zone)}

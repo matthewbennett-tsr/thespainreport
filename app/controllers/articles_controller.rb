@@ -405,6 +405,7 @@ class ArticlesController < ApplicationController
     if params[:new_story] == '1' && ["breaking", "majorbreaking"].include?(@article.urgency)
       s = Story.new
       s.story = @article.short_headline
+      s.description = 'Breaking news: ' + @article.short_headline + '. More to follow.'
       s.category_id = 17
       s.save
       

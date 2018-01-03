@@ -22,7 +22,7 @@
 
     <h1 class="headline">
        <%= link_to article do %>
-        <%= article.headline.present? ? article.headline : article.short_headline %>
+        <%= link_to article.headline.present? ? article.headline : article.short_headline, article %>
       <% end %>
     </h1>
     
@@ -91,7 +91,9 @@
     <% else %>
     <% end %>
     
-    <p class="headline"><%= link_to article.headline, article %></p>
+    <p class="headline">
+      <%= link_to article.headline.present? ? article.headline : article.short_headline, article %>
+    </p>
     
     <div class="index-story-text">
       <strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).

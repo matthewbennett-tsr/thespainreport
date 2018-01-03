@@ -4,7 +4,13 @@ class StoriesController < ApplicationController
   # GET /stories
   # GET /stories.json
   def index
-    @stories = Story.all.order( 'stories.updated_at DESC' )
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @stories = Story.all.order( 'stories.updated_at DESC' )
+    else
+      redirect_to root_url
+    end
   end
   
   # GET /stories/admin

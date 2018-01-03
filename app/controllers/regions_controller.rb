@@ -8,25 +8,35 @@ class RegionsController < ApplicationController
   # GET /regions
   # GET /regions.json
   def index
-    @regions = Region.all.order( 'regions.region ASC' )
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @regions = Region.all.order( 'regions.region ASC' )
+    else
+      redirect_to root_url
+    end
   end
 
   # GET /regions/1
   # GET /regions/1.json
   def show
-    @last50items = Newsitem.published.lastfifty
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @last50items = Newsitem.published.lastfifty
+    else
+      redirect_to root_url
+    end
   end
 
   # GET /regions/new
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @region = Region.new
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -34,12 +44,10 @@ class RegionsController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -48,7 +56,6 @@ class RegionsController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @region = Region.new(region_params)
       respond_to do |format|
@@ -62,7 +69,6 @@ class RegionsController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -71,7 +77,6 @@ class RegionsController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @region.update(region_params)
@@ -84,7 +89,6 @@ class RegionsController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -93,7 +97,6 @@ class RegionsController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @region.destroy
       respond_to do |format|
@@ -102,7 +105,6 @@ class RegionsController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 

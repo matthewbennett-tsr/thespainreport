@@ -21,134 +21,83 @@
 <div class="clear"></div>
 <div class="article-lede"><%= @story.description unless @story.description.blank? %></div>
 
-<div class="index-non-home">
-  <div class="listing-left">Published</div>
-  <div class="listing-right">Latest Articles</div>
-  <div class="clear"></div>
-</div>
-
 <% if @story.articles.empty? %>
   <div class="listing-article-container">
-    <div class="listing-left">
-      --/--
-    </div>
-    <div class="listing-right">
-    No articles for this story yet, likely because it is a breaking story, so stay tuned to this page. More information in a few minutes.
-    </div>
-    <div class="clear"></div>
+    No articles for this story yet, so come back in a few minutes.
   </div>
 <% end %>
 
-<% @story.articles.published.order( 'articles.created_at DESC' ).each do |article| %>
-  <div class="listing-article-container">
-    <div class="listing-left">
-    <div class="listing-update-text">
-    <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
-      <span class="listing-update-slug"><span class="breaking-label-mini">
-    <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
-      <span class="listing-update-slug"><span class="breaking-label-mini">
-    <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %> 
-      <span class="listing-update-slug"><span class="latest-label-mini">
-    <% elsif article.status == 'updated' %> 
-      <span class="listing-update-slug"><span class="updated-label-mini">
-    <% elsif article.type.name == 'EDITORIAL' %> 
-      <span class="listing-update-slug"><span class="editorial-label-mini">
+<% @story.articles.last100.each do |article| %>
+  <div class="index-story" style="margin-bottom: 10px;">
+    
+    <% if article.main? %>
+      <div class="index-image">
+        <%= link_to(article) do %>
+          <%= image_tag article.main.url if article.main? %>
+        <% end %>
+      </div>
+    <% elsif article.video? %>
+      <div class="index-video">
+        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{article.video}?rel=0&amp;showinfo=0") %>
+      </div>
     <% else %>
-      <span class="listing-update-slug"><span>
     <% end %>
-      <%= article.created_at.strftime("%b %d, %Y") %></span></span>
+    
+    <p class="headline">
+      <%= link_to article.headline.present? ? article.headline : article.short_headline, article %>
+    </p>
+    
+    <div class="index-story-text">
+      <strong><%= article.type.name %>:</strong> <%= article.body.truncate(225) %> (<%= link_to 'Read full story', article %>).
     </div>
-    </div>
-    <div class="listing-right">
-      <div class="listing-update-text">
-      <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
-        <span class="listing-update-slug"><span class="breaking-label-mini"><%= link_to 'MAJOR BREAKING' + ': ' + article.headline, article %></span></span>
-      <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
-        <span class="listing-update-slug"><span class="breaking-label-mini">BREAKING</span> <%= link_to article.headline, article %></span>
-      <% elsif article.urgency == 'latest' && article.created_at >= 12.hours.ago %>
-        <span class="listing-update-slug"><span class="latest-label-mini">LATEST</span> <%= link_to article.headline, article %></span>
-      <% elsif article.status == 'updated' %>
-        <span class="listing-update-slug"><span class="updated-label-mini">UPDATED</span> <%= link_to article.headline, article %></span>
-      <% elsif article.type.name == 'EDITORIAL' %>
-        <span class="listing-update-slug"><span class="editorial-label-mini">EDITORIAL</span> <%= link_to article.headline, article %></span>
-      <% else %>  
-        <span class="listing-update-slug"><strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %></span>
-      <% end %>
-    </div>
-    </div>
-    <div class="clear"></div>
-  </div>
-<% end %>
-
-<div class="index-updates">
-  <div class="listing-left">Updated</div>
-  <div class="listing-right">Latest Updates</div>
-  <div class="clear"></div>
-</div>
-
-<% if @story.newsitems.empty? %>
-  <div class="listing-article-container">
-    <div class="listing-left">
-      --/--
-    </div>
-    <div class="listing-right">
-    No updates for this story yet, likely because it is a breaking story, so stay tuned to this page. More information in a few minutes.
-    </div>
-    <div class="clear"></div>
-  </div>
-<% end %>
-
-<% @story.newsitems.published.lastfifty.each do |newsitem| %>
-<div class="listing-update-container">
-  <div class="listing-left">
-    <%= newsitem.created_at.to_formatted_s(:short) %>
-  </div>
-  <div class="listing-right">
-      <% if newsitem.main? %>
-        <div class="index-main-image">
-          <%= link_to(newsitem) do %>
-          <%= image_tag newsitem.main.url if newsitem.main? %>
+        
+    <% if article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+      <div class="index-story-updates">
+        <ul>
+          <% article.newsitems.each do |newsitem| %>
+            <li>
+              <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
+            </li>
           <% end %>
-        </div>
-      <% elsif newsitem.video? %>
-        <div class="index-main-image">
-        <div class="video-wrapper">
-          <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{newsitem.video}?rel=0&amp;showinfo=0") %>
-        </div>
-        </div>
+        </ul>
+      </div>
+    <% end %>
+    
+    <div class="index-story-meta">
+      <span class="feed-item-date"><%= article.created_at.strftime("%A, %B %-d, %Y at %l:%M %p") %></span>
+      
+      <% if article.urgency == 'majorbreaking' && article.created_at >= 2.hours.ago %>
+        <span class="breaking-label-mini">MAJOR BREAKING</span>
+      <% elsif article.urgency == 'breaking' && article.created_at >= 2.hours.ago %>
+        <span class="breaking-label-mini">BREAKING</span> 
+      <% elsif article.urgency == 'latest' && article.created_at >= 2.hours.ago %>
+        <span class="latest-label-mini">LATEST</span>   
       <% else %>
       <% end %>
-  
-    <div class="listing-update-text">
-      <span class="listing-update-slug">
       
-      <% if newsitem.article.present? && newsitem.article.type.name == "LIVE BLOG" %>
-        LIVE BLOG: <%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id) %>
-      <% else %>
-        <%= link_to newsitem.slug, newsitem %>
+      <% if article.type.name == "LIVE BLOG" %>
+        <span class="breaking-label-mini">LIVE BLOG</span>  
+      <% elsif article.type.name == 'EDITORIAL' %>
+        <span class="editorial-label-mini">EDITORIAL</span>
+      <% elsif article.type.name == 'ANALYSIS' %>
+        <span class="editorial-label-mini">ANALYSIS</span>
+      <% elsif article.type.name == 'DAILY BRIEFING' %>
+        <span class="latest-label-mini">DAILY BRIEFING</span>
+      <% elsif !["NEWS", "DAILY BRIEFING", "EDITORIAL", "ANALYSIS", "BLOG", "LIVE BLOG"].include?(article.type.try(:name)) %>
+        <span class="indepth-label-mini">IN-DEPTH</span>
       <% end %>
       
-      </span>
-      <br />
-      <%= markdown(newsitem.item) %>
-    </div>
-    <div class="clear"></div>
-    <div class="meta">
-      <strong>Source:</strong> 
-      <% if newsitem.url.blank? %>
-        <%= newsitem.source %>
-      <% else %>
-        <%= link_to newsitem.source, newsitem.url %>
-      <% end %> 
-       || 
-      <%= raw(newsitem.regions.map {|r| raw(link_to(r.region, region_path(r)))}.join(', ')) %>, 
-      <%= raw(newsitem.categories.map {|c| raw(link_to(c.category, category_path(c)))}.join(', ')) %>,
-      <%= raw(newsitem.stories.map {|s| raw(link_to(s.story, story_path(s)))}.join(', ')) %>
-    </div>
-  </div>
-  <div class="clear"></div>
-</div>
+      <% if article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(article.type.try(:name)) %>
+    <span class="black-label-mini">FREE TO READ</span>
+  <% else %>
+  <% end %>
+    </div>  
+        
+    </div> 
 <% end %>
+
+
+
 
 </div>
 </div>
