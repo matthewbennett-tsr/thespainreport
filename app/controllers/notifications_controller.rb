@@ -13,6 +13,20 @@ class NotificationsController < ApplicationController
     end
   end
 
+  def emergency_regenerate_notifications
+    User.deleted.each do |u|
+      u.notifications.each do |n|
+        n.delete
+      end
+    end
+    
+    User.notdeleted.each do |u|
+     Story.all.each do |s|
+       Notification.where(user_id: u.id, story_id: s.id).first_or_create(notificationtype_id: 1)
+     end
+    end
+  end
+
   # GET /notifications/1
   # GET /notifications/1.json
   def show

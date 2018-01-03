@@ -5,7 +5,7 @@ class Story < ActiveRecord::Base
   has_many :notifications, dependent: :destroy
   has_many :users, :through => :notifications
   
-  before_save :story_notifications
+  after_update :story_notifications
   after_create :story_notifications
   
   def to_param
@@ -19,7 +19,7 @@ class Story < ActiveRecord::Base
   
   def story_notifications
     User.notdeleted.each do |u|
-      Notification.where(user_id: u.id, story_id: self.id).first_or_create(notificationtype_id: 1)
+      u.notifications.where(story_id: self.id).first_or_create(notificationtype_id: 1)
     end
   end
   

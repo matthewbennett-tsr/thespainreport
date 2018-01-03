@@ -405,16 +405,8 @@ class ArticlesController < ApplicationController
     if params[:new_story] == '1' && ["breaking", "majorbreaking"].include?(@article.urgency)
       s = Story.new
       s.story = @article.short_headline
-      s.category_id = 12
+      s.category_id = 17
       s.save
-        
-      User.notdeleted.each do |u|
-        n = Notification.new
-        n.user_id = u.id
-        n.story_id = s.id
-        n.notificationtype_id = 1
-        n.save  
-      end
       
       @article.stories << s
     else
