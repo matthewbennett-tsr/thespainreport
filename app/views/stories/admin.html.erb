@@ -39,6 +39,7 @@
     <td style="min-width:70px; text-align: right;"><%= s.notifications.level_3.count %></td>
     <td style="min-width:70px; text-align: right;"><%= s.notifications.level_4.count %></td>
     <td style="min-width:70px; text-align: right;"><%= s.articles.count %></td>
+    <td><%= link_to 'D', s, method: :delete, data: { confirm: 'Are you sure?' } %></td>
   </tr>
   <% end %>
   </tr>
