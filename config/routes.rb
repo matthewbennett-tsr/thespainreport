@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     member do
       get :confirm_email
       get :all_off
+      get :all_to_briefings
       get :update_freq
     end
   end

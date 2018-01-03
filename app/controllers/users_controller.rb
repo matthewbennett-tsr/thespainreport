@@ -35,9 +35,20 @@ class UsersController < ApplicationController
     end
   end
   
+  def all_to_briefings
+    u = User.find_by_update_token(params[:id])
+    Notification.all.where(user_id: u.id, notificationtype_id: [1, 3, 4]).each do |n|
+     n.update(
+     notificationtype_id: 2
+     )
+    end
+    flash[:success] = "All to briefings."
+    redirect_to root_url
+  end
+  
   def all_off
     u = User.find_by_update_token(params[:id])
-    Notification.all.where(user_id: u.id, notificationtype_id: [1, 2]).each do |n|
+    Notification.all.where(user_id: u.id, notificationtype_id: [1, 2, 4]).each do |n|
      n.update(
      notificationtype_id: 3
      )

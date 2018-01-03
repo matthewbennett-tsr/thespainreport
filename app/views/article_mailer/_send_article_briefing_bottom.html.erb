@@ -15,9 +15,16 @@
 
 <p>--------</p>
 
-<p style="font-weight:bold;">Switch Off All News E-mails</p>
+<p style="font-weight:bold;">Switch All News E-mails</p>
 
-<p>To switch off all news notifications (no alerts or briefings, for any story), <%= link_to "click this link", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>. You can switch some back on at any point by logging in to your account.</p>
+<ul>
+  <li>Switch all stories to briefings (no e-mail alerts), <%= link_to "here", all_to_briefings_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>;</li>
+  <li>Switch off all news notifications (no alerts or briefings, for any story), <%= link_to "here", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>;</li>
+</ul>
+
+<p>
+.
+You can switch some back on at any point by logging in to your account.</p>
 
 <p>--------</p>
 
