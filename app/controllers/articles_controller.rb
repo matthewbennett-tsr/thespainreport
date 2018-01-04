@@ -28,43 +28,27 @@ class ArticlesController < ApplicationController
       @bignews = Article.bignews.order('updated_at DESC')
       @articlesbymonth = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
-      
     else
       redirect_to root_url
       flash[:success] = message_error_not_allowed
     end
   end
   
-  def create_am_web_briefing
-    a = Article.new
-    a.type_id = 27
-    a.status = 'published'
-    a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
-    a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
-    a.lede = 'Sign up now to get these briefings in your inbox.'
-    a.short_lede = 'Sign up now to get these briefings in your inbox.'
-    a.body = web_am_briefing_article_text
-    a.save!
-  end
-  
-  def web_am_briefing_article_text
-    arr = Array.new
-    Article.last24.notbriefing.published.each do |a|
-    arr << "**" + a.short_headline.to_s + "**: " + a.briefing_point.to_s + " ([Read now](/articles/#{a.id}-#{a.created_at.strftime("%y%m%d%H%M%S")}-#{a.headline.parameterize}))"
-    end
-    arr.join("\n\n")
-  end
-  
+# Start briefings logic for cron
+  # Sundays 10 a.m. briefing: create web briefing, send e-mail briefings
   def create_sunday_am_web_briefing
-    a = Article.new
-    a.type_id = 27
-    a.status = 'published'
-    a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
-    a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
-    a.lede = 'Sign up now to get these briefings in your inbox.'
-    a.short_lede = 'Sign up now to get these briefings in your inbox.'
-    a.body = web_sunday_am_briefing_article_text
-    a.save!
+    if Article.last48.notbriefing.published.present?
+      a = Article.new
+      a.type_id = 32
+      a.status = 'published'
+      a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
+      a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
+      a.lede = 'Sign up now to get these briefings in your inbox.'
+      a.short_lede = 'Sign up now to get these briefings in your inbox.'
+      a.body = web_sunday_am_briefing_article_text
+      a.save!
+    else
+    end
   end
   
   def web_sunday_am_briefing_article_text
@@ -75,26 +59,142 @@ class ArticlesController < ApplicationController
     arr.join("\n\n")
   end
   
-  def create_pm_web_briefing
-    a = Article.new
-    a.type_id = 27
-    a.status = 'published'
-    a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
-    a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
-    a.lede = 'Sign up now to get these briefings in your inbox.'
-    a.short_lede = 'Sign up now to get these briefings in your inbox.'
-    a.body = web_pm_briefing_article_text
-    a.save!
+  def briefing_sunday_10_am
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [2,3,6,12,24].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_48(userid)
+      elsif [84].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_84(userid)
+      elsif [168].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_168(userid)
+      else
+      end
+    end
+  end
+
+  # Weekday 10 a.m. briefing: create 24-hour web briefing, send e-mail briefings
+  def create_am_web_briefing
+    if Article.last24.notbriefing.published.present?
+      a = Article.new
+      a.type_id = 32
+      a.status = 'published'
+      a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
+      a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
+      a.lede = 'Sign up now to get these briefings in your inbox.'
+      a.short_lede = 'Sign up now to get these briefings in your inbox.'
+      a.body = web_am_briefing_article_text
+      a.save!
+    else
+    end
   end
   
-  def web_pm_briefing_article_text
+  def web_am_briefing_article_text
     arr = Array.new
-    Article.last12.notbriefing.published.each do |a|
+    Article.last24.notbriefing.published.each do |a|
     arr << "**" + a.short_headline.to_s + "**: " + a.briefing_point.to_s + " ([Read now](/articles/#{a.id}-#{a.created_at.strftime("%y%m%d%H%M%S")}-#{a.headline.parameterize}))"
     end
     arr.join("\n\n")
   end
   
+  def briefing_monday_to_friday_10_am
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [2,3,6,12].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_12(userid)
+      elsif [24].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_24(userid)
+      else
+      end
+    end
+  end
+  
+  # Weekday X-hourly briefings, every 2, every 3, and 4 p.m. for 2,3,6
+  def briefing_every_2_hours
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [2].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_2(userid)
+      else
+      end
+    end
+  end
+  
+  def briefing_every_3_hours
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [3].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_3(userid)
+      else
+      end
+    end
+  end
+  
+  def briefing_monday_to_friday_4_pm
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [2].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_2(userid)
+      elsif [3].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_3(userid)
+      elsif [6].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_6(userid)
+      else
+      end
+    end
+  end  
+  
+  # Weekday 10 p.m. briefing: create 12-hour 10 p.m. briefing, send e-mail briefings, on Wednesday nights send twice weekly e-mail briefing
+  def create_pm_web_briefing
+    if Article.last12.notbriefing.published.present?
+      a = Article.new
+      a.type_id = 32
+      a.status = 'published'
+      a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
+      a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
+      a.lede = 'Sign up now to get these briefings in your inbox.'
+      a.short_lede = 'Sign up now to get these briefings in your inbox.'
+      a.body = web_pm_briefing_article_text
+      a.save!
+    else
+    end
+  end
+  
+  def web_pm_briefing_article_text
+    arr = Array.new
+    Article.last12.notbriefing.published.each do |a|
+      arr << "**" + a.short_headline.to_s + "**: " + a.briefing_point.to_s + " ([Read now](/articles/#{a.id}-#{a.created_at.strftime("%y%m%d%H%M%S")}-#{a.headline.parameterize}))"
+    end
+    arr.join("\n\n")
+  end
+  
+  def briefing_monday_to_friday_10_pm
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [2].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_2(userid)
+      elsif [3].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_3(userid)
+      elsif [6].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_6(userid)
+      elsif [12].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_12(userid)
+      else
+      end
+    end
+  end
+  
+  def briefing_wednesday_10pm
+    User.notdeleted.each do |user|
+      userid = user.id
+      if [84].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_84(userid)
+      else
+      end
+    end
+  end
+# Ends briefings logic
+
   # GET /articles/blog
   # GET /articles/blog.json
   def blog
@@ -270,72 +370,6 @@ class ArticlesController < ApplicationController
 
   def tweetvideo
    'https://www.youtube.com/watch?v=' + @article.video
-  end
-  
-  def briefing_sunday_10_am
-    User.notdeleted.where(briefing_frequency: [2,3,6,12,24]).each do |user|
-      ArticleMailer.delay.send_briefing_48(user)
-    end
-    User.notdeleted.frequency_84.each do |user|
-      ArticleMailer.delay.send_briefing_84(user)
-    end
-    User.notdeleted.frequency_168.each do |user|
-      ArticleMailer.delay.send_briefing_168(user)
-    end
-  end
-  
-  def briefing_monday_to_friday_10_am
-    User.notdeleted.where(briefing_frequency: [2,3,6,12]).each do |user|
-      ArticleMailer.delay.send_briefing_12(user)
-    end
-    User.notdeleted.frequency_24.each do |user|
-      ArticleMailer.delay.send_briefing_24(user)
-    end
-  end
-  
-  def briefing_monday_to_friday_10_pm
-    User.notdeleted.frequency_2.each do |user|
-      ArticleMailer.delay.send_briefing_2(user)
-    end
-    User.notdeleted.frequency_3.each do |user|
-      ArticleMailer.delay.send_briefing_3(user)
-    end
-    User.notdeleted.frequency_6.each do |user|
-      ArticleMailer.delay.send_briefing_6(user)
-    end
-    User.notdeleted.frequency_12.each do |user|
-      ArticleMailer.delay.send_briefing_12(user)
-    end
-  end
-
-  def briefing_monday_to_friday_4_pm
-    User.notdeleted.frequency_2.each do |user|
-      ArticleMailer.delay.send_briefing_2(user)
-    end
-    User.notdeleted.frequency_3.each do |user|
-      ArticleMailer.delay.send_briefing_3(user)
-    end
-    User.notdeleted.frequency_6.each do |user|
-      ArticleMailer.delay.send_briefing_6(user)
-    end
-  end
-
-  def briefing_wednesday_10pm
-    User.notdeleted.frequency_84.each do |user|
-      ArticleMailer.delay.send_briefing_84(user)
-    end
-  end
-  
-  def briefing_every_2_hours
-    User.notdeleted.frequency_2.each do |user|
-      ArticleMailer.delay.send_briefing_2(user)
-    end
-  end
-  
-  def briefing_every_3_hours
-    User.notdeleted.frequency_3.each do |user|
-      ArticleMailer.delay.send_briefing_3(user)
-    end
   end
   
   def emailarticles

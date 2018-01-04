@@ -70,7 +70,6 @@ class User < ActiveRecord::Base
   has_many :invoices
   has_many :histories
   has_many :articles, :through => :histories
-  
   has_many :notifications, -> {joins(:story).order("story ASC")}, dependent: :destroy
   has_many :stories, :through => :notifications
   accepts_nested_attributes_for :notifications

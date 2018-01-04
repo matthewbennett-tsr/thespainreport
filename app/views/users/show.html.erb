@@ -1,8 +1,0 @@
-<h1><%= @user.name %></h1>
-
-<p style="margin-top: 20px; line-height: 140%;"><strong><%= @user.role.to_s.humanize %></strong></p>
-
-<p style="margin-top: 20px; line-height: 140%;"><%= @user.bio %></p>
-
-<p style="margin-top: 20px; line-height: 140%;"><%= link_to 'Follow ' + @user.name + ' on Twitter', 'https://twitter.com/' + @user.twitter unless @user.twitter.blank? %></p>
-<div class="clear"></div>

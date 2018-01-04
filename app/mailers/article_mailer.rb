@@ -26,60 +26,60 @@ class ArticleMailer < ApplicationMailer
     mail(:to => "<#{user.email}>", :subject => send_article_subject)
   end
   
-  def send_briefing_2(user)
-    @user = user
+  def send_briefing_2(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last2.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_3(user)
-    @user = user
+  def send_briefing_3(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last3.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_6(user)
-    @user = user
+  def send_briefing_6(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last6.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_12(user)
-    @user = user
+  def send_briefing_12(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last12.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_24(user)
-    @user = user
+  def send_briefing_24(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last24.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My 9 a.m. Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_48(user)
-    @user = user
+  def send_briefing_48(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last48.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Sunday Morning Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_84(user)
-    @user = user
+  def send_briefing_84(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last84.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Twice Weekly Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
-  def send_briefing_168(user)
-    @user = user
+  def send_briefing_168(userid)
+    @user = User.find_by_id(userid)
     @briefingstories = @user.stories.where(notifications: {notificationtype_id: 2}).ids
     @briefing_articles = Article.last168.published.order("created_at DESC").joins(:stories).where(stories: {id: @briefingstories}).distinct
-    mail(:to => "<#{user.email}>", :subject => "My Weekly Spain Briefing", template_name: 'send_briefing')
+    mail(:to => "<#{@user.email}>", :subject => "My Spain Briefing at #{Time.now.strftime("%I:%M %P on %A, %B %-d, %Y")}", template_name: 'send_briefing')
   end
   
   def send_article_subject

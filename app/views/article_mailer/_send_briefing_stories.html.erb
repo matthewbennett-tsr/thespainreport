@@ -1,3 +1,5 @@
+<p>--------</p>
+
 <p style="font-weight: bold;">My Spain Briefing Notifications</p>
 
 <% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
