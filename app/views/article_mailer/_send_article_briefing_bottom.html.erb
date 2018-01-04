@@ -10,7 +10,7 @@
   <% else%>
     <%= link_to bf.name, update_freq_user_url(@user.update_token, freq: bf.id), {:style=>'color:#AA151B;'} %>
   <% end %>
-  <%= ' — ' unless bf == BriefingFrequency.all.order(:briefing_frequency).last %>
+  <%= ' — ' unless bf == BriefingFrequency.all.order(:id).last %>
 <% end %>
 
 <p>--------</p>
