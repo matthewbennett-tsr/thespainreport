@@ -48,6 +48,11 @@ class UsersController < ApplicationController
   
   def all_off
     u = User.find_by_update_token(params[:id])
+    
+    u.update(
+    briefing_frequency_id: 8
+    )
+    
     Notification.all.where(user_id: u.id, notificationtype_id: [1, 2, 4]).each do |n|
      n.update(
      notificationtype_id: 3
@@ -112,7 +117,7 @@ class UsersController < ApplicationController
       end
       @stories = Story.all.order(:story)
       @notificationtypes = Notificationtype.all.order(:order)
-      @briefingfrequencies = BriefingFrequency.all.order(:briefing_frequency)
+      @briefingfrequencies = BriefingFrequency.all.order(:id)
     elsif current_user != User.find(params[:id])
       redirect_to edit_user_path(current_user)
     elsif current_user = User.find(params[:id])
