@@ -50,14 +50,14 @@ class Article < ActiveRecord::Base
   scope :lastthirty, -> {order('created_at DESC').limit(30)}
   scope :last100, -> {order('created_at DESC').limit(100)}
   scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
-  scope :last2, -> {where(:created_at => 2.hours.ago..DateTime.now.in_time_zone)}
-  scope :last3, -> {where(:created_at => 3.hours.ago..DateTime.now.in_time_zone)}
-  scope :last6, -> {where(:created_at => 6.hours.ago..DateTime.now.in_time_zone)}
-  scope :last12, -> {where(:created_at => 12.hours.ago..DateTime.now.in_time_zone)}
-  scope :last24, -> {where(:created_at => 24.hours.ago..DateTime.now.in_time_zone)}
-  scope :last48, -> {where(:created_at => 48.hours.ago..DateTime.now.in_time_zone)}
-  scope :last84, -> {where(:created_at => 84.hours.ago..DateTime.now.in_time_zone)}
-  scope :last168, -> {where(:created_at => 168.hours.ago..DateTime.now.in_time_zone)}
+  scope :last2, -> {where(:updated_at => 2.hours.ago..DateTime.now.in_time_zone)}
+  scope :last3, -> {where(:updated_at => 3.hours.ago..DateTime.now.in_time_zone)}
+  scope :last6, -> {where(:updated_at => 6.hours.ago..DateTime.now.in_time_zone)}
+  scope :last12, -> {where(:updated_at => 12.hours.ago..DateTime.now.in_time_zone)}
+  scope :last24, -> {where(:updated_at => 24.hours.ago..DateTime.now.in_time_zone)}
+  scope :last48, -> {where(:updated_at => 48.hours.ago..DateTime.now.in_time_zone)}
+  scope :last84, -> {where(:updated_at => 84.hours.ago..DateTime.now.in_time_zone)}
+  scope :last168, -> {where(:updated_at => 168.hours.ago..DateTime.now.in_time_zone)}
   scope :next24, -> {where('created_at <= ? and created_at >= now()', 24.hours.from_now).limit(20)}
   scope :following5days, -> {where('created_at <= ? and created_at >= ?', 6.days.from_now, 1.days.from_now).limit(20)}
   scope :following614days, -> {where('created_at <= ? and created_at >= ?', 14.days.from_now, 6.days.from_now).limit(20)}

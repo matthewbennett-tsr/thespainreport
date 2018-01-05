@@ -489,12 +489,6 @@ class ArticlesController < ApplicationController
         if @article.update(article_params) && ["draft", "editing"].include?(@article.status)
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :created, location: @article }
-        elsif @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["SUMMARY"].include?(@article.type.name) || @article.update(article_params) && ["published", "updated"].include?(@article.status) && ["breaking", "majorbreaking"].include?(@article.urgency)
-          twitter
-          story_last_active
-          emailarticles
-          format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully udpated.' }
-          format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
           twitter
           story_last_active
