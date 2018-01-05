@@ -26,13 +26,17 @@
      <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"]], "None") %>
    </div>
 
-  <div class="admin-block" style="background-color: #ffcccc;">
+  <div class="admin-block-image">
   <%= f.hidden_field :imagesource %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @newsitem.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
     <%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
   <div style="margin-top: 3px;">
     <%= f.text_field :caption, :style => 'width: 100%; padding:5px;' %>
   </div>
+  </div>
+  
+  <div class="admin-block-briefing">
+    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
   </div>
   
   <div class="admin-block">
@@ -44,10 +48,6 @@
   
   <div class="admin-block">
     <%= f.text_area :item, :style => "width:100%; min-height: 400px;", :class => "inputtextarea", :maxlength => 2000 %>
-  </div>
-  
-  <div class="admin-block">
-    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
   </div>
 
 <% if @newsitem.main? %>

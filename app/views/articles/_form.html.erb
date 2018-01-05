@@ -29,7 +29,7 @@
       Story? <%= check_box_tag 'new_story' %> 
   </div>
   
-  <div class="admin-block">
+  <div class="admin-block-image">
   <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
   <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
       <%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
@@ -38,7 +38,7 @@
     </div>
   </div>
   
-    <div class="admin-block">
+    <div class="admin-block-briefing">
     <div style="margin-bottom: 5px;">
       <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '27', :style => 'padding:5px;' %>
       <%= f.text_field :short_lede, :size => '57', :class => "edit-short-lede", :style => 'padding:5px;' %>

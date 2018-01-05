@@ -40,11 +40,8 @@ class NewsitemsController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @newsitemarticle = Article.published.lastthirty
+      @newsitemarticle = Article.notbriefing.published.lastthirty
       @newsitem = Newsitem.new
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
-      @stories = Story.all.order(:story)
     else
       redirect_to root_url
     end
@@ -55,10 +52,7 @@ class NewsitemsController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @newsitemarticle = Article.published.lastthirty
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
-      @stories = Story.all.order(:story)
+      @newsitemarticle = Article.notbriefing.published.lastthirty
     else
       redirect_to root_url
     end 	
