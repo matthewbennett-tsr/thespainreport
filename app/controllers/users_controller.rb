@@ -130,6 +130,7 @@ class UsersController < ApplicationController
       end
       @stories = Story.all.order(:story)
       @notificationtypes = Notificationtype.all.order(:order)
+      @briefingfrequencies = BriefingFrequency.all.order(:id)
     else
     end
   end
