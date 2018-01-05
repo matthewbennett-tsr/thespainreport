@@ -28,19 +28,60 @@
 <% else %> 
 <% end %>          
 
-<p>---------</p>
- 
+<p>--------</p>
+
+<p style="font-weight:bold;">My Spain Briefings Frequency</p>
+
+<p>To adjust the frequency of your Spain Briefings, click a link. Your current setting <em>is in italics</em>.</p>
+          
+<% BriefingFrequency.all.each do |bf| %>
+  <% if @user.briefing_frequency == bf %>
+    <em><%= bf.name %></em>
+  <% else%>
+    <%= link_to bf.name, update_freq_user_url(@user.update_token, freq: bf.id), {:style=>'color:#AA151B;'} %>
+  <% end %>
+  <%= ' — ' unless bf == BriefingFrequency.all.order(:id).last %>
+<% end %>
+
+<p>--------</p>
+
+<p style="font-weight:bold;">Change All News E-mails</p>
+
+<ul>
+  <li>Switch all stories to briefings (no e-mail alerts), <%= link_to "here", all_to_briefings_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>;</li>
+  <li>Switch off all news notifications (no alerts or briefings, for any story), <%= link_to "here", all_off_user_url(@user.update_token), {:style=>'color:#AA151B;'} %>;</li>
+</ul>
+
+<p>
+.
+You can switch some back on at any point by logging in to your account.</p>
+
+<p>--------</p>
+
 <p style="font-weight:bold;">My Account</p>
 
 <p>Thank you for reading and subscribing to The Spain Report.</p>
 
 <ul>
-  <li>To manage your account <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
+  <li>To manage your account, <%= link_to "log in here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>;</li>
+  <li>Forgotten your password? <%= link_to "Get a new one here", 'https://www.thespainreport.com/password_resets/new', {:style=>'color:#AA151B;'} %>;</li>
 </ul>
 
-<p>If you experience any problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %> straight away.</p>
 
-<p>---------</p>
+<% if ['reader', 'guest'].include?@user.role %>
+<p>--------</p>
+
+<p style="font-weight:bold;">Unsubscribe</p>
+
+<p>To unsubscribe from The Spain Report, click the link below. This will remove your e-mail address from our system.</p>
+
+<ul>
+  <li><%= link_to "Unsubscribe", unsubscribe_subscription_url(@user.update_token), {:style=>'color:#AA151B;'} %></li>
+</ul>
+
+<p>If you ever have any other problems, please e-mail <%= mail_to "subscriptions@thespainreport.com", "subscriptions@thespainreport.com", {:style=>'color:#AA151B;'} %>.</p>
+<% else %>
+<% end %>
 
 <p style="font-weight:bold;">The Spain Report Ltd.</p>
 

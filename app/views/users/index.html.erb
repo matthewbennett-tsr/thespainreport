@@ -70,7 +70,7 @@
           <% end %>
         </td>
         <td><%= user.email_confirmed %></td>
-        <td><%= link_to 'D?', user, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= link_to 'U?', unsubscribe_by_staff_subscription_url(user), data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
   </tbody>
