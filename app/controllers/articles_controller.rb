@@ -286,17 +286,37 @@ class ArticlesController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @article = Article.new
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
+      
+      @article = Article.new
       @article.type_id = 2
       @article.urgency = 'breaking'
       @article.status = 'published'
       @article.topstory = true
       @article.lede = 'Breaking story…more to follow.'
       @article.body = '*(Breaking story…more to follow.)*'
+      @article.short_headline = 'XXXXX'
+    else
+      redirect_to root_url
+    end
+  end
+  
+  # GET /articles/latest
+  def latest
+    if current_user.nil? 
+      redirect_to root_url
+    elsif current_user.role == 'editor'
+      @stories = Story.all.order(:story)
+      @types = Type.all.order(:name)
+      
+      @article = Article.new
+      @article.type_id = 2
+      @article.urgency = 'latest'
+      @article.status = 'published'
+      @article.topstory = true
+      @article.lede = 'Developing…more to follow.'
+      @article.body = '*(Developing…more to follow.)*'
       @article.short_headline = 'XXXXX'
     else
       redirect_to root_url
