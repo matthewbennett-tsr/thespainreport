@@ -187,6 +187,7 @@ class NewsitemsController < ApplicationController
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save && ["published", "updated"].include?(@newsitem.status)
+          @newsitem.article.touch
           twitter
           email
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
@@ -215,6 +216,7 @@ class NewsitemsController < ApplicationController
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Newsitem was successfully updated.' }
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update(newsitem_params) && ["published", "updated"].include?(@newsitem.status)
+          @newsitem.article.touch
           twitter
           email
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Newsitem was successfully updated.' }

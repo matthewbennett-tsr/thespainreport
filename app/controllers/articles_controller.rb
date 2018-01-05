@@ -229,7 +229,7 @@ class ArticlesController < ApplicationController
       @type = Article.find(params[:id])
       @latestaudio = Audio.lastone
       @title = "some custom page title"
-      @articleupdates = @article.newsitems.published
+      @articleupdates = @article.newsitems.published.order('updated_at ASC')
       @comments = @article.comments
       @last30items = Newsitem.published.lastthirty
       @last6articles = Article.published.lastten

@@ -141,8 +141,8 @@
   <% else %>
   <% end %>
   
-    <% if @article.newsitems.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
-      <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
+    <% if @article.newsitems.published.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
+      <% @article.newsitems.published.order('updated_at DESC').each do |newsitem| %>
         <div class="liveblog-updates">
           <p><span class="liveblog-updates-date"><%= newsitem.created_at.strftime("%l:%M %P, %b %d %Y") %></span> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
 
