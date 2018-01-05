@@ -12,6 +12,17 @@
 - <%= @deletedcount %> deleted <br />
 </div>
 
+<div class="article-lede">
+- <%= User.notdeleted.where(briefing_frequency_id: 1).count %> Every 2 hours <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 2).count %> Every 3 hours <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 3).count %> Every 6 hours <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 4).count %> Every 12 hours <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 5).count %> Once a day <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 6).count %> Twice a week <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 7).count %> Once a week <br />
+- <%= User.notdeleted.where(briefing_frequency_id: 8).count %> Briefings off <br />
+</div>
+
   <%= form_tag(users_path, :method => "get", id: "search-form") do %>
     <div style="float:left;">
       <%= text_field_tag :search, params[:search], :size => 50, placeholder: "Search Stories" %>
