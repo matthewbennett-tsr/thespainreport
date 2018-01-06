@@ -271,7 +271,7 @@ class ArticlesController < ApplicationController
       redirect_to root_url
     elsif current_user.role == 'editor'
       @article = Article.new
-      @stories = Story.all(:include => [:id, :story]).order(:story)
+      @stories = Story.all.includes(:category).order(:story)
       @types = Type.all.order(:name)
     else
       redirect_to root_url
@@ -325,7 +325,7 @@ class ArticlesController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @stories = Story.all.order(:story)
+      @stories = Story.all.includes(:category).order(:story)
       @types = Type.all.order(:name)
     else
       redirect_to root_url
