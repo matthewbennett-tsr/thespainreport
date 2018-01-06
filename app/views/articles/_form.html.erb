@@ -59,14 +59,15 @@
 <textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 660px;"><%= @article.body %></textarea>
 </div>
   
-  <div class="admin-block">   
+  <div class="admin-block">
+  <% article_story_ids = @article.stories.pluck(:id) %>
     <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
       <div class="admin-stories-in-categories">
         <strong><%= c.category unless c.nil? %></strong>
           <ul>
-            <% for s in stories %>
+            <% stories.each do |s| %>
               <li>
-                <%= check_box_tag "article[story_ids][]", s.id, @article.stories.include?(s) %>
+                <%= check_box_tag "article[story_ids][]", s.id, article_story_ids.include?(s.id) %>
                 <%= s.story %>
               </li>
             <% end %>
