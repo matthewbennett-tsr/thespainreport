@@ -510,6 +510,8 @@ class ArticlesController < ApplicationController
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
+          twitter
+          stories_last_active
           
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
