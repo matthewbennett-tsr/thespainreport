@@ -223,8 +223,6 @@ class ArticlesController < ApplicationController
   end
   
   def show_article_elements
-    @region = Article.find(params[:id])
-    @category = Article.find(params[:id])
       @story = Article.find(params[:id])
       @type = Article.find(params[:id])
       @latestaudio = Audio.lastone
@@ -273,9 +271,7 @@ class ArticlesController < ApplicationController
       redirect_to root_url
     elsif current_user.role == 'editor'
       @article = Article.new
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
-      @stories = Story.all.order(:story)
+      @stories = Story.all(:include => [:id, :story]).order(:story)
       @types = Type.all.order(:name)
     else
       redirect_to root_url
@@ -329,8 +325,6 @@ class ArticlesController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
     elsif current_user.role == 'editor'
-      @regions = Region.all.order(:region)
-      @categories = Category.all.order(:category)
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
     else
@@ -512,7 +506,7 @@ class ArticlesController < ApplicationController
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
           twitter
           stories_last_active
-          
+          emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else
