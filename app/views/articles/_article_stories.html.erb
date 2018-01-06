@@ -5,7 +5,6 @@
         <div class="notifications-admin">
           <div class="notifications-admin-left"><%= link_to s.story, s %></div>
           <div class="notifications-admin-right">
-            <% s.notifications.where(user_id: current_user).first_or_create(notificationtype_id: 1) %>
             <% s.notifications.where(user_id: current_user).each do %>
               <%= f.fields_for :notifications, current_user.notifications.where(:story_id => s.id) do |n| %>
                 <%= n.collection_radio_buttons(:notificationtype_id, @notificationtypes, :id, :name) %>

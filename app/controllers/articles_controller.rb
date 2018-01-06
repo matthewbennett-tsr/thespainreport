@@ -223,17 +223,12 @@ class ArticlesController < ApplicationController
   end
   
   def show_article_elements
-      @story = Article.find(params[:id])
-      @type = Article.find(params[:id])
-      @latestaudio = Audio.lastone
-      @title = "some custom page title"
+      @article = Article.includes(:type, :newsitems).find(params[:id])
+      
       @articleupdates = @article.newsitems.published.order('updated_at ASC')
       @liveblogupdates = @article.newsitems.published.order('updated_at DESC')
-      @comments = @article.comments
-      @last30items = Newsitem.published.lastthirty
-      @last6articles = Article.published.lastten
+      
       @notificationtypes = Notificationtype.all.order(:order)
-      @defaultnt = Notificationtype.where(:order => 2)
   end
   
   # GET /articles/1
