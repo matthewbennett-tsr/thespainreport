@@ -1,5 +1,5 @@
 <% if @article.type.try(:name) == "LIVE BLOG" %>
-  <% title 'LIVE BLOG: ' + @article.headline.present? ? @article.headline : @article.short_headline %>
+  <% title 'LIVE BLOG: ' + (@article.headline.present? ? @article.headline.to_s : @article.short_headline) %>
 <% else %>
   <% title @article.headline.present? ? @article.headline : @article.short_headline %>
 <% end %>
@@ -40,9 +40,7 @@
     <% if current_user.nil? || current_user.role != 'editor' %>
       <%= @article.headline.present? ? @article.headline : @article.short_headline %>
     <% elsif current_user.role == 'editor' %>
-      <%= link_to edit_article_path(@article) do %>
-        <%= @article.headline.present? ? @article.headline : @article.short_headline %>
-      <% end %>
+      <%= link_to (@article.headline.present? ? @article.headline : @article.short_headline), edit_article_path(@article) %>
     <% else %>
     <% end %>
 </h1>
@@ -91,7 +89,7 @@
   <% if ["IMAGES", "LIVE BLOG", "DAILY BRIEFING"].include?(@article.type.try(:name)) %>
   <% elsif @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 5px; margin-bottom: 0px; margin-left: 30px; margin-right: 0;">
-      <% @article.newsitems.each do |newsitem| %>
+      <% @articleupdates.each do |newsitem| %>
         <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
       <% end %>
     </ul>
@@ -132,21 +130,30 @@
   
   <h2>Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
   
-  <% if @articleupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
+  <% if @liveblogupdates.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
     <ul style="margin-top: 3px; margin-bottom: 25px; margin-left: 30px; margin-right: 0;">
-      <% @article.newsitems.order('created_at DESC').each do |newsitem| %>
-        <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
+      <% @liveblogupdates.each do |newsitem| %>
+        <li style="margin: 0 auto; text-align:left; font-style: normal;"><%= newsitem.updated_at.strftime("%l:%M %P")%>: <%= link_to newsitem.slug, article_path(@article, anchor: newsitem.id) %></li>
       <% end %>
     </ul>
   <% else %>
   <% end %>
   
-    <% if @article.newsitems.published.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
-      <% @article.newsitems.published.order('updated_at DESC').each do |newsitem| %>
+    <% if @liveblogupdates.present? %> <%# ARE THERE ANY LIVE-BLOG ENTRIES? %>
+      <% @liveblogupdates.each do |newsitem| %>
         <div class="liveblog-updates">
-          <p><span class="liveblog-updates-date"><%= newsitem.created_at.strftime("%l:%M %P, %b %d %Y") %></span> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
-
-          <h3><%= newsitem.slug %></h3> <%# LIVE-BLOG SLUG TITLE %>
+          <p><span class="liveblog-updates-date"><%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %></span> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 90px; margin-top: -90px; display: inline-block; background-color: transparent;" %>)</p>
+          <h3> <%# LIVE-BLOG SLUG TITLE %>
+          <% if current_user.nil? || current_user.role != 'editor' %>
+            <%= newsitem.slug %>
+          <% elsif current_user.role == 'editor' %>
+            <%= link_to edit_newsitem_path(newsitem) do %>
+              <%= newsitem.slug %>
+            <% end %>
+          <% else %>
+          <% end %>
+          </h3>
+          
           <% if newsitem.main? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
             <div class="main-image-liveblog-update">
                 <%= image_tag newsitem.main.url if newsitem.main? %>

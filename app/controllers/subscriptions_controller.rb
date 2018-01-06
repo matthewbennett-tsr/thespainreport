@@ -176,13 +176,29 @@ end
       h = History.create(
       user_id: user.id,
       article_id: params[:article_id])
-    
+
     # …then add stories…
-    Story.all.each do |s|
+    Story.nowactive.each do |s|
       n = Notification.new
       n.story_id = s.id
       n.user_id = user.id
-      n.notificationtype_id = 1
+      n.notificationtype_id =  1
+      n.save!
+    end
+    
+    Story.notnowactive.keystories.each do |s|
+      n = Notification.new
+      n.story_id = s.id
+      n.user_id = user.id
+      n.notificationtype_id =  1
+      n.save!
+    end
+    
+    Story.notnowactive.notkeystories.each do |s|
+      n = Notification.new
+      n.story_id = s.id
+      n.user_id = user.id
+      n.notificationtype_id =  2
       n.save!
     end
     

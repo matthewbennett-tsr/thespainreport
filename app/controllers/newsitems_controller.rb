@@ -168,7 +168,13 @@ class NewsitemsController < ApplicationController
     else
     end
   end
-
+  
+  def stories_last_active
+    @newsitem.article.stories.each do |s|
+      s.touch
+    end
+  end
+  
   # POST /newsitems
   # POST /newsitems.json
   def create
@@ -182,6 +188,7 @@ class NewsitemsController < ApplicationController
           format.json { render :show, status: :created, location: @article }
         elsif @newsitem.save && ["published", "updated"].include?(@newsitem.status)
           @newsitem.article.touch
+          stories_last_active
           twitter
           email
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Update was successfully created.' }
@@ -211,6 +218,7 @@ class NewsitemsController < ApplicationController
           format.json { render :show, status: :ok, location: @newsitem }
         elsif @newsitem.update(newsitem_params) && ["published", "updated"].include?(@newsitem.status)
           @newsitem.article.touch
+          stories_last_active
           twitter
           email
           format.html { redirect_to edit_newsitem_path(@newsitem), notice: 'Newsitem was successfully updated.' }

@@ -230,6 +230,7 @@ class ArticlesController < ApplicationController
       @latestaudio = Audio.lastone
       @title = "some custom page title"
       @articleupdates = @article.newsitems.published.order('updated_at ASC')
+      @liveblogupdates = @article.newsitems.published.order('updated_at DESC')
       @comments = @article.comments
       @last30items = Newsitem.published.lastthirty
       @last6articles = Article.published.lastten
@@ -448,10 +449,9 @@ class ArticlesController < ApplicationController
     end
   end
   
-  def story_last_active
-    @article.stories.each do |story|
-      story.last_active = Time.now
-      story.save
+  def stories_last_active
+    @article.stories.each do |s|
+      s.touch
     end
   end
   
@@ -483,7 +483,7 @@ class ArticlesController < ApplicationController
         elsif @article.save && ["published", "updated"].include?(@article.status)
           new_breaking_story
           twitter
-          story_last_active
+          stories_last_active
           emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
@@ -510,9 +510,7 @@ class ArticlesController < ApplicationController
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :created, location: @article }
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
-          twitter
-          story_last_active
-          emailarticles
+          
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else

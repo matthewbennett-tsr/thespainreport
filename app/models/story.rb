@@ -16,6 +16,10 @@ class Story < ActiveRecord::Base
   scope :latest, -> {order('last_active DESC NULLS LAST, story ASC').limit(5)}
   scope :ticker, -> {limit(1)}
   scope :active, -> {where(:status => ['active'])}
+  scope :nowactive, -> {where(:updated_at => 168.hours.ago..DateTime.now.in_time_zone)}
+  scope :notnowactive, -> {where.not(:last_active => 168.hours.ago..DateTime.now.in_time_zone)}
+  scope :keystories, -> {where(:id => [6,7,10])}
+  scope :notkeystories, -> {where.not(:id => [6,7,10])}
   
   def story_notifications
     User.notdeleted.each do |u|

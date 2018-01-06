@@ -2,7 +2,16 @@
     <% @articleupdates.each do |newsitem| %>
       <div class="article-updates">
         <p style="margin: 0 auto; font-size: 11px; text-align:right;"><strong>Updated:</strong> <%= newsitem.updated_at.strftime("%l:%M %P, %b %d %Y") %> (<%= link_to "link", article_path(@article, anchor: newsitem.id), id: newsitem.id, :style => "padding-top: 80px; margin-top: -80px; display: inline-block; background-color: transparent;" %>)</p>
-        <h3><%= newsitem.slug %></h3>
+          <h3>
+          <% if current_user.nil? || current_user.role != 'editor' %>
+            <%= newsitem.slug %>
+          <% elsif current_user.role == 'editor' %>
+            <%= link_to edit_newsitem_path(newsitem) do %>
+              <%= newsitem.slug %>
+            <% end %>
+          <% else %>
+          <% end %>
+          </h3>
         <% if newsitem.main? %>
           <div class="main-image-article-update">
             <%= image_tag newsitem.main.url if newsitem.main? %>
