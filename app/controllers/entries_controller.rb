@@ -22,6 +22,10 @@ class EntriesController < ApplicationController
     @regions = Region.all.order( 'regions.region ASC' )
   end
   
+  def how_many_results
+    @resultscount = @entries.count
+  end
+  
   def index
     feed_teasers
     entry_count
@@ -29,15 +33,18 @@ class EntriesController < ApplicationController
     if params[:search] && params[:all] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" AND ")
-      @entries = Entry.lastfewdays.where(query).order("created_at DESC")
+      @entries = Entry.where(query).order("created_at DESC")
+      how_many_results
       feedsearches
     elsif params[:search] && params[:any] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" OR ")
-      @entries = Entry.lastfewdays.where(query).order("created_at DESC")
+      @entries = Entry.where(query).order("created_at DESC")
+      how_many_results
       feedsearches
     elsif params[:search]
-      @entries = Entry.lastfewdays.search(params[:search]).order("created_at DESC")
+      @entries = Entry.search(params[:search]).order("created_at DESC")
+      how_many_results
       feedsearches
     else
       @entries = Entry.indexlimit.order('created_at DESC')
