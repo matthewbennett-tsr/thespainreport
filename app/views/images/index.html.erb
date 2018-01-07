@@ -1,4 +1,5 @@
-<p id="notice"><%= notice %></p>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
 
 <h1>Listing Images</h1>
 
@@ -15,7 +16,7 @@
     <% @images.each do |image| %>
       <tr>
         <td style="padding-right:5px;"><%= link_to image.id, edit_image_path(image) %></td>
-        <td style="padding-right:5px;">![<%= image.description %>](<%= image.url %> "<%= image.description %>") ***Image:*** *<%= image.description %>*</td>
+        <td style="padding-right:5px;">![<%= image.description %>](<%= image.url %> "<%= image.description %>")<br />***Image:*** *<%= image.description %>*</td>
         <td style="padding-right:5px;"><%= link_to 'D?', image, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -25,3 +26,6 @@
 <br>
 
 <%= link_to 'New Image', new_image_path %>
+
+</div>
+</div>
