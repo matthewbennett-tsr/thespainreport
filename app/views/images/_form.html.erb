@@ -1,0 +1,27 @@
+<%= form_for(@image) do |f| %>
+  
+  <% if @image.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@image.errors.count, "error") %> prohibited this image from being saved:</h2>
+
+      <ul>
+      <% @image.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="admin-block-image">
+    <%= f.file_field :url %> <% if @image.url? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
+    <%= f.check_box :remove_url %> | 
+  <div style="margin-top: 3px;">
+    <%= f.text_field :description, :style => 'width: 100%; padding:5px;' %>
+  </div>
+  </div>
+  
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+  
+<% end %>
