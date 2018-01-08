@@ -19,7 +19,6 @@ class EntriesController < ApplicationController
   def feedsearches
     @stories = Story.all.order( 'stories.updated_at DESC' )
     @categories = Category.all.order( 'categories.category ASC' )
-    @regions = Region.all.order( 'regions.region ASC' )
   end
   
   def how_many_results
@@ -33,17 +32,17 @@ class EntriesController < ApplicationController
     if params[:search] && params[:all] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" AND ")
-      @entries = Entry.where(query).order("created_at DESC")
+      @entries = Entry.lastfewdays.where(query).order("created_at DESC")
       how_many_results
       feedsearches
     elsif params[:search] && params[:any] == '1'
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
       query = terms.map { |term| "title @@ '%#{term}%'" }.join(" OR ")
-      @entries = Entry.where(query).order("created_at DESC")
+      @entries = Entry.lastfewdays.where(query).order("created_at DESC")
       how_many_results
       feedsearches
     elsif params[:search]
-      @entries = Entry.search(params[:search]).order("created_at DESC")
+      @entries = Entry.lastfewdays.search(params[:search]).order("created_at DESC")
       how_many_results
       feedsearches
     else

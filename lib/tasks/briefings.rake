@@ -9,8 +9,8 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
       a = Article.new
       a.type_id = 32
       a.status = 'published'
-      a.headline = 'Spain Briefing: ' + Time.now.strftime("%A, %b %-d, %Y at %l:%M %p")
-      a.short_headline = 'Spain Briefing: ' + Time.now.strftime("%d/%m/%y, %l:%M %p")
+      a.headline = 'Spain Briefing: ' + Time.current.strftime("%A, %b %-d, %Y at %l:%M %p")
+      a.short_headline = 'Spain Briefing: ' + Time.current.strftime("%d/%m/%y, %l:%M %p")
       a.lede = 'Sign up now to get these briefings in your inbox.'
       a.short_lede = 'Sign up now to get these briefings in your inbox.'
       a.body = web_sunday_am_briefing_article_text
@@ -134,7 +134,6 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
       end
     end
   end
-
 
 
   def web_sunday_am_briefing_article_text
