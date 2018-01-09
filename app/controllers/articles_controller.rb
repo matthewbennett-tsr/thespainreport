@@ -1,5 +1,6 @@
 class ArticlesController < ApplicationController
   before_action :set_article, only: [:show, :edit, :update, :destroy]
+  after_action :emailarticles, only: [:create, :update]
   
   # GET /articles
   # GET /articles.json
@@ -473,7 +474,6 @@ class ArticlesController < ApplicationController
           new_breaking_story
           twitter
           stories_last_active
-          emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully created.' }
           format.json { render :show, status: :created, location: @article }
         else
@@ -501,7 +501,6 @@ class ArticlesController < ApplicationController
         elsif @article.update(article_params) && ["published", "updated"].include?(@article.status)
           twitter
           stories_last_active
-          emailarticles
           format.html { redirect_to edit_article_path(@article), notice: 'Article was successfully updated.' }
           format.json { render :show, status: :ok, location: @article }
         else
