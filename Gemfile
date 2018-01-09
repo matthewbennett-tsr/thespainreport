@@ -50,6 +50,7 @@ gem 'redcarpet'
 
 #Stripe
 gem 'stripe', :source => 'https://code.stripe.com/'
+gem 'stripe_event'
 
 # Twitter
 gem 'twitter'

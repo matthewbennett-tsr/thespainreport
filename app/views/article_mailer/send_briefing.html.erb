@@ -15,14 +15,28 @@
 <% end %>
       
 <% if @briefing_articles.present? %>
+  
   <% @briefing_articles.each do |article| %>
     <%= render 'send_briefing_points', article: article %>
   <% end %>
+  
+  <% if @user.notifications.level_2.count.between?(1,10) %>
+    <strong>Note:</strong> Your briefings look a little sparse. <%= link_to "Log in to add some more stories.", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
+  <% elsif @user.notifications.level_2.count == 0 %>
+    <strong>Note:</strong> You haven't assigned any stories to your briefings yet. <%= link_to "Log in and choose some", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
+  <% else %>
+  <% end %>
+  
   <%= render 'send_briefing_stories' %>    
+
 <% else %>
+
   No new articles for you this time. 
   Get the latest at <a href="https://www.thespainreport.com" style="color:#AA151B;">www.thespainreport.com</a> and manage <%= link_to "your e-mail notification settings here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>.
   <%= render 'send_briefing_stories' %>
+
 <% end %>
+
+  
       
 <%= render 'send_article_briefing_bottom' %>

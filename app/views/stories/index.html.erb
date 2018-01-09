@@ -37,33 +37,7 @@
   </div>
 <% end %>
   
-  <% story.articles.published.lastseven.each do |article| %>
-    <div class="listing-article-container" >
-      <div class="listing-left">
-      <div class="listing-update-text">
-        <span class="listing-update-slug"><%= article.updated_at.to_formatted_s(:short) %></span>
-      </div>
-      </div>
-      <div class="listing-right">
-        <div class="listing-update-text">
-      <% if article.urgency == 'majorbreaking' && article.updated_at >= 2.hours.ago %>
-        <span class="listing-update-slug"><strong>BREAKING</strong><%= link_to article.headline, article %></strong></span>
-      <% elsif article.urgency == 'breaking' && article.updated_at >= 2.hours.ago %>
-        <span class="listing-update-slug"><strong>BREAKING</strong> <%= link_to article.headline, article %></span>
-      <% elsif article.urgency == 'latest' && article.updated_at >= 2.hours.ago %>
-        <span class="listing-update-slug"><strong>LATEST</strong> <%= link_to article.headline, article %></span>
-      <% elsif article.status == 'updated' %>
-        <span class="listing-update-slug"><strong>UPDATED</strong> <%= link_to article.headline, article %></span>
-      <% elsif article.type.name == 'EDITORIAL' %>
-        <span class="listing-update-slug"><strong>EDITORIAL</strong> <%= link_to article.headline, article %></span>
-      <% else %>  
-        <span class="listing-update-slug"><strong><%= article.type.name unless article.type.nil? %>:</strong> <%= link_to article.headline, article %></span>
-      <% end %>
-    </div>   
-      </div>
-      <div class="clear"></div>
-    </div>
-  <% end %>
+
 
 </div>
 <% end %>
