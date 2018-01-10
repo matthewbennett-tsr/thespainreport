@@ -64,7 +64,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
     User.notdeleted.each do |user|
       userid = user.id
       if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_2(userid)
+        ArticleMailer.delay.send_briefing_3(userid)
       else
       end
     end
@@ -74,7 +74,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
     User.notdeleted.each do |user|
       userid = user.id
       if [3].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_3(userid)
+        ArticleMailer.delay.send_briefing_4(userid)
       else
       end
     end
@@ -84,11 +84,11 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
     User.notdeleted.each do |user|
       userid = user.id
       if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_2(userid)
-      elsif [3].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_3(userid)
+      elsif [3].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_4(userid)
       elsif [6].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_6(userid)
+        ArticleMailer.delay.send_briefing_7(userid)
       else
       end
     end
@@ -113,11 +113,11 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
     User.notdeleted.each do |user|
       userid = user.id
       if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_2(userid)
-      elsif [3].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_3(userid)
+      elsif [3].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_4(userid)
       elsif [6].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_6(userid)
+        ArticleMailer.delay.send_briefing_7(userid)
       elsif [12].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_12(userid)
       else

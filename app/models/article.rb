@@ -52,7 +52,9 @@ class Article < ActiveRecord::Base
 	scope :lastfewdays, -> {where(:created_at => 7.days.ago...1.days.ago).limit(50)}
 	scope :last2, -> {where(:updated_at => 2.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
 	scope :last3, -> {where(:updated_at => 3.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
+	scope :last4, -> {where(:updated_at => 4.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
 	scope :last6, -> {where(:updated_at => 6.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
+	scope :last7, -> {where(:updated_at => 7.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
 	scope :last12, -> {where(:updated_at => 12.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
 	scope :last24, -> {where(:updated_at => 24.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
 	scope :last48, -> {where(:updated_at => 48.hours.ago..DateTime.now.in_time_zone).order("created_at DESC")}
