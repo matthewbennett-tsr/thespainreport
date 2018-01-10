@@ -1,91 +1,91 @@
 <%= form_for @article, :html => {:multipart => true} do |f| %>
 
-  <% if @article.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
+<% if @article.errors.any? %>
+	<div id="error_explanation">
+		<h2><%= pluralize(@article.errors.count, "error") %> prohibited this article from being saved:</h2>
+		<ul>
+			<% @article.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+			<% end %>
+		</ul>
+	</div>
+<% end %>
 
-      <ul>
-      <% @article.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-  
-  <div class="admin-block-notify">
-      <%= f.text_field :notification_slug, :size => "18", :maxlength => "15" %>
-      <%= f.text_field :notification_message, :size => "59", :maxlength => "70" %>
-      T <%= check_box_tag 'tweet' %> 
-      <%= f.submit %>
-      &nbsp;<%= link_to 'Go', @article, :target => 'blank' %> 
-  </div>
-  
-  <div class="admin-block">
-  Top <%= f.check_box :topstory %> | <%= f.select :urgency, options_for_select([["Morning", "morning"], ["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
-      | <%= f.collection_select :type_id, @types, :id, :name, {:selected => @article.type_id ? @article.type_id : 2} %>
-      <%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
-      <%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], controller_name == "articles" && action_name == "breaking" ? 'all' : 'none') %>
-      € <%= f.check_box :is_free %>
-      Story? <%= check_box_tag 'new_story' %> 
-  </div>
-  
-  <div class="admin-block-image">
-  <%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
-  <%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
-      <%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
-    <div style="margin-top: 3px;">
-      <%= f.text_field :caption, :size => '92', :style => 'padding:5px;' %>
-    </div>
-  </div>
-  
-    <div class="admin-block-briefing">
-    <div style="margin-bottom: 5px;">
-      <%= f.text_field :short_headline, :class => "edit-short-headline", :size => '27', :style => 'padding:5px;' %>
-      <%= f.text_field :short_lede, :size => '57', :class => "edit-short-lede", :style => 'padding:5px;' %>
-    </div>
-    <%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
-  </div>
-  
-  <div class="admin-block">
-    <div style="margin-top: 5px;">
-        <%= f.text_area :headline, :class => "edit-headline", :style => 'width: 100%; padding:5px;' %>
-    </div>
-    <div style="margin-top: 5px;">
-      <%= f.text_area :lede, :class => "edit-lede", :style => 'width: 100%; padding:5px;' %>
-    </div>
-  </div>
-  
-<div class="admin-block">
-<textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 660px;"><%= @article.body %></textarea>
+<div class="admin-block-notify">
+	<%= f.text_field :notification_slug, :size => "18", :maxlength => "15" %>
+	<%= f.text_field :notification_message, :size => "59", :maxlength => "70" %>
+	T <%= check_box_tag 'tweet' %>
+	<%= f.submit %>
+	<%= link_to 'Go', @article, :target => 'blank' %>
 </div>
-  
-  <div class="admin-block">
-  <% article_story_ids = @article.stories.pluck(:id) %>
-    <% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
-      <div class="admin-stories-in-categories">
-        <strong><%= c.category unless c.nil? %></strong>
-          <ul>
-            <% stories.each do |s| %>
-              <li>
-                <%= check_box_tag "article[story_ids][]", s.id, article_story_ids.include?(s.id) %>
-                <%= s.story %>
-              </li>
-            <% end %>
-          </ul>
-      </div>
-    <% end %>
-  </div>
-  
-  <% if @article.main? %>
-    <div class="admin-block">
-      <%= image_tag @article.main.url %>
-    </div>
-  <% end %>
-  
-  <div class="admin-block">
-    <div style="font-size: 12px;">
-      <strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '35' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '35' %>
-    </div>
-  </div>
-  
+
+<div class="admin-block">
+	Top <%= f.check_box :topstory %>
+	Free <%= f.check_box :is_free %>
+	Story <%= check_box_tag 'new_story' %>
+	 | <%= f.select :urgency, options_for_select([["Latest", "latest"], ["Breaking", "breaking"], ["Major Breaking", "majorbreaking"]], @article.urgency), :include_blank => true %>
+	 | <%= f.collection_select :type_id, @types, :id, :name, {:selected => @article.type_id ? @article.type_id : 2} %>
+	<%= f.select :status, options_for_select([["Draft", "draft"], ["Editing", "editing"], ["Published", "published"], ["Updated", "updated"]], @article.status) %>
+	<%= f.select :email_to, options_for_select([["None", "none"], ["E-Mail Alerts", "all"], ["Test", "test"], ["Readers", "readers"], ["Subscribers", "subscribers"]], controller_name == "articles" && action_name == "breaking" ? 'all' : 'none') %>
+</div>
+
+<div class="admin-block-image">
+	<%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
+	<%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
+	<%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+	<div style="margin-top: 3px;">
+		<%= f.text_field :caption, :size => '92', :style => 'padding:5px;' %>
+	</div>
+</div>
+
+<div class="admin-block-briefing">
+	<div style="margin-bottom: 5px;">
+		<%= f.text_field :short_headline, :class => "edit-short-headline", :size => '27', :style => 'padding:5px;' %>
+		<%= f.text_field :short_lede, :size => '57', :class => "edit-short-lede", :style => 'padding:5px;' %>
+	</div>
+	<%= f.text_area :briefing_point, :style => "width:100%; min-height: 80px;", :class => "inputtextarea", :maxlength => 235 %>
+</div>
+
+<div class="admin-block">
+	<div style="margin-top: 5px;">
+		<%= f.text_area :headline, :class => "edit-headline", :style => 'width: 100%; padding:5px;' %>
+	</div>
+	<div style="margin-top: 5px;">
+		<%= f.text_area :lede, :class => "edit-lede", :style => 'width: 100%; padding:5px;' %>
+	</div>
+</div>
+	
+<div class="admin-block">
+	<textarea name="article[body]" id="article_body" class="inputtextarea" style="width: 100%; min-height: 660px;"><%= @article.body %></textarea>
+</div>
+
+<div class="admin-block">
+	<% article_story_ids = @article.stories.pluck(:id) %>
+	<% @stories.group_by(&:category).sort_by{|c, stories| c.category}.each do |c, stories| %>
+		<div class="admin-stories-in-categories">
+			<strong><%= c.category unless c.nil? %></strong>
+				<ul>
+					<% stories.each do |s| %>
+						<li>
+							<%= check_box_tag "article[story_ids][]", s.id, article_story_ids.include?(s.id) %>
+							<%= s.story %>
+						</li>
+					<% end %>
+				</ul>
+		</div>
+	<% end %>
+</div>
+
+<% if @article.main? %>
+	<div class="admin-block">
+		<%= image_tag @article.main.url %>
+	</div>
+<% end %>
+
+<div class="admin-block">
+	<div style="font-size: 12px;">
+		<strong>CREATED AT:</strong> <%= f.datetime_field :created_at, :size => '35' %> <strong>UPDATED AT:</strong> <%= f.datetime_field :updated_at, :size => '35' %>
+	</div>
+</div>
+
 <% end %>
