@@ -8,7 +8,8 @@ Rails.configuration.stripe = {
 }
 Stripe.api_key = Rails.configuration.stripe[:secret_key]
 
-StripeEvent.signing_secret = 'whsec_1ufIAmEkRokJEbU3LlkJPg4ZvTYT7hKb'
+StripeEvent.signing_secret = whsec_1ufIAmEkRokJEbU3LlkJPg4ZvTYT7hKb
+
 StripeEvent.configure do |events|
 	events.subscribe 'charge.failed' do |event|
 							# Define subscriber behavior based on the event object
