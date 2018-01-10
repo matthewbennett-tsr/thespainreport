@@ -2,18 +2,24 @@
 
 <p style="font-weight: bold;">My Spain Briefing Notifications</p>
 
-<% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
-  <p><strong><%= s.story %>:</strong>
-  <% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 2) %>
-  <% s.notifications.where(user_id: @user).each do |n| %>
-    <% Notificationtype.all.order(:order).each do |nt| %>
-      <% if nt.id == n.notificationtype_id %>
-        <em><%= nt.name %></em>
-      <% else %>
-        <%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
-      <% end %>
-      <%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
-    <% end %>
-  <% end %>
-  </p>
+<% if @user.notifications.level_2.count == 0 %>
+	<strong>Note:</strong> You haven't assigned any stories to your briefings yet. <%= link_to "Log in and choose some", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
+<% elsif @user.notifications.level_2.count.between?(1,10) %>
+	<strong>Note:</strong> Your briefings look a little sparse. <%= link_to "Log in to add some more stories.", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
+<% else %>
+	<% Story.joins(:articles).where(stories: {id: @briefingstories}).distinct.each do |s| %>
+		<p><strong><%= s.story %>:</strong>
+			<% s.notifications.where(user_id: @user).first_or_create(notificationtype_id: 2) %>
+			<% s.notifications.where(user_id: @user).each do |n| %>
+				<% Notificationtype.all.order(:order).each do |nt| %>
+					<% if nt.id == n.notificationtype_id %>
+						<em><%= nt.name %></em>
+					<% else %>
+						<%= link_to nt.name, update_type_notification_url(n.update_token, type: nt.id), {:style=>'color:#AA151B;'} %>
+					<% end %>
+					<%= ' — ' unless nt == Notificationtype.all.order(:order).last %>
+				<% end %>
+			<% end %>
+		</p>
+	<% end %>
 <% end %>

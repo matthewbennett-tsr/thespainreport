@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       get :update_all_notification_tokens
     end
   end
+  mount StripeEvent::Engine, at: '/SzXGyFFp0s3fMpc'
   resources :taxes
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'

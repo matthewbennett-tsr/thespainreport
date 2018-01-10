@@ -1,31 +1,31 @@
 <p>
-  <% if @user.access_date.blank? %>
-    <%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= article.briefing_point %>
-    <% if article.newsitems.present? %>
-      <ul>
-        <% article.newsitems.each do |newsitem| %>
-          <li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= newsitem.briefing_point %></li>
-        <% end %>
-      </ul>
-    <% end %>  
-  <% elsif @user.access_date < Time.current %>
-    <%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= truncate(article.briefing_point, :length => 50) %>
-    <% if article.newsitems.present? %>
-      <ul>
-        <% article.newsitems.each do |newsitem| %>
-          <li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= truncate(newsitem.briefing_point, :length => 50) %></li>
-        <% end %>
-      </ul>
-    <% end %>          
-  <% elsif @user.access_date >= Time.current %>
-    <%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= article.briefing_point %>
-    <% if article.newsitems.present? %>
-      <ul>
-        <% article.newsitems.each do |newsitem| %>
-          <li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= newsitem.briefing_point %></li>
-        <% end %>
-      </ul>
-    <% end %>   
-  <% else %>
-  <% end %>
+	<% if @user.access_date.blank? %>
+		<%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= article.briefing_point %>
+		<% if article.newsitems.present? %>
+			<ul>
+				<% article.newsitems.each do |newsitem| %>
+					<li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= newsitem.briefing_point %></li>
+				<% end %>
+			</ul>
+		<% end %>
+	<% elsif @user.access_date < Time.current %>
+		<%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= truncate(article.briefing_point, :length => 50) %>
+		<% if article.newsitems.present? %>
+			<ul>
+				<% article.newsitems.each do |newsitem| %>
+					<li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= truncate(newsitem.briefing_point, :length => 50) %></li>
+				<% end %>
+			</ul>
+		<% end %>
+	<% elsif @user.access_date >= Time.current %>
+		<%= link_to article.short_headline, article, {:style=>'color:#AA151B;'} %>: <%= article.briefing_point %>
+		<% if article.newsitems.present? %>
+			<ul>
+				<% article.newsitems.each do |newsitem| %>
+					<li><%= link_to newsitem.slug, article_url(newsitem.article, anchor: newsitem.id), {:style=>'color:#AA151B;'} %>: <%= newsitem.briefing_point %></li>
+				<% end %>
+			</ul>
+		<% end %>
+	<% else %>
+	<% end %>
 </p>
