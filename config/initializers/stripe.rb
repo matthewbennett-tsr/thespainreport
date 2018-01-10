@@ -9,7 +9,7 @@ Rails.configuration.stripe = {
 
 Stripe.api_key = Rails.configuration.stripe[:secret_key]
 
-StripeEvent.signing_secrets = [ENV['STRIPE_UK_SIGNING_SECRET'], ENV['STRIPE_SPAIN_SIGNING_SECRET']]
+
 
 StripeEvent.configure do |events|
   events.subscribe 'charge.failed' do |event|
