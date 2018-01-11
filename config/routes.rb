@@ -9,7 +9,6 @@ Rails.application.routes.draw do
       get :update_all_notification_tokens
     end
   end
-  mount StripeEvent::Engine, at: '/SzXGyFFp0s3fMpc'
   resources :taxes
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'
@@ -17,6 +16,7 @@ Rails.application.routes.draw do
   post 'new_spain_report_subscriber' => 'subscriptions#new_spain_report_subscriber'
   post 'update_credit_card' => 'subscriptions#update_credit_card'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
+  post '/SzXGyFFp0s3fMpc' => 'subscriptions#stripe_hooks'
   get 'subscriptions/spain'
   resources :subscriptions do
    member do

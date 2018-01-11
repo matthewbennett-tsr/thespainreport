@@ -5,16 +5,18 @@
 
 
 class SubscriptionsController < ApplicationController
-  before_action :set_subscription, only: [:show, :edit, :update, :destroy]
-  
-  def country
-     if ip_country_code == "ES"
-          {:api_key => Rails.configuration.stripe[:secret_spain_key]}
-     else
-          {:api_key => Rails.configuration.stripe[:secret_key]}
-     end
-  end
-  
+	before_action :set_subscription, only: [:show, :edit, :update, :destroy]
+	skip_before_action :verify_authenticity_token, only: :stripe_hooks
+	protect_from_forgery except: :stripe_hooks
+
+	def country
+		if ip_country_code == "ES"
+			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+		 else
+			{:api_key => Rails.configuration.stripe[:secret_key]}
+		end
+	end
+
   def new_subscription
     # Get the credit card details from the form and generate stripeToken
     token = params[:stripeToken]
@@ -129,39 +131,47 @@ class SubscriptionsController < ApplicationController
   end
 end
 
-   def thespainreport_new_user_create
-    autopassword = 'L e @ 4' + SecureRandom.hex(32)
-    generate_token = SecureRandom.urlsafe_base64
-     
-    user = User.create!(
-      email: params[:email],
-      password: autopassword,
-      password_confirmation: autopassword,
-      password_reset_token: generate_token,
-      password_reset_sent_at: Time.zone.now
-      )
-   end
-   
-   def thespainreport_user_roles
-     user = User.find_by_email(params[:email])
-     if params[:plan] == "one_story"
-       user.update(
-         access_date: Time.now + 30.days,
-         role: 'subscriber_one_story'
-         )
-     elsif params[:plan] == "all_stories"
-       user.update(
-         access_date: Time.now + 30.days,
-         role: 'subscriber_all_stories'
-         )
-     else
-       user.update(
-         access_date: Time.now + 30.days,
-         role: 'reader'
-         )
-     end
-   end
-   
+	def stripe_hooks
+		event = JSON.parse(request.body.read)
+		puts 'Event type: ' + event['type']
+		puts 'Event id: ' + event['id']
+		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
+		puts 'Customer: ' + event['data']['object']['customer']
+		head 200
+	end
+
+	def thespainreport_new_user_create
+		autopassword = 'L e @ 4' + SecureRandom.hex(32)
+		generate_token = SecureRandom.urlsafe_base64
+		user = User.create!(
+			email: params[:email],
+			password: autopassword,
+			password_confirmation: autopassword,
+			password_reset_token: generate_token,
+			password_reset_sent_at: Time.zone.now
+			)
+	end
+
+	def thespainreport_user_roles
+		user = User.find_by_email(params[:email])
+		if params[:plan] == "one_story"
+			user.update(
+				access_date: Time.now + 30.days,
+				role: 'subscriber_one_story'
+				)
+		elsif params[:plan] == "all_stories"
+			user.update(
+				access_date: Time.now + 30.days,
+				role: 'subscriber_all_stories'
+				)
+		else
+			user.update(
+				access_date: Time.now + 30.days,
+				role: 'reader'
+				)
+		end
+	end
+
    def new_spain_report_reader
     thespainreport_new_user_create
     thespainreport_user_roles
