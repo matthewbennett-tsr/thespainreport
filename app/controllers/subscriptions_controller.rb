@@ -133,10 +133,6 @@ end
 
 	def stripe_hooks
 		event = JSON.parse(request.body.read)
-		puts 'Event type: ' + event['type']
-		puts 'Event id: ' + event['id']
-		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
-		puts 'Customer: ' + event['data']['object']['customer']
 		head 200
 	end
 
