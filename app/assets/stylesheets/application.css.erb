@@ -58,10 +58,11 @@ body {margin: 0; font-family: Arial; font-size: 14px; background-color: #fff;}
 #top-bar-layer {position:relative; left: 0%; top: 0%; width: 100%; min-height: 60px; background-color: #AA151B; z-index: 10000;}
 
 .wrap {position: relative; width: 1020px; height: auto; margin: 0 auto; background-color: #fff; border-left: 1px solid #B1A87D; border-right: 1px solid #B1A87D; overflow: hidden;}
-.wrap-subscription {position: relative; width: 80%; margin: 0 auto; background-color: #fff;}
 .left-hand-bar {position:relative; float:left; margin-left: 10px; margin-top: 5px; width: 285px; background-color: #fff; padding: 10px;}
 .content-left-new {float:left; width: 700px; margin-top: 5px; padding: 10px; background-color: #fff; }
 .content-left-new-page {float:left; width: 700px; margin-top: 5px; padding: 10px; background-color: #fff; }
+
+.wrap-subscription {position: relative; width: 1020px; margin: 0 auto; background-color: #fff;}
 .content-left-subscription {float:left; width: 100%; margin-top: 5px; padding: 10px; background-color: #fff; }
 
 #email-sign-up-box {background-color: #fff; font-family: Georgia; padding: 5px; margin-bottom: 2px; font-size: 14px; line-height: 150%; border-bottom: 1px solid #F1BF00;}
@@ -479,19 +480,29 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 ---------------------------------------------------------------------------------------------------- */
 
 @media only screen and (max-width: 1019px) {
-  h1 {font-size: 24px;}
-  .wrap {width:100%;}
-  .left-hand-bar {display:none;}
-  .content-left-new {width:100%;}
-  .content-left-new-page {width:100%;}
-  .notifications-admin {width:100%;}
-  
-  .user-bar-right-links {position: relative; width: 100%; padding: 0px 10px 7px 10px; margin-top: 0px !important; margin-right: 0px; background-color: #F1BF00;}
-  .user-bar-right-links a, .user-bar-right-links a:visited {color: #AA151B;}
-  .user-bar-right-links a:hover {color: #ffe680; background-color: #F1BF00;}
-  .web-width {display: none;}
-  .mobile-width {display: inline;}
-  .user-bar-login-form {padding-top: 5px;}
+	h1 {font-size: 24px;}
+	.wrap {width:100%;}
+	.left-hand-bar {display:none;}
+	.content-left-new {width:100%;}
+	.content-left-new-page {width:100%;}
+	.wrap-subscription {width:100%;}
+	.notifications-admin {width:100%;}
+	
+	.user-bar-right-links {position: relative; width: 100%; padding: 0px 10px 7px 10px; margin-top: 0px !important; margin-right: 0px; background-color: #F1BF00;}
+	.user-bar-right-links a, .user-bar-right-links a:visited {color: #AA151B;}
+	.user-bar-right-links a:hover {color: #ffe680; background-color: #F1BF00;}
+	.web-width {display: none;}
+	.mobile-width {display: inline;}
+	.user-bar-login-form {padding-top: 5px;}
+}
+
+@media only screen and (max-width: 950px) {
+	.subscription-image {display: none;}
+	.subscription-form {float: left; width: 100%;}
+	.payment-form {width: 100%;}
+	.subscription-form-container {width: 100%; max-width: 500px; margin: 0px; padding: 10px 10px; 10px 0px;}
+	.subscription-left-label-input {width: 150px;}
+	.subscription-left-label-select {width: 150px;}
 }
 
 @media only screen and (max-width: 780px) {
@@ -546,9 +557,13 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 @media only screen and (max-width: 560px) {
 }
 
-@media only screen and (max-width: 490px) {  
-
+@media only screen and (max-width: 459px) {  
+	.subscription-left-label-input {width: 100%; text-align: left;}
+	.subscription-left-label-select {width: 100%; text-align: left;}
+	.subscription-right-form-element {width: 100%;}
 }
+
+
 
 @media only screen and (max-width: 450px) {
   .notifications-admin-right input {float: left; width: 5%;}
