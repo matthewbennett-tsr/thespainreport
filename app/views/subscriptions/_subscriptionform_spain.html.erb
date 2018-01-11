@@ -90,15 +90,19 @@
     <div class="clear"></div>
     </div>
     
-    <div class="subscription-form-section-middle">
-      <div class="subscription-left-label-input">
-        Your E-mail Address:
-      </div>
-      <div class="subscription-right-form-element">
-        <input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral" onclick="calculateTotal()"/>
-      </div>
-      <div class="clear"></div>
-    </div>
+	<div class="subscription-form-section-middle">
+		<div class="subscription-left-label-input">
+			Your E-mail Address:
+		</div>
+		<div class="subscription-right-form-element">
+			<% if current_user.nil? || current_user.role == 'editor' %>
+				<input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral" onclick="calculateTotal()"/>
+			<% else %>
+				<input type="email" size="35" name="email" id="email" value="<%= current_user.email %>" class="inputgeneral" onclick="calculateTotal()" readonly />
+			<% end %>
+		</div>
+		<div class="clear"></div>
+	</div>
       
     <div class="subscription-form-section-middle" style="background-image: url(<%= asset_path 'thespainreport-evssl-yellow.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
       

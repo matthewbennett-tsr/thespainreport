@@ -27,6 +27,30 @@ class SubscriptionsController < ApplicationController
 		ip_country_code = params[:ip_country_code]
 		ip_country_name = params[:ip_country_name]
 
+		if User.exists?(email: params[:email]) && current_user.nil?
+			redirect_to :back
+			flash[:success] = "Please use another e-mail or log in to continue."
+		elsif User.exists?(email: params[:email]) && current_user.role == 'editor'
+			redirect_to :back
+			flash[:success] = "That user already exists"
+		elsif User.exists?(email: params[:email]) && current_user.email != params[:email]
+			redirect_to :back
+			flash[:success] = "Please enter your e-mail."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['reader', 'guest'].include?(current_user.role)
+			redirect_to :back
+			flash[:success] = "Please subscribe now."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(current_user.role) && current_user.access_date < Time.current
+			redirect_to :back
+			flash[:success] = "Please re-subscribe now."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_one_story'].include?(current_user.role)
+			redirect_to :back
+			flash[:success] = "Upgrade now."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_all_stories'].include?(current_user.role)
+			redirect_to :back
+			flash[:success] = "Downgrade now."
+		
+		else
+
 		begin
 			# Create a new Stripe customer and add them to a subscription plan
 			customer = Stripe::Customer.create({
@@ -36,66 +60,72 @@ class SubscriptionsController < ApplicationController
 				:tax_percent => tax_percent,
 				:quantity => how_many}, country)
 
-				thespainreport_new_user_create
-				thespainreport_user_roles
+			# If brand new user, basic account set up
+			thespainreport_new_user_create
+			thespainreport_user_roles
+			set_briefings_and_stories
 
-				user = User.find_by_email(params[:email])
+			# Set up user subscription details
+			user = User.find_by_email(params[:email])
+			user.update(
+				stripe_customer_id: customer.id,
+				becomes_customer_date: Time.at(customer.created).to_datetime,
+				credit_card_id: customer.sources.data[0].id,
+				credit_card_brand: customer.sources.data[0].brand,
+				credit_card_country: customer.sources.data[0].country,
+				credit_card_last4: customer.sources.data[0].last4,
+				credit_card_expiry_month: customer.sources.data[0].exp_month,
+				credit_card_expiry_year: customer.sources.data[0].exp_year,
+				access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
+			)
 
-				user.update(
-					stripe_customer_id: customer.id,
-					becomes_customer_date: Time.at(customer.created).to_datetime,
-					credit_card_id: customer.sources.data[0].id,
-					credit_card_brand: customer.sources.data[0].brand,
-					credit_card_country: customer.sources.data[0].country,
-					credit_card_last4: customer.sources.data[0].last4,
-					credit_card_expiry_month: customer.sources.data[0].exp_month,
-					credit_card_expiry_year: customer.sources.data[0].exp_year,
-					access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-				)
+			# Create the first subscription record on TSR
+			subscription = Subscription.new
+			subscription.user_id = user.id
+			subscription.stripe_customer_id = customer.id
+			subscription.stripe_subscription_id = customer.subscriptions.data[0].id
+			subscription.stripe_subscription_email = email_address
+			subscription.stripe_subscription_plan = customer.subscriptions.data[0].plan.name
+			subscription.stripe_subscription_amount = customer.subscriptions.data[0].plan.amount
+			subscription.stripe_subscription_interval = customer.subscriptions.data[0].plan.interval
+			subscription.stripe_subscription_quantity = customer.subscriptions.data[0].quantity
+			subscription.stripe_subscription_tax_percent = customer.subscriptions.data[0].tax_percent
+			subscription.stripe_subscription_ip = ip_address
+			subscription.stripe_subscription_ip_country = ip_country_code
+			subscription.stripe_subscription_ip_country_name = ip_country_name
+			subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
+			subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
+			subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
+			subscription.is_active = true
+			subscription.save!
 
-				subscription = Subscription.new
-				subscription.user_id = user.id
-				subscription.stripe_customer_id = customer.id
-				subscription.stripe_subscription_id = customer.subscriptions.data[0].id
-				subscription.stripe_subscription_email = email_address
-				subscription.stripe_subscription_plan = customer.subscriptions.data[0].plan.name
-				subscription.stripe_subscription_amount = customer.subscriptions.data[0].plan.amount
-				subscription.stripe_subscription_interval = customer.subscriptions.data[0].plan.interval
-				subscription.stripe_subscription_quantity = customer.subscriptions.data[0].quantity
-				subscription.stripe_subscription_tax_percent = customer.subscriptions.data[0].tax_percent
-				subscription.stripe_subscription_ip = ip_address
-				subscription.stripe_subscription_ip_country = ip_country_code
-				subscription.stripe_subscription_ip_country_name = ip_country_name
-				subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
-				subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
-				subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-				subscription.is_active = true
-				subscription.save!
-
-				stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
-				stripeinvs.each do |stripeinv|
-					invoice = Invoice.new
-					invoice.stripe_invoice_id = stripeinv.id
-					invoice.user_id = user.id
-					invoice.subscription_id = subscription.id
-					invoice.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
-					invoice.stripe_invoice_item = stripeinv.lines.data[0].plan.name
-					invoice.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
-					invoice.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
-					invoice.stripe_invoice_subtotal = stripeinv.subtotal
-					invoice.stripe_invoice_credit_card_country = customer.sources.data[0].country
-					invoice.stripe_invoice_ip_country_code = ip_country_code
-					invoice.stripe_invoice_ip_country_code_2 = ''
-					invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
-					invoice.stripe_invoice_tax_amount = stripeinv.tax
-					invoice.stripe_invoice_total = stripeinv.total
-					invoice.save!
-				end
-
-			redirect_to :back
-			flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
+			# Create the first invoice for that subscription record on TSR
+			stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
+			stripeinvs.each do |stripeinv|
+				invoice = Invoice.new
+				invoice.stripe_invoice_id = stripeinv.id
+				invoice.user_id = user.id
+				invoice.subscription_id = subscription.id
+				invoice.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
+				invoice.stripe_invoice_item = stripeinv.lines.data[0].plan.name
+				invoice.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
+				invoice.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
+				invoice.stripe_invoice_subtotal = stripeinv.subtotal
+				invoice.stripe_invoice_credit_card_country = customer.sources.data[0].country
+				invoice.stripe_invoice_ip_country_code = ip_country_code
+				invoice.stripe_invoice_ip_country_code_2 = ''
+				invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
+				invoice.stripe_invoice_tax_amount = stripeinv.tax
+				invoice.stripe_invoice_total = stripeinv.total
+				invoice.save!
+			end
+			
+			# Send a thank-you e-mail
 			UserMailer.delay.new_subscriber_thank_you(user)
 			
+			# All done, finish up, flash thank-you message on screen
+			redirect_to :back
+			flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
 		rescue Stripe::CardError => e
 			# Since it's a decline, Stripe::CardError will be caught
 			body = e.json_body
@@ -125,7 +155,8 @@ class SubscriptionsController < ApplicationController
 			flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
 			redirect_to :back
 		end
-end
+	end
+	end
 
 	def stripe_hooks
 		event = JSON.parse(request.body.read)
@@ -134,6 +165,21 @@ end
 		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
 		puts 'Customer: ' + event['data']['object']['customer']
 		head 200
+	end
+
+	def new_spain_report_reader
+		thespainreport_new_user_create
+		thespainreport_user_roles
+		set_briefings_and_stories
+
+		# …then send some welcome e-mails…
+		UserMailer.delay.new_user_password_choose(user)
+		UserMailer.delay.new_user_story_notifications(user)
+		UserMailer.delay.new_user_catch_up(user)
+
+		# Redirect to 
+		redirect_to :back
+		flash[:success] = "Welcome aboard! Check your e-mail."
 	end
 
 	def thespainreport_new_user_create
@@ -168,78 +214,66 @@ end
 		end
 	end
 
-   def new_spain_report_reader
-    thespainreport_new_user_create
-    thespainreport_user_roles
-    
-    # Get new user and set briefing frequency…
-    user = User.find_by_email(params[:email])
-    user.update(
-    briefing_frequency_id: 5
-    )
-    
-    # …then record sign-up url in a History record
-      h = History.create(
-      user_id: user.id,
-      article_id: params[:article_id])
+	def set_briefings_and_stories
+		# Get new user and set briefing frequency…
+		user = User.find_by_email(params[:email])
+		user.update(
+		briefing_frequency_id: 5
+		)
 
-    # …then add stories…
-    Story.nowactive.each do |s|
-      n = Notification.new
-      n.story_id = s.id
-      n.user_id = user.id
-      n.notificationtype_id =  1
-      n.save!
-    end
-    
-    Story.notnowactive.keystories.each do |s|
-      n = Notification.new
-      n.story_id = s.id
-      n.user_id = user.id
-      n.notificationtype_id =  1
-      n.save!
-    end
-    
-    Story.notnowactive.notkeystories.each do |s|
-      n = Notification.new
-      n.story_id = s.id
-      n.user_id = user.id
-      n.notificationtype_id =  2
-      n.save!
-    end
-    
-    # …then send some welcome e-mails…
-    UserMailer.delay.new_user_password_choose(user)
-    UserMailer.delay.new_user_story_notifications(user)
-    UserMailer.delay.new_user_catch_up(user)
-    
-    # Redirect to 
-    redirect_to :back
-    flash[:success] = "Welcome aboard! Check your e-mail."
-  end
-  
-  def unsubscribe
-    user = User.find_by_update_token(params[:id])
-    user.email = 'deleted-' + SecureRandom.hex(10)
-    user.role = 'deleted'
-    user.save(:validate => false)
-    
-    session[:user_id] = nil
-    reset_session
-    
-    redirect_to root_url
-    flash[:success] = "Thank you: you have unsubscribed."
-  end
-  
-  def unsubscribe_by_staff
-    user = User.find_by_id(params[:id])
-    user.email = 'deleted-' + SecureRandom.hex(10)
-    user.role = 'deleted'
-    user.save(:validate => false)
-    
-    redirect_to :back
-    flash[:success] = "Thank you: you have unsubscribed."
-  end
+		# …then record sign-up url in a History record
+		h = History.create(
+		user_id: user.id,
+		article_id: params[:article_id])
+
+		# …then add stories…
+		Story.nowactive.each do |s|
+			n = Notification.new
+			n.story_id = s.id
+			n.user_id = user.id
+			n.notificationtype_id =	 1
+			n.save!
+		end
+
+		Story.notnowactive.keystories.each do |s|
+			n = Notification.new
+			n.story_id = s.id
+			n.user_id = user.id
+			n.notificationtype_id =	 1
+			n.save!
+		end
+
+		Story.notnowactive.notkeystories.each do |s|
+			n = Notification.new
+			n.story_id = s.id
+			n.user_id = user.id
+			n.notificationtype_id =	 2
+			n.save!
+		end
+	end
+
+	def unsubscribe
+		user = User.find_by_update_token(params[:id])
+		user.email = 'deleted-' + SecureRandom.hex(10)
+		user.role = 'deleted'
+		user.save(:validate => false)
+
+		session[:user_id] = nil
+		reset_session
+
+		redirect_to root_url
+		flash[:success] = "Thank you: you have unsubscribed."
+	end
+
+	def unsubscribe_by_staff
+		user = User.find_by_id(params[:id])
+		user.email = 'deleted-' + SecureRandom.hex(10)
+		user.role = 'deleted'
+		user.save(:validate => false)
+
+		redirect_to :back
+		flash[:success] = "Thank you: you have unsubscribed."
+	end
 
   def new_spain_report_member
     # Generate tokens for passwords and reset links
