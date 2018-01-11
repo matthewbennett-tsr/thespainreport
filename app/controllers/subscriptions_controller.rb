@@ -10,129 +10,129 @@ class SubscriptionsController < ApplicationController
 	protect_from_forgery except: :stripe_hooks
 
 	def country
-		if ip_country_code == "ES"
+		if params[:ip_country_code] == "ES"
 			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
-		 else
+		else
 			{:api_key => Rails.configuration.stripe[:secret_key]}
 		end
 	end
 
-  def new_subscription
-    # Get the credit card details from the form and generate stripeToken
-    token = params[:stripeToken]
-    email_address = params[:email]
-    tax_percent = params[:ts]
-    how_many = params[:quantity]
-    ip_address = params[:ip_address]
-    ip_country_code = params[:ip_country_code]
-    ip_country_name = params[:ip_country_name]
-    
-    if User.exists?(email: params[:email]) && current_user.nil?
-      redirect_to :back
-      flash[:error] = "E-mail already taken. Please use another or log in to continue."
-    elsif User.exists?(email: params[:email]) && current_user.email = params[:email]
-      redirect_to :back
-      flash[:success] = "Time to UPDATE your subscription."
-    else
-    
-    begin
+	def new_subscription
+		# Get the credit card details from the form and generate stripeToken
+		token = params[:stripeToken]
+		email_address = params[:email]
+		tax_percent = params[:ts]
+		how_many = params[:quantity]
+		ip_address = params[:ip_address]
+		ip_country_code = params[:ip_country_code]
+		ip_country_name = params[:ip_country_name]
 
-      # Create a new Stripe customer and add them to a subscription plan
-      customer = Stripe::Customer.create({
-        :source => token,
-        :description => email_address,
-        :plan => params[:plan],
-        :tax_percent => tax_percent,
-        :quantity => how_many}, country)
-  
-        thespainreport_new_user_create
-        thespainreport_user_roles
-        
-        user = User.find_by_email(params[:email])
-        
-        user.update(
-          stripe_customer_id: customer.id,
-          becomes_customer_date: Time.at(customer.created).to_datetime,
-          credit_card_id: customer.sources.data[0].id,
-          credit_card_brand: customer.sources.data[0].brand,
-          credit_card_country: customer.sources.data[0].country,
-          credit_card_last4: customer.sources.data[0].last4,
-          credit_card_expiry_month: customer.sources.data[0].exp_month,
-          credit_card_expiry_year: customer.sources.data[0].exp_year,
-          access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-        )
-        
-        subscription = Subscription.new
-        subscription.user_id = user.id
-        subscription.stripe_customer_id = customer.id
-        subscription.stripe_subscription_id = customer.subscriptions.data[0].id
-        subscription.stripe_subscription_email = email_address
-        subscription.stripe_subscription_plan = customer.subscriptions.data[0].plan.name
-        subscription.stripe_subscription_amount = customer.subscriptions.data[0].plan.amount
-        subscription.stripe_subscription_interval = customer.subscriptions.data[0].plan.interval
-        subscription.stripe_subscription_quantity = customer.subscriptions.data[0].quantity
-        subscription.stripe_subscription_tax_percent = customer.subscriptions.data[0].tax_percent
-        subscription.stripe_subscription_ip = ip_address
-        subscription.stripe_subscription_ip_country = ip_country_code
-        subscription.stripe_subscription_ip_country_name = ip_country_name
-        subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
-        subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
-        subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-        subscription.is_active = true
-        subscription.save!
-        
-        stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
-        stripeinvs.each do |stripeinv|
-          invoice = Invoice.new
-          invoice.stripe_invoice_id = stripeinv.id
-          invoice.user_id = user.id
-          invoice.subscription_id = subscription.id
-          invoice.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
-          invoice.stripe_invoice_item = stripeinv.lines.data[0].plan.name
-          invoice.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
-          invoice.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
-          invoice.stripe_invoice_subtotal = stripeinv.subtotal
-          invoice.stripe_invoice_credit_card_country = customer.sources.data[0].country
-          invoice.stripe_invoice_ip_country_code = ip_country_code
-          invoice.stripe_invoice_ip_country_code_2 = ''
-          invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
-          invoice.stripe_invoice_tax_amount = stripeinv.tax
-          invoice.stripe_invoice_total = stripeinv.total
-          invoice.save!
-        end
-        
-      redirect_to :back
-      flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
-      UserMailer.delay.new_subscriber_thank_you(user)
-      
-    rescue Stripe::CardError => e
-      # Since it's a decline, Stripe::CardError will be caught
-      body = e.json_body
-      err  = body[:error]
-      
-      puts "Status is: #{e.http_status}"
-      puts "Type is: #{err[:type]}"
-      puts "Code is: #{err[:code]}"
-      # param is '' in this case
-      puts "Param is: #{err[:param]}"
-      puts "Message is: #{err[:message]}"
-      flash[:error] = "#{err[:message]}"
-    rescue Stripe::InvalidRequestError => e
-      flash[:error] = "Invalid request to payment processor. Please try again."
-    rescue Stripe::AuthenticationError => e
-      flash[:error] = "Could not connect to payment processor. Please try again."
-    rescue Stripe::APIConnectionError => e
-      flash[:error] = "Could not connect to payment processor. Please try again."
-    rescue Stripe::StripeError => e
-      flash[:error] = "General payment processor problem. Please try again."
-    rescue => e
-      flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
-    end
-  end
+		begin
+			# Create a new Stripe customer and add them to a subscription plan
+			customer = Stripe::Customer.create({
+				:source => token,
+				:description => email_address,
+				:plan => params[:plan],
+				:tax_percent => tax_percent,
+				:quantity => how_many}, country)
+
+				thespainreport_new_user_create
+				thespainreport_user_roles
+
+				user = User.find_by_email(params[:email])
+
+				user.update(
+					stripe_customer_id: customer.id,
+					becomes_customer_date: Time.at(customer.created).to_datetime,
+					credit_card_id: customer.sources.data[0].id,
+					credit_card_brand: customer.sources.data[0].brand,
+					credit_card_country: customer.sources.data[0].country,
+					credit_card_last4: customer.sources.data[0].last4,
+					credit_card_expiry_month: customer.sources.data[0].exp_month,
+					credit_card_expiry_year: customer.sources.data[0].exp_year,
+					access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
+				)
+
+				subscription = Subscription.new
+				subscription.user_id = user.id
+				subscription.stripe_customer_id = customer.id
+				subscription.stripe_subscription_id = customer.subscriptions.data[0].id
+				subscription.stripe_subscription_email = email_address
+				subscription.stripe_subscription_plan = customer.subscriptions.data[0].plan.name
+				subscription.stripe_subscription_amount = customer.subscriptions.data[0].plan.amount
+				subscription.stripe_subscription_interval = customer.subscriptions.data[0].plan.interval
+				subscription.stripe_subscription_quantity = customer.subscriptions.data[0].quantity
+				subscription.stripe_subscription_tax_percent = customer.subscriptions.data[0].tax_percent
+				subscription.stripe_subscription_ip = ip_address
+				subscription.stripe_subscription_ip_country = ip_country_code
+				subscription.stripe_subscription_ip_country_name = ip_country_name
+				subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
+				subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
+				subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
+				subscription.is_active = true
+				subscription.save!
+
+				stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
+				stripeinvs.each do |stripeinv|
+					invoice = Invoice.new
+					invoice.stripe_invoice_id = stripeinv.id
+					invoice.user_id = user.id
+					invoice.subscription_id = subscription.id
+					invoice.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
+					invoice.stripe_invoice_item = stripeinv.lines.data[0].plan.name
+					invoice.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
+					invoice.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
+					invoice.stripe_invoice_subtotal = stripeinv.subtotal
+					invoice.stripe_invoice_credit_card_country = customer.sources.data[0].country
+					invoice.stripe_invoice_ip_country_code = ip_country_code
+					invoice.stripe_invoice_ip_country_code_2 = ''
+					invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
+					invoice.stripe_invoice_tax_amount = stripeinv.tax
+					invoice.stripe_invoice_total = stripeinv.total
+					invoice.save!
+				end
+
+			redirect_to :back
+			flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
+			UserMailer.delay.new_subscriber_thank_you(user)
+			
+		rescue Stripe::CardError => e
+			# Since it's a decline, Stripe::CardError will be caught
+			body = e.json_body
+			err	 = body[:error]
+			
+			puts "Status is: #{e.http_status}"
+			puts "Type is: #{err[:type]}"
+			puts "Code is: #{err[:code]}"
+			# param is '' in this case
+			puts "Param is: #{err[:param]}"
+			puts "Message is: #{err[:message]}"
+			flash[:error] = "#{err[:message]}"
+			redirect_to :back
+		rescue Stripe::InvalidRequestError => e
+			flash[:error] = "Invalid request to payment processor. Please try again."
+			redirect_to :back
+		rescue Stripe::AuthenticationError => e
+			flash[:error] = "Could not connect to payment processor. Please try again."
+			redirect_to :back
+		rescue Stripe::APIConnectionError => e
+			flash[:error] = "Could not connect to payment processor. Please try again."
+			redirect_to :back
+		rescue Stripe::StripeError => e
+			flash[:error] = "General payment processor problem. Please try again."
+			redirect_to :back
+		rescue => e
+			flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
+			redirect_to :back
+		end
 end
 
 	def stripe_hooks
 		event = JSON.parse(request.body.read)
+		puts 'Event type: ' + event['type']
+		puts 'Event id: ' + event['id']
+		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
+		puts 'Customer: ' + event['data']['object']['customer']
 		head 200
 	end
 

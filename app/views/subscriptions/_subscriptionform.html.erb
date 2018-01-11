@@ -9,28 +9,35 @@
         <% end -%>
       <% end %>
     <% end %>
-    
-    <div class="subscription-form-section-top">
-      <div class="subscription-left-label-select">
-        Choose Your Deal:
-      </div>
-      <div class="subscription-right-form-element">
-        <select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
-          <optgroup label="Yearly Payments">
-            <option value="5599year">EDITORIAL: £55.99/year</option>
-            <option value="4999year">IN-DEPTH: £49.99/year</option>
-            <option value="3599year">NEWS: £35.99/year</option>
-          </optgroup>
-          <optgroup label="Monthly Payments">
-            <option value="1299month" selected="selected">EDITORIAL: £12.99/month</option>
-            <option value="999month">IN-DEPTH: £9.99/month</option>
-            <option value="599month">NEWS: £5.99/month</option>
-          </optgroup>
-        </select>
-      </div>
-      <div class="clear"></div>
-    </div>
-    
+
+	<div class="subscription-form-section-top">
+		<div class="subscription-left-label-select">
+			Choose Your Plan:
+		</div>
+		<div class="subscription-right-form-element">
+			<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
+				<% if current_user.nil? %>
+					<option value="all_stories">ALL STORIES: £15.99/month</option>
+					<option value="one_story">ONE STORY: £7.99/month</option>
+				<% elsif current_user.access_date.blank? %>
+					<option value="all_stories">ALL STORIES: £15.99/month</option>
+					<option value="one_story">ONE STORY: £7.99/month</option>
+				<% elsif current_user.access_date < Time.current %>
+					<option value="all_stories">ALL STORIES: £15.99/month</option>
+					<option value="one_story">ONE STORY: £7.99/month</option>
+				<% elsif current_user.role == 'subscriber_one_story' %>
+					<option value="all_stories">ALL STORIES: £15.99/month</option>
+				<% elsif current_user.role == 'subscriber_all_stories' %>
+					<option value="one_story">ONE STORY: £7.99/month</option>
+				<% else %>
+					<option value="all_stories">ALL STORIES: £15.99/month</option>
+					<option value="one_story">ONE STORY: £7.99/month</option>
+				<% end %>
+			</select>
+		</div>
+		<div class="clear"></div>
+	</div>
+
    <div class="subscription-form-section-middle">
       <div class="subscription-left-label-input">
         How Many Do You Want? *
@@ -173,119 +180,80 @@
 
 var country_tax;
 // MaxMind IP VAT stuff
-  var onSuccess = function(x){
-    var ip = x.traits.ip_address;
-    document.getElementById('ip_address').value = ip;
-    
-    var country_code = x.country.iso_code;
-    document.getElementById('ip_country_code').value = country_code;
+	var onSuccess = function(x){
+		var ip = x.traits.ip_address;
+		document.getElementById('ip_address').value = ip;
 
-    var country_name = x.country.names.en;
-    document.getElementById('ip_country_name').value = country_name;
-  
-  };
-  
-  var onError = function(error){
-    alert(
-      "Error:\n\n"
-      + JSON.stringify(error, undefined, 4)
-    );
-  };
+		var country_code = x.country.iso_code;
+		document.getElementById('ip_country_code').value = country_code;
 
-  geoip2.insights(onSuccess, onError);
+		var country_name = x.country.names.en;
+		document.getElementById('ip_country_name').value = country_name;
+	};
+
+	var onError = function(error){
+		alert(
+			"Error:\n\n"
+			+ JSON.stringify(error, undefined, 4)
+		);
+	};
+
+	geoip2.country(onSuccess, onError);
 
 // Array of values for plans
- var plan_prices= new Array();
- plan_prices["zero"]=0;
- plan_prices["5599year"]=55.99;
- plan_prices["4999year"]=49.99;
- plan_prices["3599year"]=35.99;
- plan_prices["1299month"]=12.99;
- plan_prices["999month"]=9.99;
- plan_prices["599month"]=5.99;
-
-// Array of values for tax rates
- var tax_rates= {};
- tax_rates["noteu"]=0;
- tax_rates["unitedkingdom"]=0;
- tax_rates["spain"]=21;
- tax_rates["austria"]=20;
- tax_rates["belgium"]=21;
- tax_rates["bulgaria"]=20;
- tax_rates["croatia"]=25;
- tax_rates["cyprus"]=19;
- tax_rates["czechrepublic"]=21;
- tax_rates["denmark"]=25;
- tax_rates["estonia"]=20;
- tax_rates["finland"]=24;
- tax_rates["france"]=20;
- tax_rates["germany"]=19;
- tax_rates["greece"]=24;
- tax_rates["hungary"]=27;
- tax_rates["ireland"]=23;
- tax_rates["italy"]=22;
- tax_rates["latvia"]=21;
- tax_rates["lithuania"]=21;
- tax_rates["luxembourg"]=17;
- tax_rates["malta"]=18;
- tax_rates["netherlands"]=21;
- tax_rates["poland"]=23;
- tax_rates["portugal"]=23;
- tax_rates["romania"]=20;
- tax_rates["slovakrepublic"]=20;
- tax_rates["slovenia"]=22;
- tax_rates["sweden"]=25;
+	var plan_prices= new Array();
+		plan_prices["zero"]=0;
+		plan_prices["all_stories"]=15.99;
+		plan_prices["one_story"]=7.99;
 
 // Values for country flag names
- var tax_country_names = {};
- <% @taxes.each do |tax| %>
-   tax_country_names["<%= tax.tax_country_code %>"]='<%= tax.tax_country_name %>';
- <% end %>
+	var tax_country_names = {};
+		<% @taxes.each do |tax| %>
+			tax_country_names["<%= tax.tax_country_code %>"]='<%= tax.tax_country_name %>';
+		<% end %>
 
 // Values for country tax rates
-  var tax_country_rates = {};
-    <% @taxes.each do |tax| %>
-      tax_country_rates["<%= tax.tax_country_code %>"]=<%= tax.tax_country_percent %>;
-    <% end %>
- 
- // Values for country flag images
- var country_flags= {};
- country_flags["UN"]='<%= asset_path('UN.jpg') %>';
- country_flags["AT"]='<%= asset_path('AT.jpg') %>';
- country_flags["AU"]='<%= asset_path('AU.jpg') %>'
- country_flags["BE"]='<%= asset_path('BE.jpg') %>';
- country_flags["BG"]='<%= asset_path('BG.jpg') %>';
- country_flags["CA"]='<%= asset_path('CA.jpg') %>';
- country_flags["CY"]='<%= asset_path('CY.jpg') %>';
- country_flags["CZ"]='<%= asset_path('CZ.jpg') %>';
- country_flags["DE"]='<%= asset_path('DE.jpg') %>';
- country_flags["DK"]='<%= asset_path('DK.jpg') %>';
- country_flags["EE"]='<%= asset_path('EE.jpg') %>';
- country_flags["ES"]='<%= asset_path('ES.jpg') %>';
- country_flags["FI"]='<%= asset_path('FI.jpg') %>';
- country_flags["FR"]='<%= asset_path('FR.jpg') %>';
- country_flags["GB"]='<%= asset_path('GB.jpg') %>';
- country_flags["GR"]='<%= asset_path('GR.jpg') %>';
- country_flags["HR"]='<%= asset_path('HR.jpg') %>';
- country_flags["HU"]='<%= asset_path('HU.jpg') %>';
- country_flags["IE"]='<%= asset_path('IE.jpg') %>'
- country_flags["IN"]='<%= asset_path('IN.jpg') %>';
- country_flags["IT"]='<%= asset_path('IT.jpg') %>';
- country_flags["LT"]='<%= asset_path('LT.jpg') %>';
- country_flags["LU"]='<%= asset_path('LU.jpg') %>';
- country_flags["LV"]='<%= asset_path('LV.jpg') %>';
- country_flags["MT"]='<%= asset_path('MT.jpg') %>';
- country_flags["NL"]='<%= asset_path('NL.jpg') %>';
- country_flags["NZ"]='<%= asset_path('NZ.jpg') %>'
- country_flags["PL"]='<%= asset_path('PL.jpg') %>';
- country_flags["PT"]='<%= asset_path('PT.jpg') %>';
- country_flags["RO"]='<%= asset_path('RO.jpg') %>';
- country_flags["SE"]='<%= asset_path('SE.jpg') %>';
- country_flags["SI"]='<%= asset_path('SI.jpg') %>';
- country_flags["SK"]='<%= asset_path('SK.jpg') %>';
- country_flags["US"]='<%= asset_path('US.jpg') %>'
+	var tax_country_rates = {};
+		<% @taxes.each do |tax| %>
+			tax_country_rates["<%= tax.tax_country_code %>"]=<%= tax.tax_country_percent %>;
+		<% end %>
 
-
+// Values for country flag images
+	var country_flags= {};
+		country_flags["UN"]='<%= asset_path('UN.jpg') %>';
+		country_flags["AT"]='<%= asset_path('AT.jpg') %>';
+		country_flags["AU"]='<%= asset_path('AU.jpg') %>';
+		country_flags["BE"]='<%= asset_path('BE.jpg') %>';
+		country_flags["BG"]='<%= asset_path('BG.jpg') %>';
+		country_flags["CA"]='<%= asset_path('CA.jpg') %>';
+		country_flags["CY"]='<%= asset_path('CY.jpg') %>';
+		country_flags["CZ"]='<%= asset_path('CZ.jpg') %>';
+		country_flags["DE"]='<%= asset_path('DE.jpg') %>';
+		country_flags["DK"]='<%= asset_path('DK.jpg') %>';
+		country_flags["EE"]='<%= asset_path('EE.jpg') %>';
+		country_flags["ES"]='<%= asset_path('ES.jpg') %>';
+		country_flags["FI"]='<%= asset_path('FI.jpg') %>';
+		country_flags["FR"]='<%= asset_path('FR.jpg') %>';
+		country_flags["GB"]='<%= asset_path('GB.jpg') %>';
+		country_flags["GR"]='<%= asset_path('GR.jpg') %>';
+		country_flags["HR"]='<%= asset_path('HR.jpg') %>';
+		country_flags["HU"]='<%= asset_path('HU.jpg') %>';
+		country_flags["IE"]='<%= asset_path('IE.jpg') %>';
+		country_flags["IN"]='<%= asset_path('IN.jpg') %>';
+		country_flags["IT"]='<%= asset_path('IT.jpg') %>';
+		country_flags["LT"]='<%= asset_path('LT.jpg') %>';
+		country_flags["LU"]='<%= asset_path('LU.jpg') %>';
+		country_flags["LV"]='<%= asset_path('LV.jpg') %>';
+		country_flags["MT"]='<%= asset_path('MT.jpg') %>';
+		country_flags["NL"]='<%= asset_path('NL.jpg') %>';
+		country_flags["NZ"]='<%= asset_path('NZ.jpg') %>';
+		country_flags["PL"]='<%= asset_path('PL.jpg') %>';
+		country_flags["PT"]='<%= asset_path('PT.jpg') %>';
+		country_flags["RO"]='<%= asset_path('RO.jpg') %>';
+		country_flags["SE"]='<%= asset_path('SE.jpg') %>';
+		country_flags["SI"]='<%= asset_path('SI.jpg') %>';
+		country_flags["SK"]='<%= asset_path('SK.jpg') %>';
+		country_flags["US"]='<%= asset_path('US.jpg') %>';
 
 // Two drop downs, one for plan, one for tax rate
 function PlanPrice()
@@ -323,12 +291,6 @@ function TaxPrice()
     return taxprice.toFixed(1);
   }
 
-}
-
-function TaxPriceXX()
-{
-  var taxprice = $('select#country_vat :selected').val();
-  return taxprice;
 }
 
 // Calculate total 
