@@ -135,7 +135,7 @@
       <div class="clear"></div>
       
       <input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
-      <% if @user.subscriptions %>
+      <% if @user.subscriptions.any? %>
       <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
       <% else %>
       <% end %>
@@ -155,6 +155,8 @@
 			<th>Purchase Country</th>
 			<th>VAT</th>
 		</tr>
+
+		<% if @user.subscriptions.nil? %>
 
 		<% @user.subscriptions.each do |sub| %>
 			<tr>
@@ -213,6 +215,9 @@
 				</td>
 			</tr>
 		<% end %>
+		
+		<% end %>
+		
 	</table>
 </div>
 
@@ -305,7 +310,7 @@ function myFunction() {
 
 <script type="text/javascript">
 $(function(){
-	<% if @user.stripe_customer_id? %>
+	<% if @user.subscriptions.any? %>
 		<% if @user.subscriptions.order(:created_at).last.stripe_subscription_ip_country == "ES" %>
 			Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_spain_key] %>');
 		<% else %>
