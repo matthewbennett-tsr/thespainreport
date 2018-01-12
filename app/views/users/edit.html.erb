@@ -135,7 +135,7 @@
       <div class="clear"></div>
       
       <input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
-      <% if @user.subscriptions.order(:created_at).last.id %>
+      <% if @user.subscriptions %>
       <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
       <% else %>
       <% end %>
