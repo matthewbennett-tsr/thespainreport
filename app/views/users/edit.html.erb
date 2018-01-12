@@ -135,7 +135,7 @@
       <div class="clear"></div>
       
       <input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
-      <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
+      <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id unless @user.subscriptions.order(:created_at).last.id.nil? %>">
       <input type="hidden" name="old_card" id="old_card" value="<%= @user.credit_card_id %>">
       <input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
 <% end %>
