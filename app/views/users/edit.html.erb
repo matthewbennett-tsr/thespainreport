@@ -29,7 +29,7 @@
 
 <% elsif @user.stripe_customer_id? && @user.role == 'reader' %>
 
-<% elsif @user.stripe_customer_id? && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
+<% elsif @user.stripe_customer_id? && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
 <p>Your <strong>customer ID</strong> is <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %> and you first became a customer on <%= @user.becomes_customer_date.to_formatted_s(:long) unless @user.becomes_customer_date.nil? %></p>
 
 <div>
@@ -135,6 +135,7 @@
       <div class="clear"></div>
       
       <input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
+      <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
       <input type="hidden" name="old_card" id="old_card" value="<%= @user.credit_card_id %>">
       <input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
 <% end %>
@@ -142,42 +143,74 @@
 </div>
 
 <div>
-<h3>My Subscription(s)</h3>
-  <table class="invoice-table">
-  <tr>
-    <th>Subscription ID</th>
-    <th>Start</th>
-    <th>Renewal</th>
-    <th>Description</th>
-    <th>Purchase IP</th>
-    <th>Purchase Country</th>
-    <th class="right">VAT %</th>
-  </tr>
+	<h3>My Subscription(s)</h3>
+	<table class="invoice-table">
+		<tr>
+			<th>Subscription ID</th>
+			<th>Started</th>
+			<th>Renews</th>
+			<th>Purchase Country</th>
+			<th>VAT</th>
+		</tr>
 
-  <% @user.subscriptions.each do |sub| %>
-    <tr>
-      <td><%= sub.stripe_subscription_id %></td>
-      <td><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%Y") %></td>
-      <td><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%Y") %></td>
-      <td><%= sub.stripe_subscription_quantity %> x <%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> per <em><%= sub.stripe_subscription_interval %></em></td>
-      <td class="right"><%= sub.stripe_subscription_ip %></td>
-      <td><%= sub.stripe_subscription_ip_country %>, <%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %></td>
-      <td class="right"><%= sub.stripe_subscription_tax_percent %>%</td>
-      <td class="right">
-        <% if sub.is_active %>
-          <%= form_tag '/cancel_subscription', :class => '', :id => 'cancel_subscription', :name => 'cancel_subscription' do %>
-            <input type="hidden" name="cancel_subscription_id" id="cancel_subscription_id" value="<%= sub.stripe_subscription_id %>">
-            <input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-            <button type="submit" class="linkbutton">Cancel</button>
-          <% end %>
-        <% else %>
-        Inactive
-        <% end %>
-      </td>
-    </tr>
-  <% end %>
-  
-</table>
+		<% @user.subscriptions.each do |sub| %>
+			<tr>
+				<td><%= sub.stripe_subscription_id %></td>
+				<td><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></td>
+				<td><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></td>
+				<td>
+					<%= sub.stripe_subscription_ip %>
+					<br />
+					<%= sub.stripe_subscription_ip_country_name %>
+					<br />
+					<%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %>
+				</td>
+				<td><%= sub.stripe_subscription_tax_percent %>%</td>
+				<td>
+					<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
+						<%= form_tag '/one_story', :class => '', :id => 'one_story', :name => 'one_story' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">
+								<% if ['subscriber'].include?(@user.role) %>
+								Choose "One Story"
+								<% elsif ['subscriber_all_stories'].include?(@user.role) %>
+								Downgrade to "One Story"
+								<% elsif ['subscriber_paused'].include?(@user.role) %>
+								Restart as "One Story"
+								<% end %>
+							</button>
+						<% end %>
+					<% end %>
+					<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) %>
+						<%= form_tag '/all_stories', :class => '', :id => 'all_stories', :name => 'all_stories' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">
+								<% if ['subscriber'].include?(@user.role) %>
+								Choose "All Stories"
+								<% elsif ['subscriber_one_story'].include?(@user.role) %>
+								Upgrade to "All Stories"
+								<% elsif ['subscriber_paused'].include?(@user.role) %>
+								Restart as "All Stories"
+								<% end %>
+							</button>
+						<% end %>
+					<% end %>
+					<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
+						<%= form_tag '/pause', :class => '', :id => 'pause', :name => 'pause' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">Pause your subscription</button>
+						<% end %>
+					<% end %>
+				</td>
+			</tr>
+		<% end %>
+	</table>
 </div>
 
 <div>
@@ -269,25 +302,30 @@ function myFunction() {
 
 <script type="text/javascript">
 $(function(){
-  Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
+	<% if @user.subscriptions.order(:created_at).last.stripe_subscription_ip_country == "ES" %>
+		Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_spain_key] %>');
+	<% else %>
+		Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_key] %>');
+	<% end %>
+	
 });
 
 $('#update-form').submit(function(event) {
-  var form = $(this);
-  form.find('button').prop('disabled', true);
-  Stripe.createToken(form, stripeResponseHandler);
-  return false;
+	var form = $(this);
+	form.find('button').prop('disabled', true);
+	Stripe.createToken(form, stripeResponseHandler);
+	return false;
 });
 
 function stripeResponseHandler(status, response) {
-  var form = $('#update-form');
-  if (response.error) {
-    form.find('.payment-errors').text(response.error.message);
-    form.find('button').prop('disabled', false);
-  } else {
-    var token = response.id;
-    form.append($('<input type="hidden" name="stripeToken">').val(token));
-    form.get(0).submit();
-  }
+	var form = $('#update-form');
+	if (response.error) {
+		form.find('.payment-errors').text(response.error.message);
+		form.find('button').prop('disabled', false);
+	} else {
+		var token = response.id;
+		form.append($('<input type="hidden" name="stripeToken">').val(token));
+		form.get(0).submit();
+	}
 }
 </script>

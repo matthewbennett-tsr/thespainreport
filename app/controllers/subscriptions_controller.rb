@@ -9,6 +9,7 @@ class SubscriptionsController < ApplicationController
 	skip_before_action :verify_authenticity_token, only: :stripe_hooks
 	protect_from_forgery except: :stripe_hooks
 
+
 	def country
 		if params[:ip_country_code] == "ES"
 			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
@@ -16,6 +17,7 @@ class SubscriptionsController < ApplicationController
 			{:api_key => Rails.configuration.stripe[:secret_key]}
 		end
 	end
+
 
 	def new_subscription
 		# Get the credit card details from the form and generate stripeToken
@@ -35,7 +37,7 @@ class SubscriptionsController < ApplicationController
 			flash[:success] = "That user already exists"
 		elsif User.exists?(email: params[:email]) && current_user.email != params[:email]
 			redirect_to :back
-			flash[:success] = "Please enter your e-mail."
+			flash[:success] = "Please enter your own e-mail."
 		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['reader', 'guest'].include?(current_user.role)
 			redirect_to :back
 			flash[:success] = "Please subscribe now."
@@ -43,8 +45,10 @@ class SubscriptionsController < ApplicationController
 			redirect_to :back
 			flash[:success] = "Please re-subscribe now."
 		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_one_story'].include?(current_user.role)
+			
+			
 			redirect_to :back
-			flash[:success] = "Upgrade now."
+			flash[:success] = "Upgraded."
 		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_all_stories'].include?(current_user.role)
 			redirect_to :back
 			flash[:success] = "Downgrade now."
@@ -158,6 +162,7 @@ class SubscriptionsController < ApplicationController
 	end
 	end
 
+
 	def stripe_hooks
 		event = JSON.parse(request.body.read)
 		puts 'Event type: ' + event['type']
@@ -166,6 +171,7 @@ class SubscriptionsController < ApplicationController
 		puts 'Customer: ' + event['data']['object']['customer']
 		head 200
 	end
+
 
 	def new_spain_report_reader
 		thespainreport_new_user_create
@@ -182,6 +188,7 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Welcome aboard! Check your e-mail."
 	end
 
+
 	def thespainreport_new_user_create
 		autopassword = 'L e @ 4' + SecureRandom.hex(32)
 		generate_token = SecureRandom.urlsafe_base64
@@ -193,6 +200,7 @@ class SubscriptionsController < ApplicationController
 			password_reset_sent_at: Time.zone.now
 			)
 	end
+
 
 	def thespainreport_user_roles
 		user = User.find_by_email(params[:email])
@@ -213,6 +221,7 @@ class SubscriptionsController < ApplicationController
 				)
 		end
 	end
+
 
 	def set_briefings_and_stories
 		# Get new user and set briefing frequency…
@@ -252,6 +261,90 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
+
+	def subscription_details
+		current_subscription = params[:stripe_subscription_id]
+		@proration_date = Time.now.to_i
+		@user = User.find(params[:user_id])
+		@change_subscription = Stripe::Subscription.retrieve(current_subscription, subscription_country)
+	end
+
+
+	def subscription_country
+		tsr_subscription = Subscription.find(params[:tsr_subscription_id])
+		if tsr_subscription.stripe_subscription_ip_country == "ES"
+			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+		else
+			{:api_key => Rails.configuration.stripe[:secret_key]}
+		end
+	end
+
+
+	def one_story
+		subscription_details
+		
+		item_id = @change_subscription.items.data[0].id
+		items = [{
+			id: item_id,
+			plan: "one_story",
+		}]
+		@change_subscription.items = items
+		@change_subscription.proration_date = @proration_date
+		@change_subscription.save
+		
+		@user.update(
+			role: 'subscriber_one_story',
+			access_date: Time.at(@change_subscription.current_period_end).to_datetime
+		)
+		
+		redirect_to :back
+		flash[:success] = "Now subscribed to One Story."
+	end
+	
+	
+	def all_stories
+		subscription_details
+		
+		item_id = @change_subscription.items.data[0].id
+		items = [{
+			id: item_id,
+			plan: "all_stories",
+		}]
+		@change_subscription.items = items
+		@change_subscription.proration_date = @proration_date
+		@change_subscription.save
+		
+		@user.update(
+			role: 'subscriber_all_stories',
+			access_date: Time.at(@change_subscription.current_period_end).to_datetime
+		)
+		
+		redirect_to :back
+		flash[:success] = "Now subscribed to All Stories."
+	end
+	
+	def pause
+		subscription_details
+		
+		item_id = @change_subscription.items.data[0].id
+		items = [{
+			id: item_id,
+			plan: "paused",
+		}]
+		@change_subscription.items = items
+		@change_subscription.proration_date = @proration_date
+		@change_subscription.save
+		
+		@user.update(
+			role: 'subscriber_paused',
+			access_date: Time.current
+		)
+		
+		redirect_to :back
+		flash[:success] = "You have paused your subscription."
+	end
+
+
 	def unsubscribe
 		user = User.find_by_update_token(params[:id])
 		user.email = 'deleted-' + SecureRandom.hex(10)
@@ -265,6 +358,7 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Thank you: you have unsubscribed."
 	end
 
+
 	def unsubscribe_by_staff
 		user = User.find_by_id(params[:id])
 		user.email = 'deleted-' + SecureRandom.hex(10)
@@ -274,6 +368,7 @@ class SubscriptionsController < ApplicationController
 		redirect_to :back
 		flash[:success] = "Thank you: you have unsubscribed."
 	end
+
 
   def new_spain_report_member
     # Generate tokens for passwords and reset links
@@ -310,12 +405,11 @@ class SubscriptionsController < ApplicationController
     old_card = params[:old_card]
     
     begin
-    stripe_customer = Stripe::Customer.retrieve(customer_id)
-    stripe_customer.sources.create(source: token)
-    if stripe_customer.sources.retrieve(old_card)
-      stripe_customer.sources.retrieve(old_card).delete()
-    end
-    stripe_customer = Stripe::Customer.retrieve(customer_id)
+    stripe_customer = Stripe::Customer.retrieve(customer_id, subscription_country)
+    stripe_customer.source = token
+    stripe_customer.save
+
+    stripe_customer = Stripe::Customer.retrieve(customer_id, subscription_country)
     user = User.find(params[:user_id])
     user.credit_card_id = stripe_customer.sources.data[0].id
     user.credit_card_brand = stripe_customer.sources.data[0].brand
