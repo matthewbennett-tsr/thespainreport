@@ -16,6 +16,7 @@ Rails.application.routes.draw do
   post 'new_spain_report_subscriber' => 'subscriptions#new_spain_report_subscriber'
   post 'all_stories' => 'subscriptions#all_stories'
   post 'one_story' => 'subscriptions#one_story'
+  post 'get_subscription_history' => 'subscriptions#get_subscription_history'
   post 'pause' => 'subscriptions#pause'
   post 'update_credit_card' => 'subscriptions#update_credit_card'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'

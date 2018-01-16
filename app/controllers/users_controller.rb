@@ -6,8 +6,9 @@ class UsersController < ApplicationController
     elsif current_user.role == 'editor'
       if params[:search]
       terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
-      query = terms.map { |term| "email ILIKE '%#{term}%'" }.join(" OR ")
+      query = terms.map { |term| "email ILIKE '%#{term}%' OR role ILIKE '%#{term}%'" }.join(" OR ")
       @users = User.all.where(query).order("created_at DESC")
+      @userscount = @users.count
       @latestusers = User.readers.lastfew
       @latestsubscribers = User.totalsubscribers.lastfew
       else
@@ -28,6 +29,28 @@ class UsersController < ApplicationController
       redirect_to root_url
     end
   end
+  
+	def all_subscribers
+		if current_user.nil? 
+			redirect_to root_url
+		elsif current_user.role == 'editor'
+			if params[:search]
+				terms = params[:search].scan(/"[^"]*"|'[^']*'|[^"'\s]+/)
+				query = terms.map { |term| "email ILIKE '%#{term}%'" }.join(" OR ")
+				@users = User.all.where(query).order("created_at DESC")
+				@latestusers = User.readers.lastfew
+				@latestsubscribers = User.totalsubscribers.lastfew
+			else
+				@subscribers = User.totalsubscribers.lastfew
+				@subscribercount = User.totalsubscribers.count
+				@onestorysubscribers = User.onestorysubscribers.count
+				@allstorysubscribers = User.allstorysubscribers.count
+				@straysubscribercount = User.straysubscribers.count
+			end
+		else
+			redirect_to root_url
+		end
+	end
   
   def update_all_update_tokens
     User.all.each do |u|

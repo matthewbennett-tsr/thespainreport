@@ -34,7 +34,9 @@
   <% end %>
 
 <% if params[:search] %>
-  <h3>Members including "<%= params[:search] %>"</h3>
+  <div style="float:left; margin-top: 5px; background-color: #FEF9E6; padding: 4px 10px 1px 10px;">
+<p><%= @userscount %> users containing "<strong><%= params[:search] %></strong>".</p>
+</div>
 
 <table class="admin-table">
   <thead>

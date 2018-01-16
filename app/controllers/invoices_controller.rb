@@ -6,12 +6,10 @@ class InvoicesController < ApplicationController
   def index
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @invoices = Invoice.all
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -20,12 +18,10 @@ class InvoicesController < ApplicationController
   def show
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -33,12 +29,10 @@ class InvoicesController < ApplicationController
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @invoice = Invoice.new
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -46,12 +40,12 @@ class InvoicesController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
+    elsif current_user.id == @invoice.user.id
+     
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 
@@ -84,10 +78,10 @@ class InvoicesController < ApplicationController
     if current_user.nil? 
       redirect_to root_url
       flash[:success] = message_error_not_allowed
-    elsif current_user.role == 'editor'
+    elsif current_user.role == 'editor' || current_user.id == @invoice.user.id
       respond_to do |format|
       if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
+        format.html { redirect_to edit_invoice_path, notice: 'Invoice was successfully updated.' }
         format.json { render :show, status: :ok, location: @invoice }
       else
         format.html { render :edit }
@@ -127,9 +121,14 @@ class InvoicesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def invoice_params
       params.require(:invoice).permit(
+        :invoice_for,
+        :invoice_for_date,
         :stripe_invoice_id,
         :user_id,
         :subscription_id,
+        :stripe_invoice_currency,
+        :stripe_invoice_interval,
+        :stripe_invoice_number,
         :stripe_invoice_date,
         :stripe_invoice_item,
         :stripe_invoice_quantity,

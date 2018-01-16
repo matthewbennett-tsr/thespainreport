@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180107101716) do
+ActiveRecord::Schema.define(version: 20180115115746) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -169,6 +169,11 @@ ActiveRecord::Schema.define(version: 20180107101716) do
     t.string   "stripe_invoice_ip_country_code"
     t.string   "stripe_invoice_ip_country_code_2"
     t.string   "stripe_invoice_credit_card_country"
+    t.string   "invoice_for"
+    t.datetime "invoice_for_date"
+    t.string   "stripe_invoice_number"
+    t.string   "stripe_invoice_currency"
+    t.string   "stripe_invoice_interval"
   end
 
   create_table "newsitems", force: :cascade do |t|
@@ -332,6 +337,8 @@ ActiveRecord::Schema.define(version: 20180107101716) do
     t.string   "stripe_subscription_interval"
     t.string   "stripe_subscription_ip_country_name"
     t.boolean  "is_active"
+    t.string   "stripe_currency"
+    t.string   "stripe_status"
   end
 
   create_table "taxes", force: :cascade do |t|

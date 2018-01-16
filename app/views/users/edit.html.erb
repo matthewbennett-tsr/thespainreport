@@ -2,37 +2,44 @@
 <div class="content-white-background">
 
 <% if User.find(params[:id]) == current_user %>
-  <h1>Edit MyTSR</h1>
-<% elsif @user.name.present? %>
-  <h1>Editing <%= @user.name %></h1>
+	<h1>Edit MyTSR</h1>
 <% else %>
-  <h1>Editing <%= @user.email %></h1>
+	<h1>Editing <%= @user.email %></h1>
 <% end %>
 
 <%= render 'form' %>
 
-<hr />
-
+<div class="subscription-block">
 <h3>My Payment Details</h3>
 
 <% if current_user.role == 'editor' %>
-  <%= form_for(@user) do |f| %>
-    <div class="email-input-float"><strong>Customer ID:</strong> <%= f.text_field :stripe_customer_id, :class => "input200" %></div>
-    <div class="email-input-float"><button type="submit" class="blueformbutton">Save Changes</button></div>
-  <% end %>
-  <br /><br />
-<% else %>
-
+	<%= form_for(@user) do |f| %>
+		<div class="email-input-float"><strong>Customer ID:</strong> <%= f.text_field :stripe_customer_id, :class => "input200" %></div>
+		<div class="email-input-float"><button type="submit" class="blueformbutton">Save Changes</button></div>
+		<div class="clear"></div>
+	<% end %>
 <% end %>
 
 <% if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE" && @user.role == 'subscriber' %>
 
-<% elsif @user.stripe_customer_id? && @user.role == 'reader' %>
+<% elsif @user.stripe_customer_id? %>
+<p>
+	Your <strong>Customer ID</strong> is <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %>.<br />
+	You first became a customer on <%= @user.becomes_customer_date.to_formatted_s(:long) unless @user.becomes_customer_date.nil? %>
+	<% if current_user.role == 'editor' %>
+		<%= form_tag '/get_subscription_history', :id => 'get_subscription_history', :name => 'get_subscription_history' do %>
+			<% if @user.subscriptions.any? %>
+				<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.last.id %>">
+			<% end %>
+			<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+			<button type="submit" class="linkbutton">Get subscription history</button>
+		<% end %>
+	<% else %>
+	<% end %>
+</p>
+</div>
 
-<% elsif @user.stripe_customer_id? && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
-<p>Your <strong>customer ID</strong> is <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %> and you first became a customer on <%= @user.becomes_customer_date.to_formatted_s(:long) unless @user.becomes_customer_date.nil? %></p>
-
-<div>
+<div class="subscription-block">
 <h3>My Credit Card</h3>
   <table class="invoice-table">
   <tr>
@@ -145,118 +152,88 @@
 </div>
 </div>
 
-<div>
+<div class="subscription-block">
 	<h3>My Subscription(s)</h3>
-	<table class="invoice-table">
-		<tr>
-			<th>Subscription ID</th>
-			<th>Started</th>
-			<th>Renews</th>
-			<th>Purchase Country</th>
-			<th>VAT</th>
-		</tr>
-
-		<% if @user.subscriptions.nil? %>
-
+	
+	<% if current_user.role == 'editor' %>
+		<%= form_tag '/get_subscription_history', :class => '', :id => 'get_subscription_history', :name => 'get_subscription_history' do %>
+			<% if @user.subscriptions.any? %>
+				<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.last.id %>">
+			<% end %>
+			<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+			<button type="submit" class="linkbutton">Get subscription history</button>
+		<% end %>
+	<% else %>
+	<% end %>
+	
+	<% if @user.subscriptions.any? %>
 		<% @user.subscriptions.each do |sub| %>
-			<tr>
-				<td><%= sub.stripe_subscription_id %></td>
-				<td><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></td>
-				<td><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></td>
-				<td>
-					<%= sub.stripe_subscription_ip %>
-					<br />
-					<%= sub.stripe_subscription_ip_country_name %>
-					<br />
-					<%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %>
-				</td>
-				<td><%= sub.stripe_subscription_tax_percent %>%</td>
-				<td>
-					<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
-						<%= form_tag '/one_story', :class => '', :id => 'one_story', :name => 'one_story' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">
-								<% if ['subscriber'].include?(@user.role) %>
-								Choose "One Story"
-								<% elsif ['subscriber_all_stories'].include?(@user.role) %>
-								Downgrade to "One Story"
-								<% elsif ['subscriber_paused'].include?(@user.role) %>
-								Restart as "One Story"
-								<% end %>
-							</button>
-						<% end %>
+			<div style="margin-bottom: 20px;">
+				<div class="left-15 bold">ID</div><div class="subscription-item-right"><%= sub.stripe_subscription_id %></div><div class="clear"></div>
+				<div class="left-15 bold">Your plan</div><div class="subscription-item-right"><%= sub.stripe_subscription_quantity %> x <%= sub.stripe_subscription_plan %></div><div class="clear"></div>
+				<div class="left-15 bold">Purchased In</div><div class="subscription-item-right"><%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %> (<%= sub.stripe_subscription_ip %>)</div><div class="clear"></div>
+				<div class="left-15 bold">Price</div><div class="subscription-item-right"><%= sub.stripe_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> / <%= sub.stripe_subscription_interval %> + <%= sub.stripe_subscription_tax_percent %>% VAT</div><div class="clear"></div>
+				<div class="left-15 bold">Status</div><div class="subscription-item-right"><%= sub.stripe_status.titleize unless sub.stripe_status.nil? %></div><div class="clear"></div>
+				<div class="left-15 bold">Started</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
+				<div class="left-15 bold">Renews on</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
+				<div class="left-15 bold">Options</div><div class="subscription-item-right">
+				<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
+					<%= form_tag '/one_story', :style => 'float:left; margin-right: 4px;', :id => 'one_story', :name => 'one_story' do %>
+						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+						<button type="submit" class="linkbutton">
+							<% if ['subscriber'].include?(@user.role) %>
+							Choose "One Story"
+							<% elsif ['subscriber_all_stories'].include?(@user.role) %>
+							Downgrade to "One Story"
+							<% elsif ['subscriber_paused'].include?(@user.role) %>
+							Restart as "One Story"
+							<% end %>
+						</button>
 					<% end %>
-					<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) %>
-						<%= form_tag '/all_stories', :class => '', :id => 'all_stories', :name => 'all_stories' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">
-								<% if ['subscriber'].include?(@user.role) %>
-								Choose "All Stories"
-								<% elsif ['subscriber_one_story'].include?(@user.role) %>
-								Upgrade to "All Stories"
-								<% elsif ['subscriber_paused'].include?(@user.role) %>
-								Restart as "All Stories"
-								<% end %>
-							</button>
-						<% end %>
+				<% end %>
+				<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) %>
+					<%= form_tag '/all_stories', :style => 'float:left; margin-right: 10px;', :id => 'all_stories', :name => 'all_stories' do %>
+						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+						<button type="submit" class="linkbutton">
+							<% if ['subscriber'].include?(@user.role) %>
+							Choose "All Stories"
+							<% elsif ['subscriber_one_story'].include?(@user.role) %>
+							Upgrade to "All Stories"
+							<% elsif ['subscriber_paused'].include?(@user.role) %>
+							Restart as "All Stories"
+							<% end %>
+						</button>
 					<% end %>
-					<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
-						<%= form_tag '/pause', :class => '', :id => 'pause', :name => 'pause' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">Pause your subscription</button>
-						<% end %>
+				<% end %>
+				<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
+					<%= form_tag '/pause', :style => 'float:left; margin-right: 4px;', :id => 'pause', :name => 'pause' do %>
+						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+						<button type="submit" class="linkbutton">Pause your subscription</button>
 					<% end %>
-				</td>
-			</tr>
+				<% end %>
+				</div>
+				<div class="clear"></div>
+			</div>
 		<% end %>
-		
-		<% end %>
-		
-	</table>
+	<% end %>
 </div>
 
-<div>
-<h3>My Payment Receipts</h3>
-  <table class="invoice-table">
-  <tr>
-    <th>Date</th>
-    <th>Receipt ID</th>
-    <th>Item</th>
-    <th class="right">Qty</th>
-    <th class="right">Price</th>
-    <th class="right">Subtotal</th>
-    <th class="right">CC</th>
-    <th class="right">IP</th>
-    <th class="right">VAT %</th>
-    <th class="right">VAT</th>
-    <th class="right">Total</th>
-    <th class="right">Print</th>
-  </tr>
-
-  <% @user.invoices.each do |inv| %>
-    <tr>
-      <td><%= Time.at(inv.stripe_invoice_date).strftime("%d/%m/%Y") %></td>
-      <td><%= inv.stripe_invoice_id %></td>
-      <td><%= inv.stripe_invoice_item %></td>
-      <td class="right"><%= inv.stripe_invoice_quantity %></td>
-      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %></td>
-      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_subtotal/100.round(2))) %></td>
-      <td class="right"><%= inv.stripe_invoice_credit_card_country %></td>
-      <td class="right"><%= inv.stripe_invoice_ip_country_code %></td>
-      <td class="right"><%= inv.stripe_invoice_tax_percent %>%</td>
-      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_tax_amount/100.round(2))) %></td>
-      <td class="right"><%= sprintf("%.2f",(inv.stripe_invoice_total/100.round(2))) %></td>
-      <td class="right">…</td>
-    </tr>
-  <% end %>
-  
-</table>
+<div class="subscription-block">
+	<h3>My Receipts</h3>
+		<% @user.invoices.each do |inv| %>
+			<div class="subscription-item">
+				<div class="left-10"><%= link_to Time.at(inv.stripe_invoice_date).strftime("%d/%m/%y"), edit_invoice_path(inv) %></div>
+				<div class="left-10"><%= inv.stripe_invoice_quantity %> x <%= inv.stripe_invoice_item %> at <%= inv.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %> each per <%= inv.stripe_invoice_interval %> (+ <%= inv.stripe_invoice_tax_percent %>% VAT)</div>
+				<div class="right-10"><%= inv.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(inv.stripe_invoice_total/100.round(2))) %></div>
+				<div class="clear"></div>
+			</div>
+		<% end %>
 </div>
 
 <% else %>

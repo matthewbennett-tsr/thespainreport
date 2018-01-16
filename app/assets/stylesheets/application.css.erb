@@ -473,6 +473,18 @@ video { width: 100% !important; height: auto !important;}
 img + br + strong {margin-top: 5px; margin-bottom: 7px; font-size: 12px; font-style:italic; text-align: left; line-height: 1;}
 img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; font-style:italic; text-align: left; line-height: 1;}
 
+.subscription-block {margin-bottom: 15px; font-family: Georgia;}
+.subscription-block img + br + strong {margin-top: 5px; margin-bottom: 7px; font-size: 14px; font-style:normal; text-align: left; line-height: 1;}
+.subscription-block img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 14px; font-style:normal; text-align: left; line-height: 1;}
+.subscription-item {margin-bottom: 3px; font-family: Georgia;}
+.bold {font-weight: bold;}
+.left {float:left;}
+.left-5 {float: left; min-width: 5%; padding-right: 5px;}
+.left-10 {float: left; min-width: 10%; padding-right: 5px;}
+.left-15 {float: left; min-width: 15%; padding-right: 5px;}
+.left-20 {float: left; min-width: 20%; padding-right: 5px;}
+.left-60 {float: left; max-width: 60%; padding-right: 5px;}
+.right-10 {float: right; min-width: 10%; text-align:right; }
 
 .mobile-width {display: none;}
 
@@ -582,4 +594,18 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 	#top-bar-layer {height: 50px;}
 	#top-bar-wrap {height: 50px;}
 	.content-left-new {margin-top: 0px;}
+}
+
+
+/* # Printing pages
+---------------------------------------------------------------------------------------------------- */
+@media print {
+   .site-title-new, .site-title-new a {font-family: Oswald, Arial, sans-serif; color:#990000; text-decoration: none;}
+   .left-hand-bar, .user-bar-right-links {display:none;}
+   a[href]:after {content: none !important;}
+   .wrap {margin-left: 1cm; margin-top: 1cm; border-left: 10px #000 solid; border-right: none; padding-left: 1cm; }
+   .content-left-new, .content-left-new-page {width: 100%; font-size: 15pt;}
+   .subscription-block, .subscription-block p, .subscription-item {font-family: Georgia; font-size: 15pt; line-height: 21pt;}
+   .subscription-item-left {float: left; min-width: 150px; font-weight: bold; margin-bottom: 5px;}
+   .subscription-item-right {5px;}
 }

@@ -1,17 +1,123 @@
 <%= form_for(@invoice) do |f| %>
-  <% if @invoice.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
+	<% if @invoice.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@invoice.errors.count, "error") %> prohibited this invoice from being saved:</h2>
 
-      <ul>
-      <% @invoice.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
+			<ul>
+			<% @invoice.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+			<% end %>
+			</ul>
+		</div>
+	<% end %>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">Number & ID</div><div class="left-60"><%= @invoice.stripe_invoice_number %> (<%= @invoice.stripe_invoice_id %>)</div><div class="clear"></div>
+			<div class="left-20 bold">Date</div><div class="left-60"><%= Time.at(@invoice.stripe_invoice_date).strftime("%d/%m/%Y") %></div><div class="clear"></div>
+		</div>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">From</div>
+			<div class="left-60">
+				The Spain Report Ltd.<br />
+				<% if @invoice.stripe_invoice_date <= '2016-08-01' %>
+					Suite LP26203, Lower Ground Floor<br />
+					145-157 St John Street<br />
+					London<br />
+					EC1V 4PW<br />
+				<% else %>
+					20-22 Wenlock Road<br />
+					London<br />
+					N1 7GU<br />
+				<% end %>
+				<br />
+				Company Number: 09210027<br />
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">To</div>
+			<div class="left-60">
+				<%= @invoice.user.email %> (<%= @invoice.user.stripe_customer_id %>)<br />
+				<% if current_user.role == 'editor' %>
+					<%= f.text_area :invoice_for, :style => 'width: 100%; min-height: 105px; padding:5px;', :maxlength => 250 %>
+				<% elsif current_user.role != 'editor' %>
+					<% if @invoice.invoice_for_date.blank? || @invoice.invoice_for_date > 5.minutes.ago %>
+						<%= f.text_area :invoice_for, :style => 'width: 100%; min-height: 105px; padding:5px;', :maxlength => 250 %>
+					<% elsif !@invoice.invoice_for_date.blank? || @invoice.invoice_for_date < 5.minutes.ago %>
+						<%= markdown(@invoice.invoice_for) %>
+					<% else %>
+					<% end %>
+				<% end %>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">Item</div><div class="left-60"><%= @invoice.stripe_invoice_quantity %> x <%= @invoice.stripe_invoice_item %> at <%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_price/100.round(2))) %> each per <%= @invoice.stripe_invoice_interval %></div><div class="clear"></div>
+			<div class="left-20 bold">Subtotal</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_subtotal/100.round(2))) %></div><div class="clear"></div>
+			<div class="left-20 bold">VAT</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) %> (<%= @invoice.stripe_invoice_tax_percent %>%, <%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div>
+			<div class="left-20 bold">Total</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_total/100.round(2))) %></div><div class="clear"></div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">"To" updated</div>
+			<div class="left-60">
+				<% if current_user.role == 'editor' %>
+					<%= f.datetime_field :invoice_for_date %>
+				<% elsif current_user.role != 'editor' %>
+					<%= @invoice.invoice_for_date ? @invoice.invoice_for_date.strftime("%A, %B %-d, %Y at %l:%M %p") : 'Not updated yet.'  %>
+				<% end %>
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<div class="subscription-block">
+			<div class="left-20 bold">Notes</div>
+			<div class="left-60">
+				<% if @invoice.invoice_for_date.blank? %>
+					<p>You can enter an address or your company details in the box above.
+					You can do this once for each receipt (max. 250 characters).
+					There is a 5-minute window after you make the first update, in case you make a mistake.</p>
+				<% elsif !@invoice.invoice_for_date.blank? && @invoice.invoice_for_date > 5.minutes.ago %>
+					<span id="flash_success">You now have a 5-minute window to edit your receipt details, in case you just made a mistake…</span>
+				<% elsif !@invoice.invoice_for_date.blank? && @invoice.invoice_for_date < 5.minutes.ago %>
+					This receipt is now locked.
+				<% end %> 
+			</div>
+			<div class="clear"></div>
+		</div>
+		
+		<% if current_user.role == 'editor' %>
+			<div class="subscription-block" style="border-top: 1px #ff0000 dotted; border-bottom: 1px #ff0000 dotted; padding: 10px 0px;">
+				<div class="left-20 bold">Number</div><div class="left-60"><%= f.text_field :stripe_invoice_number %></div><div class="clear"></div>
+				<div class="left-20 bold">Currency</div><div class="left-60"><%= f.text_field :stripe_invoice_currency %></div><div class="clear"></div>
+				<div class="left-20 bold">Country code</div><div class="left-60"><%= f.text_field :stripe_invoice_ip_country_code %></div><div class="clear"></div>
+				<div class="left-20 bold">Subtotal</div><div class="left-60"><%= f.text_field :stripe_invoice_subtotal %></div><div class="clear"></div>
+				<div class="left-20 bold">VAT %</div><div class="left-60"><%= f.text_field :stripe_invoice_tax_percent %></div><div class="clear"></div>
+				<div class="left-20 bold">VAT</div><div class="left-60"><%= f.text_field :stripe_invoice_tax_amount %></div><div class="clear"></div>
+				<div class="left-20 bold">Total</div><div class="left-60"><%= f.text_field :stripe_invoice_total %></div><div class="clear"></div>
+			</div>
+		<% end %>
 
-  <div class="actions">
-    <%= f.submit %>
-  </div>
+		<div class="subscription-block">
+		<div class="left-20 bold">&ensp;</div>
+		<div class="left-60">
+			<% if @invoice.invoice_for_date.blank? || @invoice.invoice_for_date > 5.minutes.ago %>
+				<button type="submit" class="blueformbutton" style="z-index: 1000;">Update Receipt</button>
+			<% elsif !@invoice.invoice_for_date.blank? && @invoice.invoice_for_date < 5.minutes.ago %>
+				<% if current_user.role == 'editor' %>
+					<button type="submit" class="blueformbutton" style="z-index: 1000;">Update Receipt</button>
+				<% elsif current_user.role != 'editor' %>
+				
+				<% end %>
+			<% end %>
+		</div>
+		<div class="clear"></div>
+		</div>
+		
+
+		
 <% end %>

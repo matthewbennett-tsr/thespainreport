@@ -263,17 +263,28 @@ class SubscriptionsController < ApplicationController
 
 
 	def subscription_details
-		current_subscription = params[:stripe_subscription_id]
-		@proration_date = Time.now.to_i
 		@user = User.find(params[:user_id])
-		@change_subscription = Stripe::Subscription.retrieve(current_subscription, subscription_country)
+		@stripe_customer = @user.stripe_customer_id
+		
+		if @user.subscriptions.any?
+			@current_subscription = @user.subscriptions.last.stripe_subscription_id
+			@change_subscription = Stripe::Subscription.retrieve(@current_subscription, subscription_country)
+			@proration_date = Time.now.to_i
+		else
+		
+		end
 	end
 
 
 	def subscription_country
-		tsr_subscription = Subscription.find(params[:tsr_subscription_id])
-		if tsr_subscription.stripe_subscription_ip_country == "ES"
-			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+		@user = User.find(params[:user_id])
+		if @user.subscriptions.any?
+			tsr_subscription = @user.subscriptions.last
+			if tsr_subscription.stripe_subscription_ip_country == "ES"
+				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			else
+				{:api_key => Rails.configuration.stripe[:secret_key]}
+			end
 		else
 			{:api_key => Rails.configuration.stripe[:secret_key]}
 		end
@@ -342,6 +353,80 @@ class SubscriptionsController < ApplicationController
 		
 		redirect_to :back
 		flash[:success] = "You have paused your subscription."
+	end
+
+
+	def get_subscription_history
+		subscription_details
+		@full_customer = Stripe::Customer.retrieve(@stripe_customer, subscription_country)
+		
+		subs = @full_customer.subscriptions
+		subs.each do |sub|
+			if @user.subscriptions.where(stripe_subscription_id: sub.id).exists?
+				puts 'Subscription already exists'
+				s = Subscription.find_by_stripe_subscription_id(sub.id)
+				s.update(
+					stripe_currency: sub.plan.currency,
+					stripe_status: sub.status
+				)
+			else
+				s = Subscription.new
+				s.user_id = @user.id
+				s.stripe_customer_id = sub.customer
+				s.stripe_subscription_id = sub.id
+				s.stripe_subscription_email = @user.email
+				s.stripe_subscription_plan = sub.plan.name
+				s.stripe_subscription_amount = sub.plan.amount
+				s.stripe_subscription_interval = sub.plan.interval
+				s.stripe_subscription_quantity = sub.quantity
+				s.stripe_subscription_tax_percent = sub.tax_percent
+				s.stripe_subscription_credit_card_country = @full_customer.sources.data[0].country
+				s.stripe_subscription_current_period_start_date = Time.at(sub.current_period_start).to_datetime
+				s.stripe_subscription_current_period_end_date = Time.at(sub.current_period_end).to_datetime
+				s.stripe_currency = sub.plan.currency
+				s.stripe_status = sub.status
+				s.stripe_subscription_ip = ''
+				s.stripe_subscription_ip_country = @full_customer.sources.data[0].country
+				s.stripe_subscription_ip_country_name = ''
+				s.save!
+			end
+		end
+			
+		invs = @full_customer.invoices
+		invs.each do |inv|
+			if @user.invoices.where(stripe_invoice_id: inv.id).exists?
+				puts 'Invoice already exists'
+				i = Invoice.find_by_stripe_invoice_id(inv.id)
+				i.update(
+					stripe_invoice_currency: inv.currency,
+					stripe_invoice_number: inv.number,
+					stripe_invoice_interval: inv.lines.data[0].plan.interval
+				)
+			else
+				i = Invoice.new
+				i.stripe_invoice_id = inv.id
+				i.user_id = @user.id
+				i.subscription_id = inv.subscription
+				i.stripe_invoice_date = Time.at(inv.date).to_datetime
+				i.stripe_invoice_item = inv.lines.data[0].plan.name
+				i.stripe_invoice_quantity = inv.lines.data[0].quantity
+				i.stripe_invoice_price = inv.lines.data[0].plan.amount
+				i.stripe_invoice_subtotal = inv.subtotal
+				i.stripe_invoice_credit_card_country = @full_customer.sources.data[0].country
+				i.stripe_invoice_tax_percent = inv.tax_percent
+				i.stripe_invoice_tax_amount = inv.tax
+				i.stripe_invoice_currency = inv.currency
+				i.stripe_invoice_number = inv.number
+				i.stripe_invoice_interval = inv.lines.data[0].plan.interval
+				i.stripe_invoice_total = inv.total
+				i.stripe_invoice_ip_country_code = ''
+				i.stripe_invoice_ip_country_code_2 = ''
+				i.save!
+			end
+		end
+			
+		redirect_to :back
+		flash[:success] = "All up-to-date."
 	end
 
 
@@ -544,31 +629,33 @@ class SubscriptionsController < ApplicationController
   def destroy
   end
 
-  private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_subscription
-    end
+	private
+		# Use callbacks to share common setup or constraints between actions.
+		def set_subscription
+		end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def subscription_params
-      params.require(:subscription).permit(
-        :user_id,
-        :stripe_customer_id,
-        :stripe_subscription_id,
-        :stripe_subscription_ip,
-        :stripe_subscription_ip_country,
-        :stripe_subscription_ip_country_name,
-        :stripe_subscription_credit_card_country,
-        :stripe_subscription_email,
-        :stripe_subscription_plan,
-        :stripe_subscription_amount,
-        :stripe_subscription_interval,
-        :stripe_subscription_quantity,
-        :stripe_subscription_tax_percent,
-        :stripe_subscription_trial_end,
-        :stripe_subscription_current_period_start_date,
-        :stripe_subscription_current_period_end_date,
-        :is_active
-        )
-    end
+		# Never trust parameters from the scary internet, only allow the white list through.
+		def subscription_params
+			params.require(:subscription).permit(
+				:user_id,
+				:stripe_customer_id,
+				:stripe_currency,
+				:stripe_status,
+				:stripe_subscription_id,
+				:stripe_subscription_ip,
+				:stripe_subscription_ip_country,
+				:stripe_subscription_ip_country_name,
+				:stripe_subscription_credit_card_country,
+				:stripe_subscription_email,
+				:stripe_subscription_plan,
+				:stripe_subscription_amount,
+				:stripe_subscription_interval,
+				:stripe_subscription_quantity,
+				:stripe_subscription_tax_percent,
+				:stripe_subscription_trial_end,
+				:stripe_subscription_current_period_start_date,
+				:stripe_subscription_current_period_end_date,
+				:is_active
+				)
+		end
 end
