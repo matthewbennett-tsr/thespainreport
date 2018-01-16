@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180115115746) do
+ActiveRecord::Schema.define(version: 20180116100342) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -339,6 +339,7 @@ ActiveRecord::Schema.define(version: 20180115115746) do
     t.boolean  "is_active"
     t.string   "stripe_currency"
     t.string   "stripe_status"
+    t.datetime "stripe_subscription_created"
   end
 
   create_table "taxes", force: :cascade do |t|

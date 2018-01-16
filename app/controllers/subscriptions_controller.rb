@@ -280,8 +280,10 @@ class SubscriptionsController < ApplicationController
 		@user = User.find(params[:user_id])
 		if @user.subscriptions.any?
 			tsr_subscription = @user.subscriptions.last
-			if tsr_subscription.stripe_subscription_ip_country == "ES"
+			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date > '2018-01-01'
 				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			elsif tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date < '2018-01-01'
+				{:api_key => Rails.configuration.stripe[:secret_key]}
 			else
 				{:api_key => Rails.configuration.stripe[:secret_key]}
 			end
@@ -367,13 +369,15 @@ class SubscriptionsController < ApplicationController
 				s = Subscription.find_by_stripe_subscription_id(sub.id)
 				s.update(
 					stripe_currency: sub.plan.currency,
-					stripe_status: sub.status
+					stripe_status: sub.status,
+					stripe_subscription_created: Time.at(sub.created).to_datetime
 				)
 			else
 				s = Subscription.new
 				s.user_id = @user.id
 				s.stripe_customer_id = sub.customer
 				s.stripe_subscription_id = sub.id
+				s.stripe_subscription_created = sub.created
 				s.stripe_subscription_email = @user.email
 				s.stripe_subscription_plan = sub.plan.name
 				s.stripe_subscription_amount = sub.plan.amount
@@ -641,6 +645,7 @@ class SubscriptionsController < ApplicationController
 				:stripe_customer_id,
 				:stripe_currency,
 				:stripe_status,
+				:stripe_subscription_created,
 				:stripe_subscription_id,
 				:stripe_subscription_ip,
 				:stripe_subscription_ip_country,

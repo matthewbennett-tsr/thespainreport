@@ -155,26 +155,16 @@
 <div class="subscription-block">
 	<h3>My Subscription(s)</h3>
 	
-	<% if current_user.role == 'editor' %>
-		<%= form_tag '/get_subscription_history', :class => '', :id => 'get_subscription_history', :name => 'get_subscription_history' do %>
-			<% if @user.subscriptions.any? %>
-				<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.last.id %>">
-			<% end %>
-			<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-			<button type="submit" class="linkbutton">Get subscription history</button>
-		<% end %>
-	<% else %>
-	<% end %>
-	
 	<% if @user.subscriptions.any? %>
 		<% @user.subscriptions.each do |sub| %>
 			<div style="margin-bottom: 20px;">
 				<div class="left-15 bold">ID</div><div class="subscription-item-right"><%= sub.stripe_subscription_id %></div><div class="clear"></div>
+				<div class="left-15 bold">Created</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_created).strftime("%d/%m/%y") unless sub.stripe_subscription_created.nil? %></div><div class="clear"></div>
 				<div class="left-15 bold">Your plan</div><div class="subscription-item-right"><%= sub.stripe_subscription_quantity %> x <%= sub.stripe_subscription_plan %></div><div class="clear"></div>
 				<div class="left-15 bold">Purchased In</div><div class="subscription-item-right"><%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %> (<%= sub.stripe_subscription_ip %>)</div><div class="clear"></div>
 				<div class="left-15 bold">Price</div><div class="subscription-item-right"><%= sub.stripe_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> / <%= sub.stripe_subscription_interval %> + <%= sub.stripe_subscription_tax_percent %>% VAT</div><div class="clear"></div>
 				<div class="left-15 bold">Status</div><div class="subscription-item-right"><%= sub.stripe_status.titleize unless sub.stripe_status.nil? %></div><div class="clear"></div>
-				<div class="left-15 bold">Started</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
+				<div class="left-15 bold">Current</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
 				<div class="left-15 bold">Renews on</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
 				<div class="left-15 bold">Options</div><div class="subscription-item-right">
 				<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
