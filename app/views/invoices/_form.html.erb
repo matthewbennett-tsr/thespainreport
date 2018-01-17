@@ -12,8 +12,8 @@
 	<% end %>
 		
 		<div class="subscription-block">
-			<div class="left-20 bold">Number & ID</div><div class="left-60"><%= @invoice.stripe_invoice_number %> (<%= @invoice.stripe_invoice_id %>)</div><div class="clear"></div>
-			<div class="left-20 bold">Date</div><div class="left-60"><%= Time.at(@invoice.stripe_invoice_date).strftime("%d/%m/%Y") %></div><div class="clear"></div>
+			<div class="subscription-item"><div class="left-20 bold">Number & ID</div><div class="left-60"><%= @invoice.stripe_invoice_number %> (<%= @invoice.stripe_invoice_id %>)</div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">Date</div><div class="left-60"><%= Time.at(@invoice.stripe_invoice_date).strftime("%d/%m/%Y") %></div><div class="clear"></div></div>
 		</div>
 		
 		<div class="subscription-block">
@@ -55,11 +55,12 @@
 		</div>
 		
 		<div class="subscription-block">
-			<div class="left-20 bold">Item</div><div class="left-60"><%= @invoice.stripe_invoice_quantity %> x <%= @invoice.stripe_invoice_item %> at <%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_price/100.round(2))) %> each per <%= @invoice.stripe_invoice_interval %></div><div class="clear"></div>
-			<div class="left-20 bold">Subtotal</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_subtotal/100.round(2))) %></div><div class="clear"></div>
-			<div class="left-20 bold">VAT</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) %> (<%= @invoice.stripe_invoice_tax_percent %>%, <%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div>
-			<div class="left-20 bold">Total</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_total/100.round(2))) %></div><div class="clear"></div>
-			<div class="left-20 bold">Paid</div>
+			<div class="subscription-item"><div class="left-20 bold">Item</div><div class="left-60"><%= @invoice.stripe_invoice_quantity %> x <%= @invoice.stripe_invoice_item %> at <%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_price/100.round(2))) %> each per <%= @invoice.stripe_invoice_interval %></div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">Subtotal</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_subtotal/100.round(2))) %></div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">VAT</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) %> (<%= @invoice.stripe_invoice_tax_percent %>%, <%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">Total</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_total/100.round(2))) %></div><div class="clear"></div></div>
+			<div class="subscription-item">
+				<div class="left-20 bold">Paid</div>
 				<div class="left-60">
 					<% if @invoice.paid? %>
 						<span class="paid">Paid</span>
@@ -67,6 +68,7 @@
 						<span class="unpaid">Unpaid</span>
 					<% end %>
 				</div><div class="clear"></div>
+			</div>
 			<div class="clear"></div>
 		</div>
 		
