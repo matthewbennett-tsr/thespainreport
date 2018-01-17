@@ -57,7 +57,11 @@
 		<div class="subscription-block">
 			<div class="subscription-item"><div class="left-20 bold">Item</div><div class="left-60"><%= @invoice.stripe_invoice_quantity %> x <%= @invoice.stripe_invoice_item %> at <%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_price/100.round(2))) %> each per <%= @invoice.stripe_invoice_interval %></div><div class="clear"></div></div>
 			<div class="subscription-item"><div class="left-20 bold">Subtotal</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_subtotal/100.round(2))) %></div><div class="clear"></div></div>
-			<div class="subscription-item"><div class="left-20 bold">VAT</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) %> (<%= @invoice.stripe_invoice_tax_percent %>%, <%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">VAT</div><div class="left-60">
+			<%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %>
+			<%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) unless @invoice.stripe_invoice_tax_amount.nil? %> 
+			(<%= @invoice.stripe_invoice_tax_percent %>%, 
+			<%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div></div>
 			<div class="subscription-item"><div class="left-20 bold">Total</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_total/100.round(2))) %></div><div class="clear"></div></div>
 			<div class="subscription-item">
 				<div class="left-20 bold">Paid</div>
@@ -69,6 +73,16 @@
 					<% end %>
 				</div><div class="clear"></div>
 			</div>
+			<div class="subscription-item">
+				<div class="left-20 bold">Status</div>
+				<div class="left-60">
+					<% if @invoice.status == 'verified' %>
+						<span class="verified">Verified</span>
+					<% else %>
+						<span class="unverified">Unverified</span>
+					<% end %>
+				</div><div class="clear"></div>
+			</div>	
 			<div class="clear"></div>
 		</div>
 		
@@ -107,6 +121,7 @@
 				<div class="left-20 bold">VAT</div><div class="left-60"><%= f.text_field :stripe_invoice_tax_amount %></div><div class="clear"></div>
 				<div class="left-20 bold">Total</div><div class="left-60"><%= f.text_field :stripe_invoice_total %></div><div class="clear"></div>
 				<div class="left-20 bold">Paid</div><div class="left-60"><%= f.text_field :paid %></div><div class="clear"></div>
+				<div class="left-20 bold">Status</div><div class="left-60"><%= f.select :status, options_for_select([["Verified", "verified"], ["Unverified", "unverified"]], @invoice.status), :include_blank => true %></div><div class="clear"></div>
 			</div>
 		<% end %>
 

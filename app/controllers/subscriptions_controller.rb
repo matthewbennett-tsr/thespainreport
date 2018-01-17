@@ -122,6 +122,7 @@ class SubscriptionsController < ApplicationController
 				invoice.stripe_invoice_tax_amount = stripeinv.tax
 				invoice.stripe_invoice_total = stripeinv.total
 				invoice.paid = stripeinv.paid
+				invoice.status = 'unverified'
 				invoice.save!
 			end
 			
@@ -400,14 +401,18 @@ class SubscriptionsController < ApplicationController
 		invs = @full_customer.invoices
 		invs.each do |inv|
 			if @user.invoices.where(stripe_invoice_id: inv.id).exists?
-				puts 'Invoice already exists'
 				i = Invoice.find_by_stripe_invoice_id(inv.id)
-				i.update(
-					stripe_invoice_currency: inv.currency,
-					stripe_invoice_number: inv.number,
-					stripe_invoice_interval: inv.lines.data[0].plan.interval,
-					paid: inv.paid
-				)
+				if i.status == 'verified'
+					puts 'Invoice already verified'
+				else
+					i.update(
+						stripe_invoice_currency: inv.currency,
+						stripe_invoice_number: inv.number,
+						stripe_invoice_interval: inv.lines.data[0].plan.interval,
+						paid: inv.paid,
+						status: 'unverified'
+					)
+				end
 			else
 				i = Invoice.new
 				i.stripe_invoice_id = inv.id
@@ -428,6 +433,7 @@ class SubscriptionsController < ApplicationController
 				i.stripe_invoice_ip_country_code = ''
 				i.stripe_invoice_ip_country_code_2 = ''
 				i.paid = inv.paid
+				i.status = 'unverified'
 				i.save!
 			end
 		end

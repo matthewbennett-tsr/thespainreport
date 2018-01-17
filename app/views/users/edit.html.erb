@@ -221,6 +221,13 @@
 				<div class="left-10"><%= link_to Time.at(inv.stripe_invoice_date).strftime("%d/%m/%y"), edit_invoice_path(inv) %></div>
 				<div class="left-10"><%= inv.stripe_invoice_quantity %> x <%= inv.stripe_invoice_item %> at <%= inv.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(inv.stripe_invoice_price/100.round(2))) %> each per <%= inv.stripe_invoice_interval %> (+ <%= inv.stripe_invoice_tax_percent %>% VAT)</div>
 				<div class="right-5">
+					<% if inv.status == 'verified' %>
+						<span class="verified">Verified</span>
+					<% else %>
+						<span class="unverified">Unverified</span>
+					<% end %>
+				</div>
+				<div class="right-5">
 					<% if inv.paid? %>
 						<span class="paid">Paid</span>
 					<% else %>
