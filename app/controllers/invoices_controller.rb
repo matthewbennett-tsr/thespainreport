@@ -139,7 +139,8 @@ class InvoicesController < ApplicationController
         :stripe_invoice_ip_country_code_2,
         :stripe_invoice_tax_percent,
         :stripe_invoice_tax_amount,
-        :stripe_invoice_total
+        :stripe_invoice_total,
+        :paid
         )
     end
 end

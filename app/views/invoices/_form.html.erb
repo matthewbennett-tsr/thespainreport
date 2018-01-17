@@ -59,17 +59,21 @@
 			<div class="left-20 bold">Subtotal</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_subtotal/100.round(2))) %></div><div class="clear"></div>
 			<div class="left-20 bold">VAT</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_tax_amount/100.round(2))) %> (<%= @invoice.stripe_invoice_tax_percent %>%, <%= image_tag(@invoice.stripe_invoice_ip_country_code + '.jpg', :height => 18) %>)</div><div class="clear"></div>
 			<div class="left-20 bold">Total</div><div class="left-60"><%= @invoice.stripe_invoice_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(@invoice.stripe_invoice_total/100.round(2))) %></div><div class="clear"></div>
+			<div class="left-20 bold">Paid</div>
+				<div class="left-60">
+					<% if @invoice.paid? %>
+						<span class="paid">Paid</span>
+					<% else %>
+						<span class="unpaid">Unpaid</span>
+					<% end %>
+				</div><div class="clear"></div>
 			<div class="clear"></div>
 		</div>
 		
 		<div class="subscription-block">
 			<div class="left-20 bold">"To" updated</div>
 			<div class="left-60">
-				<% if current_user.role == 'editor' %>
-					<%= f.datetime_field :invoice_for_date %>
-				<% elsif current_user.role != 'editor' %>
-					<%= @invoice.invoice_for_date ? @invoice.invoice_for_date.strftime("%A, %B %-d, %Y at %l:%M %p") : 'Not updated yet.'  %>
-				<% end %>
+				<%= @invoice.invoice_for_date ? @invoice.invoice_for_date.strftime("%A, %B %-d, %Y at %l:%M %p") : 'Not updated yet.'  %>
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -93,12 +97,14 @@
 		<% if current_user.role == 'editor' %>
 			<div class="subscription-block" style="border-top: 1px #ff0000 dotted; border-bottom: 1px #ff0000 dotted; padding: 10px 0px;">
 				<div class="left-20 bold">Number</div><div class="left-60"><%= f.text_field :stripe_invoice_number %></div><div class="clear"></div>
+				<div class="left-20 bold">"To" updated</div><div class="left-60"><%= f.datetime_field :invoice_for_date %></div><div class="clear"></div>
 				<div class="left-20 bold">Currency</div><div class="left-60"><%= f.text_field :stripe_invoice_currency %></div><div class="clear"></div>
 				<div class="left-20 bold">Country code</div><div class="left-60"><%= f.text_field :stripe_invoice_ip_country_code %></div><div class="clear"></div>
 				<div class="left-20 bold">Subtotal</div><div class="left-60"><%= f.text_field :stripe_invoice_subtotal %></div><div class="clear"></div>
 				<div class="left-20 bold">VAT %</div><div class="left-60"><%= f.text_field :stripe_invoice_tax_percent %></div><div class="clear"></div>
 				<div class="left-20 bold">VAT</div><div class="left-60"><%= f.text_field :stripe_invoice_tax_amount %></div><div class="clear"></div>
 				<div class="left-20 bold">Total</div><div class="left-60"><%= f.text_field :stripe_invoice_total %></div><div class="clear"></div>
+				<div class="left-20 bold">Paid</div><div class="left-60"><%= f.text_field :paid %></div><div class="clear"></div>
 			</div>
 		<% end %>
 

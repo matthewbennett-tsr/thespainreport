@@ -121,6 +121,7 @@ class SubscriptionsController < ApplicationController
 				invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
 				invoice.stripe_invoice_tax_amount = stripeinv.tax
 				invoice.stripe_invoice_total = stripeinv.total
+				invoice.paid = stripeinv.paid
 				invoice.save!
 			end
 			
@@ -404,7 +405,8 @@ class SubscriptionsController < ApplicationController
 				i.update(
 					stripe_invoice_currency: inv.currency,
 					stripe_invoice_number: inv.number,
-					stripe_invoice_interval: inv.lines.data[0].plan.interval
+					stripe_invoice_interval: inv.lines.data[0].plan.interval,
+					paid: inv.paid
 				)
 			else
 				i = Invoice.new
@@ -425,6 +427,7 @@ class SubscriptionsController < ApplicationController
 				i.stripe_invoice_total = inv.total
 				i.stripe_invoice_ip_country_code = ''
 				i.stripe_invoice_ip_country_code_2 = ''
+				i.paid = inv.paid
 				i.save!
 			end
 		end
