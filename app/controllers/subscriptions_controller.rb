@@ -176,6 +176,7 @@ class SubscriptionsController < ApplicationController
 
 
 	def new_spain_report_reader
+		begin
 		thespainreport_new_user_create
 		thespainreport_user_roles
 		set_briefings_and_stories
@@ -190,6 +191,10 @@ class SubscriptionsController < ApplicationController
 		# Redirect to 
 		redirect_to :back
 		flash[:success] = "Welcome aboard! Check your e-mail."
+		rescue
+		redirect_to :back
+		flash[:success] = "Try again…"
+		end
 	end
 
 
@@ -204,6 +209,8 @@ class SubscriptionsController < ApplicationController
 			password_reset_token: generate_token,
 			password_reset_sent_at: Time.zone.now
 			)
+			
+		
 	end
 
 
