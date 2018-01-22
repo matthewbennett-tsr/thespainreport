@@ -183,6 +183,58 @@
     </div>
     </div>
     
+    
+    <div class="subscription-form-section-middle">
+      <div class="subscription-left-label-input">
+        How Many Do You Want? *
+      </div>
+      <div class="subscription-right-form-element">      
+        <input type="number" pattern="\d*" name="testquantity" id="groupquantity" class="input50" value="1" min="1" max="100" oninput="do_resize();" onchange="calculateTotal() limit_lines()" oninput="calculateTotal()">
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+    
+        <div class="subscription-form-section-middle">
+		<div class="subscription-left-label-input">
+			Your E-mail Address:
+		</div>
+		<div class="subscription-right-form-element" style="width: 60%;">
+			<textarea id="groupemails" style="resize:none; width:100%;" rows="1" name="description_name" onkeypress="return limitLines(this, event)" onpaste="return false"></textarea>
+		</div>
+		<div class="clear"></div>
+		<div class="theCount">Lines used: <span id="linesUsed">0</span><div>
+	</div>
+    
+	<script>
+		function do_resize() {
+			var divobj = document.getElementById('groupemails');
+			divobj.rows = document.getElementById('groupquantity').value;
+		}
+		
+		lines = document.getElementById('groupquantity').value;
+		var keynum, lines;
+		
+		function limitLines(obj, e) {
+			// IE
+			if(window.event) {
+				keynum = e.keyCode;
+			// Netscape/Firefox/Opera
+			} else if(e.which) {
+				keynum = e.which;
+			}
+			
+			if(keynum == 13) {
+				if(lines >= obj.rows) {
+					return false;
+				}else{
+					lines++;
+				}
+			}
+		}
+	</script>
+    
+    
     <input type="hidden" name="ts" id="ts" value="">
     <input type="hidden" name="ip_address" id="ip_address" value="">
     <input type="hidden" name="ip_country_code" id="ip_country_code" value="">

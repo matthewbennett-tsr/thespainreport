@@ -263,7 +263,7 @@ class UsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:access_date, :allow_access, :becomes_customer_date, :briefing_frequency_id, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :id, :is_author, :name, :bio, :role, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id, :one_story_id, :one_story_date, :update_token, :article_ids => [], :story_ids => [], notifications_attributes: [:id, :user_id, :story_id, :notificationtype_id])
+      params.require(:user).permit(:access_date, :account_id, :allow_access, :becomes_customer_date, :briefing_frequency_id, :created_at, :credit_card_id, :credit_card_brand, :credit_card_country, :credit_card_last4, :credit_card_expiry_month, :credit_card_expiry_year, :email, :id, :is_author, :name, :bio, :role, :twitter, :sign_up_url, :password, :password_confirmation, :reset_token, :stripe_customer_id, :one_story_id, :one_story_date, :update_token, :article_ids => [], :story_ids => [], notifications_attributes: [:id, :user_id, :story_id, :notificationtype_id])
     end
 
 end

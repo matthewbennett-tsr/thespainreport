@@ -240,6 +240,17 @@
 		<% end %>
 </div>
 
+<% if @user.account_role == 'account_boss' %>
+	<div class="subscription-block">
+		<h3>Our Account</h3>
+		<ul>
+		<% @user.account.users.each do |u| %>
+			<li><%= u.email %>: <%= u.account_role %></li>
+		<% end %>
+		</ul>
+	</div>
+<% end %>
+
 <% else %>
 Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-no-turbolink" => true %>.
 <% end %>

@@ -181,6 +181,8 @@ class SubscriptionsController < ApplicationController
 		set_briefings_and_stories
 
 		# …then send some welcome e-mails…
+		user = User.find_by_email(params[:email])
+		
 		UserMailer.delay.new_user_password_choose(user)
 		UserMailer.delay.new_user_story_notifications(user)
 		UserMailer.delay.new_user_catch_up(user)
@@ -194,6 +196,7 @@ class SubscriptionsController < ApplicationController
 	def thespainreport_new_user_create
 		autopassword = 'L e @ 4' + SecureRandom.hex(32)
 		generate_token = SecureRandom.urlsafe_base64
+		
 		user = User.create!(
 			email: params[:email],
 			password: autopassword,

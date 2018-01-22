@@ -12,7 +12,6 @@ class ArticlesController < ApplicationController
   def admin
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @articles = Article.all.order( 'articles.created_at DESC' )
       @articleslastfewdays = Article.lastfewdays.order( 'articles.created_at DESC' )
@@ -30,7 +29,6 @@ class ArticlesController < ApplicationController
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
   
@@ -418,7 +416,7 @@ class ArticlesController < ApplicationController
               elsif @article.story_ids.exclude?(user.one_story_id)
                 ArticleMailer.delay.send_article_upgrade(@article, user)
               end
-            elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+            elsif ['subscriber_all_stories', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
               ArticleMailer.delay.send_article_full(@article, user)
             end
           else
@@ -462,7 +460,6 @@ class ArticlesController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       @article = Article.new(article_params)
       respond_to do |format|
@@ -483,7 +480,6 @@ class ArticlesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end  
   end
 
@@ -492,7 +488,6 @@ class ArticlesController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @article.update(article_params) && ["draft", "editing"].include?(@article.status)
@@ -511,7 +506,6 @@ class ArticlesController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = message_error_not_allowed
     end
   end
 

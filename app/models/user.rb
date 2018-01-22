@@ -74,6 +74,7 @@ class User < ActiveRecord::Base
   has_many :stories, :through => :notifications
   accepts_nested_attributes_for :notifications
   belongs_to :briefing_frequency
+  belongs_to :account
   
   def password_complexity
     if password.present? and not password.match(/^(?=.*[A-Z])./) and not password.match(/^(?=.*[\s])./)

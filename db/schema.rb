@@ -11,10 +11,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180117145656) do
+ActiveRecord::Schema.define(version: 20180118185207) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "accounts", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "name"
+  end
 
   create_table "articles", force: :cascade do |t|
     t.string   "headline"
@@ -389,6 +395,8 @@ ActiveRecord::Schema.define(version: 20180117145656) do
     t.string   "confirm_token"
     t.string   "emailpref"
     t.string   "update_token"
+    t.integer  "account_id"
+    t.string   "account_role"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
