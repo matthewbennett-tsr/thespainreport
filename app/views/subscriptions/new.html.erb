@@ -11,31 +11,26 @@ Original, independent reporting, editorial insight and in-depth features take yo
 
 <div class="subscription-wrapper">
 
-  
+	<div class="subscription-image">
+		<div style="margin-bottom: 7px;">
+			<span class="email-sign-up-title" style="font-size: 17px;">Full Digital Subscription To The Spain Report</span>
+		</div>
+		<%= image_tag "tsr-multiple-500.jpg" %>
+	</div>
 
-  <div class="subscription-image">
-    <div style="margin-bottom: 7px;">
-      <span class="email-sign-up-title" style="font-size: 17px;">Full Digital Subscription To The Spain Report</span>
-    </div>
-    <%= image_tag "tsr-multiple-500.jpg" %>
-  </div>
-  
+	<div class="subscription-form">
+		<% if current_user.nil? %>
+			<%= render 'subscriptionform' %>
+		<% elsif current_user.stripe_customer_id.nil? %>
+			<%= render 'subscriptionform' %>
+		<% elsif current_user.stripe_customer_id? %>
+			<div id="flash_success_div">You are already a valued subscriber and your subscription is up-to-date.</div>
+		<% else %>
+			<%= render 'subscriptionform' %>
+		<% end %>
+	</div>
 
-  
-  <div class="subscription-form">
-    <% if current_user.nil? %>
-      <%= render 'subscriptionform' %>
-    <% elsif current_user.stripe_customer_id.nil? %>
-      <%= render 'subscriptionform' %>
-    <% elsif current_user.stripe_customer_id? %>
-      <div id="flash_success_div">You are already a valued subscriber and your subscription is up-to-date.</div>
-    <% else %>
-      <%= render 'subscriptionform' %>
-    <% end %>
-  </div>
-
-  <div class="clear"></div>
-
+	<div class="clear"></div>
 </div>
 
 <hr />
