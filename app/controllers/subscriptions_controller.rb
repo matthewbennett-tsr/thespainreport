@@ -17,8 +17,168 @@ class SubscriptionsController < ApplicationController
 			{:api_key => Rails.configuration.stripe[:secret_key]}
 		end
 	end
-
-
+	
+	def currency
+		if params[:ip_country_code] == "ES"
+			'eur'
+		else
+			'gbp'
+		end
+	end
+	
+	def invoice_number
+		if params[:ip_country_code] == 'ES'
+			@prefix = 'ES-'
+			@howmanyinvoices = Invoice.spain.where('extract(year from created_at) = ?', Time.current.year).count
+		else
+			@prefix = ''
+			@howmanyinvoices = Invoice.notspain.where('extract(year from created_at) = ?', Time.current.year).count
+		end
+		
+		invoice_number = @prefix + Time.current.year.to_s + (@howmanyinvoices + 1).to_s.rjust(8, '0')
+	end
+	
+	def new_prepayment
+		token = params[:stripeToken]
+		email_address = params[:email]
+		tax_percent = params[:ts]
+		how_many = params[:quantity]
+		amount = params[:amount]
+		ip_address = params[:ip_address]
+		ip_country_code = params[:ip_country_code]
+		ip_country_name = params[:ip_country_name]
+		
+		# Do we need to create a new Stripe customer?
+		if User.exists?(email: params[:email]) && current_user.nil?
+			redirect_to :back
+			flash[:success] = "Please log in to continue."
+		elsif User.exists?(email: params[:email]) && current_user.email != params[:email]
+			redirect_to :back
+			flash[:success] = "Please use your own email."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && current_user.stripe_customer_id.blank?
+			@customer = Stripe::Customer.create({
+			:source => token,
+			:description => email_address
+			}, country)
+			
+			charge = Stripe::Charge.create({
+			:customer => @customer.id,
+			:description => 'One-time pre-payment',
+			:amount => amount,
+			:currency => currency
+			}, country)
+			
+			@one_time_date = Time.current + params[:forward].to_i.months
+			set_one_time_details
+			thespainreport_user_roles
+			
+			redirect_to :back
+			flash[:success] = "Pre-payment successful."
+		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && !current_user.stripe_customer_id.nil?
+			@customer = Stripe::Customer.retrieve(current_user.stripe_customer_id, country)
+			
+			charge = Stripe::Charge.create({
+			:customer => @customer.id,
+			:description => 'One-time pre-payment',
+			:amount => amount,
+			:currency => currency
+			}, country)
+			
+			@one_time_date = Time.current + params[:forward].to_i.months
+			set_one_time_details
+			thespainreport_user_roles
+			
+			redirect_to :back
+			flash[:success] = "Pre-payment successful."
+		else
+			customer = Stripe::Customer.create({
+			:source => token,
+			:description => email_address
+			}, country)
+			
+			customer_id = customer.id
+			
+			charge = Stripe::Charge.create({
+			:customer => customer_id,
+			:description => 'One-time pre-payment',
+			:amount => amount,
+			:currency => currency
+			}, country)
+			
+			redirect_to :back
+			flash[:success] = "Brand new customer pre-payment successful."
+		end	
+	end
+	
+	def set_one_time_details
+		account = Account.create(
+			name: params[:email]
+		)
+		
+		user = User.find_by_email(params[:email])
+		user.update(
+			stripe_customer_id: @customer.id,
+			access_date: @one_time_date,
+			account_id: account.id,
+			account_role: 'account_boss',
+			becomes_customer_date: Time.at(@customer.created).to_datetime,
+			credit_card_id: @customer.sources.data[0].id,
+			credit_card_brand: @customer.sources.data[0].brand,
+			credit_card_country: @customer.sources.data[0].country,
+			credit_card_last4: @customer.sources.data[0].last4,
+			credit_card_expiry_month: @customer.sources.data[0].exp_month,
+			credit_card_expiry_year: @customer.sources.data[0].exp_year
+		)
+		
+		# A one-time subscription
+		subscription = Subscription.new
+		subscription.user_id = user.id
+		subscription.stripe_customer_id = @customer.id
+		subscription.stripe_subscription_id = 'One-time pre-payment'
+		subscription.stripe_subscription_email = user.email
+		subscription.stripe_subscription_plan = params[:plan]
+		subscription.stripe_subscription_amount = params[:amount]
+		subscription.stripe_subscription_interval = 'months'
+		subscription.stripe_subscription_quantity = params[:quantity]
+		subscription.stripe_subscription_tax_percent = params[:ts]
+		subscription.stripe_subscription_ip = params[:ip_address]
+		subscription.stripe_subscription_ip_country = params[:ip_country_code]
+		subscription.stripe_subscription_ip_country_name = params[:ip_country_name]
+		subscription.stripe_subscription_credit_card_country = @customer.sources.data[0].country
+		subscription.stripe_subscription_current_period_start_date = Time.current.to_datetime
+		subscription.stripe_subscription_created = Time.current.to_datetime
+		subscription.stripe_subscription_current_period_end_date = @one_time_date
+		subscription.stripe_currency = currency
+		subscription.stripe_status = 'active'
+		subscription.save!
+		
+		# A one-time invoice
+		invoice_number
+		
+		i = Invoice.new
+		i.number = invoice_number
+		i.user_id = user.id
+		i.subscription_id = subscription.id
+		i.stripe_invoice_id = 'One-time invoice'
+		i.stripe_invoice_number = 'One-time invoice'
+		i.stripe_invoice_date = Time.current.to_datetime
+		i.stripe_invoice_item = 'One-time pre-payment'
+		i.stripe_invoice_quantity = params[:quantity]
+		i.stripe_invoice_price = params[:base_price]
+		i.stripe_invoice_subtotal = params[:subtotal]
+		i.stripe_invoice_credit_card_country = @customer.sources.data[0].country
+		i.stripe_invoice_tax_percent = params[:ts]
+		i.stripe_invoice_tax_amount = params[:tax_amount]
+		i.stripe_invoice_currency = currency
+		i.stripe_invoice_interval = 'months'
+		i.stripe_invoice_total = params[:amount]
+		i.stripe_invoice_ip_country_code = params[:ip_country_code]
+		i.paid = true
+		i.status = 'unverified'
+		i.save!
+		
+	end
+	
 	def new_subscription
 		# Get the credit card details from the form and generate stripeToken
 		token = params[:stripeToken]
@@ -218,12 +378,10 @@ class SubscriptionsController < ApplicationController
 		user = User.find_by_email(params[:email])
 		if params[:plan] == "one_story"
 			user.update(
-				access_date: Time.now + 30.days,
 				role: 'subscriber_one_story'
 				)
 		elsif params[:plan] == "all_stories"
 			user.update(
-				access_date: Time.now + 30.days,
 				role: 'subscriber_all_stories'
 				)
 		else
@@ -273,7 +431,6 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
-
 	def subscription_details
 		@user = User.find(params[:user_id])
 		@stripe_customer = @user.stripe_customer_id
@@ -287,8 +444,21 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
-
 	def subscription_country
+		@user = User.find(params[:user_id])
+		if @user.subscriptions.any?
+			tsr_subscription = @user.subscriptions.last
+			if tsr_subscription.stripe_subscription_ip_country == "ES"
+				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			else
+				{:api_key => Rails.configuration.stripe[:secret_key]}
+			end
+		else
+			{:api_key => Rails.configuration.stripe[:secret_key]}
+		end
+	end
+	
+	def subscription_countryxxxxxx
 		@user = User.find(params[:user_id])
 		if @user.subscriptions.any?
 			tsr_subscription = @user.subscriptions.last
@@ -303,8 +473,31 @@ class SubscriptionsController < ApplicationController
 			{:api_key => Rails.configuration.stripe[:secret_key]}
 		end
 	end
-
-
+	
+	def resubscribe_one
+		subscription_details
+		
+		new = Stripe::Subscription.create({
+			customer: @stripe_customer,
+			items: [{plan: 'one_story'}],
+		}, subscription_country)
+		
+		redirect_to :back
+		flash[:success] = "Resubscribed to One Story."
+	end
+	
+	def resubscribe_all
+		subscription_details
+		
+		new = Stripe::Subscription.create({
+			customer: @stripe_customer,
+			items: [{plan: 'all_stories'}],
+		}, subscription_country)
+		
+		redirect_to :back
+		flash[:success] = "Resubscribed to All Stories ."
+	end
+	
 	def one_story
 		subscription_details
 		
@@ -348,6 +541,21 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Now subscribed to All Stories."
 	end
 	
+	def buy_more_users
+		subscription_details
+
+		item_id = @change_subscription.items.data[0].id
+		items = [{
+			id: item_id,
+			quantity: 10
+		}]
+		@change_subscription.items = items
+		@change_subscription.save
+		
+		redirect_to :back
+		flash[:success] = "Now subscribed to All Stories."
+	end
+	
 	def pause
 		subscription_details
 		
@@ -373,9 +581,11 @@ class SubscriptionsController < ApplicationController
 	def get_subscription_history
 		subscription_details
 		@full_customer = Stripe::Customer.retrieve(@stripe_customer, subscription_country)
+		@allsubscriptions = Stripe::Subscription.list({:customer => @stripe_customer, :status => 'all'}, subscription_country)
 		
-		subs = @full_customer.subscriptions
+		subs = @allsubscriptions
 		subs.each do |sub|
+			puts sub.id
 			if @user.subscriptions.where(stripe_subscription_id: sub.id).exists?
 				puts 'Subscription already exists'
 				s = Subscription.find_by_stripe_subscription_id(sub.id)
@@ -384,6 +594,22 @@ class SubscriptionsController < ApplicationController
 					stripe_status: sub.status,
 					stripe_subscription_created: Time.at(sub.created).to_datetime
 				)
+				if s.stripe_status == 'canceled'
+					@user.update(
+						access_date: Time.at(sub.canceled_at).to_datetime
+					)
+					s.update(
+						stripe_subscription_current_period_end_date: Time.at(sub.canceled_at).to_datetime
+					)
+				else
+					@user.update(
+						access_date: Time.at(sub.current_period_end).to_datetime
+					)
+					s.update(
+						stripe_subscription_current_period_end_date: Time.at(sub.current_period_end).to_datetime
+					)
+				end
+				
 			else
 				s = Subscription.new
 				s.user_id = @user.id
@@ -425,9 +651,10 @@ class SubscriptionsController < ApplicationController
 				end
 			else
 				i = Invoice.new
-				i.stripe_invoice_id = inv.id
 				i.user_id = @user.id
 				i.subscription_id = inv.subscription
+				i.stripe_invoice_id = inv.id
+				i.stripe_invoice_number = inv.number
 				i.stripe_invoice_date = Time.at(inv.date).to_datetime
 				i.stripe_invoice_item = inv.lines.data[0].plan.name
 				i.stripe_invoice_quantity = inv.lines.data[0].quantity
@@ -437,7 +664,6 @@ class SubscriptionsController < ApplicationController
 				i.stripe_invoice_tax_percent = inv.tax_percent
 				i.stripe_invoice_tax_amount = inv.tax
 				i.stripe_invoice_currency = inv.currency
-				i.stripe_invoice_number = inv.number
 				i.stripe_invoice_interval = inv.lines.data[0].plan.interval
 				i.stripe_invoice_total = inv.total
 				i.stripe_invoice_ip_country_code = ''
@@ -466,7 +692,6 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Thank you: you have unsubscribed."
 	end
 
-
 	def unsubscribe_by_staff
 		user = User.find_by_id(params[:id])
 		user.email = 'deleted-' + SecureRandom.hex(10)
@@ -477,6 +702,47 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Thank you: you have unsubscribed."
 	end
 
+	def link_by_account_boss
+		if User.exists?(email: params[:email])
+		
+		else
+			thespainreport_new_user_create
+			set_briefings_and_stories
+		end
+		
+		user = User.find_by_email(params[:email])
+		s = Subscription.find_by_id(params[:subscription_id])
+		
+		if ["All Stories", "all_stories"].include?(s.stripe_subscription_plan)
+			new_role = 'subscriber_all_stories'
+		elsif ["One Story", "one_story"].include?(s.stripe_subscription_plan)
+			new_role = 'subscriber_one_story'
+		end
+		
+		user.update(
+			account_id: params[:account_id],
+			account_role: 'account_member',
+			account_subscription_id: s.id,
+			role: new_role,
+			access_date: s.stripe_subscription_current_period_end_date
+		)
+	
+		redirect_to :back
+		flash[:success] = "User linked."
+	end
+	
+	def unlink_by_account_boss
+		user = User.find_by_id(params[:id])
+		user.update(
+			account_id: '',
+			account_role: '',
+			role: 'reader',
+			access_date: Time.current
+		)
+	
+		redirect_to :back
+		flash[:success] = "User unlinked."
+	end
 
   def new_spain_report_member
     # Generate tokens for passwords and reset links
@@ -613,6 +879,17 @@ class SubscriptionsController < ApplicationController
   def spain
   	@taxes = Tax.all.order('tax_country_name ASC')
   end
+  
+  # GET /subscriptions/prepay
+  def prepay
+  	@taxes = Tax.all.order('tax_country_name ASC')
+  end
+
+	# GET /subscriptions/prepay
+  def prepay_spain
+  	@taxes = Tax.all.order('tax_country_name ASC')
+  end
+
 
   # GET /subscriptions/1/edit
   def edit

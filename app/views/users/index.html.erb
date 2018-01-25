@@ -135,6 +135,7 @@
             <% end %>
           <% end %>
         </td>
+        <td><%= user.account_role == 'account_boss' ? 'Account' : '' %></td>
       </tr>
     <% end %>
   </tbody>

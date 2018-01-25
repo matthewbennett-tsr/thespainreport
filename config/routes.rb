@@ -13,20 +13,28 @@ Rails.application.routes.draw do
   resources :taxes
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'
+  post 'new_prepayment' => 'subscriptions#new_prepayment'
   post 'new_spain_report_reader' => 'subscriptions#new_spain_report_reader'
   post 'new_spain_report_subscriber' => 'subscriptions#new_spain_report_subscriber'
   post 'all_stories' => 'subscriptions#all_stories'
   post 'one_story' => 'subscriptions#one_story'
   post 'get_subscription_history' => 'subscriptions#get_subscription_history'
   post 'pause' => 'subscriptions#pause'
+  post 'resubscribe_one' => 'subscriptions#resubscribe_one'
+  post 'resubscribe_all' => 'subscriptions#resubscribe_all'
   post 'update_credit_card' => 'subscriptions#update_credit_card'
+  post 'link_by_account_boss' => 'subscriptions#link_by_account_boss'
+  post 'buy_more_users' => 'subscriptions#buy_more_users'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
   post '/SzXGyFFp0s3fMpc' => 'subscriptions#stripe_hooks'
   get 'subscriptions/spain'
+  get 'subscriptions/prepay'
+  get 'subscriptions/prepay_spain'
   resources :subscriptions do
    member do
     get :unsubscribe
     get :unsubscribe_by_staff
+    get :unlink_by_account_boss
    end
   end
   resources :provinces

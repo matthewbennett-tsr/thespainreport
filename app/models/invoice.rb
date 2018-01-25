@@ -4,6 +4,10 @@ class Invoice < ActiveRecord::Base
 	
 	before_update :check_invoice_for_date
 	
+	scope :thisyear, -> {where(:created_at => (Time.current.year))}
+	scope :spain, -> {where(:stripe_invoice_ip_country_code => 'ES')}
+	scope :notspain, -> {where.not(:stripe_invoice_ip_country_code => 'ES')}
+	
 	private
 	def check_invoice_for_date
 		if self.invoice_for_changed?

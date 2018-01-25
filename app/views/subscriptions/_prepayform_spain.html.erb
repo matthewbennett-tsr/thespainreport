@@ -1,0 +1,392 @@
+<%= form_tag '/new_prepayment', :class => '', :id => 'payment-form' do %>
+
+  <div class="subscription-form-container" onmouseover="calculateTotal()">
+
+    <% if flash.present? %>
+      <% flash.each do |name, msg| %>
+        <%= content_tag :div, id: "flash_#{name}_div" do -%>
+          <%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
+        <% end -%>
+      <% end %>
+    <% end %>
+	
+	<div class="subscription-form-section-top">
+      <div class="subscription-left-label-input">
+        How Many Users?
+      </div>
+      <div class="subscription-right-form-element">      
+        <input type="number" pattern="\d*" name="quantity" id="quantity" class="input50" value="1" min="1" max="100" onchange="calculateTotal()" oninput="calculateTotal()">
+      </div>
+      <div class="clear"></div>
+    </div>
+	
+	<div class="subscription-form-section-middle">
+		<div class="subscription-left-label-select">
+			On Which Plan?
+		</div>
+		<div class="subscription-right-form-element">
+			<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
+				<% if current_user.nil? %>
+					<option value="all_stories">ALL STORIES: €17.99/month</option>
+					<option value="one_story">ONE STORY: €8.99/month</option>
+				<% elsif current_user.access_date.blank? %>
+					<option value="all_stories">ALL STORIES: €17.99/month</option>
+					<option value="one_story">ONE STORY: €8.99/month</option>
+				<% elsif current_user.access_date < Time.current %>
+					<option value="all_stories">ALL STORIES: €17.99/month</option>
+					<option value="one_story">ONE STORY: €8.99/month</option>
+				<% elsif current_user.role == 'subscriber_one_story' %>
+					<option value="all_stories">ALL STORIES: €17.99/month</option>
+				<% elsif current_user.role == 'subscriber_all_stories' %>
+					<option value="one_story">ONE STORY: €8.99/month</option>
+				<% else %>
+					<option value="all_stories">ALL STORIES: €17.99/month</option>
+					<option value="one_story">ONE STORY: €8.99/month</option>
+				<% end %>
+			</select>
+		</div>
+		<div class="clear"></div>
+	</div>
+	
+    <div class="subscription-form-section-middle">
+      <div class="subscription-left-label-input">
+        How Many Months Forward?
+      </div>
+      <div class="subscription-right-form-element">      
+        <input type="number" pattern="\d*" name="forward" id="forward" class="input50" value="6" min="6" max="60" onchange="calculateTotal()" oninput="calculateTotal()">
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle">
+    <div class="subscription-left-label-select">
+        Subtotal:
+    </div>
+    <div class="subscription-right-form-element">
+    <span id="p"></span>
+    </div>
+    <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle">
+    <div class="subscription-left-label-select">
+        VAT:
+    </div>
+    <div class="subscription-right-form-element">
+    <span id="r"></span>
+    <img src="" name="tax_flag" id="tax_flag" />
+    <span name="country_name" id="country_name"></span>
+    </div>
+    <div class="clear"></div>
+    </div>
+    
+    <div class="subscription-form-section-middle">
+    <div class="subscription-left-label-select">
+        Total:
+    </div>
+    <div class="subscription-right-form-element">
+    <span id="t"></span>
+    </div>
+    <div class="clear"></div>
+    </div>
+    
+	<div class="subscription-form-section-middle">
+		<div class="subscription-left-label-input">
+			Your E-mail Address:
+		</div>
+		<div class="subscription-right-form-element">
+			<% if current_user.nil? || current_user.role == 'editor' %>
+				<input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral" onclick="calculateTotal()"/>
+			<% else %>
+				<input type="email" size="35" name="email" id="email" value="<%= current_user.email %>" class="inputgeneral" onclick="calculateTotal()" readonly />
+			<% end %>
+		</div>
+		<div class="clear"></div>
+	</div>
+      
+    <div class="subscription-form-section-middle" style="background-image: url(<%= asset_path 'thespainreport-evssl-yellow.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
+      
+    <div> 
+      <div class="subscription-left-label-input">
+        Your Credit Card Number:
+      </div>  
+      <div class="subscription-right-form-element form-group">
+          <input type="tel" autocomplete="cc-number" id="cc-number" class="inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" onclick="calculateTotal()" />      
+      </div>
+      <div class="clear"></div>
+    </div>
+       
+    <div style="margin-top: 5px;">
+      <div class="subscription-left-label-select">
+        Card Expiry Date:    
+      </div>
+        
+      <div class="subscription-right-form-element">
+        <select data-stripe="exp-month" class="ccjs-month">
+          <option selected disabled>Month</option>
+          <option value="01">01</option>
+          <option value="02">02</option>
+          <option value="03">03</option>
+          <option value="04">04</option>
+          <option value="05">05</option>
+          <option value="06">06</option>
+          <option value="07">07</option>
+          <option value="08">08</option>
+          <option value="09">09</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+          <option value="12">12</option>
+        </select>
+          
+        <select data-stripe="exp-year" class="ccjs-year">
+          <option selected disabled>Year</option>
+          <option value="17">17</option>
+          <option value="18">18</option>
+          <option value="19">19</option>
+          <option value="20">20</option>
+          <option value="21">21</option>
+          <option value="22">22</option>
+          <option value="23">23</option>
+          <option value="24">24</option>
+          <option value="25">25</option>
+        </select>
+      </div>
+      <div class="clear"></div>
+    </div>
+          
+    <div style="margin-top: 5px;">  
+      <div class="subscription-left-label-input">
+        Card CVC/Security Code:
+      </div>
+      <div class="subscription-right-form-element">
+        <input type="text" id="cc-cvc" class="inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+  </div>
+    
+    <div class="subscription-form-section-bottom">  
+      <div class="subscription-left-label-input">
+        
+      </div>
+      <div class="subscription-right-form-element">
+        <button type="submit" class="blueformbutton" style="z-index: 1000;">Pay Now</button>
+      </div>
+      <div class="clear"></div>
+    </div>
+    
+      <div class="clear"></div>
+    
+    <div class="subscription-form-section-bottom">  
+    <span style="font-size: 12px; font-style: italic;">* For group subscriptions, send us a list of extra e-mail addresses to <a href="mailto:subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> after placing your order. We will add them all.</span>
+    </div>
+    </div>
+    
+    <input type="hidden" name="ts" id="ts" value="">
+    <input type="hidden" name="base_price" id="base_price" value="">
+    <input type="hidden" name="subtotal" id="subtotal" value="">
+    <input type="hidden" name="tax_amount" id="tax_amount" value="">
+    <input type="hidden" name="amount" id="amount" value="">
+    <input type="hidden" name="ip_address" id="ip_address" value="">
+    <input type="hidden" name="ip_country_code" id="ip_country_code" value="">
+    <input type="hidden" name="ip_country_name" id="ip_country_name" value="">
+    
+<% end %>
+
+<script>
+
+var country_tax;
+// MaxMind IP VAT stuff
+	var onSuccess = function(x){
+		var ip = x.traits.ip_address;
+		document.getElementById('ip_address').value = ip;
+
+		var country_code = x.country.iso_code;
+		document.getElementById('ip_country_code').value = country_code;
+
+		var country_name = x.country.names.en;
+		document.getElementById('ip_country_name').value = country_name;
+	};
+
+	var onError = function(error){
+		alert(
+			"Error:\n\n"
+			+ JSON.stringify(error, undefined, 4)
+		);
+	};
+
+	geoip2.country(onSuccess, onError);
+
+// Array of values for plans
+	var plan_prices= new Array();
+		plan_prices["zero"]=0;
+		plan_prices["one_story"]=8.99;
+		plan_prices["all_stories"]=17.99;
+
+// Values for country flag names
+	var tax_country_names = {};
+		<% @taxes.each do |tax| %>
+			tax_country_names["<%= tax.tax_country_code %>"]='<%= tax.tax_country_name %>';
+		<% end %>
+
+// Values for country tax rates
+	var tax_country_rates = {};
+		<% @taxes.each do |tax| %>
+			tax_country_rates["<%= tax.tax_country_code %>"]=<%= tax.tax_country_percent %>;
+		<% end %>
+
+// Values for country flag images
+	var country_flags= {};
+		country_flags["UN"]='<%= asset_path('UN.jpg') %>';
+		country_flags["AT"]='<%= asset_path('AT.jpg') %>';
+		country_flags["AU"]='<%= asset_path('AU.jpg') %>';
+		country_flags["BE"]='<%= asset_path('BE.jpg') %>';
+		country_flags["BG"]='<%= asset_path('BG.jpg') %>';
+		country_flags["CA"]='<%= asset_path('CA.jpg') %>';
+		country_flags["CY"]='<%= asset_path('CY.jpg') %>';
+		country_flags["CZ"]='<%= asset_path('CZ.jpg') %>';
+		country_flags["DE"]='<%= asset_path('DE.jpg') %>';
+		country_flags["DK"]='<%= asset_path('DK.jpg') %>';
+		country_flags["EE"]='<%= asset_path('EE.jpg') %>';
+		country_flags["ES"]='<%= asset_path('ES.jpg') %>';
+		country_flags["FI"]='<%= asset_path('FI.jpg') %>';
+		country_flags["FR"]='<%= asset_path('FR.jpg') %>';
+		country_flags["GB"]='<%= asset_path('GB.jpg') %>';
+		country_flags["GR"]='<%= asset_path('GR.jpg') %>';
+		country_flags["HR"]='<%= asset_path('HR.jpg') %>';
+		country_flags["HU"]='<%= asset_path('HU.jpg') %>';
+		country_flags["IE"]='<%= asset_path('IE.jpg') %>';
+		country_flags["IN"]='<%= asset_path('IN.jpg') %>';
+		country_flags["IT"]='<%= asset_path('IT.jpg') %>';
+		country_flags["LT"]='<%= asset_path('LT.jpg') %>';
+		country_flags["LU"]='<%= asset_path('LU.jpg') %>';
+		country_flags["LV"]='<%= asset_path('LV.jpg') %>';
+		country_flags["MT"]='<%= asset_path('MT.jpg') %>';
+		country_flags["NL"]='<%= asset_path('NL.jpg') %>';
+		country_flags["NZ"]='<%= asset_path('NZ.jpg') %>';
+		country_flags["PL"]='<%= asset_path('PL.jpg') %>';
+		country_flags["PT"]='<%= asset_path('PT.jpg') %>';
+		country_flags["RO"]='<%= asset_path('RO.jpg') %>';
+		country_flags["SE"]='<%= asset_path('SE.jpg') %>';
+		country_flags["SI"]='<%= asset_path('SI.jpg') %>';
+		country_flags["SK"]='<%= asset_path('SK.jpg') %>';
+		country_flags["US"]='<%= asset_path('US.jpg') %>';
+
+// Two drop downs, one for plan, one for tax rate
+function PlanPrice()
+{
+    var planprice=0;
+    var theForm = document.forms["payment-form"];
+    var selectedprice = theForm.elements["plan"];
+    planprice = plan_prices[selectedprice.value];
+    return planprice;
+}
+
+function HowMany()
+{
+  var howmany=0;
+  var theForm = document.forms["payment-form"];
+  var selectedquantity = theForm.elements["quantity"];
+  howmany = selectedquantity.value;
+  return howmany;
+}
+
+function HowForward()
+{
+  var howforward=0;
+  var theForm = document.forms["payment-form"];
+  var selectedquantity = theForm.elements["forward"];
+  howforward = selectedquantity.value;
+  return howforward;
+}
+
+function TaxPrice() 
+{ 
+  var taxprice = 0;
+  var country_tax = document.getElementById("ip_country_code").value;
+  
+  if(tax_country_rates.hasOwnProperty(country_tax)) {
+    document.getElementById('tax_flag').src = country_flags[country_tax];
+    document.getElementById('country_name').innerHTML = tax_country_names[country_tax];
+    var taxprice = tax_country_rates[country_tax];
+    return taxprice.toFixed(1);
+  } else { 
+    document.getElementById('tax_flag').src = country_flags["UN"];
+    document.getElementById('country_name').innerHTML = "Non-EU country";
+    var taxprice = 0;
+    return taxprice.toFixed(1);
+  }
+
+}
+
+// Calculate total 
+function calculateTotal()
+{
+
+  // Do the maths
+    var TaxRate = TaxPrice() / 100;
+    var TotalBase = PlanPrice() * HowMany() * HowForward();
+    var TotalTax = (TaxRate * TotalBase);
+    var TotalPrice = TotalBase + TotalTax;
+    
+    // Check for not a number
+    if(isNaN(TotalPrice)) {
+        TotalPrice = 0
+    }
+    
+    if(isNaN(TotalTax)) {
+        TotalTax = 0
+    }
+    
+    if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
+    
+    //display the price
+    var divobj = document.getElementById('p');
+    divobj.innerHTML = "€" + TotalBase.toFixed(2);
+    
+    //display the tax amount ££ and rate %% to subscriber
+    var divobj = document.getElementById('r');
+    divobj.innerHTML = "€" + TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
+    
+    //put the tax rate %% into Stripe for payment processing
+    var divobj = document.getElementById('ts');
+    divobj.value = TaxPrice();
+    
+    //display the total
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = "€" + TotalPrice.toFixed(2);
+    
+    //total base_price for Stripe one-time charge
+    var divobj = document.getElementById('base_price');
+    divobj.value = Math.round(PlanPrice()*100);
+    
+    //total subtotal for Stripe one-time charge
+    var divobj = document.getElementById('subtotal');
+    divobj.value = Math.round(TotalBase.toFixed(2)*100);
+    
+    //total tax_amount for Stripe one-time charge
+    var divobj = document.getElementById('tax_amount');
+    divobj.value = Math.round(TotalTax.toFixed(2)*100);
+    
+    //total amount for Stripe one-time charge
+    var divobj = document.getElementById('amount');
+    divobj.value = Math.round(TotalPrice.toFixed(2)*100);
+    
+    } else {
+    
+    //display the price
+    var divobj = document.getElementById('p');
+    divobj.innerHTML = "€" + TotalBase.toFixed(2);
+    
+    //display a default tax amount
+    var divobj = document.getElementById('r');
+    divobj.innerHTML = " + <span style=\"color:red;\">Choose a country</span>";
+    
+    //display the plan price without tax defined
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = " = €" + TotalBase.toFixed(2);
+
+    } 
+};
+</script>

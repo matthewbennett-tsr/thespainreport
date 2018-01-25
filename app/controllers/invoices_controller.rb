@@ -141,7 +141,8 @@ class InvoicesController < ApplicationController
         :stripe_invoice_tax_amount,
         :stripe_invoice_total,
         :paid,
-        :status
+        :status,
+        :number
         )
     end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180118185207) do
+ActiveRecord::Schema.define(version: 20180125170530) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -182,6 +182,7 @@ ActiveRecord::Schema.define(version: 20180118185207) do
     t.string   "stripe_invoice_interval"
     t.boolean  "paid"
     t.string   "status"
+    t.string   "number"
   end
 
   create_table "newsitems", force: :cascade do |t|
@@ -397,6 +398,7 @@ ActiveRecord::Schema.define(version: 20180118185207) do
     t.string   "update_token"
     t.integer  "account_id"
     t.string   "account_role"
+    t.integer  "account_subscription_id"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree

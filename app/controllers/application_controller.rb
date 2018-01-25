@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   before_filter :set_visitor_cookie
   before_filter :app_wide
   
+  
   def app_wide
     @last_active_stories = Story.latest
     @lastnews = Article.news.published.lastone

@@ -20,6 +20,18 @@
 	<% end %>
 <% end %>
 
+<% if @user.account_role == 'account_member' %>
+	<div class="subscription-block">
+		<h3>Your Account</h3>
+		<p>
+		You currently belong to a group account managed and paid for by: 
+		<% @user.account.users.where(account_role: 'account_boss').each do |u| %>
+			<%= u.email %>
+		<% end %>
+		</p>
+	</div>
+<% end %>
+
 <% if @user.stripe_customer_id == "NON-AUTOMATIC INVOICE" && @user.role == 'subscriber' %>
 
 <% elsif @user.stripe_customer_id? %>
@@ -155,6 +167,30 @@
 <div class="subscription-block">
 	<h3>My Subscription(s)</h3>
 	
+	
+	<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) && !@user.subscriptions.active.any? %>
+		<div style="margin-bottom: 20px;">
+			<p style="margin-bottom: 15px;">
+				Your subscription has expired: please resubscribe now. 
+				If your credit card details are still correct, you may do so with one click.
+				If not, please enter your new credit card details first above.
+			</p>
+			<div class="left-15 bold">Click:</div>
+			<div class="subscription-item-right">
+				<%= form_tag '/resubscribe_one', :style => 'float:left; margin-right: 7px;', :id => 'pause', :name => 'pause' do %>
+					<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+					<button type="submit" class="linkbutton">Buy One Story</button>
+				<% end %>
+				<%= form_tag '/resubscribe_all', :style => 'float:left; margin-right: 7px;', :id => 'pause', :name => 'pause' do %>
+					<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+					<button type="submit" class="linkbutton">Buy All Stories</button>
+				<% end %>
+			</div>
+			<div class="clear"></div>
+		</div>
+	<% end %>
+	
+	
 	<% if @user.subscriptions.any? %>
 		<% @user.subscriptions.each do |sub| %>
 			<div style="margin-bottom: 20px;">
@@ -163,52 +199,101 @@
 				<div class="left-15 bold">Your plan</div><div class="subscription-item-right"><%= sub.stripe_subscription_quantity %> x <%= sub.stripe_subscription_plan %></div><div class="clear"></div>
 				<div class="left-15 bold">Purchased In</div><div class="subscription-item-right"><%= sub.stripe_subscription_ip_country_name %> <%= image_tag(sub.stripe_subscription_ip_country + '.jpg', :height => 18) %> (<%= sub.stripe_subscription_ip %>)</div><div class="clear"></div>
 				<div class="left-15 bold">Price</div><div class="subscription-item-right"><%= sub.stripe_currency == 'gbp' ? '£' : '€' %><%= sprintf("%.2f",(sub.stripe_subscription_amount/100.round(2))) %> / <%= sub.stripe_subscription_interval %> + <%= sub.stripe_subscription_tax_percent %>% VAT</div><div class="clear"></div>
-				<div class="left-15 bold">Status</div><div class="subscription-item-right"><%= sub.stripe_status.titleize unless sub.stripe_status.nil? %></div><div class="clear"></div>
+				<div class="left-15 bold">Status</div><div class="subscription-item-right">
+					<% if sub.stripe_status == 'canceled' %>
+						<span class="cancelled"><%= sub.stripe_status.titleize unless sub.stripe_status.nil? %></span>
+					<% else %>
+						<span class="active"><%= sub.stripe_status.titleize unless sub.stripe_status.nil? %></span>
+					<% end %>
+				</div><div class="clear"></div>
 				<div class="left-15 bold">Current</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_start_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
-				<div class="left-15 bold">Renews on</div><div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
-				<div class="left-15 bold">Options</div><div class="subscription-item-right">
-				<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) %>
-					<%= form_tag '/one_story', :style => 'float:left; margin-right: 10px;', :id => 'one_story', :name => 'one_story' do %>
-						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-						<button type="submit" class="linkbutton">
-							<% if ['subscriber'].include?(@user.role) %>
-							Purchase "One Story"
-							<% elsif ['subscriber_all_stories'].include?(@user.role) %>
-							Downgrade to "One Story"
-							<% elsif ['subscriber_paused'].include?(@user.role) %>
-							Restart as "One Story"
+				<% if sub.stripe_status == 'canceled' %>
+					<div class="left-15 bold">Cancelled on</div>
+				<% elsif sub.stripe_subscription_plan == 'One-time subscription' %>
+					<div class="left-15 bold">Ends on</div>
+				<% else %>
+					<div class="left-15 bold">Renews on</div>
+				<% end %>
+				<div class="subscription-item-right"><%= Time.at(sub.stripe_subscription_current_period_end_date).strftime("%d/%m/%y") %></div><div class="clear"></div>
+				
+				<% if @user.account_role == 'account_boss' && @user.account.users.any? %>
+					<div class="left-15 bold">Users</div><div class="left-60">
+						<div style="width: 100%; margin-bottom: 10px;">
+							<% @user.account.users.where(account_role: 'account_boss').each do |u| %>
+								<div class="left-50"><%= u.email %></div>
+								<div class="right-20"></div>
+								<div class="clear"></div>
 							<% end %>
-						</button>
-					<% end %>
-				<% end %>
-				<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) %>
-					<%= form_tag '/all_stories', :style => 'float:left; margin-right: 10px;', :id => 'all_stories', :name => 'all_stories' do %>
-						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-						<button type="submit" class="linkbutton">
-							<% if ['subscriber'].include?(@user.role) %>
-							Purchase "All Stories"
-							<% elsif ['subscriber_one_story'].include?(@user.role) %>
-							Upgrade to "All Stories"
-							<% elsif ['subscriber_paused'].include?(@user.role) %>
-							Restart as "All Stories"
+							<% @user.account.users.notdeleted.where(account_role: 'account_member', account_subscription_id: sub.id).each do |u| %>
+								<div class="left-50"><%= u.email %></div>
+								<div class="right-20"><%= link_to 'Unlink', unlink_by_account_boss_subscription_url(u), data: { confirm: 'Are you sure?' } %></div>
+								<div class="clear"></div>
 							<% end %>
-						</button>
-					<% end %>
+						</div>
+						<% if sub.stripe_status != 'canceled' && (sub.stripe_subscription_quantity > @user.account.users.notdeleted.where(account_role: 'account_member', account_subscription_id: sub.id).count + 1) %>
+							<%= form_tag '/link_by_account_boss',  :style => 'margin-bottom: 10px;', :id => 'link_by_account_boss' do %>
+								<input type="email" name="email" id="email">
+								<input type="hidden" name="account_id" id="account_id" value="<%= @user.account.id %>">
+								<input type="hidden" name="subscription_id" id="subscription_id" value="<%= sub.id %>">
+								<button type="submit" class="linkbutton">Add User</button>
+							<% end %>
+						<% end %>
+					</div>
+					<div class="clear"></div>
+				<% else %>
 				<% end %>
-				<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) %>
-					<%= form_tag '/pause', :style => 'float:left; margin-right: 4px;', :id => 'pause', :name => 'pause' do %>
-						<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-						<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-						<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-						<button type="submit" class="linkbutton">Pause your subscription</button>
+				
+				<% if sub.stripe_status == 'canceled' || sub.stripe_subscription_id == 'One-time pre-payment' %>
+				
+				<% else %>
+					<div class="left-15 bold">Options</div><div class="subscription-item-right">
+						<%= form_tag '/buy_more_users',  :style => 'float:left; margin-right: 10px;', :id => 'buy_more_users' do %>
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">Buy More Users</button>
+						<% end %>
+					</div>
+					<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) && sub.stripe_status != 'canceled' %>
+						<%= form_tag '/one_story', :style => 'float:left; margin-right: 10px;', :id => 'one_story', :name => 'one_story' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">
+								<% if ['subscriber'].include?(@user.role) %>
+								Purchase "One Story"
+								<% elsif ['subscriber_all_stories'].include?(@user.role) %>
+								Downgrade to "One Story"
+								<% elsif ['subscriber_paused'].include?(@user.role) %>
+								Restart as "One Story"
+								<% end %>
+							</button>
+						<% end %>
 					<% end %>
+					<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) && sub.stripe_status != 'canceled' %>
+						<%= form_tag '/all_stories', :style => 'float:left; margin-right: 10px;', :id => 'all_stories', :name => 'all_stories' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">
+								<% if ['subscriber'].include?(@user.role) %>
+								Purchase "All Stories"
+								<% elsif ['subscriber_one_story'].include?(@user.role) %>
+								Upgrade to "All Stories"
+								<% elsif ['subscriber_paused'].include?(@user.role) %>
+								Restart as "All Stories"
+								<% end %>
+							</button>
+						<% end %>
+					<% end %>
+					<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) && sub.stripe_status != 'canceled' %>
+						<%= form_tag '/pause', :style => 'float:left; margin-right: 4px;', :id => 'pause', :name => 'pause' do %>
+							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
+							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<button type="submit" class="linkbutton">Pause subscription</button>
+						<% end %>
+					<% end %>
+					<div class="clear"></div>
 				<% end %>
-				</div>
-				<div class="clear"></div>
 			</div>
 		<% end %>
 	<% end %>
@@ -240,16 +325,7 @@
 		<% end %>
 </div>
 
-<% if @user.account_role == 'account_boss' %>
-	<div class="subscription-block">
-		<h3>Our Account</h3>
-		<ul>
-		<% @user.account.users.each do |u| %>
-			<li><%= u.email %>: <%= u.account_role %></li>
-		<% end %>
-		</ul>
-	</div>
-<% end %>
+
 
 <% else %>
 Not a subscriber yet. <%= link_to "Subscribe now", '/subscriptions/new', :"data-no-turbolink" => true %>.

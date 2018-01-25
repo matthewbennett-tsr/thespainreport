@@ -12,7 +12,7 @@
 	<% end %>
 		
 		<div class="subscription-block">
-			<div class="subscription-item"><div class="left-20 bold">Number & ID</div><div class="left-60"><%= @invoice.stripe_invoice_number %> (<%= @invoice.stripe_invoice_id %>)</div><div class="clear"></div></div>
+			<div class="subscription-item"><div class="left-20 bold">Number & ID</div><div class="left-60"><%= @invoice.number %> (<%= @invoice.stripe_invoice_id %>)</div><div class="clear"></div></div>
 			<div class="subscription-item"><div class="left-20 bold">Date</div><div class="left-60"><%= Time.at(@invoice.stripe_invoice_date).strftime("%d/%m/%Y") %></div><div class="clear"></div></div>
 		</div>
 		
