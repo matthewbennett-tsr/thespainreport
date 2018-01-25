@@ -444,7 +444,7 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
-	def subscription_country
+	def subscription_country_test
 		@user = User.find(params[:user_id])
 		if @user.subscriptions.any?
 			tsr_subscription = @user.subscriptions.last
@@ -458,11 +458,11 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 	
-	def subscription_countryxxxxxx
+	def subscription_country
 		@user = User.find(params[:user_id])
 		if @user.subscriptions.any?
 			tsr_subscription = @user.subscriptions.last
-			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date > '2018-01-01'
+			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date >= '2018-01-01'
 				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
 			elsif tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date < '2018-01-01'
 				{:api_key => Rails.configuration.stripe[:secret_key]}
