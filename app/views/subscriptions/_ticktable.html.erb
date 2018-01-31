@@ -43,8 +43,15 @@
 		</tr>
 		<tr>
 			<td></td>
-			<td style="text-align:center;">£7.99/month</td>
-			<td style="text-align:center;"><strong>£15.99/month</strong></td>
+			<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+				<td style="text-align:center;">€8.99/month</td>
+				<td style="text-align:center;"><strong>€17.99/month</strong></td>
+			<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
+				<td style="text-align:center;">£7.99/month</td>
+				<td style="text-align:center;"><strong>£15.99/month</strong></td>
+			<% end %>
+			
+			
 		</tr>
 	</table>
 	<div style="font-style: italic;">
