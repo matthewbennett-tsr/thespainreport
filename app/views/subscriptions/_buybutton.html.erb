@@ -1,0 +1,30 @@
+<div class="subscription-form-section-bottom">
+	<div class="subscription-left-label-input">
+		
+	</div>
+	<div class="subscription-right-form-element">
+		<button type="submit" class="blueformbutton" style="z-index: 1000;">
+			<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+				Subscribe Now
+			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+				Pre-Pay Now
+			<% end %>
+		</button>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="clear"></div>
+
+<div class="subscription-form-section-bottom">	
+	<span style="font-size: 12px; font-style: italic;">* For group subscriptions, send us a list of extra e-mail addresses to <a href="mailto:subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> after placing your order. We will add them all.</span>
+</div>
+
+<input type="hidden" name="ts" id="ts" value="">
+<input type="hidden" name="base_price" id="base_price" value="">
+<input type="hidden" name="subtotal" id="subtotal" value="">
+<input type="hidden" name="tax_amount" id="tax_amount" value="">
+<input type="hidden" name="amount" id="amount" value="">
+<input type="hidden" name="ip_address" id="ip_address" value="">
+<input type="hidden" name="ip_country_code" id="ip_country_code" value="">
+<input type="hidden" name="ip_country_name" id="ip_country_name" value="">

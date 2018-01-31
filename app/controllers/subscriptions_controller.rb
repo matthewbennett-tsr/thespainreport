@@ -9,7 +9,7 @@ class SubscriptionsController < ApplicationController
 	skip_before_action :verify_authenticity_token, only: :stripe_hooks
 	protect_from_forgery except: :stripe_hooks
 
-
+	# All of the which country logic
 	def country
 		if params[:ip_country_code] == "ES"
 			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
@@ -26,6 +26,38 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 	
+	def country_choice
+		if params[:ip_country_code] == "ES"
+			@apikey = {:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			@currency = 'eur'
+			@prefix = 'ES-'
+			@howmanyinvoices = Invoice.spain.where('extract(year from created_at) = ?', Time.current.year).count
+			
+			if current_user.stripe_customer_id_spain?
+				@stripe_customer = current_user.stripe_customer_id_spain
+			else
+				customer = Stripe::Customer.create
+				
+				@stripe_customer = customer.id
+			end
+		else
+			@apikey = {:api_key => Rails.configuration.stripe[:secret_key]}
+			@currency = 'gbp'
+			@prefix = ''
+			@howmanyinvoices = Invoice.notspain.where('extract(year from created_at) = ?', Time.current.year).count
+			
+			if current_user.stripe_customer_id?
+				@stripe_customer = current_user.stripe_customer_id
+			else
+				customer = Stripe::Customer.create
+				
+				@stripe_customer = customer.id
+			end
+		end
+		
+		@invoice_number = @prefix + Time.current.year.to_s + (@howmanyinvoices + 1).to_s.rjust(8, '0')
+	end
+	
 	def invoice_number
 		if params[:ip_country_code] == 'ES'
 			@prefix = 'ES-'
@@ -36,6 +68,36 @@ class SubscriptionsController < ApplicationController
 		end
 		
 		invoice_number = @prefix + Time.current.year.to_s + (@howmanyinvoices + 1).to_s.rjust(8, '0')
+	end
+	
+	def subscription_country_test
+		@user = User.find(params[:user_id])
+		if @user.subscriptions.any?
+			tsr_subscription = @user.subscriptions.last
+			if tsr_subscription.stripe_subscription_ip_country == "ES"
+				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			else
+				{:api_key => Rails.configuration.stripe[:secret_key]}
+			end
+		else
+			{:api_key => Rails.configuration.stripe[:secret_key]}
+		end
+	end
+	
+	def subscription_country
+		@user = User.find(params[:user_id])
+		if @user.subscriptions.any?
+			tsr_subscription = @user.subscriptions.last
+			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date >= '2018-01-01'
+				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
+			elsif tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date < '2018-01-01'
+				{:api_key => Rails.configuration.stripe[:secret_key]}
+			else
+				{:api_key => Rails.configuration.stripe[:secret_key]}
+			end
+		else
+			{:api_key => Rails.configuration.stripe[:secret_key]}
+		end
 	end
 	
 	def new_prepayment
@@ -110,6 +172,34 @@ class SubscriptionsController < ApplicationController
 		end	
 	end
 	
+	def new_credit_card
+		user = User.find_by_email(params[:email])
+		
+		if xxxx
+			user.update(
+				stripe_customer_id_spain: @customer.id,
+				becomes_customer_date_spain: Time.at(@customer.created).to_datetime,
+				credit_card_id_spain: @customer.sources.data[0].id,
+				credit_card_brand_spain: @customer.sources.data[0].brand,
+				credit_card_country_spain: @customer.sources.data[0].country,
+				credit_card_last4_spain: @customer.sources.data[0].last4,
+				credit_card_expiry_month_spain: @customer.sources.data[0].exp_month,
+				credit_card_expiry_year_spain: @customer.sources.data[0].exp_year
+				)
+		else
+			user.update(
+				stripe_customer_id: @customer.id,
+				becomes_customer_date: Time.at(@customer.created).to_datetime,
+				credit_card_id: @customer.sources.data[0].id,
+				credit_card_brand: @customer.sources.data[0].brand,
+				credit_card_country: @customer.sources.data[0].country,
+				credit_card_last4: @customer.sources.data[0].last4,
+				credit_card_expiry_month: @customer.sources.data[0].exp_month,
+				credit_card_expiry_year: @customer.sources.data[0].exp_year
+				)
+		end
+	end
+	
 	def set_one_time_details
 		account = Account.create(
 			name: params[:email]
@@ -117,18 +207,13 @@ class SubscriptionsController < ApplicationController
 		
 		user = User.find_by_email(params[:email])
 		user.update(
-			stripe_customer_id: @customer.id,
+			
 			access_date: @one_time_date,
 			account_id: account.id,
-			account_role: 'account_boss',
-			becomes_customer_date: Time.at(@customer.created).to_datetime,
-			credit_card_id: @customer.sources.data[0].id,
-			credit_card_brand: @customer.sources.data[0].brand,
-			credit_card_country: @customer.sources.data[0].country,
-			credit_card_last4: @customer.sources.data[0].last4,
-			credit_card_expiry_month: @customer.sources.data[0].exp_month,
-			credit_card_expiry_year: @customer.sources.data[0].exp_year
+			account_role: 'account_boss'
 		)
+		
+		new_credit_card
 		
 		# A one-time subscription
 		subscription = Subscription.new
@@ -444,49 +529,23 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
-	def subscription_country_test
-		@user = User.find(params[:user_id])
-		if @user.subscriptions.any?
-			tsr_subscription = @user.subscriptions.last
-			if tsr_subscription.stripe_subscription_ip_country == "ES"
-				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
-			else
-				{:api_key => Rails.configuration.stripe[:secret_key]}
-			end
-		else
-			{:api_key => Rails.configuration.stripe[:secret_key]}
-		end
-	end
-	
-	def subscription_country
-		@user = User.find(params[:user_id])
-		if @user.subscriptions.any?
-			tsr_subscription = @user.subscriptions.last
-			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date >= '2018-01-01'
-				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
-			elsif tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date < '2018-01-01'
-				{:api_key => Rails.configuration.stripe[:secret_key]}
-			else
-				{:api_key => Rails.configuration.stripe[:secret_key]}
-			end
-		else
-			{:api_key => Rails.configuration.stripe[:secret_key]}
-		end
-	end
+
 	
 	def resubscribe_one
-		subscription_details
+		country_choice
 		
 		new = Stripe::Subscription.create({
 			customer: @stripe_customer,
+			source: @stripe_customer.source,
 			items: [{plan: 'one_story'}],
-		}, subscription_country)
+		}, @apikey)
 		
 		redirect_to :back
 		flash[:success] = "Resubscribed to One Story."
 	end
 	
 	def resubscribe_all
+		country_choice
 		subscription_details
 		
 		new = Stripe::Subscription.create({

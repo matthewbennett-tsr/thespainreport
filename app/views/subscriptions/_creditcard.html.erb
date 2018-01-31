@@ -1,0 +1,9 @@
+<% if current_user.nil? %>
+	<%= render 'creditcard_empty' %>
+<% elsif controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) && current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain? %>
+	<%= render 'creditcard_filled_spain' %>
+<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) && current_user.stripe_customer_id? && current_user.credit_card_id? %>
+	<%= render 'creditcard_filled' %>
+<% else %>
+	<%= render 'creditcard_empty' %>
+<% end %>

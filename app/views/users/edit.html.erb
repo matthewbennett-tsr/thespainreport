@@ -179,10 +179,16 @@
 			<div class="subscription-item-right">
 				<%= form_tag '/resubscribe_one', :style => 'float:left; margin-right: 7px;', :id => 'pause', :name => 'pause' do %>
 					<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+					<input type="hidden" name="ip_address" id="ip_address" value="">
+					<input type="hidden" name="ip_country_code" id="ip_country_code" value="">
+					<input type="hidden" name="ip_country_name" id="ip_country_name" value="">
 					<button type="submit" class="linkbutton">Buy One Story</button>
 				<% end %>
 				<%= form_tag '/resubscribe_all', :style => 'float:left; margin-right: 7px;', :id => 'pause', :name => 'pause' do %>
 					<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+					<input type="hidden" name="ip_address" id="ip_address" value="">
+					<input type="hidden" name="ip_country_code" id="ip_country_code" value="">
+					<input type="hidden" name="ip_country_name" id="ip_country_name" value="">
 					<button type="submit" class="linkbutton">Buy All Stories</button>
 				<% end %>
 			</div>
@@ -190,6 +196,29 @@
 		</div>
 	<% end %>
 	
+<script>
+var country_tax;
+// MaxMind IP VAT stuff
+	var onSuccess = function(x){
+		var ip = x.traits.ip_address;
+		document.getElementById('ip_address').value = ip;
+
+		var country_code = x.country.iso_code;
+		document.getElementById('ip_country_code').value = country_code;
+
+		var country_name = x.country.names.en;
+		document.getElementById('ip_country_name').value = country_name;
+	};
+
+	var onError = function(error){
+		alert(
+			"Error:\n\n"
+			+ JSON.stringify(error, undefined, 4)
+		);
+	};
+
+	geoip2.country(onSuccess, onError);
+	</script>
 	
 	<% if @user.subscriptions.any? %>
 		<% @user.subscriptions.each do |sub| %>

@@ -19,7 +19,7 @@
 			<% if controller_name == 'subscriptions' && ["spain"].include?(action_name) %>
 				if (x.country.iso_code !== "ES"){window.location.replace('/subscriptions/new');}
 			<% elsif controller_name == 'subscriptions' && ["new"].include?(action_name) %>
-				if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/prepay_spain');}
+				if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/spain');}
 			<% elsif controller_name == 'subscriptions' && ["prepay_spain"].include?(action_name) %>
 				if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/prepay');}
 			<% elsif controller_name == 'subscriptions' && ["prepay"].include?(action_name) %>

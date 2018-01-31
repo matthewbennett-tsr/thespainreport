@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180125170530) do
+ActiveRecord::Schema.define(version: 20180130223519) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -366,14 +366,14 @@ ActiveRecord::Schema.define(version: 20180125170530) do
   end
 
   create_table "users", force: :cascade do |t|
-    t.string   "email",                    default: "",    null: false
-    t.datetime "created_at",                               null: false
-    t.datetime "updated_at",                               null: false
+    t.string   "email",                          default: "",    null: false
+    t.datetime "created_at",                                     null: false
+    t.datetime "updated_at",                                     null: false
     t.string   "name"
     t.string   "twitter"
     t.string   "avatar"
     t.text     "bio"
-    t.boolean  "email_confirmed",          default: false
+    t.boolean  "email_confirmed",                default: false
     t.string   "password_digest"
     t.string   "role"
     t.string   "reset_digest"
@@ -381,7 +381,7 @@ ActiveRecord::Schema.define(version: 20180125170530) do
     t.string   "password_reset_token"
     t.datetime "password_reset_sent_at"
     t.string   "stripe_customer_id"
-    t.boolean  "is_author",                default: false
+    t.boolean  "is_author",                      default: false
     t.datetime "becomes_customer_date"
     t.string   "credit_card_id"
     t.string   "credit_card_brand"
@@ -399,6 +399,14 @@ ActiveRecord::Schema.define(version: 20180125170530) do
     t.integer  "account_id"
     t.string   "account_role"
     t.integer  "account_subscription_id"
+    t.string   "stripe_customer_id_spain"
+    t.string   "credit_card_id_spain"
+    t.string   "credit_card_brand_spain"
+    t.string   "credit_card_country_spain"
+    t.string   "credit_card_last4_spain"
+    t.integer  "credit_card_expiry_month_spain"
+    t.integer  "credit_card_expiry_year_spain"
+    t.datetime "becomes_customer_date_spain"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
