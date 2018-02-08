@@ -19,19 +19,29 @@
 		<div class="subscription-block">
 			<div class="left-20 bold">From</div>
 			<div class="left-60">
-				The Spain Report Ltd.<br />
-				<% if @invoice.stripe_invoice_date <= '2016-08-01' %>
-					Suite LP26203, Lower Ground Floor<br />
-					145-157 St John Street<br />
-					London<br />
-					EC1V 4PW<br />
+				<% if @invoice.stripe_invoice_ip_country_code == 'ES' %>
+					The Spain Report Ltd. (Sucursal en España)<br />
+					Avenida Doctor Pedro Guillén 5<br />
+					Esquina Miguel de Cervantes (Marla Center)<br />
+					30100 Murcia<br />
+					España<br />
+					<br />
+					CIF: W8265733I<br />
 				<% else %>
-					20-22 Wenlock Road<br />
-					London<br />
-					N1 7GU<br />
+					The Spain Report Ltd.<br />
+					<% if @invoice.stripe_invoice_date <= '2016-08-01' %>
+						Suite LP26203, Lower Ground Floor<br />
+						145-157 St John Street<br />
+						London<br />
+						EC1V 4PW<br />
+					<% else %>
+						20-22 Wenlock Road<br />
+						London<br />
+						N1 7GU<br />
+					<% end %>
+					<br />
+					Company Number: 09210027<br />
 				<% end %>
-				<br />
-				Company Number: 09210027<br />
 			</div>
 			<div class="clear"></div>
 		</div>
@@ -39,7 +49,14 @@
 		<div class="subscription-block">
 			<div class="left-20 bold">To</div>
 			<div class="left-60">
-				<%= @invoice.user.email %> (<%= @invoice.user.stripe_customer_id %>)<br />
+				<%= @invoice.user.email %> (
+					<% if @invoice.user.stripe_customer_id %>
+						<%= @invoice.user.stripe_customer_id %>
+					<% elsif @invoice.user.stripe_customer_id_spain %>
+						<%= @invoice.user.stripe_customer_id_spain %>
+					<% else %>
+					<% end %>
+				)<br />
 				<% if current_user.role == 'editor' %>
 					<%= f.text_area :invoice_for, :style => 'width: 100%; min-height: 105px; padding:5px;', :maxlength => 250 %>
 				<% elsif current_user.role != 'editor' %>

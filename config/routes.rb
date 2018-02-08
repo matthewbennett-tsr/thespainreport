@@ -14,6 +14,7 @@ Rails.application.routes.draw do
   resources :invoices
   post 'new_subscription' => 'subscriptions#new_subscription'
   post 'new_prepayment' => 'subscriptions#new_prepayment'
+  post 'another_prepayment' => 'subscriptions#another_prepayment'
   post 'new_spain_report_reader' => 'subscriptions#new_spain_report_reader'
   post 'new_spain_report_subscriber' => 'subscriptions#new_spain_report_subscriber'
   post 'all_stories' => 'subscriptions#all_stories'

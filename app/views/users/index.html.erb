@@ -114,13 +114,15 @@
         <% if user.role == 'editor' %>
             <span class="editor-label-mini">
           <% elsif user.role == 'subscriber' %>
-            <span class="subscriber-label-mini">
-          <% elsif user.role == 'reader' %>
-            <span class="reader-label-mini">
+            <span class="subscriber-label-mini">General
+        <% elsif user.role == 'subscriber_all_stories' %>
+            <span class="subscriber-label-mini">All Stories
+            <% elsif user.role == 'subscriber_one_story' %>
+            <span class="subscriber-label-mini">One-Story
           <% else %>
             <span>
           <% end %>
-        <%= user.role.to_s.humanize %></span>
+        </span>
         </td>
         <td><%= mail_to user.email %></td>
         <td><%= user.briefing_frequency.briefing_frequency unless user.briefing_frequency.nil? %></td>
@@ -135,7 +137,7 @@
             <% end %>
           <% end %>
         </td>
-        <td><%= user.account_role == 'account_boss' ? 'Account' : '' %></td>
+        <td><%= user.account_role == 'account_boss' ? 'Boss' : '' %></td>
       </tr>
     <% end %>
   </tbody>

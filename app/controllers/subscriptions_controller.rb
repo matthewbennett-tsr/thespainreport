@@ -1,74 +1,36 @@
-### Adds country selector + subscriptions/spain method
-### Removes redirects from error messages
-### Adds sign-up fields for new_spain_report_member
-### Adds return + flash message after new_spain_report_member sign up
-
+#### 8 Country Methods
+#### xx New Reader
+#### 101 Prepayments
+#### 242 Subscriptions
+#### 388 Common Elements
+#### xxx Subscription Webhooks
+#### 647 Get Subscription History
+#### xxx REST methods
 
 class SubscriptionsController < ApplicationController
 	before_action :set_subscription, only: [:show, :edit, :update, :destroy]
 	skip_before_action :verify_authenticity_token, only: :stripe_hooks
 	protect_from_forgery except: :stripe_hooks
 
-	# All of the which country logic
-	def country
-		if params[:ip_country_code] == "ES"
-			{:api_key => Rails.configuration.stripe[:secret_spain_key]}
-		else
-			{:api_key => Rails.configuration.stripe[:secret_key]}
-		end
-	end
-	
-	def currency
-		if params[:ip_country_code] == "ES"
-			'eur'
-		else
-			'gbp'
-		end
-	end
-	
+	#### COUNTRY RELATED METHODS: 1) country_choice, 2) subscription_country, 3) new_credit_card ####
+	#### STARTS country_choice ####
 	def country_choice
 		if params[:ip_country_code] == "ES"
 			@apikey = {:api_key => Rails.configuration.stripe[:secret_spain_key]}
 			@currency = 'eur'
 			@prefix = 'ES-'
 			@howmanyinvoices = Invoice.spain.where('extract(year from created_at) = ?', Time.current.year).count
-			
-			if current_user.stripe_customer_id_spain?
-				@stripe_customer = current_user.stripe_customer_id_spain
-			else
-				customer = Stripe::Customer.create
-				
-				@stripe_customer = customer.id
-			end
 		else
 			@apikey = {:api_key => Rails.configuration.stripe[:secret_key]}
 			@currency = 'gbp'
 			@prefix = ''
 			@howmanyinvoices = Invoice.notspain.where('extract(year from created_at) = ?', Time.current.year).count
-			
-			if current_user.stripe_customer_id?
-				@stripe_customer = current_user.stripe_customer_id
-			else
-				customer = Stripe::Customer.create
-				
-				@stripe_customer = customer.id
-			end
 		end
 		
 		@invoice_number = @prefix + Time.current.year.to_s + (@howmanyinvoices + 1).to_s.rjust(8, '0')
 	end
+	#### ENDS country_choice ####
 	
-	def invoice_number
-		if params[:ip_country_code] == 'ES'
-			@prefix = 'ES-'
-			@howmanyinvoices = Invoice.spain.where('extract(year from created_at) = ?', Time.current.year).count
-		else
-			@prefix = ''
-			@howmanyinvoices = Invoice.notspain.where('extract(year from created_at) = ?', Time.current.year).count
-		end
-		
-		invoice_number = @prefix + Time.current.year.to_s + (@howmanyinvoices + 1).to_s.rjust(8, '0')
-	end
 	
 	def subscription_country_test
 		@user = User.find(params[:user_id])
@@ -100,85 +62,12 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 	
-	def new_prepayment
-		token = params[:stripeToken]
-		email_address = params[:email]
-		tax_percent = params[:ts]
-		how_many = params[:quantity]
-		amount = params[:amount]
-		ip_address = params[:ip_address]
-		ip_country_code = params[:ip_country_code]
-		ip_country_name = params[:ip_country_name]
-		
-		# Do we need to create a new Stripe customer?
-		if User.exists?(email: params[:email]) && current_user.nil?
-			redirect_to :back
-			flash[:success] = "Please log in to continue."
-		elsif User.exists?(email: params[:email]) && current_user.email != params[:email]
-			redirect_to :back
-			flash[:success] = "Please use your own email."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && current_user.stripe_customer_id.blank?
-			@customer = Stripe::Customer.create({
-			:source => token,
-			:description => email_address
-			}, country)
-			
-			charge = Stripe::Charge.create({
-			:customer => @customer.id,
-			:description => 'One-time pre-payment',
-			:amount => amount,
-			:currency => currency
-			}, country)
-			
-			@one_time_date = Time.current + params[:forward].to_i.months
-			set_one_time_details
-			thespainreport_user_roles
-			
-			redirect_to :back
-			flash[:success] = "Pre-payment successful."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && !current_user.stripe_customer_id.nil?
-			@customer = Stripe::Customer.retrieve(current_user.stripe_customer_id, country)
-			
-			charge = Stripe::Charge.create({
-			:customer => @customer.id,
-			:description => 'One-time pre-payment',
-			:amount => amount,
-			:currency => currency
-			}, country)
-			
-			@one_time_date = Time.current + params[:forward].to_i.months
-			set_one_time_details
-			thespainreport_user_roles
-			
-			redirect_to :back
-			flash[:success] = "Pre-payment successful."
-		else
-			customer = Stripe::Customer.create({
-			:source => token,
-			:description => email_address
-			}, country)
-			
-			customer_id = customer.id
-			
-			charge = Stripe::Charge.create({
-			:customer => customer_id,
-			:description => 'One-time pre-payment',
-			:amount => amount,
-			:currency => currency
-			}, country)
-			
-			redirect_to :back
-			flash[:success] = "Brand new customer pre-payment successful."
-		end	
-	end
-	
+	#### STARTS new_credit_card ####
 	def new_credit_card
-		user = User.find_by_email(params[:email])
+		u = User.find_by_email(params[:email])
 		
-		if xxxx
-			user.update(
-				stripe_customer_id_spain: @customer.id,
-				becomes_customer_date_spain: Time.at(@customer.created).to_datetime,
+		if params[:ip_country_code] == "ES"
+			u.update(
 				credit_card_id_spain: @customer.sources.data[0].id,
 				credit_card_brand_spain: @customer.sources.data[0].brand,
 				credit_card_country_spain: @customer.sources.data[0].country,
@@ -187,9 +76,7 @@ class SubscriptionsController < ApplicationController
 				credit_card_expiry_year_spain: @customer.sources.data[0].exp_year
 				)
 		else
-			user.update(
-				stripe_customer_id: @customer.id,
-				becomes_customer_date: Time.at(@customer.created).to_datetime,
+			u.update(
 				credit_card_id: @customer.sources.data[0].id,
 				credit_card_brand: @customer.sources.data[0].brand,
 				credit_card_country: @customer.sources.data[0].country,
@@ -199,184 +86,50 @@ class SubscriptionsController < ApplicationController
 				)
 		end
 	end
+	#### ENDS new_credit_card ####
 	
-	def set_one_time_details
-		account = Account.create(
-			name: params[:email]
-		)
-		
-		user = User.find_by_email(params[:email])
-		user.update(
-			
-			access_date: @one_time_date,
-			account_id: account.id,
-			account_role: 'account_boss'
-		)
-		
-		new_credit_card
-		
-		# A one-time subscription
-		subscription = Subscription.new
-		subscription.user_id = user.id
-		subscription.stripe_customer_id = @customer.id
-		subscription.stripe_subscription_id = 'One-time pre-payment'
-		subscription.stripe_subscription_email = user.email
-		subscription.stripe_subscription_plan = params[:plan]
-		subscription.stripe_subscription_amount = params[:amount]
-		subscription.stripe_subscription_interval = 'months'
-		subscription.stripe_subscription_quantity = params[:quantity]
-		subscription.stripe_subscription_tax_percent = params[:ts]
-		subscription.stripe_subscription_ip = params[:ip_address]
-		subscription.stripe_subscription_ip_country = params[:ip_country_code]
-		subscription.stripe_subscription_ip_country_name = params[:ip_country_name]
-		subscription.stripe_subscription_credit_card_country = @customer.sources.data[0].country
-		subscription.stripe_subscription_current_period_start_date = Time.current.to_datetime
-		subscription.stripe_subscription_created = Time.current.to_datetime
-		subscription.stripe_subscription_current_period_end_date = @one_time_date
-		subscription.stripe_currency = currency
-		subscription.stripe_status = 'active'
-		subscription.save!
-		
-		# A one-time invoice
-		invoice_number
-		
-		i = Invoice.new
-		i.number = invoice_number
-		i.user_id = user.id
-		i.subscription_id = subscription.id
-		i.stripe_invoice_id = 'One-time invoice'
-		i.stripe_invoice_number = 'One-time invoice'
-		i.stripe_invoice_date = Time.current.to_datetime
-		i.stripe_invoice_item = 'One-time pre-payment'
-		i.stripe_invoice_quantity = params[:quantity]
-		i.stripe_invoice_price = params[:base_price]
-		i.stripe_invoice_subtotal = params[:subtotal]
-		i.stripe_invoice_credit_card_country = @customer.sources.data[0].country
-		i.stripe_invoice_tax_percent = params[:ts]
-		i.stripe_invoice_tax_amount = params[:tax_amount]
-		i.stripe_invoice_currency = currency
-		i.stripe_invoice_interval = 'months'
-		i.stripe_invoice_total = params[:amount]
-		i.stripe_invoice_ip_country_code = params[:ip_country_code]
-		i.paid = true
-		i.status = 'unverified'
-		i.save!
-		
-	end
-	
-	def new_subscription
-		# Get the credit card details from the form and generate stripeToken
-		token = params[:stripeToken]
-		email_address = params[:email]
-		tax_percent = params[:ts]
-		how_many = params[:quantity]
-		ip_address = params[:ip_address]
-		ip_country_code = params[:ip_country_code]
-		ip_country_name = params[:ip_country_name]
-
-		if User.exists?(email: params[:email]) && current_user.nil?
-			redirect_to :back
-			flash[:success] = "Please use another e-mail or log in to continue."
-		elsif User.exists?(email: params[:email]) && current_user.role == 'editor'
-			redirect_to :back
-			flash[:success] = "That user already exists"
-		elsif User.exists?(email: params[:email]) && current_user.email != params[:email]
-			redirect_to :back
-			flash[:success] = "Please enter your own e-mail."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['reader', 'guest'].include?(current_user.role)
-			redirect_to :back
-			flash[:success] = "Please subscribe now."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(current_user.role) && current_user.access_date < Time.current
-			redirect_to :back
-			flash[:success] = "Please re-subscribe now."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_one_story'].include?(current_user.role)
-			
-			
-			redirect_to :back
-			flash[:success] = "Upgraded."
-		elsif User.exists?(email: params[:email]) && current_user.email == params[:email] && ['subscriber_all_stories'].include?(current_user.role)
-			redirect_to :back
-			flash[:success] = "Downgrade now."
-		
+	#### STARTS existing_customer ####
+	def existing_customer
+		if params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain?
+			@customer = current_user.stripe_customer_id_spain
+		elsif params[:ip_country_code] != 'ES' && current_user.stripe_customer_id?
+			@customer = current_user.stripe_customer_id
 		else
-
+		end
+	end
+	#### ENDS existing_customer ####
+	
+	#### STARTS update_credit_card ####
+		def update_credit_card
+		token = params[:stripeToken]
+		old_card = params[:old_card]
+		
 		begin
-			# Create a new Stripe customer and add them to a subscription plan
-			customer = Stripe::Customer.create({
-				:source => token,
-				:description => email_address,
-				:plan => params[:plan],
-				:tax_percent => tax_percent,
-				:quantity => how_many}, country)
+		c = Stripe::Customer.retrieve(@customer, @apikey)
+		c.source = token
+		c.save
 
-			# If brand new user, basic account set up
-			thespainreport_new_user_create
-			thespainreport_user_roles
-			set_briefings_and_stories
-
-			# Set up user subscription details
-			user = User.find_by_email(params[:email])
-			user.update(
-				stripe_customer_id: customer.id,
-				becomes_customer_date: Time.at(customer.created).to_datetime,
-				credit_card_id: customer.sources.data[0].id,
-				credit_card_brand: customer.sources.data[0].brand,
-				credit_card_country: customer.sources.data[0].country,
-				credit_card_last4: customer.sources.data[0].last4,
-				credit_card_expiry_month: customer.sources.data[0].exp_month,
-				credit_card_expiry_year: customer.sources.data[0].exp_year,
-				access_date: Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-			)
-
-			# Create the first subscription record on TSR
-			subscription = Subscription.new
-			subscription.user_id = user.id
-			subscription.stripe_customer_id = customer.id
-			subscription.stripe_subscription_id = customer.subscriptions.data[0].id
-			subscription.stripe_subscription_email = email_address
-			subscription.stripe_subscription_plan = customer.subscriptions.data[0].plan.name
-			subscription.stripe_subscription_amount = customer.subscriptions.data[0].plan.amount
-			subscription.stripe_subscription_interval = customer.subscriptions.data[0].plan.interval
-			subscription.stripe_subscription_quantity = customer.subscriptions.data[0].quantity
-			subscription.stripe_subscription_tax_percent = customer.subscriptions.data[0].tax_percent
-			subscription.stripe_subscription_ip = ip_address
-			subscription.stripe_subscription_ip_country = ip_country_code
-			subscription.stripe_subscription_ip_country_name = ip_country_name
-			subscription.stripe_subscription_credit_card_country = customer.sources.data[0].country
-			subscription.stripe_subscription_current_period_start_date = Time.at(customer.subscriptions.data[0].current_period_start).to_datetime
-			subscription.stripe_subscription_current_period_end_date = Time.at(customer.subscriptions.data[0].current_period_end).to_datetime
-			subscription.is_active = true
-			subscription.save!
-
-			# Create the first invoice for that subscription record on TSR
-			stripeinvs = Stripe::Invoice.all({:customer => customer.id, :subscription => customer.subscriptions.data[0].id }, country)
-			stripeinvs.each do |stripeinv|
-				invoice = Invoice.new
-				invoice.stripe_invoice_id = stripeinv.id
-				invoice.user_id = user.id
-				invoice.subscription_id = subscription.id
-				invoice.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
-				invoice.stripe_invoice_item = stripeinv.lines.data[0].plan.name
-				invoice.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
-				invoice.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
-				invoice.stripe_invoice_subtotal = stripeinv.subtotal
-				invoice.stripe_invoice_credit_card_country = customer.sources.data[0].country
-				invoice.stripe_invoice_ip_country_code = ip_country_code
-				invoice.stripe_invoice_ip_country_code_2 = ''
-				invoice.stripe_invoice_tax_percent = stripeinv.tax_percent
-				invoice.stripe_invoice_tax_amount = stripeinv.tax
-				invoice.stripe_invoice_total = stripeinv.total
-				invoice.paid = stripeinv.paid
-				invoice.status = 'unverified'
-				invoice.save!
-			end
-			
-			# Send a thank-you e-mail
-			UserMailer.delay.new_subscriber_thank_you(user)
-			
-			# All done, finish up, flash thank-you message on screen
-			redirect_to :back
-			flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
+		c = Stripe::Customer.retrieve(@customer, @apikey)
+		u = User.find_by_email(params[:email])
+		
+		if params[:ip_country_code] == "ES"
+			u.credit_card_id_spain = c.sources.data[0].id
+			u.credit_card_brand_spain = c.sources.data[0].brand
+			u.credit_card_country_spain = c.sources.data[0].country
+			u.credit_card_last4_spain = c.sources.data[0].last4
+			u.credit_card_expiry_month_spain = c.sources.data[0].exp_month
+			u.credit_card_expiry_year_spain = c.sources.data[0].exp_year
+			u.save!
+		else
+			u.credit_card_id = c.sources.data[0].id
+			u.credit_card_brand = c.sources.data[0].brand
+			u.credit_card_country = c.sources.data[0].country
+			u.credit_card_last4 = c.sources.data[0].last4
+			u.credit_card_expiry_month = c.sources.data[0].exp_month
+			u.credit_card_expiry_year = c.sources.data[0].exp_year
+			u.save!
+		end
+		
 		rescue Stripe::CardError => e
 			# Since it's a decline, Stripe::CardError will be caught
 			body = e.json_body
@@ -407,21 +160,77 @@ class SubscriptionsController < ApplicationController
 			redirect_to :back
 		end
 	end
+	#### ENDS update_credit_card ####
+	
+	#### STARTS new_subscription_customer ####
+	def new_subscription_customer
+		@customer = Stripe::Customer.create({
+			:source => @token,
+			:description => @email_address
+			}, @apikey)
 	end
-
-
-	def stripe_hooks
-		event = JSON.parse(request.body.read)
-		puts 'Event type: ' + event['type']
-		puts 'Event id: ' + event['id']
-		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
-		puts 'Customer: ' + event['data']['object']['customer']
-		head 200
+	#### ENDS new_subscription_customer ####
+	
+	#### STARTS new_subscription_charge ####
+	def new_subscription_charge
+		@s = Stripe::Subscription.create({
+			customer: @customer,
+			quantity: @how_many,
+			plan: params[:plan],
+			tax_percent: @tax_percent
+		}, @apikey)
 	end
-
-
+	#### ENDS new_subscription_charge ####
+	
+	#### STARTS new_prepayment_customer ####
+	def new_prepayment_customer
+		@customer = Stripe::Customer.create({
+			:source => @token,
+			:description => @email_address
+			}, @apikey)
+	end
+	#### ENDS new_prepayment_customer ####
+	
+	#### STARTS new_prepayment_charge ####
+	def new_prepayment_charge
+		charge = Stripe::Charge.create({
+			:customer => @customer,
+			:description => 'One-time pre-payment',
+			:amount => @amount,
+			:currency => @currency
+			}, @apikey)
+	end
+	#### ENDS new_prepayment_charge ####
+	
+	#### STARTS new_customer_id_date ####
+	def new_customer_id_date
+		u = User.find_by_email(params[:email])
+		
+		if params[:ip_country_code] == 'ES'
+			u.update(
+			stripe_customer_id_spain: @customer.id,
+			becomes_customer_date_spain: Time.at(@customer.created).to_datetime
+			)
+		elsif params[:ip_country_code] != 'ES'
+			u.update(
+			stripe_customer_id: @customer.id,
+			becomes_customer_date: Time.at(@customer.created).to_datetime
+			)
+		else
+		end
+	end
+	#### ENDS new_customer_id_date ####
+	#### ENDS COUNTRY METHODS ####
+	###############################################
+	
+	
+	
+	###############################################
+	#### READERS: 1) new_spain_report_reader
+	#### STARTS new_spain_report_reader ####
 	def new_spain_report_reader
 		begin
+		# Create the user, assign role, set notifications…
 		thespainreport_new_user_create
 		thespainreport_user_roles
 		set_briefings_and_stories
@@ -441,8 +250,407 @@ class SubscriptionsController < ApplicationController
 		flash[:success] = "Try again…"
 		end
 	end
-
-
+	#### ENDS new_spain_report_reader ####
+	#### ENDS READERS ####
+	#########################################
+	
+	
+	
+	#########################################
+	#### PREPAYMENTS: 1) new_prepayment, 2) set_one_time_details ####
+	#### STARTS new_prepayment ####
+	def new_prepayment
+		# Get form elements
+		@token = params[:stripeToken]
+		@email_address = params[:email]
+		@amount = params[:amount]
+		ip_address = params[:ip_address]
+		ip_country_code = params[:ip_country_code]
+		ip_country_name = params[:ip_country_name]
+		
+		# Access country stuff
+		country_choice
+		
+		# Who is trying to make a payment? Logged-in/not, existing/current, existing_uk/not, existing_spain/not, brand new
+		if User.exists?(email: params[:email]) 
+			if current_user.nil?
+				redirect_to :back
+				flash[:success] = "Please log in to continue."
+			elsif current_user.email != params[:email]
+				redirect_to :back
+				flash[:success] = "Please use your own email."
+			elsif current_user.email == params[:email]
+				if params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain.blank? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id.blank?
+					new_prepayment_customer
+					
+					new_prepayment_charge
+					new_customer_id_date
+					new_credit_card
+					
+					set_one_time_details
+					thespainreport_user_roles
+					
+					redirect_to :back
+					flash[:success] = "Pre-payment successful."
+				elsif params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain.blank? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id? && current_user.credit_card_id.blank?
+					existing_customer
+					
+					new_prepayment_charge
+					update_credit_card
+					
+					set_one_time_details
+					thespainreport_user_roles
+					
+					redirect_to :back
+					flash[:success] = "Pre-payment successful."
+				elsif params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id? && current_user.credit_card_id?
+					existing_customer
+					
+					new_prepayment_charge
+				
+					set_one_time_details
+					thespainreport_user_roles
+				
+					redirect_to :back
+					flash[:success] = "Pre-payment successful."
+				end
+			else
+			end
+		else
+			new_prepayment_customer
+			new_prepayment_charge
+			
+			thespainreport_new_user_create
+			thespainreport_user_roles
+			set_briefings_and_stories
+			new_customer_id_date
+			new_credit_card
+			
+			set_one_time_details
+			
+			redirect_to :back
+			flash[:success] = "Pre-payment successful."
+		end
+	end
+	##### ENDS new_prepayment ####
+	
+	##### STARTS set_one_time_details ####
+	def set_one_time_details
+		country_choice
+		@one_time_date = Time.current + params[:forward].to_i.months
+		
+		user_account
+		
+		u = User.find_by_email(params[:email])
+		u.update(
+			access_date: @one_time_date
+		)
+		
+		# A new subscription on TSR
+		s = Subscription.new
+		s.user_id = u.id
+		if params[:ip_country_code] == 'ES'
+			s.stripe_customer_id = u.stripe_customer_id_spain
+		elsif params[:ip_country_code] != 'ES'
+			s.stripe_customer_id = u.stripe_customer_id
+		else
+		end
+		s.stripe_subscription_type = 'One-time pre-payment'
+		s.stripe_subscription_email = u.email
+		s.stripe_subscription_plan = params[:plan]
+		s.stripe_subscription_amount = params[:amount]
+		s.stripe_subscription_interval = 'months'
+		s.stripe_subscription_quantity = params[:quantity]
+		s.stripe_subscription_howlong = params[:forward]
+		s.stripe_subscription_tax_percent = params[:ts]
+		s.stripe_subscription_ip = params[:ip_address]
+		s.stripe_subscription_ip_country = params[:ip_country_code]
+		s.stripe_subscription_ip_country_name = params[:ip_country_name]
+		if params[:ip_country_code] == 'ES'
+			s.stripe_subscription_credit_card_country = u.credit_card_country_spain
+		elsif params[:ip_country_code] != 'ES'
+			s.stripe_subscription_credit_card_country = u.credit_card_country
+		else
+		end
+		s.stripe_subscription_current_period_start_date = Time.current.to_datetime
+		s.stripe_subscription_created = Time.current.to_datetime
+		s.stripe_subscription_current_period_end_date = @one_time_date
+		s.stripe_currency = @currency
+		s.stripe_status = 'active'
+		s.save!
+		
+		# A new one-time invoice on TSR
+		i = Invoice.new
+		i.number = @invoice_number
+		i.user_id = u.id
+		i.subscription_id = s.id
+		i.stripe_invoice_id = 'One-time invoice'
+		i.stripe_invoice_number = 'One-time invoice'
+		i.stripe_invoice_date = Time.current.to_datetime
+		i.stripe_invoice_item = 'One-time pre-payment'
+		i.stripe_invoice_quantity = params[:quantity]
+		i.stripe_invoice_price = params[:base_price]
+		i.stripe_invoice_subtotal = params[:subtotal]
+		if params[:ip_country_code] == 'ES'
+			i.stripe_invoice_credit_card_country = u.credit_card_country_spain
+		elsif params[:ip_country_code] != 'ES'
+			i.stripe_invoice_credit_card_country = u.credit_card_country
+		else
+		end
+		i.stripe_invoice_tax_percent = params[:ts]
+		i.stripe_invoice_tax_amount = params[:tax_amount]
+		i.stripe_invoice_currency = @currency
+		i.stripe_invoice_interval = 'months'
+		i.stripe_invoice_total = params[:amount]
+		i.stripe_invoice_ip_country_code = params[:ip_country_code]
+		i.paid = true
+		i.status = 'unverified'
+		i.save!
+	end
+	#### ENDS set_one_time_details ####
+	#### ENDS PREPAYMENTS ####
+	##########################################
+	
+	
+	
+	##########################################
+	#### SUBSCRIPTIONS: 1) new_subscription, 2) subscription_access_date, 3) create_tsr_subscription_invoice ####
+	#### STARTS new_subscription ####
+	def new_subscription
+		# Get the credit card details from the form and generate stripeToken
+		@token = params[:stripeToken]
+		@email_address = params[:email]
+		@tax_percent = params[:ts]
+		@how_many = params[:quantity]
+		@ip_address = params[:ip_address]
+		@ip_country_code = params[:ip_country_code]
+		@ip_country_name = params[:ip_country_name]
+		
+		# Access country stuff
+		country_choice
+		
+		if User.exists?(email: params[:email]) 
+			if current_user.nil?
+				redirect_to :back
+				flash[:success] = "Please log in to continue."
+			elsif current_user.email != params[:email]
+				redirect_to :back
+				flash[:success] = "Please use your own email."
+			elsif current_user.email == params[:email]
+				if params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain.blank? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id.blank?
+					# No Stripe customer exists, so create one and add them to a subscription plan
+					new_subscription_customer
+					new_subscription_charge
+					new_customer_id_date
+					
+					# Update existing user, relate to Stripe
+					thespainreport_user_roles
+					subscription_access_date
+					
+					# Attach a new credit card to the new user
+					new_credit_card
+					
+					# Make an account for them
+					user_account
+					
+					# Create the subscription and invoice on TSR
+					create_tsr_subscription_invoice
+					
+					# All done, good job
+					redirect_to :back
+					flash[:success] = "Subscription successful."
+				elsif params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain.blank? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id? && current_user.credit_card_id.blank?
+					# User already exists and has a Stripe customer number for the purchase country
+					existing_customer
+					
+					# But has no attached credit card, so…
+					update_credit_card
+					
+					# And create new subscription…
+					new_subscription_charge
+					
+					# Related to Stripe, now has a credit card, so update role and access date…
+					thespainreport_user_roles
+					subscription_access_date
+					
+					# Make sure they are attached to an account
+					user_account
+					
+					# Create the subscription and invoice on TSR
+					create_tsr_subscription_invoice
+					
+					# All done, good job
+					redirect_to :back
+					flash[:success] = "Re-subscription successful."
+				elsif params[:ip_country_code] == 'ES' && current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain? || params[:ip_country_code] != 'ES' && current_user.stripe_customer_id? && current_user.credit_card_id?
+					# User already exists and has a Stripe customer number for the purchase country
+					existing_customer
+					
+					# Already has a credit card attached
+					
+					# So just create new subscription…
+					new_subscription_charge
+					
+					# No need to relate to Stripe again or add a card, but update role and access date
+					thespainreport_user_roles
+					subscription_access_date
+					
+					# Make sure they are attached to an account
+					user_account
+					
+					# Create the subscription and invoice on TSR
+					create_tsr_subscription_invoice
+					
+					# All done, good job
+					redirect_to :back
+					flash[:success] = "Subscription successful."
+				end
+			else
+			end
+		else
+			begin
+				# Create a new Stripe customer and add them to a subscription plan
+				new_subscription_customer
+				
+				# Basic new user set up, then relate to Stripe
+				thespainreport_new_user_create
+				thespainreport_user_roles
+				set_briefings_and_stories
+				new_customer_id_date
+				
+				new_subscription_charge
+				subscription_access_date
+				
+				# Add a new credit card
+				new_credit_card
+				
+				# Make an account for them
+				user_account
+				
+				# Create the subscription on TSR
+				create_tsr_subscription_invoice
+				
+				# Send a thank-you e-mail
+				u = User.find_by_email(params[:email])
+				UserMailer.delay.new_subscriber_thank_you(u)
+				
+				# All done, good job
+				redirect_to :back
+				flash[:success] = "Thanks for subscribing to The Spain Report! Check your e-mail."
+			rescue Stripe::CardError => e
+				# Since it's a decline, Stripe::CardError will be caught
+				body = e.json_body
+				err	 = body[:error]
+			
+				puts "Status is: #{e.http_status}"
+				puts "Type is: #{err[:type]}"
+				puts "Code is: #{err[:code]}"
+				# param is '' in this case
+				puts "Param is: #{err[:param]}"
+				puts "Message is: #{err[:message]}"
+				flash[:error] = "#{err[:message]}"
+				redirect_to :back
+			rescue Stripe::InvalidRequestError => e
+				flash[:error] = "Invalid request to payment processor. Please try again."
+				redirect_to :back
+			rescue Stripe::AuthenticationError => e
+				flash[:error] = "Could not connect to payment processor. Please try again."
+				redirect_to :back
+			rescue Stripe::APIConnectionError => e
+				flash[:error] = "Could not connect to payment processor. Please try again."
+				redirect_to :back
+			rescue Stripe::StripeError => e
+				flash[:error] = "General payment processor problem. Please try again."
+				redirect_to :back
+			rescue => e
+				flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
+				redirect_to :back
+			end
+		end
+	end
+	#### ENDS new_subscription ####
+	
+	#### STARTS subscription_access_date ####
+	def subscription_access_date
+		u = User.find_by_email(params[:email])
+		
+		u.update(
+			access_date: Time.at(@s.current_period_end).to_datetime
+		)
+	end
+	#### ENDS subscription_access_date ####
+	
+	#### STARTS create_tsr_subscription_invoice ####
+	def create_tsr_subscription_invoice
+		u = User.find_by_email(params[:email])
+		
+		s = Subscription.new
+		s.user_id = u.id
+		if params[:ip_country_code] == 'ES'
+			s.stripe_customer_id = u.stripe_customer_id_spain
+			s.stripe_subscription_credit_card_country = u.credit_card_country_spain
+		elsif params[:ip_country_code] != 'ES'
+			s.stripe_customer_id = u.stripe_customer_id
+			s.stripe_subscription_credit_card_country = u.credit_card_country
+		else
+		end
+		s.stripe_subscription_id = @s.id
+		s.stripe_subscription_type = 'Recurring subscription'
+		s.stripe_subscription_email = @email_address
+		s.stripe_subscription_plan = @s.plan.name
+		s.stripe_subscription_amount = @s.plan.amount
+		s.stripe_subscription_interval = @s.plan.interval
+		s.stripe_subscription_quantity = @s.quantity
+		s.stripe_subscription_howlong = 1
+		s.stripe_subscription_tax_percent = @s.tax_percent
+		s.stripe_subscription_ip = @ip_address
+		s.stripe_subscription_ip_country = @ip_country_code
+		s.stripe_subscription_ip_country_name = @ip_country_name
+		s.stripe_subscription_current_period_start_date = Time.at(@s.current_period_start).to_datetime
+		s.stripe_subscription_current_period_end_date = Time.at(@s.current_period_end).to_datetime
+		s.stripe_subscription_created = Time.current.to_datetime
+		s.stripe_currency = @currency
+		s.stripe_status = 'active'
+		s.save!
+		
+		# Create the first invoice for that subscription record on TSR
+		stripeinvs = Stripe::Invoice.all({:customer => @customer, :subscription => @s.id }, @apikey)
+		stripeinvs.each do |stripeinv|
+			i = Invoice.new
+			i.number = @invoice_number
+			i.user_id = u.id
+			i.subscription_id = @s.id
+			i.stripe_invoice_id = stripeinv.id
+			i.stripe_invoice_number = stripeinv.number
+			i.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
+			i.stripe_invoice_item = stripeinv.lines.data[0].plan.name
+			i.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
+			i.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
+			i.stripe_invoice_subtotal = stripeinv.subtotal
+			if params[:ip_country_code] == 'ES'
+				i.stripe_invoice_credit_card_country = u.credit_card_country_spain
+			elsif params[:ip_country_code] != 'ES'
+				i.stripe_invoice_credit_card_country = u.credit_card_country
+			else
+			end
+			i.stripe_invoice_ip_country_code = @ip_country_code
+			i.stripe_invoice_tax_percent = stripeinv.tax_percent
+			i.stripe_invoice_tax_amount = stripeinv.tax
+			i.stripe_invoice_total = stripeinv.total
+			i.stripe_invoice_currency = @currency
+			i.stripe_invoice_interval = stripeinv.lines.data[0].plan.interval
+			i.paid = stripeinv.paid
+			i.status = 'unverified'
+			i.save!
+		end
+	end
+	#### ENDS create_tsr_subscription_invoice ####
+	#### ENDS SUBSCRIPTIONS  ####
+	###################################################
+	
+	
+	###################################################
+	#### COMMON ELEMENTS:  ####
 	def thespainreport_new_user_create
 		autopassword = 'L e @ 4' + SecureRandom.hex(32)
 		generate_token = SecureRandom.urlsafe_base64
@@ -454,11 +662,27 @@ class SubscriptionsController < ApplicationController
 			password_reset_token: generate_token,
 			password_reset_sent_at: Time.zone.now
 			)
-			
-		
 	end
-
-
+	
+	def user_account
+		u = User.find_by_email(params[:email])
+		
+		if User.exists?(email: params[:email]) && u.account
+			u.update(
+				account_role: 'account_boss'
+			)
+		else
+			a = Account.create(
+				name: params[:email]
+			)
+			
+			u.update(
+				account_id: a.id,
+				account_role: 'account_boss'
+			)
+		end
+	end
+	
 	def thespainreport_user_roles
 		user = User.find_by_email(params[:email])
 		if params[:plan] == "one_story"
@@ -477,41 +701,40 @@ class SubscriptionsController < ApplicationController
 		end
 	end
 
-
 	def set_briefings_and_stories
 		# Get new user and set briefing frequency…
-		user = User.find_by_email(params[:email])
-		user.update(
+		u = User.find_by_email(params[:email])
+		u.update(
 		briefing_frequency_id: 5
 		)
 
 		# …then record sign-up url in a History record
 		h = History.create(
-		user_id: user.id,
+		user_id: u.id,
 		article_id: params[:article_id])
 
 		# …then add stories…
 		Story.nowactive.each do |s|
 			n = Notification.new
 			n.story_id = s.id
-			n.user_id = user.id
-			n.notificationtype_id =	 1
+			n.user_id = u.id
+			n.notificationtype_id = 1
 			n.save!
 		end
 
 		Story.notnowactive.keystories.each do |s|
 			n = Notification.new
 			n.story_id = s.id
-			n.user_id = user.id
-			n.notificationtype_id =	 1
+			n.user_id = u.id
+			n.notificationtype_id = 1
 			n.save!
 		end
 
 		Story.notnowactive.notkeystories.each do |s|
 			n = Notification.new
 			n.story_id = s.id
-			n.user_id = user.id
-			n.notificationtype_id =	 2
+			n.user_id = u.id
+			n.notificationtype_id = 2
 			n.save!
 		end
 	end
@@ -528,11 +751,21 @@ class SubscriptionsController < ApplicationController
 		
 		end
 	end
-
-
 	
+	##### STRIPE WEBHOOKS ####
+	def stripe_hooks
+		event = JSON.parse(request.body.read)
+		puts 'Event type: ' + event['type']
+		puts 'Event id: ' + event['id']
+		puts 'Event date: ' + Time.at(event['created']).to_datetime.to_s
+		puts 'Customer: ' + event['data']['object']['customer']
+		head 200
+	end
+	
+	##### RESUBSCRIPTIONS ####
 	def resubscribe_one
 		country_choice
+		subscription_details
 		
 		new = Stripe::Subscription.create({
 			customer: @stripe_customer,
@@ -831,60 +1064,7 @@ class SubscriptionsController < ApplicationController
     return
     flash[:success] = "Welcome aboard! Check your e-mail."
   end
-  
-  def update_credit_card
-    token = params[:stripeToken]
-    customer_id = params[:customer_id]
-    old_card = params[:old_card]
-    
-    begin
-    stripe_customer = Stripe::Customer.retrieve(customer_id, subscription_country)
-    stripe_customer.source = token
-    stripe_customer.save
 
-    stripe_customer = Stripe::Customer.retrieve(customer_id, subscription_country)
-    user = User.find(params[:user_id])
-    user.credit_card_id = stripe_customer.sources.data[0].id
-    user.credit_card_brand = stripe_customer.sources.data[0].brand
-    user.credit_card_country = stripe_customer.sources.data[0].country
-    user.credit_card_last4 = stripe_customer.sources.data[0].last4
-    user.credit_card_expiry_month = stripe_customer.sources.data[0].exp_month
-    user.credit_card_expiry_year = stripe_customer.sources.data[0].exp_year
-    user.save!
-    redirect_to :back
-    flash[:success] = "Well done! New credit card saved."
-    
-    rescue Stripe::CardError => e
-      # Since it's a decline, Stripe::CardError will be caught
-      body = e.json_body
-      err  = body[:error]
-      
-      puts "Status is: #{e.http_status}"
-      puts "Type is: #{err[:type]}"
-      puts "Code is: #{err[:code]}"
-      # param is '' in this case
-      puts "Param is: #{err[:param]}"
-      puts "Message is: #{err[:message]}"
-      flash[:error] = "#{err[:message]}"
-      redirect_to :back
-    rescue Stripe::InvalidRequestError => e
-      flash[:error] = "Invalid request to payment processor. Please try again."
-      redirect_to :back
-    rescue Stripe::AuthenticationError => e
-      flash[:error] = "Could not connect to payment processor. Please try again."
-      redirect_to :back
-    rescue Stripe::APIConnectionError => e
-      flash[:error] = "Could not connect to payment processor. Please try again."
-      redirect_to :back
-    rescue Stripe::StripeError => e
-      flash[:error] = "General payment processor problem. Please try again."
-      redirect_to :back
-    rescue => e
-      flash[:error] = "Unspecified problem. Please contact subscriptions@thespainreport.com."
-      redirect_to :back
-    end
-    
-  end
   
   def cancel_subscription
     if current_user.nil? 
@@ -998,10 +1178,11 @@ class SubscriptionsController < ApplicationController
 			params.require(:subscription).permit(
 				:user_id,
 				:stripe_customer_id,
+				:stripe_subscription_id,
 				:stripe_currency,
 				:stripe_status,
+				:stripe_subscription_type,
 				:stripe_subscription_created,
-				:stripe_subscription_id,
 				:stripe_subscription_ip,
 				:stripe_subscription_ip_country,
 				:stripe_subscription_ip_country_name,
@@ -1011,6 +1192,7 @@ class SubscriptionsController < ApplicationController
 				:stripe_subscription_amount,
 				:stripe_subscription_interval,
 				:stripe_subscription_quantity,
+				:stripe_subscription_howlong,
 				:stripe_subscription_tax_percent,
 				:stripe_subscription_trial_end,
 				:stripe_subscription_current_period_start_date,

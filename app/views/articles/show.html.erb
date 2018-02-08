@@ -222,7 +222,7 @@
             <%= markdown(@article.body) %>
             <%= render 'articleupdates' %>
           <% end %> <%# END: One-story logic. %>
-        <% elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(current_user.role) %> <%# CONT: subscriber ONE/ALL: If all stories subscriber, staff… %>
+        <% elsif ['subscriber_all_stories', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(current_user.role) %> <%# CONT: subscriber ONE/ALL: If all stories subscriber, staff… %>
           <%= markdown(@article.body) %>
           <%= render 'articleupdates' %>
         <% end %> <%# END: subscriber ONE/ALL %>
