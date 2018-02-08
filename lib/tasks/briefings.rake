@@ -22,7 +22,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   task :briefing_sunday_10_am => :environment do
     User.notdeleted.each do |user|
       userid = user.id
-      if [2,3,6,12,24].include?(user.briefing_frequency.briefing_frequency)
+      if [12,24].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_48(userid)
       elsif [84].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_84(userid)

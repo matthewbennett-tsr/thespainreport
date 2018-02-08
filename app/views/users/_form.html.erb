@@ -166,22 +166,18 @@
   <p class="user-paragraph">
     <strong>My Spain Briefings</strong> run 10 a.m. – 10 p.m., Mon-Fri, Spanish time, according to the setting you choose.
     If there are no new updates in the time period you choose, the e-mail tells you there is nothing new.
-    The <em>Every X Hours</em> options on weekdays also get the morning briefing on Sundays, with the last 48 hours.
-    There are no briefings on Saturdays.
+    No briefings on Saturdays, but a weekly round up on Sundays, with the latest updates.
   </p>
-  <p class="user-paragraph">
-  I want my briefings
-  <%= f.collection_select :briefing_frequency_id, @briefingfrequencies, :id, :name %>
-  </p>
-  <ul style="margin-top: 5px;">
-        <li><strong>Once a week:</strong> Sundays at 10 a.m.;</li>
-        <li><strong>Twice a week:</strong> Sundays at 10 a.m., Wednesdays at 10 p.m.;</li>
-        <li><strong>Once a day:</strong> 10 a.m., Mon-Fri, Sundays;</li>
-        <li><strong>Every 12 hours:</strong> 10 a.m., 10 p.m., Mon-Fri;</li>
-        <li><strong>Every 6 hours:</strong> 10 a.m., 4 p.m., 10 p.m., Mon-Fri;</li>
-        <li><strong>Every 3 hours:</strong> 10 a.m., 1 p.m., 4 p.m., 7 p.m., 10 p.m., Mon-Fri;</li>
-        <li><strong>Every 2 hours:</strong> 10 a.m., 12 p.m., 2 p.m., 4 p.m., 6 p.m., 8 p.m., 10 p.m., Mon-Fri;</li>
-      </ul>
+	<p class="user-paragraph">
+	I want my briefings
+	<%= f.collection_select :briefing_frequency_id, @briefingfrequencies, :id, :name %>
+	</p>
+	<ul style="margin-top: 5px;">
+		<li><strong>Once a week:</strong> Sundays at 10 a.m.;</li>
+		<li><strong>Twice a week:</strong> Sundays at 10 a.m., Wednesdays at 10 p.m.;</li>
+		<li><strong>Once a day:</strong> 10 a.m., Mon-Fri, Sundays;</li>
+		<li><strong>Every 12 hours:</strong> 10 a.m., 10 p.m., Mon-Fri;</li>
+	</ul>
   <p class="user-paragraph">
   <strong>Website Only:</strong> you want to read these stories online but do not want e-mails about them;
   </p>
