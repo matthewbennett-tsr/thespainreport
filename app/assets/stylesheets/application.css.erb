@@ -485,11 +485,18 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 .unverified {background-color: #fff0b3; color: black; padding: 1px 4px; font-size: 11px; font-family: Oswald, sans-serif; line-height: 120%;}
 
 .bold {font-weight: bold;}
+.light-green {background-color: #E3EDED;}
+.pad-10 {padding:10px;}
+.pad-15 {padding:15px;}
+.pad-20 {padding:20px;}
+.mb-10 {margin-bottom: 10px;}
 .left {float:left;}
 .left-5 {float: left; min-width: 5%; padding-right: 5px;}
 .left-10 {float: left; min-width: 10%; padding-right: 5px;}
 .left-15 {float: left; min-width: 15%; padding-right: 5px;}
 .left-20 {float: left; min-width: 20%; padding-right: 5px;}
+.left-40 {float: left; min-width: 40%; padding-right: 5px;}
+.left-40-max {float: left; max-width: 40%; padding-right: 5px;}
 .left-50 {float: left; min-width: 50%; padding-right: 5px;}
 .left-60 {float: left; max-width: 60%; padding-right: 5px;}
 .right-5 {float: right; min-width: 5%; text-align:right; padding-left: 5px;}
@@ -534,6 +541,7 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 }
 
 @media only screen and (max-width: 750px) {
+	.left-40-max {width: 100%; max-width: 100%; margin-top: 10px;}
 }
 
 @media only screen and (max-width: 700px) {
@@ -548,6 +556,7 @@ img + br + strong + em {margin-top: 5px; margin-bottom: 7px; font-size: 12px; fo
 	.top-login-input-float {width: 32%; margin-right: 5px;}
 	.input200 {width: 100%;}
 	.input170 {width: 100%;}
+	
 }
 
 @media only screen and (max-width: 680px) {

@@ -1,0 +1,38 @@
+		<p class="mb-10">
+			<strong>How Many Users:</strong> 
+			Everybody is welcome: friends, family, school groups, teams, organisations or companies.
+			It's very easy to add your users after subscribing, or we can help you. 
+		</p>
+		<p class="mb-10">
+			<strong>Which Plan:</strong> 
+			If you select "one story" (Podemos, Catalan independence, Spain & Brexit, etc.), you can change it once every 30 days.
+			If, like most people, you want to follow and read lots of interesting Spain stories, choose "all stories".
+		</p>
+		<p class="mb-10">
+			<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+				<strong>Prepay:</strong> 
+				If you want to buy X months in advance now instead of recurring monthly payments, <a href="/subscriptions/prepay">prepay here</a>.
+			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+				<strong>Recurring Payments:</strong> 
+				If you want to buy recurring monthly payments instead of prepaying, <a href="/subscriptions/new">subscribe here</a>.
+			<% end %>
+			
+		</p>
+		<p class="mb-10">
+			<strong>Tax (VAT):</strong> 
+			If you are purchasing from a country in the European Union, the relevant tax rate is added.
+		</p>
+		<p class="mb-10">
+			<strong>Receipts/Invoices:</strong> 
+			You can access a receipt or invoice for tax or accounting purposes immediately after your purchase.
+			There is space on each receipt to add your details.
+		</p>
+		<p class="mb-10">
+			<strong>Credit Card:</strong> 
+			We do not store your credit card number.
+			The Spain Report uses the secure <em>https</em> protocol for the whole site and we use a very secure payment processor called Stripe, and they encrypt your card details: "All card numbers are encrypted on disk with AES-256. Decryption keys are stored on separate machines".
+		</p>
+		<p class="mb-10">
+			<strong>Questions & Problems:</strong>
+			Send us an e-mail to <a href="mailto:subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> and we will help you.
+		</p>
