@@ -23,7 +23,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
     User.notdeleted.each do |user|
       userid = user.id
       if [12,24].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_48(userid)
+        ArticleMailer.delay.send_briefing_84(userid)
       elsif [84].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_84(userid)
       elsif [168].include?(user.briefing_frequency.briefing_frequency)
@@ -51,51 +51,17 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   task :briefing_monday_to_friday_10_am => :environment do
     User.notdeleted.each do |user|
       userid = user.id
-      if [2,3,6,12].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_12(userid)
+      if [12].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_24(userid)
       elsif [24].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_24(userid)
       else
       end
     end
   end
-
-  task :briefing_every_2_hours => :environment do
-    User.notdeleted.each do |user|
-      userid = user.id
-      if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_3(userid)
-      else
-      end
-    end
-  end
-  
-  task :briefing_every_3_hours => :environment do
-    User.notdeleted.each do |user|
-      userid = user.id
-      if [3].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_4(userid)
-      else
-      end
-    end
-  end
-  
-  task :briefing_monday_to_friday_4_pm => :environment do
-    User.notdeleted.each do |user|
-      userid = user.id
-      if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_3(userid)
-      elsif [3].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_4(userid)
-      elsif [6].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_7(userid)
-      else
-      end
-    end
-  end
   
   task :create_pm_web_briefing => :environment do
-    if Article.last12.notbriefing.published.present?
+    if Article.last24.notbriefing.published.present?
       a = Article.new
       a.type_id = 32
       a.status = 'published'
@@ -112,14 +78,8 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   task :briefing_monday_to_friday_10_pm => :environment do
     User.notdeleted.each do |user|
       userid = user.id
-      if [2].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_3(userid)
-      elsif [3].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_4(userid)
-      elsif [6].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_7(userid)
-      elsif [12].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_12(userid)
+      if [12].include?(user.briefing_frequency.briefing_frequency)
+        ArticleMailer.delay.send_briefing_24(userid)
       else
       end
     end
@@ -154,7 +114,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   
   def web_pm_briefing_article_text
     arr = Array.new
-    Article.last12.notbriefing.published.each do |a|
+    Article.last24.notbriefing.published.each do |a|
       arr << "**" + a.short_headline.to_s + "**: " + a.briefing_point.to_s + " ([Read now](/articles/#{a.id}-#{a.created_at.strftime("%y%m%d%H%M%S")}-#{a.headline.parameterize}))"
     end
     arr.join("\n\n")

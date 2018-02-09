@@ -381,60 +381,60 @@ class ArticlesController < ApplicationController
   end
   
   def emailarticles
-    if @article.email_to == 'none'
-    
-    elsif @article.email_to == 'test'
-      User.editors.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-      end
-    elsif @article.email_to == 'all'
-      if ["BLOG"].include?(@article.type.try(:name))
-        User.notdeleted.each do |user|
-          ArticleMailer.delay.send_article_full(@article, user)
-	    end
-      elsif @article.is_free || ["LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name))
-        User.notdeleted.each do |user|
-          Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
-            ArticleMailer.delay.send_article_full(@article, user)
-          end
-        end
-      else
-        User.notdeleted.each do |user|
-        Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
-          if user.access_date.blank?
-            ArticleMailer.delay.send_article_full(@article, user)
-          elsif user.access_date < Time.current
-            if ['reader', 'guest'].include?(user.role)
-              ArticleMailer.delay.send_article_subscribe(@article, user)
-            elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
-              ArticleMailer.delay.send_article_resubscribe(@article, user)
-            end
-          elsif user.access_date >= Time.current
-            if user.role == 'subscriber_one_story'
-              if @article.story_ids.include?(user.one_story_id)
-                ArticleMailer.delay.send_article_full(@article, user)
-              elsif @article.story_ids.exclude?(user.one_story_id)
-                ArticleMailer.delay.send_article_upgrade(@article, user)
-              end
-            elsif ['subscriber_all_stories', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
-              ArticleMailer.delay.send_article_full(@article, user)
-            end
-          else
-          end
-        end
-        end
-      end
-    elsif @article.email_to == 'readers' && @article.type.name == 'BLOG'
-      User.totalreaders.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-    elsif @article.email_to == 'subscribers' && @article.type.name == 'BLOG'
-      User.totalsubscribers.each do |user|
-        ArticleMailer.delay.send_article_full(@article, user)
-	  end
-    else
-    end
-  end
+		if @article.email_to == 'none'
+		
+		elsif @article.email_to == 'test'
+			User.editors.each do |user|
+				ArticleMailer.delay.send_article_full(@article, user)
+			end
+		elsif @article.email_to == 'all'
+			if ["BLOG"].include?(@article.type.try(:name))
+				User.notdeleted.each do |user|
+					ArticleMailer.delay.send_article_full(@article, user)
+				end
+			elsif @article.is_free || ["LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name))
+				User.notdeleted.each do |user|
+					Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
+						ArticleMailer.delay.send_article_full(@article, user)
+					end
+				end
+			else
+				User.notdeleted.each do |user|
+				Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
+					if user.access_date.blank?
+						ArticleMailer.delay.send_article_full(@article, user)
+					elsif user.access_date < Time.current
+						if ['reader', 'guest'].include?(user.role)
+							ArticleMailer.delay.send_article_subscribe(@article, user)
+						elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+							ArticleMailer.delay.send_article_resubscribe(@article, user)
+						end
+					elsif user.access_date >= Time.current
+						if user.role == 'subscriber_one_story'
+							if @article.story_ids.include?(user.one_story_id)
+								ArticleMailer.delay.send_article_full(@article, user)
+							elsif @article.story_ids.exclude?(user.one_story_id)
+								ArticleMailer.delay.send_article_upgrade(@article, user)
+							end
+						elsif ['subscriber_all_stories', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+							ArticleMailer.delay.send_article_full(@article, user)
+						end
+					else
+					end
+				end
+				end
+			end
+		elsif @article.email_to == 'readers' && @article.type.name == 'BLOG'
+			User.totalreaders.each do |user|
+				ArticleMailer.delay.send_article_full(@article, user)
+		end
+		elsif @article.email_to == 'subscribers' && @article.type.name == 'BLOG'
+			User.totalsubscribers.each do |user|
+				ArticleMailer.delay.send_article_full(@article, user)
+		end
+		else
+		end
+	end
   
   def stories_last_active
     @article.stories.each do |s|
