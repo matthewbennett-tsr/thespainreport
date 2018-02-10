@@ -5,7 +5,7 @@
 	<% if ['reader', 'guest'].include?(@user.role) %>
 		(<em><strong>**</strong> Thank you for enjoying your guest access to The Spain Report.
 		<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please subscribe now</a> to keep getting your full-text e-mails.</em>)
-	<% elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(@user.role) %>
+	<% elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber'].include?(@user.role) %>
 		(<em><strong>**</strong> Thank you for subscribing to The Spain Report.
 		Your subscription has run out.
 	<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please resubscribe now</a> to keep getting your full-text e-mails.</em>)

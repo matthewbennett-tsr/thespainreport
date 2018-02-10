@@ -1,26 +1,26 @@
 <%= render 'send_article_top' %>
-        
+
 <%= markdown(@article.body) %>
-        
+
 <% if @article.newsitems.present? %> <%# POST ANY PUBLISHED UPDATES TO THE ARTICLE %>
-  <% @article.newsitems.each do |newsitem| %>
-    <p style="font-weight: bold;"><%= newsitem.slug %></p>
-    <p>
-      <% if newsitem.main? %>
-        <%= image_tag newsitem.main.url if newsitem.main? %><br />
-        <strong>IMAGE:</strong> <em><%= newsitem.caption %></em>
-      <% elsif newsitem.video? %>
-         <strong>VIDEO:</strong> 
-           <% if newsitem.article.present? %>
-             <%= link_to 'Watch here', article_url(newsitem.article, anchor: newsitem.id) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
-           <% else %>
-             <%= link_to 'Watch here', newsitem_url(newsitem) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
-           <% end %>
-      <% else %>
-      <% end %>
-      <%= markdown(newsitem.item.html_safe) %>
-    </p>
-  <% end %>
+	<% @article.newsitems.each do |newsitem| %>
+		<p style="font-weight: bold;"><%= newsitem.slug %></p>
+		<p>
+			<% if newsitem.main? %>
+				<%= image_tag newsitem.main.url if newsitem.main? %><br />
+				<strong>IMAGE:</strong> <em><%= newsitem.caption %></em>
+			<% elsif newsitem.video? %>
+				 <strong>VIDEO:</strong> 
+					 <% if newsitem.article.present? %>
+						 <%= link_to 'Watch here', article_url(newsitem.article, anchor: newsitem.id) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
+					 <% else %>
+						 <%= link_to 'Watch here', newsitem_url(newsitem) %>. <%= newsitem.caption unless newsitem.caption.empty? %>
+					 <% end %>
+			<% else %>
+			<% end %>
+			<%= markdown(newsitem.item.html_safe) %>
+		</p>
+	<% end %>
 <% end %> <%# END OF ARTICLE UPDATES %> 
 
 <p><%= link_to 'Read on The Spain Report', article_url(@article), {:style=>'color:#AA151B;'} %></p>

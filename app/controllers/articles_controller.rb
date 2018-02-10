@@ -406,7 +406,7 @@ class ArticlesController < ApplicationController
 					elsif user.access_date < Time.current
 						if ['reader', 'guest'].include?(user.role)
 							ArticleMailer.delay.send_article_subscribe(@article, user)
-						elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+						elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber'].include?(user.role)
 							ArticleMailer.delay.send_article_resubscribe(@article, user)
 						end
 					elsif user.access_date >= Time.current

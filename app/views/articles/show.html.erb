@@ -209,7 +209,7 @@
         <% if ['reader', 'guest'].include?(current_user.role) %> <%# START: user roles, if reader, guest… %>
           <%= markdown(@article.body.truncate(600)) %>
           <%= render 'reader_subscribe' %>
-        <% elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(current_user.role) %> <%# CONT: user roles, if subscriber, etc… %>
+        <% elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber'].include?(current_user.role) %> <%# CONT: user roles, if subscriber, etc… %>
           <%= markdown(@article.body.truncate(600)) %>
           <%= render 'resubscribe' %>
         <% end %> <%# END: user roles. %>
