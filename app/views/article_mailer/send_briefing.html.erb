@@ -28,8 +28,11 @@
 
 	<%= render 'send_briefing_stories' %>	   
 <% else %>
+	<p>
 	No new articles for you this time. 
 	Get the latest at <a href="https://www.thespainreport.com" style="color:#AA151B;">www.thespainreport.com</a> and manage <%= link_to "your e-mail notification settings here", edit_user_url(@user), {:style=>'color:#AA151B;'} %>.
+	</p>
+	
 	<%= render 'send_briefing_stories' %>
 <% end %>
 

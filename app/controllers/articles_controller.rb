@@ -27,6 +27,7 @@ class ArticlesController < ApplicationController
       @bignews = Article.bignews.order('updated_at DESC')
       @articlesbymonth = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_month }
       @articlesbyweek = Article.all.order('created_at DESC').group_by { |t| t.created_at.beginning_of_week }
+
     else
       redirect_to root_url
     end
@@ -60,12 +61,12 @@ class ArticlesController < ApplicationController
   def briefing_sunday_10_am
     User.notdeleted.each do |user|
       userid = user.id
-      if [2,3,6,12,24].include?(user.briefing_frequency.briefing_frequency)
+      if [12].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_48(userid)
       elsif [84].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_84(userid)
+        
       elsif [168].include?(user.briefing_frequency.briefing_frequency)
-        ArticleMailer.delay.send_briefing_168(userid)
+        
       else
       end
     end
