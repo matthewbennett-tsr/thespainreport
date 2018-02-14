@@ -226,7 +226,7 @@ class ArticlesController < ApplicationController
       
       @articleupdates = @article.newsitems.published.order('updated_at ASC')
       @liveblogupdates = @article.newsitems.published.order('updated_at DESC')
-      
+      @articletweets = @article.tweets.order('updated_at ASC')
       @notificationtypes = Notificationtype.all.order(:order)
   end
   
@@ -286,7 +286,7 @@ class ArticlesController < ApplicationController
       @article.status = 'published'
       @article.topstory = true
       @article.lede = 'Breaking story…more to follow.'
-      @article.body = '*(Breaking story…more to follow.)*'
+      @article.body = ''
       @article.short_headline = 'XXXXX'
     else
       redirect_to root_url
@@ -307,7 +307,7 @@ class ArticlesController < ApplicationController
       @article.status = 'published'
       @article.topstory = true
       @article.lede = 'Developing…more to follow.'
-      @article.body = '*(Developing…more to follow.)*'
+      @article.body = ''
       @article.short_headline = 'XXXXX'
     else
       redirect_to root_url

@@ -126,6 +126,14 @@
   
   <h2>Summary So Far…</h2> <%# LIVE-BLOG QUICK SUMMARY %>
   
+  	<% if @article.body.blank? && @articletweets.present? %>
+		<ul>
+			<% @articletweets.each do |t| %>
+				<li><%= t.message %></li>
+			<% end %>
+		</ul>
+	<% end %>
+  
   <%= markdown(@article.body) %>
   
   <h2>Latest Updates…</h2> <%# LIVE-BLOG ENTRIES %>
@@ -178,11 +186,19 @@
       <% end %> <%# END OF LIVE-BLOG ENTRIES %>
     <% else %> <%# IF THERE ARE NO LIVE-BLOG ENTRIES YET… %>
       <p style="font-style:italic;">
-        Brand new live blog for breaking story, standby for first update very shortly. Refresh page.
+        New live blog. Breaking story. Standby for first updates shortly. Refresh this page.
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
 
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
+
+	<% if @article.body.blank? && @articletweets.present? %>
+		<ul>
+			<% @articletweets.each do |t| %>
+				<li><%= t.message %></li>
+			<% end %>
+		</ul>
+	<% end %>
 
 <%# PAYWALL LOGIC %>
     <% if @article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>

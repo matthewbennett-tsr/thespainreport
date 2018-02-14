@@ -108,7 +108,7 @@
       </div>
     <% elsif current_user.role == 'editor' %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left"><%= link_to "Breaking", '/articles/breaking' %> | <%= link_to "Latest", '/articles/latest' %> | <%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Story", new_story_path %></div>
+        <div class="user-float-left"><%= link_to "Tweet", new_tweet_path %> | <%= link_to "Breaking", '/articles/breaking' %> | <%= link_to "Latest", '/articles/latest' %> | <%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Story", new_story_path %></div>
         <div class="user-float-left">—</div>
         <div class="user-float-left"><%= link_to "Images", images_path %> | <%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %> | <%= link_to "News", entries_path %></div>
         <div class="user-float-left">—</div>

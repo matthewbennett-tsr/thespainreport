@@ -1,0 +1,23 @@
+<%= form_for(@tweet) do |f| %>
+	<% if @tweet.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@tweet.errors.count, "error") %> prohibited this tweet from being saved:</h2>
+
+			<ul>
+			<% @tweet.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+			<% end %>
+			</ul>
+		</div>
+	<% end %>
+
+	<div class="admin-block-notify">
+		<div style="float">
+		<%= f.text_area :message, :style => "width:100%; min-height: 70px; padding: 5px;", :maxlength => "250" %>
+		<br />
+		<%= f.collection_select :article_id, @tweetarticle, :id, :short_headline,  {:style => "width:500px;"} %>
+		T <%= check_box_tag 'sendtweet' %>
+		<%= f.submit %>
+	</div>
+	 
+<% end %>

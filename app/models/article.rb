@@ -4,6 +4,7 @@ class Article < ActiveRecord::Base
 	has_and_belongs_to_many :stories
 	belongs_to :type
 	has_many :newsitems
+	has_many :tweets
 	has_many :comments, as: :commentable, dependent: :destroy
 	has_many :histories
 	has_many :users, :through => :histories

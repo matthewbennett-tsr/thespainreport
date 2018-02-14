@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180201161714) do
+ActiveRecord::Schema.define(version: 20180214122238) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -359,6 +359,13 @@ ActiveRecord::Schema.define(version: 20180201161714) do
     t.string   "tax_country_name"
     t.string   "tax_country_code"
     t.decimal  "tax_country_percent"
+  end
+
+  create_table "tweets", force: :cascade do |t|
+    t.string   "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer  "article_id"
   end
 
   create_table "types", force: :cascade do |t|
