@@ -11,19 +11,14 @@
 	<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please resubscribe now</a> to keep getting your full-text e-mails.</em>)
 	<% else %>
 	<% end %>
+	
+	<%= render 'send_article_sales_arguments' %>
 <% else %>
 <% end %>
 
 <% if @briefing_articles.present? %>
 	<% @briefing_articles.each do |article| %>
 		<%= render 'send_briefing_points', article: article %>
-	<% end %>
-
-	<% if @user.notifications.level_2.count.between?(1,10) %>
-		<strong>Note:</strong> Your briefings look a little sparse. <%= link_to "Log in to add some more stories.", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
-	<% elsif @user.notifications.level_2.count == 0 %>
-		<strong>Note:</strong> You haven't assigned any stories to your briefings yet. <%= link_to "Log in and choose some", edit_user_url(@user), {:style=>'color:#AA151B;'} %>
-	<% else %>
 	<% end %>
 
 	<%= render 'send_briefing_stories' %>	   
