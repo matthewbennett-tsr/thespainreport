@@ -8,8 +8,7 @@
 			</div>
 			<div class="subscription-right-form-element">
 				<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
-					<option value="all_stories">ALL STORIES: £15.99/month</option>
-					<option value="one_story">ONE STORY: £7.99/month</option>
+					<%= render 'plans_uk_form' %>
 				</select>
 			</div>
 			<div class="clear"></div>
@@ -48,10 +47,7 @@ var country_tax;
 	geoip2.country(onSuccess, onError);
 
 // Array of values for plans
-	var plan_prices= new Array();
-		plan_prices["zero"]=0;
-		plan_prices["all_stories"]=15.99;
-		plan_prices["one_story"]=7.99;
+	<%= render 'plans_uk' %>
 
 // Values for country flag names
 	var tax_country_names = {};
@@ -130,6 +126,18 @@ function HowForward()
   return howforward;
 }
 
+function HowDiscount()
+{
+	var howdiscount=0
+	var theForm = document.forms["payment-form"];
+	var selectedquantity = theForm.elements["quantity"].value;
+	if(selectedquantity == 1) {howdiscount = 0;}
+	if(selectedquantity > 1) {howdiscount = 0.1;}
+	if(selectedquantity >= 10) {howdiscount = 0.2;}
+	if(selectedquantity >= 100) {howdiscount = 0.3;}
+	return howdiscount
+}
+
 function TaxPrice() 
 { 
   var taxprice = 0;
@@ -156,8 +164,10 @@ function calculateTotal()
   // Do the maths
     var TaxRate = TaxPrice() / 100;
     var TotalBase = PlanPrice() * HowMany() * HowForward();
-    var TotalTax = (TaxRate * TotalBase);
-    var TotalPrice = TotalBase + TotalTax;
+    var TotalDiscount = TotalBase * HowDiscount();
+    var TotalSub = TotalBase - TotalDiscount;
+    var TotalTax = (TaxRate * TotalSub);
+    var TotalPrice = TotalSub + TotalTax;
     
     // Check for not a number
     if(isNaN(TotalPrice)) {
@@ -170,9 +180,13 @@ function calculateTotal()
     
     if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
     
+    //display the discount
+    var divobj = document.getElementById('d');
+    divobj.innerHTML = "£" + TotalDiscount.toFixed(2);
+    
     //display the price
     var divobj = document.getElementById('p');
-    divobj.innerHTML = "£" + TotalBase.toFixed(2);
+    divobj.innerHTML = "£" + TotalSub.toFixed(2);
     
     //display the tax amount ££ and rate %% to subscriber
     var divobj = document.getElementById('r');
@@ -190,9 +204,13 @@ function calculateTotal()
     var divobj = document.getElementById('base_price');
     divobj.value = Math.round(PlanPrice()*100);
     
+    // discount rate
+    var divobj = document.getElementById('discount');
+    divobj.value = Math.round(HowDiscount()*100);
+    
     //total subtotal for Stripe one-time charge
     var divobj = document.getElementById('subtotal');
-    divobj.value = Math.round(TotalBase.toFixed(2)*100);
+    divobj.value = Math.round(TotalSub.toFixed(2)*100);
     
     //total tax_amount for Stripe one-time charge
     var divobj = document.getElementById('tax_amount');
@@ -206,7 +224,7 @@ function calculateTotal()
     
     //display the price
     var divobj = document.getElementById('p');
-    divobj.innerHTML = "£" + TotalBase.toFixed(2);
+    divobj.innerHTML = "£" + TotalSub.toFixed(2);
     
     //display a default tax amount
     var divobj = document.getElementById('r');
@@ -214,7 +232,7 @@ function calculateTotal()
     
     //display the plan price without tax defined
     var divobj = document.getElementById('t');
-    divobj.innerHTML = " = £" + TotalBase.toFixed(2);
+    divobj.innerHTML = " = £" + TotalSub.toFixed(2);
 
     } 
 };

@@ -142,7 +142,9 @@ class InvoicesController < ApplicationController
         :stripe_invoice_total,
         :paid,
         :status,
-        :number
+        :number,
+        :discount,
+        :howlong
         )
     end
 end

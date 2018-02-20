@@ -177,8 +177,20 @@ class SubscriptionsController < ApplicationController
 			customer: @customer,
 			quantity: @how_many,
 			plan: params[:plan],
+			coupon: discount_code,
 			tax_percent: @tax_percent
 		}, @apikey)
+	end
+	
+	def discount_code
+		if params[:discount] == '10'
+			'users-10'
+		elsif params[:discount] == '20'
+			'users-20'
+		elsif params[:discount] == '30'
+			'users-30'
+		else
+		end
 	end
 	#### ENDS new_subscription_charge ####
 	
@@ -362,6 +374,7 @@ class SubscriptionsController < ApplicationController
 		s.stripe_subscription_interval = 'months'
 		s.stripe_subscription_quantity = params[:quantity]
 		s.stripe_subscription_howlong = params[:forward]
+		s.discount = params[:discount]
 		s.stripe_subscription_tax_percent = params[:ts]
 		s.stripe_subscription_ip = params[:ip_address]
 		s.stripe_subscription_ip_country = params[:ip_country_code]
@@ -389,7 +402,9 @@ class SubscriptionsController < ApplicationController
 		i.stripe_invoice_date = Time.current.to_datetime
 		i.stripe_invoice_item = 'One-time pre-payment'
 		i.stripe_invoice_quantity = params[:quantity]
+		i.howlong = params[:forward]
 		i.stripe_invoice_price = params[:base_price]
+		i.discount = params[:discount]
 		i.stripe_invoice_subtotal = params[:subtotal]
 		if params[:ip_country_code] == 'ES'
 			i.stripe_invoice_credit_card_country = u.credit_card_country_spain
@@ -400,7 +415,7 @@ class SubscriptionsController < ApplicationController
 		i.stripe_invoice_tax_percent = params[:ts]
 		i.stripe_invoice_tax_amount = params[:tax_amount]
 		i.stripe_invoice_currency = @currency
-		i.stripe_invoice_interval = 'months'
+		i.stripe_invoice_interval = 'month'
 		i.stripe_invoice_total = params[:amount]
 		i.stripe_invoice_ip_country_code = params[:ip_country_code]
 		i.paid = true
@@ -602,6 +617,7 @@ class SubscriptionsController < ApplicationController
 		s.stripe_subscription_interval = @s.plan.interval
 		s.stripe_subscription_quantity = @s.quantity
 		s.stripe_subscription_howlong = 1
+		s.discount = discount_code_subscription
 		s.stripe_subscription_tax_percent = @s.tax_percent
 		s.stripe_subscription_ip = @ip_address
 		s.stripe_subscription_ip_country = @ip_country_code
@@ -625,8 +641,10 @@ class SubscriptionsController < ApplicationController
 			i.stripe_invoice_date = Time.at(stripeinv.date).to_datetime
 			i.stripe_invoice_item = stripeinv.lines.data[0].plan.name
 			i.stripe_invoice_quantity = stripeinv.lines.data[0].quantity
+			i.howlong = 1
+			i.discount = discount_code_subscription
 			i.stripe_invoice_price = stripeinv.lines.data[0].plan.amount
-			i.stripe_invoice_subtotal = stripeinv.subtotal
+			i.stripe_invoice_subtotal = params[:subtotal]
 			if params[:ip_country_code] == 'ES'
 				i.stripe_invoice_credit_card_country = u.credit_card_country_spain
 			elsif params[:ip_country_code] != 'ES'
@@ -642,6 +660,18 @@ class SubscriptionsController < ApplicationController
 			i.paid = stripeinv.paid
 			i.status = 'unverified'
 			i.save!
+		end
+	end
+	
+	def discount_code_subscription
+		if params[:discount] == '10'
+			10
+		elsif params[:discount] == '20'
+			20
+		elsif params[:discount] == '30'
+			30
+		else
+			0
 		end
 	end
 	#### ENDS create_tsr_subscription_invoice ####
@@ -1197,7 +1227,8 @@ class SubscriptionsController < ApplicationController
 				:stripe_subscription_trial_end,
 				:stripe_subscription_current_period_start_date,
 				:stripe_subscription_current_period_end_date,
-				:is_active
+				:is_active,
+				:discount
 				)
 		end
 end

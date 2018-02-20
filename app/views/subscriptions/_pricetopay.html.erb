@@ -1,5 +1,15 @@
 <div class="subscription-form-section-middle">
 	<div class="subscription-left-label-select">
+		Discount:
+	</div>
+	<div class="subscription-right-form-element">
+		<span id="d"></span>
+	</div>
+	<div class="clear"></div>
+</div>
+
+<div class="subscription-form-section-middle">
+	<div class="subscription-left-label-select">
 		Subtotal:
 	</div>
 	<div class="subscription-right-form-element">
@@ -26,6 +36,12 @@
 	</div>
 	<div class="subscription-right-form-element">
 		<span id="t"></span>
+		<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+			 / month
+		<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+			 / one-time
+		<% end %>
+		
 	</div>
 	<div class="clear"></div>
 </div>
