@@ -869,7 +869,7 @@ class SubscriptionsController < ApplicationController
 		item_id = @change_subscription.items.data[0].id
 		items = [{
 			id: item_id,
-			quantity: 10
+			quantity: 0
 		}]
 		@change_subscription.items = items
 		@change_subscription.save
