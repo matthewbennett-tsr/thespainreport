@@ -869,10 +869,17 @@ class SubscriptionsController < ApplicationController
 		item_id = @change_subscription.items.data[0].id
 		items = [{
 			id: item_id,
-			quantity: 0
+			quantity: params[:quantity]
 		}]
 		@change_subscription.items = items
+		@change_subscription.proration_date = @proration_date
 		@change_subscription.save
+		
+		@user = User.find(params[:user_id])
+		@subscription = @user.subscriptions.last
+		@subscription.update(
+			stripe_subscription_quantity: params[:quantity]
+		)
 		
 		redirect_to :back
 		flash[:success] = "Now subscribed to All Stories."

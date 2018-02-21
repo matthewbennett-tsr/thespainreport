@@ -51,7 +51,7 @@
 			You first purchased from The Spain Report Ltd. (UK) on <%= @user.becomes_customer_date.strftime("%b %d, %Y at %l:%M %P") unless @user.becomes_customer_date.nil? %><br />
 			<strong>Customer ID:</strong> <%= @user.stripe_customer_id unless @user.stripe_customer_id.nil? %><br />
 			<% if @user.credit_card_id? %>
-				<strong>Credit Card:</strong> <%= @user.credit_card_brand %> ending in **** <%= @user.credit_card_last4 %>, expires on <%= @user.credit_card_expiry_month.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year %>. <a onclick="myFunction()">Update card details</a>
+				<strong>Credit Card:</strong> <%= @user.credit_card_brand %> ending in **** <%= @user.credit_card_last4 %>, expires on <%= @user.credit_card_expiry_month.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year %>. <a onclick="updateCreditCard()">Update card details</a>
 			<% end %>
 		</p>
 	<% elsif @user.stripe_customer_id_spain? %>
@@ -59,7 +59,7 @@
 			You first purchased from The Spain Report Ltd. (Sucursal en España) on <%= @user.becomes_customer_date_spain.strftime("%b %d, %Y at %l:%M %P") unless @user.becomes_customer_date_spain.nil? %>.<br />
 			<strong>Customer ID:</strong> <%= @user.stripe_customer_id_spain unless @user.stripe_customer_id_spain.nil? %><br />
 			<% if @user.credit_card_id_spain? %>
-				<strong>Credit Card:</strong> <%= @user.credit_card_brand_spain %> ending in **** <%= @user.credit_card_last4_spain %>, expires on <%= @user.credit_card_expiry_month_spain.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year_spain %>. <a onclick="myFunction()">Update card details</a>
+				<strong>Credit Card:</strong> <%= @user.credit_card_brand_spain %> ending in **** <%= @user.credit_card_last4_spain %>, expires on <%= @user.credit_card_expiry_month_spain.to_s.rjust(2, '0') %>/<%= @user.credit_card_expiry_year_spain %>. <a onclick="updateCreditCard()">Update card details</a>
 			<% end %>
 		</p>
 	<% end %>
@@ -189,52 +189,40 @@ var country_tax;
 				<% if sub.stripe_status == 'canceled' || sub.stripe_subscription_id == 'One-time pre-payment' %>
 				
 				<% else %>
-					<div class="left-15 bold">Options</div><div class="subscription-item-right">
-						<%= form_tag '/buy_more_users',  :style => 'float:left; margin-right: 10px;', :id => 'buy_more_users' do %>
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">Buy More Users</button>
-						<% end %>
+					<div class="left-15 bold">Options</div>
+					<div class="left-60">
+						<div class="left-15"><a onclick="buyMoreUsers()">Buy More Users</a>:</div>
+						<div class="left-70">
+							Click on the link, enter the new total number of users you want, and press "Buy Now".
+							<%= form_tag '/buy_more_users', :style => 'display:none; margin-right: 10px;', :class => '', :id => 'buy_more_users' do %>
+								<div class="subscription-form-section-middle">
+									<div class="subscription-left-label-input">
+										How Many Users?
+									</div>
+									<div class="subscription-right-form-element">			 
+										<input type="number" pattern="\d*" name="quantity" id="quantity" class="input50" value="1" min="1" max="10000" onchange="calculateTotal()" oninput="calculateTotal()">
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="subscription-form-section-bottom">	
+									<div class="subscription-left-label-input">
+									</div>
+									<div class="subscription-right-form-element">
+										<button type="submit" class="blueformbutton" style="z-index: 1000;">Buy Now</button>
+									</div>
+									<div class="clear"></div>
+								</div>
+								<div class="clear"></div>
+								<input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
+								<% if @user.subscriptions.any? %>
+									<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
+								<% else %>
+								<% end %>
+								<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+							<% end %>
+						</div>
+						<div class="clear"></div>
 					</div>
-					<% if ['subscriber', 'subscriber_all_stories', 'subscriber_paused'].include?(@user.role) && sub.stripe_status != 'canceled' %>
-						<%= form_tag '/one_story', :style => 'float:left; margin-right: 10px;', :id => 'one_story', :name => 'one_story' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">
-								<% if ['subscriber'].include?(@user.role) %>
-								Purchase "One Story"
-								<% elsif ['subscriber_all_stories'].include?(@user.role) %>
-								Downgrade to "One Story"
-								<% elsif ['subscriber_paused'].include?(@user.role) %>
-								Restart as "One Story"
-								<% end %>
-							</button>
-						<% end %>
-					<% end %>
-					<% if ['subscriber', 'subscriber_one_story', 'subscriber_paused', 'editor'].include?(@user.role) && sub.stripe_status != 'canceled' %>
-						<%= form_tag '/all_stories', :style => 'float:left; margin-right: 10px;', :id => 'all_stories', :name => 'all_stories' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">
-								<% if ['subscriber'].include?(@user.role) %>
-								Purchase "All Stories"
-								<% elsif ['subscriber_one_story'].include?(@user.role) %>
-								Upgrade to "All Stories"
-								<% elsif ['subscriber_paused'].include?(@user.role) %>
-								Restart as "All Stories"
-								<% end %>
-							</button>
-						<% end %>
-					<% end %>
-					<% if ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'].include?(@user.role) && sub.stripe_status != 'canceled' %>
-						<%= form_tag '/pause', :style => 'float:left; margin-right: 4px;', :id => 'pause', :name => 'pause' do %>
-							<input type="hidden" name="stripe_subscription_id" id="stripe_subscription_id" value="<%= sub.stripe_subscription_id %>">
-							<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
-							<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
-							<button type="submit" class="linkbutton">Pause subscription</button>
-						<% end %>
-					<% end %>
 					<div class="clear"></div>
 				<% end %>
 			</div>
@@ -279,8 +267,17 @@ You are not a subscriber yet: <%= link_to "subscribe now", '/subscriptions/new',
 <%= javascript_include_tag "jquery.payment.js" %>
 
 <script>
-function myFunction() {
+function updateCreditCard() {
     var x = document.getElementById('update-credit-card');
+    if (x.style.display === 'none') {
+        x.style.display = 'block';
+    } else {
+        x.style.display = 'none';
+    }
+}
+
+function buyMoreUsers() {
+    var x = document.getElementById('buy_more_users');
     if (x.style.display === 'none') {
         x.style.display = 'block';
     } else {
