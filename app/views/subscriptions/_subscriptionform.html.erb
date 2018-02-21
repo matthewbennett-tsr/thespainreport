@@ -120,6 +120,18 @@ function HowMany()
   return howmany;
 }
 
+function HowDiscount()
+{
+	var howdiscount=0
+	var theForm = document.forms["payment-form"];
+	var selectedquantity = theForm.elements["quantity"].value;
+	if(selectedquantity == 1) {howdiscount = 0;}
+	if(selectedquantity > 1) {howdiscount = 0.1;}
+	if(selectedquantity >= 10) {howdiscount = 0.2;}
+	if(selectedquantity >= 100) {howdiscount = 0.3;}
+	return howdiscount
+}
+
 function TaxPrice() 
 { 
   var taxprice = 0;
@@ -146,8 +158,10 @@ function calculateTotal()
   // Do the maths
     var TaxRate = TaxPrice() / 100;
     var TotalBase = PlanPrice() * HowMany();
-    var TotalTax = (TaxRate * TotalBase);
-    var TotalPrice = TotalBase + TotalTax;
+    var TotalDiscount = TotalBase * HowDiscount();
+    var TotalSub = TotalBase - TotalDiscount;
+    var TotalTax = (TaxRate * TotalSub);
+    var TotalPrice = TotalSub + TotalTax;
     
     // Check for not a number
     if(isNaN(TotalPrice)) {
@@ -160,21 +174,33 @@ function calculateTotal()
     
     if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
     
-    //display the price
+    //display discount
+    var divobj = document.getElementById('d');
+    divobj.innerHTML = TotalDiscount.toFixed(2);
+    
+    //display subtotal
     var divobj = document.getElementById('p');
-    divobj.innerHTML = "£" + TotalBase.toFixed(2);
+    divobj.innerHTML = TotalSub.toFixed(2);
     
-    //display the tax amount ££ and rate %% to subscriber
+    //display tax amount and rate
     var divobj = document.getElementById('r');
-    divobj.innerHTML = "£" + TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
+    divobj.innerHTML = TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
     
-    //put the tax rate %% into Stripe for payment processing
+    //display total
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = TotalPrice.toFixed(2);
+    
+    // inner discount rate
+    var divobj = document.getElementById('discount');
+    divobj.value = Math.round(HowDiscount()*100);
+    
+    // inner tax rate
     var divobj = document.getElementById('ts');
     divobj.value = TaxPrice();
     
-    //display the total
-    var divobj = document.getElementById('t');
-    divobj.innerHTML = "£" + TotalPrice.toFixed(2);
+    // inner subtotal
+    var divobj = document.getElementById('subtotal');
+    divobj.value = Math.round(TotalSub.toFixed(2)*100);
 
     } else {
     

@@ -170,29 +170,29 @@ function calculateTotal()
     
     if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
     
-    //display the discount
+    // display discount
     var divobj = document.getElementById('d');
-    divobj.innerHTML = "€" + TotalDiscount.toFixed(2);
+    divobj.innerHTML = TotalDiscount.toFixed(2);
     
-    //display the subtotal
+    // display subtotal
     var divobj = document.getElementById('p');
-    divobj.innerHTML = "€" + TotalSub.toFixed(2);
+    divobj.innerHTML = TotalSub.toFixed(2);
     
-    //display the tax amount ££ and rate %% to subscriber
+    //display tax amount and rate
     var divobj = document.getElementById('r');
-    divobj.innerHTML = "€" + TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
+    divobj.innerHTML = TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
     
-    //put the tax rate %% into Stripe for payment processing
-    var divobj = document.getElementById('ts');
-    divobj.value = TaxPrice();
-    
-    //display the total
+    // display total
     var divobj = document.getElementById('t');
-    divobj.innerHTML = "€" + TotalPrice.toFixed(2);
+    divobj.innerHTML = TotalPrice.toFixed(2);
     
     // inner discount rate
     var divobj = document.getElementById('discount');
     divobj.value = Math.round(HowDiscount()*100);
+    
+    // inner tax rate
+    var divobj = document.getElementById('ts');
+    divobj.value = TaxPrice();
     
     // inner subtotal
     var divobj = document.getElementById('subtotal');

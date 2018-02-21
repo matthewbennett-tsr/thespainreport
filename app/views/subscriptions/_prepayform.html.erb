@@ -180,43 +180,43 @@ function calculateTotal()
     
     if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
     
-    //display the discount
+    // display discount
     var divobj = document.getElementById('d');
-    divobj.innerHTML = "£" + TotalDiscount.toFixed(2);
+    divobj.innerHTML = TotalDiscount.toFixed(2);
     
-    //display the price
+    // display price
     var divobj = document.getElementById('p');
-    divobj.innerHTML = "£" + TotalSub.toFixed(2);
+    divobj.innerHTML = TotalSub.toFixed(2);
     
-    //display the tax amount ££ and rate %% to subscriber
+    // display tax amount and rate
     var divobj = document.getElementById('r');
-    divobj.innerHTML = "£" + TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
+    divobj.innerHTML = TotalTax.toFixed(2) + " (" + TaxPrice() + "%)";
     
-    //put the tax rate %% into Stripe for payment processing
+    // display total
+    var divobj = document.getElementById('t');
+    divobj.innerHTML = TotalPrice.toFixed(2);
+    
+    // inner tax rate
     var divobj = document.getElementById('ts');
     divobj.value = TaxPrice();
     
-    //display the total
-    var divobj = document.getElementById('t');
-    divobj.innerHTML = "£" + TotalPrice.toFixed(2);
-    
-    //total base_price for Stripe one-time charge
+    // inner base_price
     var divobj = document.getElementById('base_price');
     divobj.value = Math.round(PlanPrice()*100);
     
-    // discount rate
+    // inner discount
     var divobj = document.getElementById('discount');
     divobj.value = Math.round(HowDiscount()*100);
     
-    //total subtotal for Stripe one-time charge
+    // inner subtotal
     var divobj = document.getElementById('subtotal');
     divobj.value = Math.round(TotalSub.toFixed(2)*100);
     
-    //total tax_amount for Stripe one-time charge
+    // inner tax_amount
     var divobj = document.getElementById('tax_amount');
     divobj.value = Math.round(TotalTax.toFixed(2)*100);
     
-    //total amount for Stripe one-time charge
+    // inner total amount
     var divobj = document.getElementById('amount');
     divobj.value = Math.round(TotalPrice.toFixed(2)*100);
 
