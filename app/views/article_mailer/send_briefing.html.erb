@@ -5,14 +5,15 @@
 	<% if ['reader', 'guest'].include?(@user.role) %>
 		(<em><strong>**</strong> Thank you for enjoying your guest access to The Spain Report.
 		<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please subscribe now</a> to keep getting your full-text e-mails.</em>)
+		<%= render 'send_article_sales_arguments' %>
+		<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Subscribe here</a>
 	<% elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber'].include?(@user.role) %>
-		(<em><strong>**</strong> Thank you for subscribing to The Spain Report.
-		Your subscription has run out.
-	<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please resubscribe now</a> to keep getting your full-text e-mails.</em>)
+		(<em><strong>**</strong> Thank you for subscribing to The Spain Report; your subscription has run out.
+		<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Please resubscribe now</a> to keep getting your full-text e-mails.</em>)
+		<%= render 'send_article_sales_arguments' %>
+		<a href="https://www.thespainreport.com/subscriptions/new" style="color:#AA151B;">Resubscribe here</a>
 	<% else %>
 	<% end %>
-	
-	<%= render 'send_article_sales_arguments' %>
 <% else %>
 <% end %>
 
