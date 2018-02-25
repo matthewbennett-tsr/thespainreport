@@ -48,11 +48,12 @@ class SubscriptionsController < ApplicationController
 	
 	def subscription_country
 		@user = User.find(params[:user_id])
+		@tsr_subscription = Subscription.find(params[:tsr_subscription_id])
+		
 		if @user.subscriptions.any?
-			tsr_subscription = @user.subscriptions.last
-			if tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date >= '2018-01-01'
+			if @tsr_subscription.stripe_subscription_ip_country == "ES" && @tsr_subscription.stripe_subscription_created >= '2018-01-01'
 				{:api_key => Rails.configuration.stripe[:secret_spain_key]}
-			elsif tsr_subscription.stripe_subscription_ip_country == "ES" && @user.becomes_customer_date < '2018-01-01'
+			elsif @tsr_subscription.stripe_subscription_ip_country == "ES" && @tsr_subscription.stripe_subscription_created < '2018-01-01'
 				{:api_key => Rails.configuration.stripe[:secret_key]}
 			else
 				{:api_key => Rails.configuration.stripe[:secret_key]}
@@ -864,21 +865,22 @@ class SubscriptionsController < ApplicationController
 	end
 	
 	def buy_more_users
-		subscription_details
-
+		@change_subscription = Stripe::Subscription.retrieve(params[:existing_subscription], subscription_country)
+		
 		item_id = @change_subscription.items.data[0].id
 		items = [{
 			id: item_id,
 			quantity: params[:quantity]
 		}]
 		@change_subscription.items = items
-		@change_subscription.proration_date = @proration_date
+		@change_subscription.proration_date = Time.now.to_i
+		@change_subscription.coupon = discount_code
 		@change_subscription.save
 		
-		@user = User.find(params[:user_id])
-		@subscription = @user.subscriptions.last
-		@subscription.update(
-			stripe_subscription_quantity: params[:quantity]
+		@current_tsr_subscription = Subscription.find(params[:tsr_subscription_id])
+		@current_tsr_subscription.update(
+			stripe_subscription_quantity: params[:quantity],
+			discount: discount_code_subscription
 		)
 		
 		redirect_to :back

@@ -187,15 +187,22 @@ var country_tax;
 				<% end %>
 				
 				<% if sub.stripe_status == 'canceled' || sub.stripe_subscription_id == 'One-time pre-payment' %>
-				
 				<% else %>
 					<div class="left-15 bold">Options</div>
 					<div class="left-60">
 						<div class="left-15"><a onclick="buyMoreUsers()">Buy More Users</a>:</div>
 						<div class="left-70">
-							Click on the link, enter the new total number of users you want, and press "Buy Now".
+							Click on the link, enter the new <strong>total</strong> number of users you want, and press "Buy Now".
 							<%= form_tag '/buy_more_users', :style => 'display:none; margin-right: 10px;', :class => '', :id => 'buy_more_users' do %>
 								<div class="subscription-form-section-middle">
+									<p class="mb-10">
+										<strong>Automatic monthly discount:</strong>
+										<ul style="margin: -10px 0 10px 20px; list-style:none;">
+											<li style="font-size:14px; line-height: 100%;">2–9 users = -10%;
+											<li style="font-size:14px; line-height: 100%;">10–99 users = -20%;
+											<li style="font-size:14px; line-height: 100%;">+100 users = -30%;
+										</ul>
+									</p>
 									<div class="subscription-left-label-input">
 										How Many Users?
 									</div>
@@ -214,11 +221,10 @@ var country_tax;
 								</div>
 								<div class="clear"></div>
 								<input type="hidden" name="customer_id" id="customer_id" value="<%= @user.stripe_customer_id %>">
-								<% if @user.subscriptions.any? %>
-									<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= @user.subscriptions.order(:created_at).last.id %>">
-								<% else %>
-								<% end %>
+								<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
+								<input type="hidden" name="existing_subscription" id="existing_subscription" value="<%= sub.stripe_subscription_id %>">
 								<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+								<input type="hidden" name="discount" id="discount" value="">
 							<% end %>
 						</div>
 						<div class="clear"></div>
@@ -283,6 +289,25 @@ function buyMoreUsers() {
     } else {
         x.style.display = 'none';
     }
+}
+
+function HowDiscount()
+{
+	var howdiscount=0
+	var theForm = document.forms["buy_more_users"];
+	var selectedquantity = theForm.elements["quantity"].value;
+	if(selectedquantity == 1) {howdiscount = 0;}
+	if(selectedquantity > 1) {howdiscount = 0.1;}
+	if(selectedquantity >= 10) {howdiscount = 0.2;}
+	if(selectedquantity >= 100) {howdiscount = 0.3;}
+	return howdiscount
+}
+
+function calculateTotal()
+{
+// inner discount rate
+	var divobj = document.getElementById('discount');
+	divobj.value = Math.round(HowDiscount()*100);
 }
 </script>
 
