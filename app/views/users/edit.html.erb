@@ -224,6 +224,7 @@ var country_tax;
 								<input type="hidden" name="tsr_subscription_id" id="tsr_subscription_id" value="<%= sub.id %>">
 								<input type="hidden" name="existing_subscription" id="existing_subscription" value="<%= sub.stripe_subscription_id %>">
 								<input type="hidden" name="user_id" id="user_id" value="<%= @user.id %>">
+								<input type="hidden" name="email" id="email" value="<%= @user.email %>">
 								<input type="hidden" name="discount" id="discount" value="">
 							<% end %>
 						</div>

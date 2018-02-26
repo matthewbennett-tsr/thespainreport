@@ -883,6 +883,9 @@ class SubscriptionsController < ApplicationController
 			discount: discount_code_subscription
 		)
 		
+		# User account check
+		user_account
+		
 		redirect_to :back
 		flash[:success] = "Now subscribed to All Stories."
 	end
