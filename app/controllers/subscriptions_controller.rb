@@ -1044,10 +1044,10 @@ class SubscriptionsController < ApplicationController
 		user = User.find_by_email(params[:email])
 		s = Subscription.find_by_id(params[:subscription_id])
 		
-		if ["All Stories", "all_stories"].include?(s.stripe_subscription_plan)
-			new_role = 'subscriber_all_stories'
-		elsif ["One Story", "one_story"].include?(s.stripe_subscription_plan)
+		if ["One Story", "one_story"].include?(s.stripe_subscription_plan)
 			new_role = 'subscriber_one_story'
+		else
+			new_role = 'subscriber_all_stories'
 		end
 		
 		user.update(
@@ -1057,7 +1057,7 @@ class SubscriptionsController < ApplicationController
 			role: new_role,
 			access_date: s.stripe_subscription_current_period_end_date
 		)
-	
+		
 		redirect_to :back
 		flash[:success] = "User linked."
 	end
