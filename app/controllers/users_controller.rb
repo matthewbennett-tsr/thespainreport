@@ -12,17 +12,20 @@ class UsersController < ApplicationController
       @latestusers = User.readers.lastfew
       @latestsubscribers = User.totalsubscribers.lastfew
       else
-      @subscribers = User.totalsubscribers.lastfew
-      @readers = User.readers.lastfew
-      @guests = User.guests.lastfew
-      @deleted = User.deleted.lastfew
-      @subscribercount = User.totalsubscribers.count
-      @onestorysubscribers = User.onestorysubscribers.count
-      @allstorysubscribers = User.allstorysubscribers.count
-      @straysubscribercount = User.straysubscribers.count
+      @totalactivecount = User.notdeleted.count
+      @subscribercount = User.subscribers.count
+      @onestorycount = User.onestorysubscribers.count
+      @allstorycount = User.allstorysubscribers.count
+      @pre2018count = User.pre2018.count
+      @pausedcount = User.pausedsubscribers.count
+      @nostripecount = User.nostripeid.count
       @readercount = User.readers.count
       @guestcount = User.guests.count
       @deletedcount = User.deleted.count
+      @subscribers = User.subscribers.lastfew
+      @readers = User.readers.lastfew
+      @guests = User.guests.lastfew
+      @deleted = User.deleted.lastfew
       update_all_update_tokens
       end
     else

@@ -5,10 +5,15 @@
 <h1>All Members</h1>
 
 <div class="article-lede">
-- <%= @subscribercount %> total subscribers: <%= @onestorysubscribers %> single-story and <%= @allstorysubscribers %> all-story<br />
-- <%= @straysubscribercount %> non subscribers <br />
-- <%= @readercount %> readers <br />
-- <%= @guestcount %> guests <br />
+- <%= @totalactivecount %> total active users<br />
+--- <%= @subscribercount %> total subscribers<br />
+------ <%= @allstorycount %> all-story<br />
+------ <%= @onestorycount %> single-story<br />
+------ <%= @pausedcount %> paused<br />
+------ <%= @pre2018count %> pre-2018<br />
+------ <%= @nostripecount %> without Stripe ID<br />
+--- <%= @readercount %> readers <br />
+--- <%= @guestcount %> guests <br />
 - <%= @deletedcount %> deleted <br />
 </div>
 

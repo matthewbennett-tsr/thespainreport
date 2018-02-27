@@ -18,10 +18,12 @@ class User < ActiveRecord::Base
     where("email @@ ?", search)
   end
   
-  scope :totalsubscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'])}
+  scope :subscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories'])}
   scope :onestorysubscribers, -> {where(role: 'subscriber_one_story')}
   scope :allstorysubscribers, -> {where(role: 'subscriber_all_stories')}
-  scope :straysubscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories']).where('stripe_customer_id is null')}
+  scope :pre2018, -> {where(role: 'subscriber')}
+  scope :pausedsubscribers, -> {where(role: 'subscriber_paused')}
+  scope :nostripeid, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories']).where('stripe_customer_id is null')}
   scope :totalreaders, -> {where(role: ['reader', 'guest'])}
   scope :readers, -> {where(role: 'reader')}
   scope :guests, -> {where(role: 'guest')}
