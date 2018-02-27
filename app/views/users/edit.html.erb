@@ -175,7 +175,7 @@ var country_tax;
 						</div>
 						<% if sub.stripe_status != 'canceled' && (sub.stripe_subscription_quantity > @user.account.users.notdeleted.where(account_role: 'account_member', account_subscription_id: sub.id).count + 1) %>
 							<%= form_tag '/link_by_account_boss',  :style => 'margin-bottom: 10px;', :id => 'link_by_account_boss' do %>
-								<input type="email" name="email" id="email">
+								<input type="email" name="email" id="email" placeholder="Enter new e-mail…">
 								<input type="hidden" name="account_id" id="account_id" value="<%= @user.account.id %>">
 								<input type="hidden" name="subscription_id" id="subscription_id" value="<%= sub.id %>">
 								<button type="submit" class="linkbutton">Add User</button>
