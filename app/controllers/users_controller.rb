@@ -9,9 +9,8 @@ class UsersController < ApplicationController
       query = terms.map { |term| "email ILIKE '%#{term}%' OR role ILIKE '%#{term}%'" }.join(" OR ")
       @users = User.all.where(query).order("created_at DESC")
       @userscount = @users.count
-      @latestusers = User.readers.lastfew
-      @latestsubscribers = User.totalsubscribers.lastfew
       else
+      end
       @totalactivecount = User.notdeleted.count
       @subscribercount = User.subscribers.count
       @onestorycount = User.onestorysubscribers.count
@@ -26,8 +25,6 @@ class UsersController < ApplicationController
       @readers = User.readers.lastfew
       @guests = User.guests.lastfew
       @deleted = User.deleted.lastfew
-      update_all_update_tokens
-      end
     else
       redirect_to root_url
     end
