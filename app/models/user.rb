@@ -12,7 +12,7 @@ class User < ActiveRecord::Base
   before_update :check_one_story_date
   before_save :check_update_token
   
-  ROLES = %i[subscriber_all_stories subscriber_one_story subscriber subscriber_paused reader guest deleted editor staff]
+  ROLES = %i[subscriber_all_stories subscriber_one_story subscriber subscriber_paused subscriber_cancelled reader guest deleted editor staff]
   
   def self.search(search)
     where("email @@ ?", search)
