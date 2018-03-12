@@ -23,6 +23,7 @@ class User < ActiveRecord::Base
   scope :allstorysubscribers, -> {where(role: 'subscriber_all_stories')}
   scope :pre2018, -> {where(role: 'subscriber')}
   scope :pausedsubscribers, -> {where(role: 'subscriber_paused')}
+  scope :cancelledsubscribers, -> {where(role: 'subscriber_cancelled')}
   scope :nostripeid, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_stories']).where('stripe_customer_id is null')}
   scope :totalreaders, -> {where(role: ['reader', 'guest'])}
   scope :readers, -> {where(role: 'reader')}
