@@ -101,9 +101,9 @@ def send_article_subject
 	if @article.notification_slug?
 		@article.notification_slug + ": " + send_article_headline
 	elsif @article.urgency == 'latest'
-		"LATEST : " + send_article_headline
+		"LATEST: " + send_article_headline
 	elsif @article.urgency == 'breaking'
-		"BREAKING : " + send_article_headline
+		"BREAKING: " + send_article_headline
 	elsif @article.urgency == 'majorbreaking'
 		"MAJOR BREAKING: " + send_article_headline
 	else

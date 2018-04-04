@@ -46,13 +46,24 @@
 			<td style="text-align:center;">&#9989;</td>
 		</tr>
 		<tr>
+			<td>Archive Access</td>
+			<td style="text-align:center;">Last 30 days</td>
+			<td style="text-align:center;">Last 30 days</td>
+			<td style="text-align:center;">All articles</td>
+		</tr>
+		<tr>
 			<td></td>
 			<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
 				<td style="text-align:center;">€8.99/month</td>
-				<td style="text-align:center;"><strong>€17.99/month</strong></td>
+				<td style="text-align:center;">
+					<strong>€10.99/month</strong><br />
+					just €0.35/day
+				</td>
+				<td style="text-align:center;">€17.99/month</td>
 			<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 				<td style="text-align:center;">£7.99/month</td>
-				<td style="text-align:center;"><strong>£15.99/month</strong></td>
+				<td style="text-align:center;"><strong>£9.99/month</strong></td>
+				<td style="text-align:center;">£15.99/month</td>
 			<% end %>
 		</tr>
 	</table>

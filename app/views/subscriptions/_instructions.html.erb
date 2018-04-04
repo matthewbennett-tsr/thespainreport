@@ -1,38 +1,39 @@
 		<p class="mb-10">
 			<strong>How Many Users:</strong> 
-			Everybody is welcome: friends, family, school groups, teams, organisations or companies.
-			It's very easy to add your users after subscribing, or we can help you:
-			<div style="margin-left: 10px; margin-top: 10px; margin-bottom: 10px;">
-				<%= image_tag "add-users-example.jpg", :width => '250' %>
-			</div>
+			Add friends, family, groups, teams or companies.
+			It's very easy to add your users after you pay.
 		</p>
 		<p class="mb-10">
 			<strong>Which Plan:</strong> 
-			If you select "one story" (Podemos, Catalan independence, Spain & Brexit, etc.), you can change it once every 30 days.
-			If, like most people, you want to follow and read lots of interesting Spain stories, choose "all stories".
+			Buy the plan that is best for you.
+			<ul style="margin: -7px 0 10px 20px; list-style:none;">
+				<li style="font-size:14px; line-height: 130%;"><em>All Stories - Archive</em>: Everything, back to 2013.</li>
+				<li style="font-size:14px; line-height: 130%;"><em>All Stories - Current</em>: Everything, last 30 days.</li>
+				<li style="font-size:14px; line-height: 130%;"><em>One Story</em>: If you are just interested in Podemos or Catalan independence or Spanish politics or X.</li>
+			</ul>
 		</p>
 		<p class="mb-10">
 			<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
 				<strong>Prepay:</strong> 
-				If you want to buy X months in advance now instead of recurring monthly payments, <a href="/subscriptions/prepay">prepay here</a>.
+				To buy X months in advance instead of recurring monthly charges, or to support independent journalism with a single payment, <a href="/subscriptions/prepay">use this form</a>.
 			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
 				<strong>Recurring Payments:</strong> 
-				If you want to buy recurring monthly payments instead of prepaying, <a href="/subscriptions/new">subscribe here</a>.
+				Subscribe with recurring monthly charges instead of a single prepayment <a href="/subscriptions/new">using this form</a>.
 			<% end %>
 			
 		</p>
 		<p class="mb-10">
 			<strong>Discount:</strong> 
-			When you buy more than one user.
-			<ul style="margin: -10px 0 10px 20px; list-style:none;">
-				<li style="font-size:14px; line-height: 100%;">2–9 users = 10% discount;
-				<li style="font-size:14px; line-height: 100%;">10–99 users = 20% discount;
-				<li style="font-size:14px; line-height: 100%;">100 or more users = 30% discount;
+			Automatic when you buy more than one user.
+			<ul style="margin: -7px 0 10px 20px; list-style:none;">
+				<li style="font-size:14px; line-height: 100%;">2–9 users: -10%;
+				<li style="font-size:14px; line-height: 100%;">10–99 users: -20%;
+				<li style="font-size:14px; line-height: 100%;">+100 users: -30%;
 			</ul>
 		</p>
 		<p class="mb-10">
 			<strong>Tax (VAT):</strong> 
-			If you are purchasing from a country in the European Union, the relevant tax rate is added.
+			In the EU, the relevant tax rate is added.
 		</p>
 		<p class="mb-10">
 			<strong>Receipts/Invoices:</strong> 
@@ -42,9 +43,9 @@
 		<p class="mb-10">
 			<strong>Credit Card:</strong> 
 			We do not store your credit card number.
-			We uses the secure <em>https</em> protocol for the whole site.
-			We use a very secure payment processor called Stripe.
-			They encrypt your details: "All card numbers are encrypted on disk with AES-256. Decryption keys are stored on separate machines".
+			We uses secure <em>https</em> for the whole site, with a 4,096 bit key.
+			We use a secure payment processor called Stripe.
+			They encrypt your details with the AES-256 standard.
 		</p>
 		<p class="mb-10">
 			<strong>Questions & Problems:</strong>
