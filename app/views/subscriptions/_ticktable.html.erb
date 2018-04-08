@@ -7,9 +7,9 @@
 	<table width="98%">
 		<tr class="even">
 			<td></td>
-			<td style="text-align:center; font-family: Oswald, Arial; font-size: 16px;">One Story</td>
-			<td style="text-align:center; font-family: Oswald, Arial; font-size: 16px;">All Stories - Current</td>
 			<td style="text-align:center; font-family: Oswald, Arial; font-size: 16px;">All Stories - Archive</td>
+			<td style="text-align:center; font-family: Oswald, Arial; font-size: 16px;">All Stories - Current</td>
+			<td style="text-align:center; font-family: Oswald, Arial; font-size: 16px;">One Story</td>
 		</tr>
 		<tr>
 			<td>Ad-free</td>
@@ -25,65 +25,65 @@
 		</tr>
 		<tr>
 			<td>Full-text e-mails</td>
+			<td style="text-align:center;">&#9989;</td>
+			<td style="text-align:center;">&#9989;</td>
 			<td style="text-align:center;">Selected story</td>
-			<td style="text-align:center;">&#9989;</td>
-			<td style="text-align:center;">&#9989;</td>
 		</tr>
 		<tr>
 			<td>Stories (Podemos, Catalan Independence, etc.)</td>
+			<td style="text-align:center;">All</td>
+			<td style="text-align:center;">All</td>
 			<td style="text-align:center;">Selected story</td>
-			<td style="text-align:center;">All</td>
-			<td style="text-align:center;">All</td>
 		</tr>
 		<tr>
 			<td>All news articles & updates</td>
+			<td style="text-align:center;">&#9989;</td>
+			<td style="text-align:center;">&#9989;</td>
 			<td style="text-align:center;">Selected story</td>
-			<td style="text-align:center;">&#9989;</td>
-			<td style="text-align:center;">&#9989;</td>
 		</tr>
 		<tr>
 			<td>All in-depth articles</td>
+			<td style="text-align:center;">&#9989;</td>
+			<td style="text-align:center;">&#9989;</td>
 			<td style="text-align:center;">Selected story</td>
-			<td style="text-align:center;">&#9989;</td>
-			<td style="text-align:center;">&#9989;</td>
 		</tr>
 		<tr>
 			<td>All editorials</td>
+			<td style="text-align:center;">&#9989;</td>
+			<td style="text-align:center;">&#9989;</td>
 			<td style="text-align:center;">Selected story</td>
-			<td style="text-align:center;">&#9989;</td>
-			<td style="text-align:center;">&#9989;</td>
 		</tr>
 		<tr>
 			<td>Archive Access</td>
-			<td style="text-align:center;">Selected story</td>
+			<td style="text-align:center;">Full</td>
 			<td style="text-align:center;">Last 30 days</td>
-			<td style="text-align:center;">Back to 2013</td>
+			<td style="text-align:center;">Selected story</td>
 		</tr>
 		<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
 			<tr>
 				<td>Price</td>
-				<td style="text-align:center;">€8.99/month</td>
-				<td style="text-align:center;"><strong>€10.99/month</strong></td>
 				<td style="text-align:center;">€17.99/month</td>
+				<td style="text-align:center;">€10.99/month</td>
+				<td style="text-align:center;">€8.99/month</td>
 			</tr>
 			<tr>
 				<td>Or just…</td>
-				<td style="text-align:center;">€0.29/day</td>
-				<td style="text-align:center;">€0.35/day</td>
 				<td style="text-align:center;">€0.58/day</td>
+				<td style="text-align:center;">€0.35/day</td>
+				<td style="text-align:center;">€0.29/day</td>
 			</tr>
 		<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 			<tr>
 				<td>Price</td>
-				<td style="text-align:center;">£7.99/month</td>
-				<td style="text-align:center;">£9.99/month</td>
 				<td style="text-align:center;">£15.99/month</td>
+				<td style="text-align:center;">£9.99/month</td>
+				<td style="text-align:center;">£7.99/month</td>
 			</tr>
 			<tr>
 				<td>Or just…</td>
-				<td style="text-align:center;">£0.26/day</td>
-				<td style="text-align:center;">£0.32/day</td>
 				<td style="text-align:center;">£0.52/day</td>
+				<td style="text-align:center;">£0.32/day</td>
+				<td style="text-align:center;">£0.26/day</td>
 			</tr>
 		<% end %>
 	</table>
