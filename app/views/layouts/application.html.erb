@@ -200,7 +200,7 @@
 			
 					<% end %>
 				</div>
-			<% elsif ['subscriber', 'subscriber_paused', 'subscriber_one_story', 'subscriber_all_stories'].include?(current_user.role) %>
+			<% elsif ['subscriber', 'subscriber_paused', 'subscriber_one_story', 'subscriber_all_current', 'subscriber_all_stories'].include?(current_user.role) %>
 				<span class="subscriber-label-mini">Subscriber</span>
 				<% if current_user.access_date.blank? || current_user.access_date < Time.current %>
 					· <a href="/subscriptions/new"><span class="highlight">Re-subscribe</span></a> · <a href="/subscriptions/prepay"><span class="highlight">Prepay</span></a>

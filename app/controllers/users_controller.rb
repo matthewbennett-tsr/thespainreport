@@ -14,6 +14,7 @@ class UsersController < ApplicationController
       @totalactivecount = User.notdeleted.count
       @subscribercount = User.subscribers.count
       @onestorycount = User.onestorysubscribers.count
+      @allcurrentcount = User.allcurrentsubscribers.count
       @allstorycount = User.allstorysubscribers.count
       @pre2018count = User.pre2018.count
       @pausedcount = User.pausedsubscribers.count

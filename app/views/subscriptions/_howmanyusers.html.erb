@@ -1,3 +1,5 @@
+<div class="subscription-form-container" onmouseover="calculateTotal()">
+
 <% if flash.present? %>
 	<% flash.each do |name, msg| %>
 		<%= content_tag :div, id: "flash_#{name}_div" do -%>
@@ -15,3 +17,10 @@
 	</div>
 	<div class="clear"></div>
 </div>
+
+<div class="subscription-form-section-middle">
+	<div class="subscription-left-label-select">
+		On Which Plan?
+	</div>
+	<div class="subscription-right-form-element">
+		<select name="plan" id="plan" class="inputplans" onchange="calculateTotal()" onclick="calculateTotal()">

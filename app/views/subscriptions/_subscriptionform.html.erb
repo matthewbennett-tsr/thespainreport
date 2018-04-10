@@ -1,25 +1,11 @@
 <%= form_tag '/new_subscription', :class => '', :id => 'payment-form' do %>
-	<div class="subscription-form-container" onmouseover="calculateTotal()">
-		<%= render 'howmanyusers' %>
-
-		<div class="subscription-form-section-middle">
-			<div class="subscription-left-label-select">
-				On Which Plan?
-			</div>
-			<div class="subscription-right-form-element">
-				<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
-					<option value="all_stories">ALL STORIES: £15.99/month</option>
-					<option value="one_story">ONE STORY: £7.99/month</option>
-				</select>
-			</div>
-			<div class="clear"></div>
-		</div>
-	
-		<%= render 'pricetopay' %>
-		<%= render 'useremail' %>
-		<%= render 'creditcard' %>
-		<%= render 'buybutton' %>
-	</div>
+	<%= render 'howmanyusers' %>
+	<%= render 'plans_uk_form' %>
+	<%= render 'plans_bottom' %>
+	<%= render 'pricetopay' %>
+	<%= render 'useremail' %>
+	<%= render 'creditcard' %>
+	<%= render 'buybutton' %>
 <% end %>
 
 <script>
@@ -47,10 +33,7 @@ var country_tax;
 	geoip2.country(onSuccess, onError);
 
 // Array of values for plans
-	var plan_prices= new Array();
-		plan_prices["zero"]=0;
-		plan_prices["all_stories"]=15.99;
-		plan_prices["one_story"]=7.99;
+	<%= render 'plans_uk' %>
 
 // Values for country flag names
 	var tax_country_names = {};

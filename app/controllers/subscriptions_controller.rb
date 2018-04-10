@@ -720,6 +720,10 @@ class SubscriptionsController < ApplicationController
 			user.update(
 				role: 'subscriber_one_story'
 				)
+		elsif params[:plan] == "all_current"
+			user.update(
+				role: 'subscriber_all_current'
+				)
 		elsif params[:plan] == "all_stories"
 			user.update(
 				role: 'subscriber_all_stories'
@@ -1049,6 +1053,8 @@ class SubscriptionsController < ApplicationController
 		
 		if ["One Story", "one_story"].include?(s.stripe_subscription_plan)
 			new_role = 'subscriber_one_story'
+		elsif ["All Current", "all_current"].include?(s.stripe_subscription_plan)
+			new_role = 'subscriber_all_current'
 		else
 			new_role = 'subscriber_all_stories'
 		end

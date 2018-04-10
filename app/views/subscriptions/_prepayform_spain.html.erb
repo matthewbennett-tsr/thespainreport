@@ -1,25 +1,14 @@
 <%= form_tag '/new_prepayment', :class => '', :id => 'payment-form' do %>
-	<div class="subscription-form-container" onmouseover="calculateTotal()">
-		<%= render 'howmanyusers' %>
-	
-		<div class="subscription-form-section-middle">
-			<div class="subscription-left-label-select">
-				On Which Plan?
-			</div>
-			<div class="subscription-right-form-element">
-				<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
-					<%= render 'plans_spain_form' %>
-				</select>
-			</div>
-			<div class="clear"></div>
-		</div>
-	
-		<%= render 'howmanymonths' %>
-		<%= render 'pricetopay' %>
-		<%= render 'useremail' %>
-		<%= render 'creditcard' %>
-		<%= render 'buybutton' %>
-	</div>
+	<%= render 'howmanyusers' %>
+	<%= render 'plans_spain_form' %>
+	<%= render 'plans_bottom' %>
+
+	<%= render 'howmanymonths' %>
+
+	<%= render 'pricetopay' %>
+	<%= render 'useremail' %>
+	<%= render 'creditcard' %>
+	<%= render 'buybutton' %>
 <% end %>
 
 <script>
