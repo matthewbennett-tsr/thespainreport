@@ -31,7 +31,7 @@
 
 <script type="text/javascript">
 
-<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+<% if controller_name == 'subscriptions' && ["spain", "prepay_spain", "support_spain"].include?(action_name) %>
 	$(function(){
 	  Stripe.setPublishableKey('<%= Rails.configuration.stripe[:publishable_spain_key] %>');
 	});

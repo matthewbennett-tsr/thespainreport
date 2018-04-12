@@ -1,4 +1,4 @@
-<% title 'Prepay Now' %>
+<% title 'Support Now' %>
 
 <div class="content-left-subscription"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
 	<div class="" style="position: relative; z-index: 1000;">
@@ -7,15 +7,15 @@
 		
 		<div class="subscription-wrapper">
 			<div class="left-50">
-				<%= render 'prepayform' %>
+				<%= render 'supportform_spain' %>
 			</div>
-			<div class="left-40-max light-green pad-20">
-				<%= render 'instructions' %>
+			<div class="left-45-max light-green pad-20">
+				<%= render 'supportinstructions' %>
 			</div>
 			<div class="clear"></div>
 		</div>
+		<hr />
 		<div class="article-text">
-			<%= render 'ticktable' %>
 			<%= render 'testimonies' %>
 			<%= render 'faq' %>
 		</div>
@@ -25,7 +25,7 @@
 
 <% if current_user.nil? %>
 	<%= render 'creditcard_js' %>
-<% elsif current_user.stripe_customer_id? && current_user.credit_card_id? %>
+<% elsif current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain? %>
 
 <% else %>
 	<%= render 'creditcard_js' %>

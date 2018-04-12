@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get 'subscriptions/spain'
   get 'subscriptions/prepay'
   get 'subscriptions/prepay_spain'
+  get 'subscriptions/support'
+  get 'subscriptions/support_spain'
   resources :subscriptions do
    member do
     get :unsubscribe

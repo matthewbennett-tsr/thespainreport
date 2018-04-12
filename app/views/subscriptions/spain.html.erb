@@ -3,7 +3,7 @@
 <div class="content-left-subscription"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
 	<div class="" style="position: relative; z-index: 1000;">
 		
-		<%= render 'top_subscribe' %>
+		<%= render 'top_headlines' %>
 		
 		<div class="subscription-wrapper">
 			<div class="left-50">
@@ -14,8 +14,11 @@
 			</div>
 			<div class="clear"></div>
 		</div>
-		
-		<%= render 'ticktable' %>
+		<div class="article-text">
+			<%= render 'ticktable' %>
+			<%= render 'testimonies' %>
+			<%= render 'faq' %>
+		</div>
 	</div>
 </div>
 <div class="clear"></div>

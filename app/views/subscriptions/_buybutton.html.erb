@@ -8,6 +8,8 @@
 				Subscribe Now
 			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
 				Prepay Now
+			<% elsif controller_name == 'subscriptions' && ["support", "support_spain"].include?(action_name) %>
+				Support Now
 			<% end %>
 		</button>
 	</div>
@@ -25,6 +27,11 @@
 <input type="hidden" name="ip_address" id="ip_address" value="">
 <input type="hidden" name="ip_country_code" id="ip_country_code" value="">
 <input type="hidden" name="ip_country_name" id="ip_country_name" value="">
+<% if controller_name == 'subscriptions' && ["support", "support_spain"].include?(action_name) %>
+	<input type="hidden" name="quantity" id="quantity" value="1">
+	<input type="hidden" name="forward" id="forward" value="">
+	<input type="hidden" name="support" id="support" value="yes">
+<% end %>
 
 
 

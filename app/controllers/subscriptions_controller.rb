@@ -728,6 +728,10 @@ class SubscriptionsController < ApplicationController
 			user.update(
 				role: 'subscriber_all_stories'
 				)
+		elsif params[:support] == "yes"
+			user.update(
+				role: 'subscriber_all_stories'
+				)
 		else
 			user.update(
 				access_date: Time.now + 30.days,
@@ -1176,7 +1180,14 @@ class SubscriptionsController < ApplicationController
   def prepay_spain
   	@taxes = Tax.all.order('tax_country_name ASC')
   end
-
+  
+  def support
+  	@taxes = Tax.all.order('tax_country_name ASC')
+  end
+  
+  def support_spain
+  	@taxes = Tax.all.order('tax_country_name ASC')
+  end
 
   # GET /subscriptions/1/edit
   def edit
