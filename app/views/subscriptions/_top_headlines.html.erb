@@ -1,16 +1,6 @@
-<% if controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
-	<h1>Prepay Now To Lock In Your Access Price</h1>
-	<div class="article-lede" id="subscribenow">
-		Enjoy original, independent reporting, editorial insight and in-depth features that take you deeper into a changing country.
-	</div>
-<% elsif controller_name == 'subscriptions' && ["new", "spain"].include?(action_name) %>
-	<h1>Subscribe Now To Understand More About The News From Spain, In English</h1>
-	<div class="article-lede" id="subscribenow">
-		Enjoy original, independent reporting, editorial insight and in-depth features take you deeper into a changing country.
-	</div>
-<% elsif controller_name == 'subscriptions' && ["support", "support_spain"].include?(action_name) %>
-	<h1>Support Independent Journalism Now</h1>
-	<div class="article-lede" id="subscribenow">
-		You guarantee self-sustaining reporting and editorial freedom from political and corporate influence.
-	</div>
-<% end %>
+<h1>
+	<%= @campaign.headline %>
+</h1>
+<div class="article-lede" id="subscribenow">
+	<%= @campaign.lede %>
+</div>

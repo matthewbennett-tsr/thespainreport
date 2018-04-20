@@ -1,53 +1,55 @@
-		<p class="mb-10">
-			<strong>How Many Users:</strong> 
-			Add friends, family, groups, teams or companies.
-			It's very easy to add your users after you pay.
-		</p>
-		<p class="mb-10">
-			<strong>Which Plan:</strong> 
-			Buy the plan that is best for you.
-			<ul style="margin: -7px 0 10px 20px; list-style:none;">
-				<li style="font-size:14px; line-height: 130%;"><em>All Stories - Archive</em>: Everything, back to 2013.</li>
-				<li style="font-size:14px; line-height: 130%;"><em>All Stories - Current</em>: Everything, last 30 days.</li>
-				<li style="font-size:14px; line-height: 130%;"><em>One Story</em>: If you are just interested in Podemos or Catalan independence or Spanish politics or X.</li>
-			</ul>
-		</p>
-		<p class="mb-10">
-			<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
-				<strong>Prepay:</strong> 
-				To buy X months in advance instead of recurring monthly charges, or to support independent journalism with a single payment, <a href="/subscriptions/prepay">use this form</a>.
-			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
-				<strong>Recurring Payments:</strong> 
-				Subscribe with recurring monthly charges instead of a single prepayment <a href="/subscriptions/new">using this form</a>.
-			<% end %>
-			
-		</p>
-		<p class="mb-10">
-			<strong>Discount:</strong> 
-			Automatic when you buy more than one user.
-			<ul style="margin: -7px 0 10px 20px; list-style:none;">
-				<li style="font-size:14px; line-height: 100%;">2–9 users: -10%;
-				<li style="font-size:14px; line-height: 100%;">10–99 users: -20%;
-				<li style="font-size:14px; line-height: 100%;">+100 users: -30%;
-			</ul>
-		</p>
-		<p class="mb-10">
-			<strong>Tax (VAT):</strong> 
-			In the EU, the relevant tax rate is added.
-		</p>
-		<p class="mb-10">
-			<strong>Receipts/Invoices:</strong> 
-			You can access a receipt or invoice for tax or accounting purposes immediately after your purchase.
-			There is space on each receipt to add your details.
-		</p>
-		<p class="mb-10">
-			<strong>Credit Card:</strong> 
-			We do not store your credit card number.
-			We uses secure <em>https</em> for the whole site, with a 4,096 bit key.
-			We use a secure payment processor called Stripe.
-			They encrypt your details with the AES-256 standard.
-		</p>
-		<p class="mb-10">
-			<strong>Questions & Problems:</strong>
-			Send us an e-mail to <a href="mailto:subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> and we will help you.
-		</p>
+<div class="light-green pad-20 instructions">
+	<p class="mb-10">
+		<strong>How Many Users:</strong> 
+		Add friends, family, groups, teams or companies.
+		It's very easy to add your users after you pay.
+	</p>
+	<p class="mb-10">
+		<strong>Which Plan:</strong> 
+		Buy the plan that is best for you.
+		<ul style="margin: -7px 0 10px 20px; list-style:none;">
+			<li style="font-size:14px; line-height: 130%;"><em>All Stories - Archive</em>: Everything, back to 2013.</li>
+			<li style="font-size:14px; line-height: 130%;"><em>All Stories - Current</em>: Everything, last 30 days.</li>
+			<li style="font-size:14px; line-height: 130%;"><em>One Story</em>: If you are just interested in Podemos or Catalan independence or Spanish politics or X.</li>
+		</ul>
+	</p>
+	<p class="mb-10">
+		<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+			<strong>Prepay:</strong> 
+			To buy X months in advance instead of recurring monthly charges, or to support independent journalism with a single payment, <a href="/subscriptions/prepay">use this form</a>.
+		<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+			<strong>Recurring Payments:</strong> 
+			Subscribe with recurring monthly charges instead of a single prepayment <a href="/subscriptions/new">using this form</a>.
+		<% end %>
+		
+	</p>
+	<p class="mb-10">
+		<strong>Discount:</strong> 
+		Automatic when you buy more than one user.
+		<ul style="margin: -7px 0 10px 20px; list-style:none;">
+			<li style="font-size:14px; line-height: 100%;">2–9 users: -10%;
+			<li style="font-size:14px; line-height: 100%;">10–99 users: -20%;
+			<li style="font-size:14px; line-height: 100%;">+100 users: -30%;
+		</ul>
+	</p>
+	<p class="mb-10">
+		<strong>Tax (VAT):</strong> 
+		In the EU, the relevant tax rate is added.
+	</p>
+	<p class="mb-10">
+		<strong>Receipts/Invoices:</strong> 
+		You can access a receipt or invoice for tax or accounting purposes immediately after your purchase.
+		There is space on each receipt to add your details.
+	</p>
+	<p class="mb-10">
+		<strong>Credit Card:</strong> 
+		We do not store your credit card number.
+		We uses secure <em>https</em> for the whole site, with a 4,096 bit key.
+		We use a secure payment processor called Stripe.
+		They encrypt your details with the AES-256 standard.
+	</p>
+	<p class="mb-10">
+		<strong>Questions & Problems:</strong>
+		Send us an e-mail to <a href="mailto:subscriptions@thespainreport.com">subscriptions@thespainreport.com</a> and we will help you.
+	</p>
+</div>

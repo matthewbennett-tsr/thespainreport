@@ -1,0 +1,78 @@
+<script>
+	function checkCountry(){
+	var onSuccess = function(x){
+	var country_code = x.country.iso_code;
+	document.getElementById('ip_country_code').value = country_code;
+	
+	function getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
+    var params = getParameterByName('c');
+    var spainsubs = '/subscriptions/spain/new?c=' + params;
+    var spainprepay = '/subscriptions/spain/prepay?c=' + params;
+    var spainsupport = '/subscriptions/spain/support?c=' + params;
+    var spainsupportes = '/subscriptions/spain/support/es?c=' + params;
+    
+    if (window.location.pathname == '/subscriptions/new') {
+			if (x.country.iso_code == "ES"){window.location.replace(spainsubs);}
+		};
+	if (window.location.pathname == '/subscriptions/prepay'){
+			if (x.country.iso_code == "ES"){window.location.replace(spainprepay);}
+		};
+	if (window.location.pathname == '/subscriptions/support'){
+			if (x.country.iso_code == "ES"){window.location.replace(spainsupport);}
+		};
+	if (window.location.pathname == '/subscriptions/support/es'){
+			if (x.country.iso_code == "ES"){window.location.replace(spainsupportes);}
+		};
+
+		if (window.location.pathname == '/subscriptions/new?c=' + params) {
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/spain?c=' + params);}
+		};
+		
+		<% if URI(request.original_url).path == '/subscriptions/spain' %>
+			if (x.country.iso_code !== "ES"){window.location.replace('/subscriptions/new');}
+		<% elsif URI(request.original_url).path == '/subscriptions/prepay_spain' %>
+			if (x.country.iso_code != "ES"){window.location.replace(newpage);}
+		<% elsif URI(request.original_url).path == '/subscriptions/prepay' %>
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/prepay_spain');}
+		<% elsif URI(request.original_url).path == '/subscriptions/support_spain' %>
+			if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/support');}
+		<% elsif URI(request.original_url).path == '/subscriptions/support' %>
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/support_spain');}
+		<% end %>
+		
+		<% if URI(request.original_url).path == '/subscriptions/spain' %>
+			if (x.country.iso_code !== "ES"){window.location.replace('/subscriptions/new');}
+		<% elsif URI(request.original_url).path == ('/subscriptions/new') %>
+		
+			if window.location.pathname == '/subscriptions/new';
+			if (x.country.iso_code == "ES"){window.location.replace(newpage);}
+		<% elsif URI(request.original_url).path == '/subscriptions/new' %>
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/spain');}
+		<% elsif URI(request.original_url).path == '/subscriptions/prepay_spain' %>
+			if (x.country.iso_code != "ES"){window.location.replace(newpage);}
+		<% elsif URI(request.original_url).path == '/subscriptions/prepay' %>
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/prepay_spain');}
+		<% elsif URI(request.original_url).path == '/subscriptions/support_spain' %>
+			if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/support');}
+		<% elsif URI(request.original_url).path == '/subscriptions/support' %>
+			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/support_spain');}
+		<% end %>
+		
+	};
+	var onError = function(error){
+		alert(
+			"Error:\n\n"
+			+ JSON.stringify(error, undefined, 4)
+			);
+	};
+	geoip2.country(onSuccess, onError);
+};
+</script>

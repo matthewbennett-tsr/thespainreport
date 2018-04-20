@@ -1,0 +1,45 @@
+<%= form_for @campaign, :html => {:multipart => true} do |f| %>
+	<% if @campaign.errors.any? %>
+		<div id="error_explanation">
+			<h2><%= pluralize(@campaign.errors.count, "error") %> prohibited this campaign from being saved:</h2>
+
+			<ul>
+			<% @campaign.errors.full_messages.each do |message| %>
+				<li><%= message %></li>
+			<% end %>
+			</ul>
+		</div>
+	<% end %>
+	
+	<div class="admin-block">
+		<div style="margin-top: 5px;">
+			<%= f.text_field :keyword,:size => '10' %> | <%= f.submit %>
+			<% if action_name == "edit" %>
+			 | <%= link_to 'Subscribe', '/subscriptions/new?c=' + @campaign.keyword, :target => 'blank' %>
+			 | <%= link_to 'Prepay', '/subscriptions/prepayment?c=' + @campaign.keyword, :target => 'blank' %>
+			 | <%= link_to 'Support', '/subscriptions/support?c=' + @campaign.keyword, :target => 'blank' %>
+			 | <%= link_to 'Apoyar', '/subscriptions/support_spain/es?c=' + @campaign.keyword, :target => 'blank' %>
+			<% end %>
+		</div>
+	</div>
+	
+	<div class="admin-block">
+		<div style="margin-top: 5px;">
+			<%= f.text_area :headline, :class => "edit-headline", :style => 'width: 100%; padding:5px;' %>
+		</div>
+		<div style="margin-top: 5px;">
+			<%= f.text_area :lede, :class => "edit-lede", :style => 'width: 100%; padding:5px;' %>
+		</div>
+	</div>
+
+	<div class="admin-block-image">
+		<%= f.file_field :url %> <% if @campaign.url? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
+		<%= f.check_box :remove_url %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+	</div>
+	
+	<div class="admin-block">
+		<div style="margin-top: 5px;">
+			<%= f.text_area :text, :style => 'width: 100%; min-height:250px;' %>
+		</div>
+	</div>
+<% end %>

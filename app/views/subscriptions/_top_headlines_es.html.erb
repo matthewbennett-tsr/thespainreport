@@ -1,0 +1,8 @@
+<% if controller_name == 'subscriptions' && ["support_es", "support_spain_es"].include?(action_name) %>
+	<h1>
+		<%= @campaign.headline %>
+	</h1>
+	<div class="article-lede" id="subscribenow">
+		<%= @campaign.lede %>
+	</div>
+<% end %>

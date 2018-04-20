@@ -10,6 +10,8 @@
 				Prepay Now
 			<% elsif controller_name == 'subscriptions' && ["support", "support_spain"].include?(action_name) %>
 				Support Now
+			<% elsif controller_name == 'subscriptions' && ["support_es", "support_spain_es"].include?(action_name) %>
+				Comprar
 			<% end %>
 		</button>
 	</div>

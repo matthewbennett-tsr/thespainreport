@@ -19,6 +19,7 @@ class User < ActiveRecord::Base
   end
   
   scope :subscribers, -> {where(role: ['subscriber', 'subscriber_one_story', 'subscriber_all_current', 'subscriber_all_stories'])}
+  scope :fullaccess, -> {where(role: ['subscriber', 'subscriber_all_current', 'subscriber_all_stories'])}
   scope :onestorysubscribers, -> {where(role: 'subscriber_one_story')}
   scope :allstorysubscribers, -> {where(role: 'subscriber_all_stories')}
   scope :allcurrentsubscribers, -> {where(role: 'subscriber_all_current')}

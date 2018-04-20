@@ -1,0 +1,33 @@
+<% title 'Support Now' %>
+
+<div class="content-left-subscription"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+	<div class="" style="position: relative; z-index: 1000;">
+		
+		<%= render 'top_headlines' %>
+		
+		<div class="subscription-wrapper">
+			<div class="left-50">
+				<%= render 'spain_supportform_es' %>
+			</div>
+			<div class="left-45-max light-green pad-20 campaign">
+				<%= render 'campaign_text' %>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<%= render 'supportinstructions' %>
+		<hr />
+		<div class="article-text">
+			<%= render 'testimonies' %>
+			<%= render 'faq' %>
+		</div>
+	</div>
+</div>
+<div class="clear"></div>
+
+<% if current_user.nil? %>
+	<%= render 'creditcard_js' %>
+<% elsif current_user.stripe_customer_id_spain? && current_user.credit_card_id_spain? %>
+
+<% else %>
+	<%= render 'creditcard_js' %>
+<% end %>

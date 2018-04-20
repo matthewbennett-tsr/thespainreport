@@ -3,7 +3,7 @@
 		Discount:
 	</div>
 	<div class="subscription-right-form-element">
-		<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["spain_new", "spain_prepay"].include?(action_name) %>
 			€
 		<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 			£
@@ -18,7 +18,7 @@
 		Subtotal:
 	</div>
 	<div class="subscription-right-form-element">
-		<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["spain_new", "spain_prepay"].include?(action_name) %>
 			€
 		<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 			£
@@ -33,7 +33,7 @@
 		VAT:
 	</div>
 	<div class="subscription-right-form-element">
-		<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["spain_new", "spain_prepay"].include?(action_name) %>
 			€
 		<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 			£
@@ -50,15 +50,15 @@
 		Total:
 	</div>
 	<div class="subscription-right-form-element">
-		<% if controller_name == 'subscriptions' && ["spain", "prepay_spain"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["spain_new", "spain_prepay"].include?(action_name) %>
 			€
 		<% elsif controller_name == 'subscriptions' && ["new", "prepay"].include?(action_name) %>
 			£
 		<% end %>
 		<span id="t"></span>
-		<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["new", "spain_new"].include?(action_name) %>
 			 / month
-		<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+		<% elsif controller_name == 'subscriptions' && ["prepay", "spain_prepay"].include?(action_name) %>
 			 / one-time
 		<% end %>
 	</div>

@@ -1161,33 +1161,103 @@ class SubscriptionsController < ApplicationController
     end
   end
 
-  # GET /subscriptions/new
-  def new
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
-  
-  # GET /subscriptions/spain
-  def spain
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
-  
-  # GET /subscriptions/prepay
-  def prepay
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
+	# GET /subscriptions/new
+	def new
+		taxes
+		campaigns_subs
+	end
+	
+	# GET /subscriptions/spain/new
+	def spain_new
+		taxes
+		campaigns_subs
+	end
+	
+	# GET /subscriptions/prepay
+	def prepay
+		taxes
+		campaigns_prepay
+	end
 
 	# GET /subscriptions/prepay
-  def prepay_spain
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
-  
-  def support
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
-  
-  def support_spain
-  	@taxes = Tax.all.order('tax_country_name ASC')
-  end
+	def spain_prepay
+		taxes
+		campaigns_prepay
+	end
+	
+	def support
+		taxes
+		campaigns_support
+	end
+	
+	def support_es
+		taxes
+		campaigns_support_es
+	end
+	
+	def spain_support
+		taxes
+		campaigns_support
+	end
+	
+	def spain_support_es
+		taxes
+		campaigns_support_es
+	end
+	
+	#taxes
+	def taxes
+		@taxes = Tax.all.order('tax_country_name ASC')
+	end
+	
+	# campaigns
+	def campaigns_subs
+		if params[:c]
+			if !Campaign.find_by_keyword(params[:c])
+				@campaign = Campaign.find_by_keyword('default_subscription')
+			else
+				@campaign = Campaign.find_by_keyword(params[:c])
+			end
+		else
+			@campaign = Campaign.find_by_keyword('default_subscription')
+		end
+	end
+	
+	def campaigns_prepay
+		if params[:c]
+			if !Campaign.find_by_keyword(params[:c])
+				@campaign = Campaign.find_by_keyword('default_prepay')
+			else
+				@campaign = Campaign.find_by_keyword(params[:c])
+			end
+		else
+			@campaign = Campaign.find_by_keyword('default_prepay')
+		end
+	end
+	
+	def campaigns_support
+		if params[:c]
+			if !Campaign.find_by_keyword(params[:c])
+				@campaign = Campaign.find_by_keyword('default_support')
+			else
+				@campaign = Campaign.find_by_keyword(params[:c])
+			end
+		else
+			@campaign = Campaign.find_by_keyword('default_support')
+		end
+	end
+	
+	def campaigns_support_es
+		if params[:c]
+			if !Campaign.find_by_keyword(params[:c])
+				@campaign = Campaign.find_by_keyword('default_support_es')
+			else
+				@campaign = Campaign.find_by_keyword(params[:c])
+			end
+		else
+			@campaign = Campaign.find_by_keyword('default_support_es')
+		end
+	end
 
   # GET /subscriptions/1/edit
   def edit

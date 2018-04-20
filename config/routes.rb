@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :campaigns
   resources :tweets
   resources :accounts
   resources :images
@@ -29,11 +30,13 @@ Rails.application.routes.draw do
   post 'buy_more_users' => 'subscriptions#buy_more_users'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
   post '/SzXGyFFp0s3fMpc' => 'subscriptions#stripe_hooks'
-  get 'subscriptions/spain'
   get 'subscriptions/prepay'
-  get 'subscriptions/prepay_spain'
   get 'subscriptions/support'
-  get 'subscriptions/support_spain'
+  get 'subscriptions/support/es' => 'subscriptions#support_es'
+  get 'subscriptions/spain/new' => 'subscriptions#spain_new'
+  get 'subscriptions/spain/prepay' => 'subscriptions#spain_prepay'
+  get 'subscriptions/spain/support' => 'subscriptions#spain_support'
+  get 'subscriptions/spain/support/es' => 'subscriptions#spain_support_es'
   resources :subscriptions do
    member do
     get :unsubscribe
