@@ -18,6 +18,10 @@
     var spainprepay = '/subscriptions/spain/prepay?c=' + params;
     var spainsupport = '/subscriptions/spain/support?c=' + params;
     var spainsupportes = '/subscriptions/spain/support/es?c=' + params;
+    var uksubs = '/subscriptions/new?c=' + params;
+    var ukprepay = '/subscriptions/prepay?c=' + params;
+    var uksupport = '/subscriptions/support?c=' + params;
+    var uksupportes = '/subscriptions/support/es?c=' + params;
     
     if (window.location.pathname == '/subscriptions/new') {
 			if (x.country.iso_code == "ES"){window.location.replace(spainsubs);}
@@ -31,8 +35,18 @@
 	if (window.location.pathname == '/subscriptions/support/es'){
 			if (x.country.iso_code == "ES"){window.location.replace(spainsupportes);}
 		};
-
-
+	if (window.location.pathname == '/subscriptions/spain/new') {
+			if (x.country.iso_code != "ES"){window.location.replace(uksubs);}
+		};
+	if (window.location.pathname == '/subscriptions/spain/prepay'){
+			if (x.country.iso_code != "ES"){window.location.replace(ukprepay);}
+		};
+	if (window.location.pathname == '/subscriptions/spain/support'){
+			if (x.country.iso_code != "ES"){window.location.replace(uksupport);}
+		};
+	if (window.location.pathname == '/subscriptions/spain/support/es'){
+			if (x.country.iso_code != "ES"){window.location.replace(uksupportes);}
+		};
 		
 	};
 	var onError = function(error){
