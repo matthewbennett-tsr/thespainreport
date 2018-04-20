@@ -32,39 +32,7 @@
 			if (x.country.iso_code == "ES"){window.location.replace(spainsupportes);}
 		};
 
-		if (window.location.pathname == '/subscriptions/new?c=' + params) {
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/spain?c=' + params);}
-		};
-		
-		<% if URI(request.original_url).path == '/subscriptions/spain' %>
-			if (x.country.iso_code !== "ES"){window.location.replace('/subscriptions/new');}
-		<% elsif URI(request.original_url).path == '/subscriptions/prepay_spain' %>
-			if (x.country.iso_code != "ES"){window.location.replace(newpage);}
-		<% elsif URI(request.original_url).path == '/subscriptions/prepay' %>
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/prepay_spain');}
-		<% elsif URI(request.original_url).path == '/subscriptions/support_spain' %>
-			if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/support');}
-		<% elsif URI(request.original_url).path == '/subscriptions/support' %>
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/support_spain');}
-		<% end %>
-		
-		<% if URI(request.original_url).path == '/subscriptions/spain' %>
-			if (x.country.iso_code !== "ES"){window.location.replace('/subscriptions/new');}
-		<% elsif URI(request.original_url).path == ('/subscriptions/new') %>
-		
-			if window.location.pathname == '/subscriptions/new';
-			if (x.country.iso_code == "ES"){window.location.replace(newpage);}
-		<% elsif URI(request.original_url).path == '/subscriptions/new' %>
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/spain');}
-		<% elsif URI(request.original_url).path == '/subscriptions/prepay_spain' %>
-			if (x.country.iso_code != "ES"){window.location.replace(newpage);}
-		<% elsif URI(request.original_url).path == '/subscriptions/prepay' %>
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/prepay_spain');}
-		<% elsif URI(request.original_url).path == '/subscriptions/support_spain' %>
-			if (x.country.iso_code != "ES"){window.location.replace('/subscriptions/support');}
-		<% elsif URI(request.original_url).path == '/subscriptions/support' %>
-			if (x.country.iso_code == "ES"){window.location.replace('/subscriptions/support_spain');}
-		<% end %>
+
 		
 	};
 	var onError = function(error){
