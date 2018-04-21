@@ -1,7 +1,11 @@
 <div class="subscription-form-section-middle" style="background-image: url(<%= asset_path 'thespainreport-evssl-yellow.jpg' %>); background-repeat: no-repeat; background-position: bottom right; background-size: 65px 48px;">
 	<div> 
 		<div class="subscription-left-label-input">
-			Your Credit Card Number:
+			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+				Your Credit Card Number:
+			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+				Número de tarjeta:
+			<% end %>
 		</div>
 		<div class="subscription-right-form-element form-group">
 			<input type="tel" autocomplete="cc-number" id="cc-number" class="inputgeneral form-control cc-number" size="21" maxlength="19" data-stripe="number" placeholder="•••• •••• •••• ••••" onclick="calculateTotal()" />
@@ -11,12 +15,22 @@
 	
 	<div style="margin-top: 5px;">
 		<div class="subscription-left-label-select">
-			Card Expiry Date:
+			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+				Card Expiry Date:
+			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+				Caduca:
+			<% end %>
 		</div>
 			
 		<div class="subscription-right-form-element">
 			<select data-stripe="exp-month" class="ccjs-month">
-				<option selected disabled>Month</option>
+				<option selected disabled>
+					<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+						Month
+					<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+						Mes
+					<% end %>
+				</option>
 				<option value="01">01</option>
 				<option value="02">02</option>
 				<option value="03">03</option>
@@ -32,7 +46,13 @@
 			</select>
 				
 			<select data-stripe="exp-year" class="ccjs-year">
-				<option selected disabled>Year</option>
+				<option selected disabled>
+					<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+						Year
+					<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+						Año
+					<% end %>
+				</option>
 				<option value="18">18</option>
 				<option value="19">19</option>
 				<option value="20">20</option>
@@ -49,7 +69,11 @@
 				
 	<div style="margin-top: 5px;">
 		<div class="subscription-left-label-input">
-			Card CVC/Security Code:
+			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+				Card CVC/Security Code:
+			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+				Código de seguridad:
+			<% end %>
 		</div>
 		<div class="subscription-right-form-element">
 			<input type="text" id="cc-cvc" class="inputgeneral cc-cvc" size="3" maxlength="4" data-stripe="cvc" placeholder="•••" autocomplete="off" required/>

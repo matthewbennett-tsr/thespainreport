@@ -1,6 +1,10 @@
 <div class="subscription-form-section-middle">
 	<div class="subscription-left-label-input">
-		Your E-mail Address:
+		<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
+			Your E-mail Address:
+		<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+			Tu correo:
+		<% end %>
 	</div>
 	<div class="subscription-right-form-element">
 		<% if current_user.nil? || current_user.role == 'editor' %>

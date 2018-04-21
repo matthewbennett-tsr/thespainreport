@@ -1,6 +1,10 @@
 <div class="subscription-form-section-middle">
 	<div class="subscription-left-label-select">
-		Subtotal:
+		<% if controller_name == 'subscriptions' && ["support", "spain_support"].include?(action_name) %>
+			Subtotal:
+		<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+			Base:
+		<% end %>
 	</div>
 	<div class="subscription-right-form-element">
 		<% if controller_name == 'subscriptions' && ["spain_support", "spain_support_es"].include?(action_name) %>
@@ -15,7 +19,11 @@
 
 <div class="subscription-form-section-middle">
 	<div class="subscription-left-label-select">
-		VAT:
+		<% if controller_name == 'subscriptions' && ["support", "spain_support"].include?(action_name) %>
+			VAT
+		<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
+			IVA
+		<% end %>
 	</div>
 	<div class="subscription-right-form-element">
 		<% if controller_name == 'subscriptions' && ["spain_support", "spain_support_es"].include?(action_name) %>
