@@ -5,7 +5,7 @@
 	<div class="subscription-right-form-element">
 		<% if controller_name == 'subscriptions' && ["spain_support", "spain_support_es"].include?(action_name) %>
 			€
-		<% elsif controller_name == 'subscriptions' && ["support"].include?(action_name) %>
+		<% elsif controller_name == 'subscriptions' && ["support", "support_es"].include?(action_name) %>
 			£
 		<% end %>
 		<span id="p"></span>
@@ -20,7 +20,7 @@
 	<div class="subscription-right-form-element">
 		<% if controller_name == 'subscriptions' && ["spain_support", "spain_support_es"].include?(action_name) %>
 			€
-		<% elsif controller_name == 'subscriptions' && ["support"].include?(action_name) %>
+		<% elsif controller_name == 'subscriptions' && ["support", "support_es"].include?(action_name) %>
 			£
 		<% end %>
 		<span id="r"></span>
@@ -37,13 +37,13 @@
 	<div class="subscription-right-form-element">
 		<% if controller_name == 'subscriptions' && ["spain_support", "spain_support_es"].include?(action_name) %>
 			€
-		<% elsif controller_name == 'subscriptions' && ["support"].include?(action_name) %>
+		<% elsif controller_name == 'subscriptions' && ["support", "support_es"].include?(action_name) %>
 			£
 		<% end %>
 		<span id="t"></span>
-		<% if controller_name == 'subscriptions' && ["spain_support"].include?(action_name) %>
+		<% if controller_name == 'subscriptions' && ["support", "spain_support"].include?(action_name) %>
 			 / one-time
-		<% elsif controller_name == 'subscriptions' && ["spain_support_es"].include?(action_name) %>
+		<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 			 / pago único
 		<% end %>
 	</div>

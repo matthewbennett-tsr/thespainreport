@@ -4,13 +4,13 @@
 	</div>
 	<div class="subscription-right-form-element">
 		<button type="submit" class="blueformbutton" style="z-index: 1000;">
-			<% if controller_name == 'subscriptions' && ["spain", "new"].include?(action_name) %>
+			<% if controller_name == 'subscriptions' && ["new", "spain_new"].include?(action_name) %>
 				Subscribe Now
-			<% elsif controller_name == 'subscriptions' && ["prepay", "prepay_spain"].include?(action_name) %>
+			<% elsif controller_name == 'subscriptions' && ["prepay", "spain_prepay"].include?(action_name) %>
 				Prepay Now
-			<% elsif controller_name == 'subscriptions' && ["support", "support_spain"].include?(action_name) %>
+			<% elsif controller_name == 'subscriptions' && ["support", "spain_support"].include?(action_name) %>
 				Support Now
-			<% elsif controller_name == 'subscriptions' && ["support_es", "support_spain_es"].include?(action_name) %>
+			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 				Comprar
 			<% end %>
 		</button>

@@ -1,13 +1,6 @@
 <%= form_tag '/new_prepayment', :class => '', :id => 'payment-form' do %>
 
-	<div class="subscription-form-container" onmouseover="calculateTotal()">
-		<% if flash.present? %>
-			<% flash.each do |name, msg| %>
-				<%= content_tag :div, id: "flash_#{name}_div" do -%>
-					<%= content_tag :span, msg.html_safe, id: "flash_#{name}" %>
-				<% end -%>
-			<% end %>
-		<% end %>
+	<%= render 'formtopload' %>
 
 		<div class="subscription-form-section-middle">
 			<div class="subscription-left-label-select">

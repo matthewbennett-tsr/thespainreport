@@ -1,12 +1,38 @@
 <%= form_tag '/new_prepayment', :class => '', :id => 'payment-form' do %>
+
 	<%= render 'formtopload' %>
-	<%= render 'howmanyusers' %>
-	<%= render 'plans_spain_form' %>
-	<%= render 'plans_bottom' %>
 
-	<%= render 'howmanymonths' %>
+		<div class="subscription-form-section-middle">
+			<div class="subscription-left-label-select">
+				Tu contribución:
+			</div>
+			<div class="subscription-right-form-element">
+				<select name="plan" id="plan" class="input200" onchange="calculateTotal()" onclick="calculateTotal()">
+					<option value="500">£500</option>
+					<option value="300">£300</option>
+					<option value="200">£200</option>
+					<option value="150">£150</option>
+					<option value="100" selected="selected">£100</option>
+					<option value="75">£75</option>
+					<option value="50">£50</option>
+					<option value="30">£30</option>
+					<option value="25">£25</option>
+				</select>
+			</div>
+			<div class="clear"></div>
+		</div>
 
-	<%= render 'pricetopay' %>
+		<div class="subscription-form-section-middle">
+			<div class="subscription-left-label-select">
+				A cambio recibes:
+			</div>
+			<div class="subscription-right-form-element">
+				<span id="g"></span> meses de acceso a todo
+			</div>
+			<div class="clear"></div>
+		</div>
+
+	<%= render 'supportpricetopay' %>
 	<%= render 'useremail' %>
 	<%= render 'creditcard' %>
 	<%= render 'buybutton' %>
@@ -37,7 +63,16 @@ var country_tax;
 	geoip2.country(onSuccess, onError);
 
 // Array of values for plans
-	<%= render 'plans_spain' %>
+	var plan_prices= new Array();
+	plan_prices["25"]=25;
+	plan_prices["30"]=30;
+	plan_prices["50"]=50;
+	plan_prices["75"]=75;
+	plan_prices["100"]=100;
+	plan_prices["150"]=150;
+	plan_prices["200"]=200;
+	plan_prices["300"]=300;
+	plan_prices["500"]=500;
 
 // Values for country flag names
 	var tax_country_names = {};
@@ -98,36 +133,6 @@ function PlanPrice()
     return planprice;
 }
 
-function HowMany()
-{
-  var howmany=0;
-  var theForm = document.forms["payment-form"];
-  var selectedquantity = theForm.elements["quantity"];
-  howmany = selectedquantity.value;
-  return howmany;
-}
-
-function HowForward()
-{
-  var howforward=0;
-  var theForm = document.forms["payment-form"];
-  var selectedquantity = theForm.elements["forward"];
-  howforward = selectedquantity.value;
-  return howforward;
-}
-
-function HowDiscount()
-{
-	var howdiscount=0
-	var theForm = document.forms["payment-form"];
-	var selectedquantity = theForm.elements["quantity"].value;
-	if(selectedquantity == 1) {howdiscount = 0;}
-	if(selectedquantity > 1) {howdiscount = 0.1;}
-	if(selectedquantity >= 10) {howdiscount = 0.2;}
-	if(selectedquantity >= 100) {howdiscount = 0.3;}
-	return howdiscount
-}
-
 function TaxPrice() 
 { 
   var taxprice = 0;
@@ -153,11 +158,11 @@ function calculateTotal()
 
   // Do the maths
     var TaxRate = TaxPrice() / 100;
-    var TotalBase = PlanPrice() * HowMany() * HowForward();
-    var TotalDiscount = TotalBase * HowDiscount();
-    var TotalSub = TotalBase - TotalDiscount;
-    var TotalTax = (TaxRate * TotalSub);
-    var TotalPrice = TotalSub + TotalTax;
+    var TotalPrice = PlanPrice();
+    var OneUnit = TotalPrice / (100 + +TaxPrice());
+    var TotalSub = OneUnit * 100;
+    var TotalTax = OneUnit * +TaxPrice();
+    var MonthsForward = TotalSub / 20;
     
     // Check for not a number
     if(isNaN(TotalPrice)) {
@@ -170,9 +175,9 @@ function calculateTotal()
     
     if (typeof TaxPrice() != 'undefined' && typeof PlanPrice() != 'undefined') {
     
-    // display discount
-    var divobj = document.getElementById('d');
-    divobj.innerHTML = TotalDiscount.toFixed(2);
+    // display months access
+    var divobj = document.getElementById('g');
+    divobj.innerHTML = MonthsForward.toFixed();
     
     // display subtotal
     var divobj = document.getElementById('p');
@@ -186,13 +191,13 @@ function calculateTotal()
     var divobj = document.getElementById('t');
     divobj.innerHTML = TotalPrice.toFixed(2);
     
+    // inner months forward
+    var divobj = document.getElementById('forward');
+    divobj.value = MonthsForward.toFixed();
+    
     // inner base_price
     var divobj = document.getElementById('base_price');
     divobj.value = Math.round(PlanPrice()*100);
-    
-    // inner discount rate
-    var divobj = document.getElementById('discount');
-    divobj.value = Math.round(HowDiscount()*100);
     
     // inner subtotal
     var divobj = document.getElementById('subtotal');
