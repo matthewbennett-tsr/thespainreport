@@ -6,12 +6,10 @@ class AudiosController < ApplicationController
   def index
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @audios = Audio.lastthirty
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -20,12 +18,10 @@ class AudiosController < ApplicationController
   def show
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -33,12 +29,10 @@ class AudiosController < ApplicationController
   def new
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @audio = Audio.new
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -46,12 +40,10 @@ class AudiosController < ApplicationController
   def edit
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -60,7 +52,6 @@ class AudiosController < ApplicationController
   def create
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @audio = Audio.new(audio_params)
       respond_to do |format|
@@ -74,7 +65,6 @@ class AudiosController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -83,7 +73,6 @@ class AudiosController < ApplicationController
   def update
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       respond_to do |format|
         if @audio.update(audio_params)
@@ -96,7 +85,6 @@ class AudiosController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
@@ -105,7 +93,6 @@ class AudiosController < ApplicationController
   def destroy
     if current_user.nil? 
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     elsif current_user.role == 'editor'
       @audio.destroy
       respond_to do |format|
@@ -114,7 +101,6 @@ class AudiosController < ApplicationController
       end
     else
       redirect_to root_url
-      flash[:success] = "Now then, now then, you're not allowed to do that."
     end
   end
 
