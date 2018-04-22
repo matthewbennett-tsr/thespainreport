@@ -1,9 +1,9 @@
 <% if @campaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
-	<div class="main-image-liveblog-update">
+	<div class="campaign-image">
 		<%= image_tag @campaign.url if @campaign.url? %>
 	</div>
 <% elsif @campaign.video? %>
-	<div class="main-image-liveblog-update-video">
+	<div class="campaign-video">
 		<div class="video-wrapper">
 			<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@campaign.video}?rel=0&amp;showinfo=0") %>
 		</div>
@@ -11,4 +11,6 @@
 <% else %>
 <% end %>
 
-<%= markdown(@campaign.text) %>
+<div class="campaign-text">
+	<%= markdown(@campaign.text) %>
+</div>
