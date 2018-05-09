@@ -1,8 +1,11 @@
-<p id="notice"><%= notice %></p>
+<div class="content-left-new-page"> <%# LEFT-HAND MAIN CONTENT BLOCK %>
+<div class="content-white-background">
 
+<div class="admin-block">
+<p id="notice"><%= notice %></p>
 <h1>Listing Campaigns</h1>
 
-<table>
+<table class="admin-table">
   <thead>
     <tr>
       <th colspan="3"></th>
@@ -14,6 +17,8 @@
       <tr>
         <td><%= link_to campaign.keyword, edit_campaign_path(campaign) %></td>
         <td><%= campaign.headline %></td>
+        <td><%= campaign.article_count %></td>
+        <td><%= campaign.subscriptions.count %></td>
         <td><%= link_to 'D', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
     <% end %>
@@ -23,3 +28,7 @@
 <br>
 
 <%= link_to 'New Campaign', new_campaign_path %>
+
+</div>
+</div>
+</div>

@@ -266,6 +266,7 @@
   <% end %>
   
 <% if @article.campaign %>
+	<% @article.campaign.increment!(:article_count) %>
 	<div class="article-ads">
 		<h3><%= @article.campaign.headline %></h3>
 		<div class="article-ads-lede"><%= @article.campaign.lede %></div>
@@ -287,6 +288,7 @@
 		<div class="article-ads-button"><a href="/subscriptions/new?c=<%= @article.campaign.keyword %>" class="blueformbutton" style="z-index: 1000;">Subscribe Now</a></div>
 	</div>
 <% else %>
+	<% @defaultcampaign.increment!(:article_count) %>
 	<div class="article-ads">
 		<h3><%= @defaultcampaign.headline %></h3>
 		<div class="article-ads-lede"><%= @defaultcampaign.lede %></div>

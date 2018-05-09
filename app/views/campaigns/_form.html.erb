@@ -12,6 +12,11 @@
 	<% end %>
 	
 	<div class="admin-block">
+		<p>
+			<strong>Real subscriptions:</strong> <%= @campaign.subscriptions.count %>
+		<p>
+	</div>
+	<div class="admin-block">
 		<div style="margin-top: 5px;">
 			<%= f.text_field :keyword,:size => '10' %> | <%= f.submit %>
 			<% if action_name == "edit" %>

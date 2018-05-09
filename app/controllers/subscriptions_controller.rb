@@ -628,6 +628,7 @@ class SubscriptionsController < ApplicationController
 		s.stripe_subscription_created = Time.current.to_datetime
 		s.stripe_currency = @currency
 		s.stripe_status = 'active'
+		s.campaign_id = params[:campaign_id]
 		s.save!
 		
 		# Create the first invoice for that subscription record on TSR
@@ -1305,6 +1306,7 @@ class SubscriptionsController < ApplicationController
 		# Never trust parameters from the scary internet, only allow the white list through.
 		def subscription_params
 			params.require(:subscription).permit(
+				:campaign_id,
 				:user_id,
 				:stripe_customer_id,
 				:stripe_subscription_id,
