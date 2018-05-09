@@ -33,6 +33,7 @@
 	<%= f.hidden_field :source %> <%# Backwards compatible hack to make the image work on display, something strange going on when omitting this field %>
 	<%= f.file_field :main %> <% if @article.main? %> <span style="font-size: 11px; color: red;">!!!</span><% end %>
 	<%= f.check_box :remove_main %> | <%= f.text_field :video, :size => "20", :style => 'padding:5px;' %>
+	| <%= f.collection_select :campaign_id, @campaigns, :id, :keyword, {include_blank: true}, {:selected => @article.campaign_id} %>
 	<div style="margin-top: 3px;">
 		<%= f.text_field :caption, :size => '92', :style => 'padding:5px;' %>
 	</div>

@@ -227,6 +227,7 @@ class ArticlesController < ApplicationController
       @liveblogupdates = @article.newsitems.published.order('updated_at DESC')
       @articletweets = @article.tweets.order('updated_at ASC')
       @notificationtypes = Notificationtype.all.order(:order)
+      @defaultcampaign = Campaign.find_by_keyword('default_subscription')
   end
   
   # GET /articles/1
@@ -266,6 +267,7 @@ class ArticlesController < ApplicationController
       @article = Article.new
       @stories = Story.all.includes(:category).order(:story)
       @types = Type.all.order(:name)
+      @campaigns = Campaign.all.order(:keyword)
     else
       redirect_to root_url
     end
@@ -320,6 +322,7 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @stories = Story.all.includes(:category).order(:story)
       @types = Type.all.order(:name)
+      @campaigns = Campaign.all.order(:keyword)
     else
       redirect_to root_url
     end  
@@ -535,6 +538,6 @@ class ArticlesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def article_params
-      params.require(:article).permit(:body, :briefing_point, :caption, :created_at, :email_to, :is_free, :headline, :lede, :main, :notification_slug, :notification_message, :remove_main, :short_lede, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [], :user_ids => [])
+      params.require(:article).permit(:body, :briefing_point, :campaign_id, :caption, :created_at, :email_to, :is_free, :headline, :lede, :main, :notification_slug, :notification_message, :remove_main, :short_lede, :short_slug, :short_headline, :status, :source, :topstory, :type_id, :updated_at, :urgency, :video, :summary, :summary_slug, :category_ids => [], :region_ids => [], :story_ids => [], :user_ids => [])
     end
 end

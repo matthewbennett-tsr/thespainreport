@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180416132404) do
+ActiveRecord::Schema.define(version: 20180508161839) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,7 @@ ActiveRecord::Schema.define(version: 20180416132404) do
     t.string   "short_headline"
     t.boolean  "is_free"
     t.string   "briefing_point"
+    t.integer  "campaign_id"
   end
 
   create_table "articles_categories", id: false, force: :cascade do |t|
