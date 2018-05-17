@@ -1,16 +1,16 @@
 <div class="subscription-form-section-middle">
 	<div class="subscription-left-label-input">
 		<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
-			Your E-mail Address:
+			Your E-mail:
 		<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 			Tu correo:
 		<% end %>
 	</div>
 	<div class="subscription-right-form-element">
 		<% if current_user.nil? || current_user.role == 'editor' %>
-			<input type="email" size="35" name="email" id="email" placeholder="you@example.com" class="inputgeneral" onclick="calculateTotal()"/>
+			<input type="email" size="30" name="email" id="email" placeholder="you@example.com" class="inputgeneral" onclick="calculateTotal()"/>
 		<% else %>
-			<input type="email" size="35" name="email" id="email" value="<%= current_user.email %>" class="inputgeneral" onclick="calculateTotal()" readonly />
+			<input type="email" size="30" name="email" id="email" value="<%= current_user.email %>" class="inputgeneral" onclick="calculateTotal()" readonly />
 		<% end %>
 	</div>
 	<div class="clear"></div>

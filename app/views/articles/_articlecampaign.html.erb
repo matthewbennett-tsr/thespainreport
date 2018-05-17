@@ -1,0 +1,45 @@
+<% if @article.campaign %>
+	<% @article.campaign.increment!(:article_count) %>
+	<div class="article-ads">
+		<h3><%= @article.campaign.headline %></h3>
+		<div class="article-ads-lede"><%= @article.campaign.lede %></div>
+		<div class="article-ads-text">
+			<% if @article.campaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<div class="campaign-image">
+					<%= image_tag @article.campaign.url if @article.campaign.url? %>
+				</div>
+			<% elsif @article.campaign.video? %>
+				<div class="campaign-video">
+					<div class="video-wrapper">
+						<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.campaign.video}?rel=0&amp;showinfo=0") %>
+					</div>
+				</div> 
+			<% else %>
+			<% end %>
+			<%= markdown(@article.campaign.text) %>
+		</div>
+		<div class="article-ads-button"><a href="/subscriptions/new?c=<%= @article.campaign.keyword %>" class="blueformbutton" style="z-index: 1000;">Subscribe Now</a></div>
+	</div>
+<% else %>
+	<% @defaultcampaign.increment!(:article_count) %>
+	<div class="article-ads">
+		<h3><%= @defaultcampaign.headline %></h3>
+		<div class="article-ads-lede"><%= @defaultcampaign.lede %></div>
+		<div class="article-ads-text">
+			<% if @defaultcampaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<div class="campaign-image">
+					<%= image_tag @defaultcampaign.url if @defaultcampaign.url? %>
+				</div>
+			<% elsif @defaultcampaign.video? %>
+				<div class="campaign-video">
+					<div class="video-wrapper">
+						<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@defaultcampaign.video}?rel=0&amp;showinfo=0") %>
+					</div>
+				</div> 
+			<% else %>
+			<% end %>
+			<%= markdown(@defaultcampaign.text) %>
+		</div>
+		<div class="article-ads-button"><a href="/subscriptions/new" class="blueformbutton" style="z-index: 1000;">Subscribe Now</a></div>
+	</div>
+<% end %>

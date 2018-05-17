@@ -75,8 +75,14 @@
 <% end %>
 </div>
 
+<% if current_user.nil? %>
+	<div class="index-story">
+		<%= render 'emailsignup_2018' %>
+	</div>
+<% end %>
+
 <% @lasttwenty.each do |article| %>
-  <div class="index-story" style="margin-bottom: 10px;">
+  <div class="index-story">
     
     <% if article.main? %>
       <div class="index-image">

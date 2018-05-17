@@ -97,24 +97,28 @@
   <% end %>
 </div>
 
-  <% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
-    <div class="main-image">
-        <%= image_tag @article.main.url if @article.main? %>
-    <div class="main-caption">
-      <strong>Image:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
-    </div>
-    </div>
-  <% elsif @article.video? %>
-    <div class="main-image">
-      <div class="video-wrapper">
-        <%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
-      </div>
-      <div class="main-caption">
-        <strong>Video:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
-      </div>
-    </div>
-  <% else %>
-  <% end %>
+<% if @article.main? %> <%# MAIN IMAGE OR VIDEO %>
+	<div class="main-image">
+			<%= image_tag @article.main.url if @article.main? %>
+	<div class="main-caption">
+		<strong>Image:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+	</div>
+	</div>
+	<div class="clear"></div>
+<% elsif @article.video? %>
+	<div class="main-image">
+		<div class="video-wrapper">
+			<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.video}?rel=0&amp;showinfo=0") %>
+		</div>
+		<div class="main-caption">
+			<strong>Video:</strong> <%= @article.caption %> <% '<strong>Source:</strong>' unless @article.source.empty? %> <%= @article.source %>
+		</div>
+	</div>
+	<div class="clear"></div>
+<% else %>
+<% end %>
+
+<%= render 'emailsignup_2018' %>
 
   <div class="article-text"> <%# MAIN TEXT %>
 
@@ -190,6 +194,8 @@
       </p>
     <% end %> <%# END OF LIVE-BLOG ENTRY LOGIC %>
 
+	<%= render 'articlecampaign' %>
+
 <% else %> <%# NON LIVE-BLOG LAYOUT STARTS HERE %>
 
 	<% if @article.body.blank? && @articletweets.present? %>
@@ -204,6 +210,7 @@
     <% if @article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>
       <%= markdown(@article.body) %>
       <%= render 'articleupdates' %>
+      <%= render 'articlecampaign' %>
     <% elsif !@article.is_free %> <%# CONT: If article NOT free… %>
       <% if current_user.nil? %> <%# START: logged-in/NOT. %>
         <% if paywall %> <%# START: paywall/NOT. If yes > Log in. %>
@@ -221,6 +228,7 @@
       <% elsif current_user.access_date.blank? %> <%# CONT: logged-in/NOT: no access date set? > Read. %>
         <%= markdown(@article.body) %>
         <%= render 'articleupdates' %>
+        <%= render 'articlecampaign' %>
       <% elsif current_user.access_date < Time.current %> <%# CONT: logged-in/NOT: access date run out? > Re(subscribe). %>
         <% if ['reader', 'guest'].include?(current_user.role) %> <%# START: user roles, if reader, guest… %>
           <%= markdown(@article.body.truncate(600)) %>
@@ -241,6 +249,7 @@
         <% elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(current_user.role) %> <%# CONT: subscriber ONE/ALL: If all stories subscriber, staff… %>
           <%= markdown(@article.body) %>
           <%= render 'articleupdates' %>
+          <%= render 'articlecampaign' %>
         <% end %> <%# END: subscriber ONE/ALL %>
       <% end %> <%# END: logged-in/NOT %>
     <% end %> <%# END: free/NOT %>
@@ -264,52 +273,6 @@
     </div>
   <% else %>
   <% end %>
-  
-<% if @article.campaign %>
-	<% @article.campaign.increment!(:article_count) %>
-	<div class="article-ads">
-		<h3><%= @article.campaign.headline %></h3>
-		<div class="article-ads-lede"><%= @article.campaign.lede %></div>
-		<div class="article-ads-text">
-			<% if @article.campaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
-				<div class="campaign-image">
-					<%= image_tag @article.campaign.url if @article.campaign.url? %>
-				</div>
-			<% elsif @article.campaign.video? %>
-				<div class="campaign-video">
-					<div class="video-wrapper">
-						<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@article.campaign.video}?rel=0&amp;showinfo=0") %>
-					</div>
-				</div> 
-			<% else %>
-			<% end %>
-			<%= markdown(@article.campaign.text) %>
-		</div>
-		<div class="article-ads-button"><a href="/subscriptions/new?c=<%= @article.campaign.keyword %>" class="blueformbutton" style="z-index: 1000;">Subscribe Now</a></div>
-	</div>
-<% else %>
-	<% @defaultcampaign.increment!(:article_count) %>
-	<div class="article-ads">
-		<h3><%= @defaultcampaign.headline %></h3>
-		<div class="article-ads-lede"><%= @defaultcampaign.lede %></div>
-		<div class="article-ads-text">
-			<% if @defaultcampaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
-				<div class="campaign-image">
-					<%= image_tag @defaultcampaign.url if @defaultcampaign.url? %>
-				</div>
-			<% elsif @defaultcampaign.video? %>
-				<div class="campaign-video">
-					<div class="video-wrapper">
-						<%= content_tag(:iframe, nil, frameborder: 0, src: "//www.youtube.com/embed/#{@defaultcampaign.video}?rel=0&amp;showinfo=0") %>
-					</div>
-				</div> 
-			<% else %>
-			<% end %>
-			<%= markdown(@defaultcampaign.text) %>
-		</div>
-		<div class="article-ads-button"><a href="/subscriptions/new" class="blueformbutton" style="z-index: 1000;">Subscribe Now</a></div>
-	</div>
-<% end %>
 <%# END OF AFTER ARTICLE STUFF %>
 
 </div>

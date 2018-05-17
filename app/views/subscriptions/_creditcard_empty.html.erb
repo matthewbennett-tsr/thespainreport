@@ -2,7 +2,7 @@
 	<div> 
 		<div class="subscription-left-label-input">
 			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
-				Your Credit Card Number:
+				Credit Card Number:
 			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 				Número de tarjeta:
 			<% end %>
@@ -16,7 +16,7 @@
 	<div style="margin-top: 5px;">
 		<div class="subscription-left-label-select">
 			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
-				Card Expiry Date:
+				Expiry Date:
 			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 				Caduca:
 			<% end %>
@@ -70,7 +70,7 @@
 	<div style="margin-top: 5px;">
 		<div class="subscription-left-label-input">
 			<% if controller_name == 'subscriptions' && ["new", "prepay", "support", "spain_new", "spain_prepay", "spain_support"].include?(action_name) %>
-				Card CVC/Security Code:
+				CVC/Security Code:
 			<% elsif controller_name == 'subscriptions' && ["support_es", "spain_support_es"].include?(action_name) %>
 				Código de seguridad:
 			<% end %>

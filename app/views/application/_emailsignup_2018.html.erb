@@ -1,0 +1,22 @@
+<% if current_user.nil? %>
+	<div id="email-sign-up-box">
+		Independent reporting of the news stories changing Spain, in English.
+		No ads, no spam.
+		<div class="email-sign-up-form-new">
+			<%= form_tag '/new_spain_report_reader', :class => '', :id => 'email-sign-up' do |f| %>
+				<div class="email-input-float">
+					<input type="email" size="35" name="email" id="email" class="inputgeneral" placeholder="Enter your e-mail here..."/>
+				</div>
+				<div class="email-input-float email-button">
+					<button type="submit" class="blueformbutton">Join Now</button>
+				</div>
+				<div class="clear"></div>
+			
+				<% if controller_name == 'articles' && action_name == 'show' %>
+					<%= hidden_field_tag 'article_id', @article.id %>
+				<% end %>
+			
+			<% end %>
+		</div>
+	</div>
+<% end %>
