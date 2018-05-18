@@ -235,6 +235,8 @@ class ArticlesController < ApplicationController
   def show
     if ["published", "updated"].include?@article.status
       show_article_elements
+      
+      
       if current_user.nil?
       
       else
@@ -280,7 +282,7 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
-      
+      @campaigns = Campaign.all.order(:keyword)
       @article = Article.new
       @article.type_id = 2
       @article.urgency = 'breaking'
@@ -301,7 +303,7 @@ class ArticlesController < ApplicationController
     elsif current_user.role == 'editor'
       @stories = Story.all.order(:story)
       @types = Type.all.order(:name)
-      
+      @campaigns = Campaign.all.order(:keyword)
       @article = Article.new
       @article.type_id = 2
       @article.urgency = 'latest'
