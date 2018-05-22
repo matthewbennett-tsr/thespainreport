@@ -27,7 +27,7 @@ class UsersController < ApplicationController
       @readers = User.readers.lastfew
       @guests = User.guests.lastfew
       @deleted = User.deleted.lastfew
-      @dateblank = User.dateblank.count
+      @dateblank = User.notdeleted.dateblank.count
     else
       redirect_to root_url
     end
