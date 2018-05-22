@@ -1,0 +1,30 @@
+<% if @article.campaign %>
+	<% @article.campaign.increment!(:article_count) %>
+		<p style="font-weight: bold;"><%= @article.campaign.headline %></p>
+		<p style="font-style: italic;"><%= @article.campaign.lede %></p>
+		<p>
+			<% if @article.campaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<%= image_tag @article.campaign.url if @article.campaign.url? %>
+			<% elsif @article.campaign.video? %>
+				<a href="https://www.thespainreport.com/subscriptions/new?c=<%= @article.campaign.keyword %>">Watch video here</a>
+			<% else %>
+			<% end %>
+			<%= markdown(@article.campaign.text) %>
+		</p>
+		<p><a href="https://www.thespainreport.com/subscriptions/new?c=<%= @article.campaign.keyword %>">Subscribe Now</a></p>
+<% else %>
+	<% @defaultcampaign = Campaign.find_by_keyword('default_subscription') %>
+	<% @defaultcampaign.increment!(:article_count) %>
+		<p style="font-weight: bold;"><%= @defaultcampaign.headline %></p>
+		<p style="font-style: italic;"><%= @defaultcampaign.lede %></p>
+		<p>
+			<% if @defaultcampaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<%= image_tag @defaultcampaign.url if @defaultcampaign.url? %>
+			<% elsif @defaultcampaign.video? %>
+				<a href="https://www.thespainreport.com/subscriptions/new">Watch video here</a>
+			<% else %>
+			<% end %>
+			<%= markdown(@defaultcampaign.text) %>
+		</p>
+		<p><a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></p>
+<% end %>

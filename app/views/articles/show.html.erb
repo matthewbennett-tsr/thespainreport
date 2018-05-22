@@ -218,11 +218,11 @@
 				<p style="font-style: italic;">(To read the full article, please log in or subscribe now…)</p>
 				<%= render 'articlecampaign' %>
 			<% elsif !paywall %> <%# CONT: …and has SOME free articles left… %>
-				<% if @article.created_at >= 720.hours.ago %> <%# START: article NEW/OLD. -48hours > Read. %>
+				<% if @article.created_at >= 720.hours.ago %> <%# START: article NEW/OLD. -720hours > Read. %>
 					<%= markdown(@article.body) %>
 					<%= render 'articleupdates' %>
 					<%= render 'articlecampaign' %>
-				<% elsif @article.created_at < 720.hours.ago %> <%# CONT: …+48 hours > Log in. %>
+				<% elsif @article.created_at < 720.hours.ago %> <%# CONT: …+720 hours > Log in. %>
 					<%= markdown(@article.body.truncate(800)) %>
 					<p style="font-style: italic;">(To read the full article, please log in or subscribe now…)</p>
 					<%= render 'articlecampaign' %>
