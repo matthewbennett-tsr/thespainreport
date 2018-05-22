@@ -411,7 +411,7 @@ class ArticlesController < ApplicationController
 					elsif user.access_date < Time.current
 						if ['reader', 'guest'].include?(user.role)
 							ArticleMailer.delay.send_article_subscribe(@article, user)
-						elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber_one_story', 'subscriber_paused', 'subscriber'].include?(user.role)
 							ArticleMailer.delay.send_article_resubscribe(@article, user)
 						end
 					elsif user.access_date >= Time.current
@@ -421,7 +421,7 @@ class ArticlesController < ApplicationController
 							elsif @article.story_ids.exclude?(user.one_story_id)
 								ArticleMailer.delay.send_article_upgrade(@article, user)
 							end
-						elsif ['subscriber_all_stories', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
 							ArticleMailer.delay.send_article_full(@article, user)
 						end
 					else
