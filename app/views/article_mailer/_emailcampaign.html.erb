@@ -1,5 +1,5 @@
 <% if @article.campaign %>
-	<% @article.campaign.increment!(:article_count) %>
+	<% @article.campaign.increment!(:email_count) %>
 		<p style="font-weight: bold;"><%= @article.campaign.headline %></p>
 		<p style="font-style: italic;"><%= @article.campaign.lede %></p>
 		<p>
@@ -14,7 +14,7 @@
 		<p><a href="https://www.thespainreport.com/subscriptions/new?c=<%= @article.campaign.keyword %>">Subscribe Now</a></p>
 <% else %>
 	<% @defaultcampaign = Campaign.find_by_keyword('default_subscription') %>
-	<% @defaultcampaign.increment!(:article_count) %>
+	<% @defaultcampaign.increment!(:email_count) %>
 		<p style="font-weight: bold;"><%= @defaultcampaign.headline %></p>
 		<p style="font-style: italic;"><%= @defaultcampaign.lede %></p>
 		<p>

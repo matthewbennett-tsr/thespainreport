@@ -18,6 +18,7 @@
         <td><%= link_to campaign.keyword, edit_campaign_path(campaign) %></td>
         <td><%= campaign.headline %></td>
         <td><%= campaign.article_count %></td>
+        <td><%= campaign.email_count %></td>
         <td><%= campaign.subscriptions.count %></td>
         <td><%= link_to 'D', campaign, method: :delete, data: { confirm: 'Are you sure?' } %></td>
       </tr>
