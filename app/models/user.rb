@@ -33,6 +33,7 @@ class User < ActiveRecord::Base
   scope :editors, -> {where(role: 'editor')}
   scope :deleted, -> {where(role: 'deleted')}
   scope :notdeleted, -> {where.not(role: 'deleted')}
+  scope :dateblank, -> {where(access_date: nil)}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
   scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
