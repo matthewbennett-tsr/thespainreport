@@ -86,11 +86,11 @@
       </div>
     <% elsif current_user.role == 'editor' %>
       <div class="user-bar-right-links-basic-user">
-        <div class="user-float-left"><%= link_to "Tweet", new_tweet_path %> | <%= link_to "Breaking", '/articles/breaking' %> | <%= link_to "Latest", '/articles/latest' %> | <%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Story", new_story_path %></div>
+        <div class="user-float-left"><%= link_to "Tweet", new_tweet_path %> | <%= link_to "Break", '/articles/breaking' %> | <%= link_to "Article", new_article_path %> | <%= link_to "Update", new_newsitem_path %> | <%= link_to "Story", new_story_path %></div>
         <div class="user-float-left">—</div>
-        <div class="user-float-left"><%= link_to "Images", images_path %> | <%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %> | <%= link_to "News", entries_path %></div>
+        <div class="user-float-left"><%= link_to "Image", new_image_path %> | <%= link_to "Quotes", quotes_path %> | <%= link_to "Sources", sources_path %> | <%= link_to "Orgs", organisations_path %> | <%= link_to "News", entries_path %></div>
         <div class="user-float-left">—</div>
-        <div class="user-float-left"><%= link_to "Members", users_path %> | <%= link_to "Messages", salesemails_path %></div>
+        <div class="user-float-left"><%= link_to "Members", users_path %> | <%= link_to "Campaigns", campaigns_path %> | <%= link_to "Messages", salesemails_path %></div>
         <div class="user-float-left">—</div>
         <div class="user-float-left"><%= link_to "My Account", edit_user_path(current_user) %></div>
         <div class="user-float-left-no"><%= link_to "Log Out", '/logout' %></div>
