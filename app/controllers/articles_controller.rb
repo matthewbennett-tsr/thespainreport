@@ -421,7 +421,7 @@ class ArticlesController < ApplicationController
 							elsif @article.story_ids.exclude?(user.one_story_id)
 								ArticleMailer.delay.send_article_upgrade(@article, user)
 							end
-						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber_paused', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
 							ArticleMailer.delay.send_article_full(@article, user)
 						end
 					else

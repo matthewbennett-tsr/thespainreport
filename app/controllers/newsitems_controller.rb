@@ -126,30 +126,28 @@ class NewsitemsController < ApplicationController
       end
     elsif @newsitem.email_to == 'all' 
       if @newsitem.article.is_free || ["BLOG", "LIVE BLOG", "VIDEO BLOG"].include?(@newsitem.article.type.try(:name))
-        User.notdeleted.each do |user|
+        User.active.each do |user|
           NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
 	    end
       else
-        User.notdeleted.each do |user|
+        User.active.each do |user|
         Notification.where(user_id: user.id, story_id: @newsitem.article.story_ids, notificationtype_id: 1).first(1).each do
           if user.access_date.blank?
             NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
           elsif user.access_date < Time.current
             if ['reader', 'guest'].include?(user.role)
               NewsitemMailer.delay.send_newsitem_subscribe(@newsitem, user)
-            elsif ['subscriber_one_story', 'subscriber_all_stories', 'subscriber'].include?(user.role)
+            elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber_one_story', 'subscriber_paused', 'subscriber'].include?(user.role)
               NewsitemMailer.delay.send_newsitem_resubscribe(@newsitem, user)
             end
           elsif user.access_date >= Time.current
             if user.role == 'subscriber_one_story'
-              if ["RECAP"].include?(@newsitem.article.type.try(:name))
-                NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
-              elsif @newsitem.article.story_ids.include?(user.one_story_id)
+              if @newsitem.article.story_ids.include?(user.one_story_id)
                 NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
               elsif @newsitem.article.story_ids.exclude?(user.one_story_id)
                 NewsitemMailer.delay.send_newsitem_upgrade(@newsitem, user)
               end
-            elsif ['subscriber_all', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+            elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
               NewsitemMailer.delay.send_newsitem_full(@newsitem, user)
             end
           else
