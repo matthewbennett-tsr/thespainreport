@@ -20,7 +20,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   end
 
   task :briefing_sunday_10_am => :environment do
-    User.notdeleted.each do |user|
+    User.active.each do |user|
       userid = user.id
       if [12,24].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_84(userid)
@@ -49,7 +49,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   end
   
   task :briefing_monday_to_friday_10_am => :environment do
-    User.notdeleted.each do |user|
+    User.active.each do |user|
       userid = user.id
       if [12].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_24(userid)
@@ -76,7 +76,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   end
   
   task :briefing_monday_to_friday_10_pm => :environment do
-    User.notdeleted.each do |user|
+    User.active.each do |user|
       userid = user.id
       if [12].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_24(userid)
@@ -86,7 +86,7 @@ task :weekdays_10pm => [:create_pm_web_briefing, :briefing_monday_to_friday_10_p
   end
   
   task :briefing_wednesday_10pm => :environment do
-    User.notdeleted.each do |user|
+    User.active.each do |user|
       userid = user.id
       if [84].include?(user.briefing_frequency.briefing_frequency)
         ArticleMailer.delay.send_briefing_84(userid)

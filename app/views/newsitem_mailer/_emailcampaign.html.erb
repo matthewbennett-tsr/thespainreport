@@ -1,0 +1,30 @@
+<% if @newsitem.article.campaign %>
+	<% @newsitem.article.campaign.increment!(:email_count) %>
+		<p style="font-weight: bold;"><%= @newsitem.article.campaign.headline %></p>
+		<p style="font-style: italic;"><%= @newsitem.article.campaign.lede %></p>
+		<p>
+			<% if @newsitem.article.campaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<%= image_tag @newsitem.article.campaign.url if @newsitem.article.campaign.url? %>
+			<% elsif @newsitem.article.campaign.video? %>
+				<a href="https://www.thespainreport.com/subscriptions/new?c=<%= @newsitem.article.campaign.keyword %>">Watch video here</a>
+			<% else %>
+			<% end %>
+			<%= markdown(@newsitem.article.campaign.text) %>
+		</p>
+		<p><a href="https://www.thespainreport.com/subscriptions/new?c=<%= @newsitem.article.campaign.keyword %>">Subscribe Now</a></p>
+<% else %>
+	<% @defaultcampaign = Campaign.find_by_keyword('default_subscription') %>
+	<% @defaultcampaign.increment!(:email_count) %>
+		<p style="font-weight: bold;"><%= @defaultcampaign.headline %></p>
+		<p style="font-style: italic;"><%= @defaultcampaign.lede %></p>
+		<p>
+			<% if @defaultcampaign.url? %> <%# PHOTO OR VIDEO WITH THE ENTRY? %>
+				<%= image_tag @defaultcampaign.url if @defaultcampaign.url? %>
+			<% elsif @defaultcampaign.video? %>
+				<a href="https://www.thespainreport.com/subscriptions/new">Watch video here</a>
+			<% else %>
+			<% end %>
+			<%= markdown(@defaultcampaign.text) %>
+		</p>
+		<p><a href="https://www.thespainreport.com/subscriptions/new">Subscribe Now</a></p>
+<% end %>

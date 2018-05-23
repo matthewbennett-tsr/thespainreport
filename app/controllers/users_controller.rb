@@ -11,7 +11,7 @@ class UsersController < ApplicationController
       @userscount = @users.count
       else
       end
-      @totalactivecount = User.notdeleted.count
+      @totalactivecount = User.active.count
       @subscribercount = User.subscribers.count
       @onestorycount = User.onestorysubscribers.count
       @allcurrentcount = User.allcurrentsubscribers.count
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
       @readers = User.readers.lastfew
       @guests = User.guests.lastfew
       @deleted = User.deleted.lastfew
-      @dateblank = User.notdeleted.dateblank.count
+      @dateblank = User.active.dateblank.count
     else
       redirect_to root_url
     end
