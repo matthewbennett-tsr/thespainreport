@@ -32,10 +32,10 @@ class User < ActiveRecord::Base
   scope :guests, -> {where(role: 'guest')}
   scope :editors, -> {where(role: 'editor')}
   scope :deleted, -> {where(role: 'deleted')}
-  scope :notdeleted, -> {where.not(role: 'deleted')}
+  scope :active, -> {where.not(role: ['deleted', 'subscriber_cancelled'])}
   scope :dateblank, -> {where(access_date: nil)}
   scope :wantssummariesbreaking, -> {where(emailpref: ['articlesupdates', 'justarticles', 'justsummariesbreaking'])}
-  scope :wantsarticles, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
+  scope :wantsemails, -> {where(emailpref: ['articlesupdates', 'justarticles'])}
   scope :wantsupdates, -> {where(emailpref: 'articlesupdates')}
   scope :lastfew, -> {order('created_at DESC').limit(10)}
   scope :oneday, -> {where('created_at <= ? and created_at >= ?', 0.hours.ago, 24.hours.ago)}

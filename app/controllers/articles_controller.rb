@@ -385,7 +385,7 @@ class ArticlesController < ApplicationController
    'https://www.youtube.com/watch?v=' + @article.video
   end
   
-  def emailarticles
+  def emailarticles 
 		if @article.email_to == 'none'
 		
 		elsif @article.email_to == 'test'
@@ -394,17 +394,17 @@ class ArticlesController < ApplicationController
 			end
 		elsif @article.email_to == 'all'
 			if ["BLOG"].include?(@article.type.try(:name))
-				User.notdeleted.each do |user|
+				User.active.each do |user|
 					ArticleMailer.delay.send_article_full(@article, user)
 				end
 			elsif @article.is_free || ["LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name))
-				User.notdeleted.each do |user|
+				User.active.each do |user|
 					Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
 						ArticleMailer.delay.send_article_full(@article, user)
 					end
 				end
 			else
-				User.notdeleted.each do |user|
+				User.active.each do |user|
 				Notification.where(user_id: user.id, story_id: @article.story_ids, notificationtype_id: 1).first(1).each do
 					if user.access_date.blank?
 						ArticleMailer.delay.send_article_full(@article, user)
@@ -421,7 +421,7 @@ class ArticlesController < ApplicationController
 							elsif @article.story_ids.exclude?(user.one_story_id)
 								ArticleMailer.delay.send_article_upgrade(@article, user)
 							end
-						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
+						elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber_paused', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(user.role)
 							ArticleMailer.delay.send_article_full(@article, user)
 						end
 					else
