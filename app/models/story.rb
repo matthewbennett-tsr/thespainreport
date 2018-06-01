@@ -22,7 +22,7 @@ class Story < ActiveRecord::Base
   scope :notkeystories, -> {where.not(:id => [60, 61, 62, 84])}
   
   def story_notifications
-    User.notdeleted.each do |u|
+    User.active.each do |u|
       u.notifications.where(story_id: self.id).first_or_create(notificationtype_id: 1)
     end
   end
