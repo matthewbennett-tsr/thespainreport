@@ -30,13 +30,14 @@ Rails.application.routes.draw do
   post 'buy_more_users' => 'subscriptions#buy_more_users'
   post 'cancel_subscription' => 'subscriptions#cancel_subscription'
   post '/SzXGyFFp0s3fMpc' => 'subscriptions#stripe_hooks'
-  get 'subscriptions/prepay'
-  get 'subscriptions/support'
-  get 'subscriptions/support/es' => 'subscriptions#support_es'
-  get 'subscriptions/spain/new' => 'subscriptions#spain_new'
-  get 'subscriptions/spain/prepay' => 'subscriptions#spain_prepay'
-  get 'subscriptions/spain/support' => 'subscriptions#spain_support'
-  get 'subscriptions/spain/support/es' => 'subscriptions#spain_support_es'
+  get 'subscriptions/new' => redirect('/')
+  get 'subscriptions/prepay' => redirect('/')
+  get 'subscriptions/support' => redirect('/')
+  get 'subscriptions/support/es' => redirect('/')
+  get 'subscriptions/spain/new' => redirect('/')
+  get 'subscriptions/spain/prepay' => redirect('/')
+  get 'subscriptions/spain/support' => redirect('/')
+  get 'subscriptions/spain/support/es' => redirect('/')
   resources :subscriptions do
    member do
     get :unsubscribe
