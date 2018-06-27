@@ -75,12 +75,6 @@
 <% end %>
 </div>
 
-<% if current_user.nil? %>
-	<div class="index-story">
-		<%= render 'emailsignup_2018' %>
-	</div>
-<% end %>
-
 <% @lasttwenty.each do |article| %>
   <div class="index-story">
     
