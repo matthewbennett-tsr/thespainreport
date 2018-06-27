@@ -81,6 +81,7 @@
     <div class="news-alert"><span class="black-label-mini">FREE TO READ</span></div>
   <% else %>
   <% end %>
+  
 <div class="clear"></div>
 </div>
 
@@ -206,59 +207,9 @@
 		</ul>
 	<% end %>
 
-<%# PAYWALL LOGIC %>
-	<% if @article.is_free || ["BLOG", "BRIEFING", "LIVE BLOG", "VIDEO BLOG"].include?(@article.type.try(:name)) %> <%# START: free/NOT. If free > Read %>
-		<%= markdown(@article.body) %>
-		<%= render 'articleupdates' %>
-		<%= render 'articlecampaign' %>
-	<% elsif !@article.is_free %> <%# CONT: If article NOT free… %>
-		<% if current_user.nil? %> <%# START: logged-in/NOT. %>
-			<% if paywall %> <%# START: paywall/NOT. If yes > Log in. %>
-				<%= markdown(@article.body.truncate(800)) %>
-				<p style="font-style: italic;">(To read the full article, please log in or subscribe now…)</p>
-				<%= render 'articlecampaign' %>
-			<% elsif !paywall %> <%# CONT: …and has SOME free articles left… %>
-				<% if @article.created_at >= 720.hours.ago %> <%# START: article NEW/OLD. -720hours > Read. %>
-					<%= markdown(@article.body) %>
-					<%= render 'articleupdates' %>
-					<%= render 'articlecampaign' %>
-				<% elsif @article.created_at < 720.hours.ago %> <%# CONT: …+720 hours > Log in. %>
-					<%= markdown(@article.body.truncate(800)) %>
-					<p style="font-style: italic;">(To read the full article, please log in or subscribe now…)</p>
-					<%= render 'articlecampaign' %>
-				<% end %> <%# END: article NEW/OLD. %>	 
-			<% end %> <%# END: paywall/NOT. %>
-		<% elsif current_user.access_date.blank? %> <%# CONT: logged-in/NOT: no access date set? > Read. %>
-			<%= markdown(@article.body) %>
-			<%= render 'articleupdates' %>
-			<%= render 'articlecampaign' %>
-		<% elsif current_user.access_date < Time.current %> <%# CONT: logged-in/NOT: access date run out? > Re(subscribe). %>
-			<% if ['reader', 'guest'].include?(current_user.role) %> <%# START: user roles, if reader, guest… %>
-				<%= markdown(@article.body.truncate(800)) %>
-				<p style="font-style: italic;">(Thank you for enjoying your guest access: please subscribe now to continue reading…)</p>
-				<%= render 'articlecampaign' %>
-			<% elsif ['subscriber_one_story', 'subscriber_paused', 'subscriber_all_stories', 'subscriber_all_current', 'subscriber'].include?(current_user.role) %> <%# CONT: user roles, if subscriber, etc… %>
-				<%= markdown(@article.body.truncate(800)) %>
-				<p style="font-style: italic;">(Your subscription has run out: please re-subscribe now…)</p>
-				<%= render 'articlecampaign' %>
-			<% end %> <%# END: user roles. %>
-		<% elsif current_user.access_date >= Time.current %> <%# CONT: logged-in/NOT: access date good? %>
-			<% if current_user.role == 'subscriber_one_story' %> <%# START: subscriber ONE/ALL? If one story subscriber… %>
-				<% if @article.story_ids.exclude?(current_user.one_story_id) %> <%# START: One-story logic. If NOT chosen story… %>
-					<%= markdown(@article.body.truncate(800)) %>
-					<p style="font-style: italic;">(Article not included in your subscription story: please upgrade now…)</p>
-					<%= render 'articlecampaign' %>
-				<% elsif @article.story_ids.include?(current_user.one_story_id) %> <%# CONT: One-story logic. If IS chosen story… %>
-					<%= markdown(@article.body) %>
-					<%= render 'articleupdates' %>
-				<% end %> <%# END: One-story logic. %>
-			<% elsif ['subscriber_all_stories', 'subscriber_all_current', 'subscriber', 'editor', 'staff', 'reader', 'guest'].include?(current_user.role) %> <%# CONT: subscriber ONE/ALL: If all stories subscriber, staff… %>
-				<%= markdown(@article.body) %>
-				<%= render 'articleupdates' %>
-			<% end %> <%# END: subscriber ONE/ALL %>
-		<% end %> <%# END: logged-in/NOT %>
-	<% end %> <%# END: free/NOT %>
-<%# PAYWALL LOGIC ENDS %>
+	<%= markdown(@article.body) %>
+	<%= render 'articleupdates' %>
+	<%= render 'articlecampaign' %>
 
 <% end %> <%# END OF LIVE-BLOGS vs. NORMAL ARTICLES %>
 </div> <%# END OF MAIN ARTICLE TEXT & ENTRIES %>
